@@ -1,0 +1,107 @@
+.bfYoutube, dl.thumbnail img {
+    border: 1px solid #AAAAAA;
+	background-color: #FFFFFF;
+}
+
+p.author {
+    color: #555555;
+}
+
+a {
+    color: #555555;
+}
+
+.signature {
+    border-top-color: transparent;
+    color: #9F9F9F;
+}
+
+.postbody h3.first a, .postbody h3 a {
+    color: #484848;
+}
+
+.postbody .content {
+    color: #484848;
+}
+
+.content blockquote {
+    background-color: #efebda;
+    border-color: #d4cfba;
+    color: #5a5a55;
+}
+
+.content blockquote cite {
+    color: #a0a0a0;
+}
+
+.content blockquote cite a {
+    color: #a0a0a0;
+}
+
+.error {
+    color: #FFFFFF;
+    background-color: #BF2424;
+}
+
+select {
+    border-color: #AAAAAA;
+}
+
+.headerbar, .forabg, .forumbg  {
+    background-color: #247ca9;
+}
+
+.navbar {
+	background-color: #f5f5f5;
+}
+
+li.row:hover {
+    background-color: #f5f5f5;
+}
+
+li.row {
+    border-top-color: transparent;
+    border-bottom-color: #c1d6e0;
+}
+
+ul.topiclist dd {
+    border-left-color: #c1d6e0;
+}
+
+dl.thumbnail dt a:hover {
+    background-color: transparent;
+}
+
+.bg1 {
+    background-color: #F5F5F5;
+}
+
+.bg2 {
+    background-color: #f9f9f9;
+}
+
+ul.forums {
+    background-color: #F5F5F5;
+    background-image: none;
+}
+
+.panel {
+    background-color: #F5F5F5;
+}
+
+.headerbar, .forabg, .forumbg {
+    -webkit-box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.15);
+    -moz-box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.15);
+    box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.15);
+}
+
+.tabs .tab > a  {
+    background-color: #e0e0e0;
+    color: #555555;
+}
+
+.tabs .tab > a:hover {
+    background-color: #e0e0e0;   
+    border: 1px solid #AAAAAA;
+    color: #555555;
+}

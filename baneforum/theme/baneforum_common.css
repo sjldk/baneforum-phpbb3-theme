@@ -1,0 +1,403 @@
+/* Fonts */
+
+body, fieldset, h1, h2, h3 {
+	font-family: "Roboto", sans-serif;
+}
+
+.button, .postbody .content, a.forumtitle, a.topictitle, 
+p.author, .attachbox dt, .message-box textarea,
+dl.faq, .postbody h3 {
+	font-family: "Roboto", sans-serif;
+}
+
+input, input.button1, input.button2, input.button3, select, textarea {
+	font-family: "Roboto", sans-serif;
+}
+
+.site-description h1 {
+	font-family: "Oswald", sans-serif;
+}
+
+/* Styles */
+
+body { 
+	font-size: 0.8em;
+}
+
+.username-coloured {
+	font-weight: normal;
+}
+
+.postbody .content {
+	font-style: normal;
+	font-size: 0.9rem;
+	margin: 1.5rem 0 1.5rem 0;
+}
+
+.signature {
+	font-size: 0.9rem;
+}
+
+a.forumtitle, a.topictitle {
+	font-weight: normal;
+}
+
+ul.topiclist li.row dl {
+	margin: 1em 0 1em 0;
+}
+
+a.lastsubject {
+	font-weight: normal;
+}
+
+.site_logo {
+	background-image: url("./images/baneforum_logo_electric.png")
+}
+
+.breadcrumbs .crumb {
+	font-weight: normal;
+}
+
+.postbody h3 {
+	font-weight: normal;
+	font-size: 1.2rem;
+}
+
+.postbody h3.first {
+	font-size: 1.2rem;
+}
+
+.bfYoutube {
+	width: 95%;
+	height: 360px;
+}
+
+.bfYoutube, dl.thumbnail img {
+	margin: 1em 0 0.5em 0;
+	padding: 0.5em;
+}
+
+dl.thumbnail dd {
+	font-size: 0.8rem;
+	font-style: normal;
+}
+
+.attachbox {
+	border: 0;
+	margin: 1.5em 0 1.5em 0;	
+	padding: 0;
+	background-color: transparent;
+}
+
+.attachbox dt {
+	font-size: 0.9rem;
+	text-transform: none;	
+}
+
+.attachbox dd {
+	border: 0;
+}
+
+.error {
+	font-weight: normal;
+	padding: 1em;
+}
+
+input, input.button1, input.button2, input.button3, select, textarea, .message-box textarea {
+	font-size: inherit;
+}
+
+input.button1, input.button1:hover {
+	background-color: #555555; /* Green */
+	background-image: none;
+    border: none;
+    color: white;
+    padding: 0.5em 1em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: inherit;
+	font-weight: normal;
+	border-radius: 0.5em;
+}
+
+input.button2, input.button2:hover {
+	background-color: #555555; /* Green */
+	background-image: none;
+    border: none;
+    color: white;
+    padding: 0.5em 1em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: inherit;
+	font-weight: normal;
+	border-radius: 0.3em;
+}
+
+.attach-panel-multi input.button2 {
+	margin-bottom: 1em;
+}
+
+li.header dd, li.header dt {
+	text-transform: none;
+	font-weight: normal;
+}
+
+.headerbar {
+	border-radius: 0em;
+	background-image: url("images/baneforum_top.png");
+}
+
+.navbar, .forabg, .forumbg, .wrap {
+	border-radius: 0em;
+}
+
+.forabg, .forumbg {
+	background-image: none;
+	padding: 0;
+}
+
+.site-description h1 {
+	font-size: 3rem;
+}
+
+.post {
+	border-radius: 0em;
+	padding: 2em;
+	margin: 1em 0 1em 0;
+}
+
+.content blockquote {
+	font-size: inherit;
+	background-image: none;
+	border-radius: 0.5em;
+	padding: 1em;
+	margin: 1em 0 1em 0;
+}
+
+.content blockquote cite {
+	margin: 0em;
+}
+
+li.header dl.row-item dt, li.header dl.row-item dd {
+	padding-top: 1em;
+	padding-bottom: 1em;
+	font-size: 0.9rem;
+}
+
+.forabg, .forumbg {
+	margin-bottom: 2em;
+}
+
+.forumbg .header a:hover, .forabg .header a:hover, th a:hover {
+    text-decoration: none;
+}
+
+li.header dl.row-item dt .list-inner {
+	padding-left: 0.5em;
+}
+
+.action-bar {
+	margin: 2em 0 2em 0;
+	font-size: 0.9rem;
+}
+
+.responsive-hide strong {
+	font-weight: normal;
+}
+
+.author i {
+	display: none;
+}
+
+blockquote cite {
+	font-weight: normal;
+	font-size: inherit;
+}
+
+blockquote cite > div {
+	display: none;
+}
+
+/* .action-bar .pagination .button,
+.action-bar .pagination li.active span {
+	padding: 0.5rem;
+	border-radius: 1.5rem;
+	width: 1.5rem;
+	height: 1.5rem;
+} */
+
+.panel {
+	border-radius: 0;
+}
+
+fieldset dt {
+	padding-top: 0.6rem;
+}
+
+input.inputbox {
+	border-radius: 0.2rem;
+	padding: 0.5rem;
+}
+
+.forum-title, .topic-title, .searchresults-title {
+	font-family: "Roboto Slab", sans-serif;
+	font-size: 2rem;
+	font-weight: bold;
+}
+
+.inner strong {
+	font-size: 0.9rem;
+}
+
+.section-search .page-body .panel div.inner  {
+	padding: 1em;
+}
+
+.panel {
+	-webkit-box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.15);
+    -moz-box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.15);
+    box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.15);
+}
+
+.advanced-search-link, .jumpbox-return {
+	display: none;
+}
+
+.statistics h3, .headerspace h3  {
+	font-family: Roboto Slab;
+    text-transform: none;
+	font-size: 0.9rem;
+	border: none;
+}
+
+.statistics strong {
+	font-weight: normal;
+}
+
+.page-body {
+	margin: 2rem 0;
+}
+/* 
+.button {
+	border: 0.06rem solid #BBBBBB;
+    background-image: none;
+    border-radius: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    min-width: 6rem;
+    justify-content: center;
+    background: #eaeaea;
+	color: #888888;
+	text-shadow: none;
+	font-size: 0.8rem;
+	font-weight: normal;
+	box-shadow: none;
+}
+
+.button:hover,
+.button:focus {
+	background-color: #FFFFFF;
+	color: #555555;
+	background-image: none;
+} */
+
+/* div.pagination .button,
+.post-buttons .button,
+.format-buttons .button {
+	height: 2rem;
+	min-width: 2rem;
+	margin-right: 0.5rem;
+	margin-bottom: 0.5rem;
+} */
+
+.pagination li.active span {
+	font-family: Roboto, sans-serif;
+	font-weight: 600;
+}
+
+.format-buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+}
+
+.button .icon, .button-secondary {
+	color: #616161;
+}
+
+.search-box .inputbox {
+	height: 2.3rem;
+}
+
+li.pagejump  {
+	border-radius: 2rem;
+    height: 0.9rem;
+    min-width: 0.9rem;
+}
+
+fieldset.fields1:first-child {
+	display: none;
+}
+
+.action-bar .button-search {
+	margin-right: 0.5rem;
+}
+
+.button-search {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	height: 2.3rem;
+}
+
+.search-box {
+	display: none;
+}
+
+.bbcode-status {
+	display: none;
+}
+
+select.bbcode-size {
+	margin-right: 0.5rem;
+	border-radius: 0.2rem;
+}
+
+textarea {
+	border-radius: 0.2rem;
+	margin-top: 0.5rem;
+}
+
+.content {
+	line-height: normal;
+}
+
+dl.attachbox dt {
+	font-size: 1.5rem;
+    color: #AAAAAA;
+    border-bottom: 0.1rem solid #AAAAAA;
+}
+
+.attachbox dl.thumbnail dt {
+	margin: 0.2rem;
+	border: 0;
+}
+
+.attachbox dl.thumbnail {
+	border: 1px solid #000000;
+	font-family: Comic Sans, Roboto, sans-serif;
+	background-color: #FFFFFF;
+	text-align: center;
+}
+
+.attachbox dl.thumbnail img {
+	margin: 0;
+	border: none;
+}
+
+.attachbox dl.thumbnail a:hover {
+	border: none;
+}
