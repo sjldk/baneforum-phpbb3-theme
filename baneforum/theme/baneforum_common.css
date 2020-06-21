@@ -11,7 +11,7 @@ body, fieldset, h1, h2, h3 {
 
 .button, .postbody .content, a.forumtitle, a.topictitle, 
 p.author, .attachbox dt, .message-box textarea,
-dl.faq, .postbody h3 {
+dl.faq, .postbody h3, .content p {
 	font-family: "Roboto", sans-serif;
 }
 

@@ -109,3 +109,7 @@ ul.forums {
     border: 1px solid #AAAAAA;
     color: #555555;
 }
+
+.content p {
+    color: #484848;
+}
