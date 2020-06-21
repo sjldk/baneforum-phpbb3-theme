@@ -1,5 +1,10 @@
 /* Fonts */
 
+body {
+	background: url("images/background.jpg")  no-repeat fixed center;
+}
+
+
 body, fieldset, h1, h2, h3 {
 	font-family: "Roboto", sans-serif;
 }

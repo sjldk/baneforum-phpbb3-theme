@@ -1,3 +1,7 @@
+body {
+    background-color: rgb(245,245,250);
+}
+
 .bfYoutube, dl.thumbnail img {
     border: 1px solid #AAAAAA;
 	background-color: #FFFFFF;
