@@ -77,9 +77,14 @@ a.lastsubject {
 	height: 360px;
 }
 
-.bfYoutube, dl.thumbnail img {
-	margin: 1em 0 0.5em 0;
-	padding: 0.5em;
+dl.thumbnail img {
+	padding: 0;
+	border: none;
+	margin-bottom: 0.5rem;
+}
+
+dl.thumbnail dt a:hover img {
+	border: none;
 }
 
 dl.thumbnail dd {
@@ -466,4 +471,17 @@ dl.attachbox dt {
 
 [data-s9e-mediaembed] {
 	margin: 1rem 0 1rem 0;
+}
+
+.bfYoutube, div.inline-attachment {
+	margin: 1.5rem 0 1.5rem 0;
+}
+
+h1.markdown, h2.markdown, h3.markdown, h4.markdown, h5.markdown, h6.markdown {
+	font-family: Roboto Slab, serif;
+}
+
+table.markdown thead {
+	background-color: #677c8e;
+	font-weight: normal;
 }
