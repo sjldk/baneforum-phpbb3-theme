@@ -7,6 +7,7 @@ body {
 
 body, fieldset, h1, h2, h3 {
 	font-family: "Roboto", sans-serif;
+	text-transform: none;
 }
 
 .button, .postbody .content, a.forumtitle, a.topictitle, 
@@ -117,8 +118,8 @@ input, input.button1, input.button2, input.button3, select, textarea, .message-b
 	font-size: inherit;
 }
 
-input.button1, input.button1:hover {
-	background-color: #555555; /* Green */
+input.button2, input.button1 {
+background:rgb(36,124,169);
 	background-image: none;
     border: none;
     color: white;
@@ -128,21 +129,7 @@ input.button1, input.button1:hover {
     display: inline-block;
     font-size: inherit;
 	font-weight: normal;
-	border-radius: 0.5em;
-}
-
-input.button2, input.button2:hover {
-	background-color: #555555; /* Green */
-	background-image: none;
-    border: none;
-    color: white;
-    padding: 0.5em 1em;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: inherit;
-	font-weight: normal;
-	border-radius: 0.3em;
+	border-radius: 0.2em;
 }
 
 .attach-panel-multi input.button2 {
@@ -289,39 +276,6 @@ input.inputbox {
 .page-body {
 	margin: 2rem 0;
 }
-/* 
-.button {
-	border: 0.06rem solid #BBBBBB;
-    background-image: none;
-    border-radius: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    min-width: 6rem;
-    justify-content: center;
-    background: #eaeaea;
-	color: #888888;
-	text-shadow: none;
-	font-size: 0.8rem;
-	font-weight: normal;
-	box-shadow: none;
-}
-
-.button:hover,
-.button:focus {
-	background-color: #FFFFFF;
-	color: #555555;
-	background-image: none;
-} */
-
-/* div.pagination .button,
-.post-buttons .button,
-.format-buttons .button {
-	height: 2rem;
-	min-width: 2rem;
-	margin-right: 0.5rem;
-	margin-bottom: 0.5rem;
-} */
 
 .pagination li.active span {
 	font-family: Roboto, sans-serif;
@@ -420,10 +374,12 @@ dl.attachbox dt {
 	font-weight: inherit;
 }
 
+input.button1:hover, 
+input.button2:hover,
 .button:hover,
 .button:focus {
+	border: none;
 	text-shadow: none;
-	/* border: 0.2rem solid #627ca3; */
 	background: rgb(23, 154, 219);
 	color: #FFFFFF;
 }
@@ -487,4 +443,45 @@ table.markdown thead {
 
 table.markdown th {
 	font-weight: normal;
+}
+
+table.markdown, table.markdown td, table.markdown th {
+	border: 0.02rem solid #AAAAAA;
+}
+
+.postlink {
+	border: none;
+}
+
+a:hover {
+	color: rgb(36,124,169);
+}
+
+.posting-title {
+	margin-bottom: 2rem;
+	font-family: Roboto Slab, serif;
+}
+
+.posting-title a, posting-title a:hover {
+	text-decoration: none;
+}
+
+/* #postingbox > div.inner > fieldset > dl:first-child {
+	display: none;
+} */
+
+.inputbox {
+	border: 0.15rem solid #DDDDDD;
+	border-radius: 0.5rem;
+	padding: 0.5rem;
+}
+
+.inputbox::placeholder  {
+    color: rgb(128,128,128);
+	text-align: center;
+    font-size: 1rem;
+}
+
+.inputbox:hover {
+	border: 0.15rem solid #DDDDDD;
 }
