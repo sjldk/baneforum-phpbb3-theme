@@ -330,6 +330,7 @@ textarea {
 dl.attachbox dt {
     color: #484848;
 	border: 0;
+	font-weight: bold;
 }
 
 .attachbox dl.thumbnail dt {
