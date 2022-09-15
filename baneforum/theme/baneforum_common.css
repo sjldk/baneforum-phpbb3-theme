@@ -1,33 +1,62 @@
-/* Fonts */
+:root {
+	--base-font: "Roboto", sans-serif;	
+	--font-headline: "Oswald", sans-serif;
+	--font-title: "Roboto Slab", serif;
+	--font-comic: "Comic Sans", sans-serif;
+
+	--base-font-size: 0.8em;
+}
 
 body {
 	background: url("images/background.jpg")  no-repeat fixed center;
+	
+	font-family: var(--base-font);
+	font-size: var(--base-font-size);	
 }
 
-
-body, fieldset, h1, h2, h3 {
-	font-family: "Roboto", sans-serif;
+body, fieldset, h1, h2, h3 {	
 	text-transform: none;
 }
 
-.button, .postbody .content, a.forumtitle, a.topictitle, 
+fieldset, .button, .postbody .content, a.forumtitle, a.topictitle, 
 p.author, .attachbox dt, .message-box textarea,
-dl.faq, .postbody h3, .content p {
-	font-family: "Roboto", sans-serif;
+dl.faq, .postbody h3, .content p,input, input.button1, 
+input.button2, input.button3, select, textarea, dl.file, 
+dl.file dt, .pagination li.active span {
+	font-family: inherit;
 }
 
-input, input.button1, input.button2, input.button3, select, textarea {
-	font-family: "Roboto", sans-serif;
-}
-
+.forum-title, .searchresults-title, h1.markdown, 
+h2.markdown, h3.markdown, h4.markdown, h5.markdown, h6.markdown,
 .site-description h1 {
-	font-family: "Oswald", sans-serif;
+	font-family: var(--font-headline);
 }
 
-/* Styles */
+.posting-title, .statistics h3, .headerspace h3, .topic-title {
+	font-family: var(--font-title);
+}
 
-body { 
-	font-size: 0.8em;
+.attachbox dl.thumbnail {
+	font-family: var(--font-comic);
+}
+
+fieldset, .content, p, p.author, .postbody .content,
+.signature, input.button1, input.button2, 
+input.button3, .content blockquote, blockquote cite, 
+li.header dl.row-item dt, li.header dl.row-item dd, .attachbox {
+	font-size: inherit;
+}
+
+select, input, textarea, .message-box textarea {
+	font-size: 1.2em;
+}
+
+.panel p {
+	font-size: unset;
+}
+
+.action-bar {
+	font-size: 1.2em;
 }
 
 .username-coloured {
@@ -35,13 +64,8 @@ body {
 }
 
 .postbody .content {
-	font-style: normal;
-	font-size: 0.9rem;
+	font-style: normal;	
 	margin: 1.5rem 0 1.5rem 0;
-}
-
-.signature {
-	font-size: 0.9rem;
 }
 
 a.forumtitle, a.topictitle {
@@ -64,13 +88,13 @@ a.lastsubject {
 	font-weight: normal;
 }
 
-.postbody h3 {
-	font-weight: normal;
-	font-size: 1.2rem;
+.postbody h3, .postbody h3.first {
+	font-weight: bold;
+	font-size: 1.2em;
 }
 
-.postbody h3.first {
-	font-size: 1.2rem;
+.postbody {
+	font-size: 1.15em;
 }
 
 .bfYoutube {
@@ -88,17 +112,15 @@ dl.thumbnail dt a:hover img {
 	border: none;
 }
 
-dl.thumbnail dd {
-	font-size: 0.8rem;
+dl.thumbnail dd {	
 	font-style: normal;
 }
 
 .attachbox {
 	border: 0;
-	margin: 1.5em 0 1.5em 0;	
+	margin: 0 0 1.5em 0;	
 	background-color: transparent;
-	padding: 1rem 0 0 0;	
-	font-size: 0.9rem;
+	padding: 0;	
 }
 
 .attachbox dt {	
@@ -114,20 +136,13 @@ dl.thumbnail dd {
 	padding: 1em;
 }
 
-input, input.button1, input.button2, input.button3, select, textarea, .message-box textarea {
-	font-size: inherit;
-}
-
-input.button2, input.button1 {
-background:rgb(36,124,169);
+input.button2, input.button1 {	
 	background-image: none;
-    border: none;
-    color: white;
+    border: none;    
     padding: 0.5em 1em;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
-    font-size: inherit;
+    display: inline-block;    
 	font-weight: normal;
 	border-radius: 0.2em;
 }
@@ -156,7 +171,7 @@ li.header dd, li.header dt {
 }
 
 .site-description h1 {
-	font-size: 3rem;
+	font-size: 3em;
 }
 
 .post {
@@ -166,7 +181,6 @@ li.header dd, li.header dt {
 }
 
 .content blockquote {
-	font-size: inherit;
 	background-image: none;
 	border-radius: 0.5em;
 	padding: 1em;
@@ -174,13 +188,12 @@ li.header dd, li.header dt {
 }
 
 .content blockquote cite {
-	margin: 0em;
+	margin: 0 0 0.6em 0;
 }
 
 li.header dl.row-item dt, li.header dl.row-item dd {
 	padding-top: 1em;
-	padding-bottom: 1em;
-	font-size: 0.9rem;
+	padding-bottom: 1em;	
 }
 
 .forabg, .forumbg {
@@ -196,8 +209,7 @@ li.header dl.row-item dt .list-inner {
 }
 
 .action-bar {
-	margin: 2em 0 2em 0;
-	font-size: 0.9rem;
+	margin: 2em 0 2em 0;	
 }
 
 .responsive-hide strong {
@@ -210,7 +222,6 @@ li.header dl.row-item dt .list-inner {
 
 blockquote cite {
 	font-weight: normal;
-	font-size: inherit;
 }
 
 blockquote cite > div {
@@ -218,7 +229,11 @@ blockquote cite > div {
 }
 
 .panel {
-	border-radius: 0;
+	border-radius: 0;	
+}
+
+.panel p {	
+	margin: 0.5rem 0 0.5rem 0;
 }
 
 fieldset dt {
@@ -230,32 +245,26 @@ input.inputbox {
 	padding: 0.5rem;
 }
 
-.forum-title, .topic-title, .searchresults-title {
-	font-family: "Roboto Slab", sans-serif;
+.forum-title, .topic-title, .searchresults-title {	
 	font-size: 2rem;
 	font-weight: bold;
-}
-
-.inner strong {
-	font-size: 0.9rem;
 }
 
 .section-search .page-body .panel div.inner  {
 	padding: 1em;
 }
 
-.panel {
+/* .panel {
 	-webkit-box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.15);
     -moz-box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.15);
     box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.15);
-}
+} */
 
 .advanced-search-link, .jumpbox-return {
 	display: none;
 }
 
-.statistics h3, .headerspace h3  {
-	font-family: Roboto Slab;
+.statistics h3, .headerspace h3  {	
     text-transform: none;
 	font-size: 0.9rem;
 	border: none;
@@ -269,9 +278,8 @@ input.inputbox {
 	margin: 2rem 0;
 }
 
-.pagination li.active span {
-	font-family: Roboto, sans-serif;
-	font-weight: 600;
+.pagination li.active span {	
+	font-weight: bold;
 }
 
 .format-buttons {
@@ -279,10 +287,6 @@ input.inputbox {
 	flex-direction: row;
 	justify-content: flex-start;
 	flex-wrap: wrap;
-}
-
-.button .icon, .button-secondary {
-	color: #616161;
 }
 
 .search-box .inputbox {
@@ -295,7 +299,7 @@ li.pagejump  {
     min-width: 0.9rem;
 }
 
-.action-bar .button-search {
+.action-bar .button-search {	
 	margin-right: 0.5rem;
 }
 
@@ -327,8 +331,7 @@ textarea {
 	line-height: normal;
 }
 
-dl.attachbox dt {
-    color: #484848;
+dl.attachbox dt {    
 	border: 0;
 	font-weight: bold;
 }
@@ -338,10 +341,7 @@ dl.attachbox dt {
 	border: 0;
 }
 
-.attachbox dl.thumbnail {
-	border: 1px solid #000000;
-	font-family: Comic Sans, Roboto, sans-serif;
-	background-color: #FFFFFF;
+.attachbox dl.thumbnail {	
 	text-align: center;
 }
 
@@ -354,23 +354,16 @@ dl.attachbox dt {
 	border: none;
 }
 
-dl.file, dl.file dt {
-	font-family: inherit;
-}
-
 dl.file dd {
-	font-size: 0.5rem;
-	color: #484848;
+	font-size: 0.9em;	
 }
 
 .button {
-	border: none;
-    background:rgb(36,124,169);
+	border: none;   
     border-radius: 0.2rem;
     box-shadow: none;
     -webkit-box-shadow: none;
-    padding: 0.5rem;    
-	color: #FFFFFF;
+    padding: 0.5rem;    	
 	font-weight: inherit;
 }
 
@@ -379,30 +372,13 @@ input.button2:hover,
 .button:hover,
 .button:focus {
 	border: none;
-	text-shadow: none;
-	background: rgb(23, 154, 219);
-	color: #FFFFFF;
-}
-
-.button:hover .icon,
-.button .icon {
-	color: #FFFFFF;
-}
-
-.pagination .icon {
-	color: rgb(36,124,169);
+	text-shadow: none;	
 }
 
 .post-buttons .button,
-.format-buttons .button {
-	background: #777777;
+.format-buttons .button {	
 	margin-right: 0.2rem;
 	min-width: 2rem;
-}
-
-.post-buttons .button:hover,
-.format-buttons .button:hover {
-	background: #6e6e6e;
 }
 
 .pagination li.active span {
@@ -433,56 +409,29 @@ input.button2:hover,
 	margin: 1.5rem 0 1.5rem 0;
 }
 
-h1.markdown, h2.markdown, h3.markdown, h4.markdown, h5.markdown, h6.markdown {
-	font-family: Roboto Slab, serif;
-}
-
-table.markdown thead {
-	background-color: #677c8e;
-}
-
 table.markdown th {
 	font-weight: normal;
-}
-
-table.markdown, table.markdown td, table.markdown th {
-	border: 0.02rem solid #AAAAAA;
 }
 
 .postlink {
 	border: none;
 }
 
-a:hover {
-	color: rgb(36,124,169);
-}
-
 .posting-title {
-	margin-bottom: 2rem;
-	font-family: Roboto Slab, serif;
+	margin-bottom: 2rem;	
+	font-weight: bold;
 }
 
 .posting-title a, posting-title a:hover {
 	text-decoration: none;
 }
 
-/* #postingbox > div.inner > fieldset > dl:first-child {
-	display: none;
-} */
-
 .inputbox {
-	border: 0.15rem solid #DDDDDD;
 	border-radius: 0.5rem;
 	padding: 0.5rem;
 }
 
-.inputbox::placeholder  {
-    color: rgb(128,128,128);
+.inputbox::placeholder  {    
 	text-align: center;
     font-size: 1rem;
 }
-
-.inputbox:hover {
-	border: 0.15rem solid #DDDDDD;
-}
-

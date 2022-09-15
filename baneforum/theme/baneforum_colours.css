@@ -1,110 +1,117 @@
-body {
-    background-color: rgb(245,245,250);
+:root {
+    --base-font-color: #484848;
+
+    --color-totally-white: #FFFFFF;
+    --color-almost-white: #F5F5F5;
+
+    --color-baneforum-darkgray: #285da1;
+    --color-baneforum-darkishgray:  #6E6E6E;
+    --color-baneforum-lightgray: lightgray;
 }
 
-p.author {
-    color: #555555;
+.wrap {
+    background-color: var(--color-totally-white);
+    border-color: var(--color-totally-white);
 }
 
-a {
-    color: #555555;
+table.markdown, table.markdown td, table.markdown th {
+	border: 0.02rem solid var(--color-baneforum-darkishgray);
 }
 
-.signature {
-    border-top-color: transparent;
-    color: #9F9F9F;
+.attachbox dl.thumbnail {
+    border: 1px solid var(--color-baneforum-darkgray);		
 }
 
-.postbody h3.first a, .postbody h3 a {
-    color: #484848;
+ul.topiclist li {
+    color: inherit;
 }
 
-.postbody .content {
-    color: #484848;
+a:hover .icon.icon-gray, .pagination .icon, a:hover, dl.attachbox dt, dl.file dd {
+    color: var(--color-baneforum-darkgray);
+}
+
+input.button2, input.button1, input.button1:hover, input.button2:hover, .button:hover, 
+.button:focus, .button:hover .icon, .button .icon, .button, .pagination li.active span,
+.error,.pagination li a:hover, .pagination li a:hover .icon, 
+.pagination .dropdown-visible a.dropdown-trigger, 
+.nojs .pagination .dropdown-container:hover a.dropdown-trigger {
+    color: var(--color-almost-white);
+}
+
+body, p.author, a, .postbody h3.first a, .postbody h3 a, h3,
+.postbody .content, .content blockquote, .content p, 
+.tabs .tab > a:hover,.tabs .tab > a {
+    color: var(--base-font-color);
+}
+
+input.button2, input.button1, input.button1:hover, 
+input.button2:hover, .button:hover, .button:focus, .pagination li.active span,
+.post-buttons .button:hover, .format-buttons .button:hover,
+.pagination li a:hover, .pagination li a:hover .icon, 
+.pagination .dropdown-visible a.dropdown-trigger, 
+.nojs .pagination .dropdown-container:hover a.dropdown-trigger {
+    background: var(--color-baneforum-darkgray);
+}
+
+.headerbar, .forabg, .forumbg, table.markdown thead {
+    background-color: var(--color-baneforum-darkgray);
+}
+
+body, .bg1, ul.forums, .panel,.navbar,li.row:hover,.tabs .tab > a,
+.tabs .tab > a:hover, .bg2, .attachbox dl.thumbnail  {
+    background-color: var(--color-almost-white);
 }
 
 .content blockquote {
-    background-color: #efebda;
-    border-color: #d4cfba;
-    color: #5a5a55;
+    background-color: rgb(255, 245, 235);
 }
 
-.content blockquote cite {
-    color: #a0a0a0;
+.pagination li.active span {
+    border-color: var(--color-baneforum-darkgray);
 }
 
-.content blockquote cite a {
-    color: #a0a0a0;
+.button-secondary, .inputbox::placeholder, .content blockquote cite,
+.content blockquote cite a,.signature,.icon.icon-gray {
+    color: var(--color-baneforum-darkishgray);
 }
 
-.error {
-    color: #FFFFFF;
-    background-color: #BF2424;
+.button, .post-buttons .button, .format-buttons .button {
+    background: var(--color-baneforum-darkishgray);
 }
 
-select {
-    border-color: #AAAAAA;
+.signature {
+    border-top-color: transparent;    
 }
 
-.headerbar, .forabg, .forumbg  {
-    background-color: #247ca9;
+.content blockquote, select {    
+    border-color: var(--color-baneforum-lightgray);    
 }
 
-.navbar {
-	background-color: #f5f5f5;
+.error {    
+    background-color: darkred;
 }
 
-li.row:hover {
-    background-color: #f5f5f5;
+.inputbox:hover, .inputbox {
+	border: 0.15rem solid var(--color-baneforum-lightgray);
 }
 
 li.row {
     border-top-color: transparent;
-    border-bottom-color: #c1d6e0;
+    border-bottom-color: var(--color-baneforum-lightgray);
 }
 
 ul.topiclist dd {
-    border-left-color: #c1d6e0;
+    border-left-color: var(--color-almost-white);
 }
 
 dl.thumbnail dt a:hover {
     background-color: transparent;
 }
 
-.bg1 {
-    background-color: #F5F5F5;
-}
-
-.bg2 {
-    background-color: #f9f9f9;
-}
-
-ul.forums {
-    background-color: #F5F5F5;
+ul.forums {    
     background-image: none;
 }
 
-.panel {
-    background-color: #F5F5F5;
-}
-
-.headerbar, .forabg, .forumbg {
-    -webkit-box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.15);
-    -moz-box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.15);
-    box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.15);
-}
-
-.tabs .tab > a  {
-    background-color: #e0e0e0;
-    color: #555555;
-}
-
-.tabs .tab > a:hover {
-    background-color: #e0e0e0;   
-    border: 1px solid #AAAAAA;
-    color: #555555;
-}
-
-.content p {
-    color: #484848;
+.tabs .tab > a:hover {    
+    border: 1px solid var(--color-baneforum-lightgray); 
 }
