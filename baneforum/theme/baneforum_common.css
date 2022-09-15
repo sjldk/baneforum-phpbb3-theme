@@ -97,12 +97,11 @@ dl.thumbnail dd {
 	border: 0;
 	margin: 1.5em 0 1.5em 0;	
 	background-color: transparent;
-	padding: 1rem 0 0 0;
-	border-top: 0.2rem solid #484848
+	padding: 1rem 0 0 0;	
+	font-size: 0.9rem;
 }
 
-.attachbox dt {
-	font-size: 0.9rem;
+.attachbox dt {	
 	text-transform: none;	
 }
 
@@ -329,10 +328,8 @@ textarea {
 }
 
 dl.attachbox dt {
-	font-size: 1rem;
     color: #484848;
 	border: 0;
-	padding-bottom: 0.2rem;
 }
 
 .attachbox dl.thumbnail dt {
@@ -354,6 +351,10 @@ dl.attachbox dt {
 
 .attachbox dl.thumbnail a:hover {
 	border: none;
+}
+
+dl.file, dl.file dt {
+	font-family: inherit;
 }
 
 dl.file dd {
