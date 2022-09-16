@@ -26,7 +26,7 @@ ul.topiclist li {
     color: inherit;
 }
 
-a:hover .icon.icon-gray, .pagination .icon, a:hover, dl.attachbox dt, dl.file dd {
+a:hover .icon.icon-gray, .pagination .icon, a:hover, dl.file dd {
     color: var(--color-baneforum-darkgray);
 }
 
@@ -40,7 +40,7 @@ input.button2, input.button1, input.button1:hover, input.button2:hover, .button:
 
 body, p.author, a, .postbody h3.first a, .postbody h3 a, h3,
 .postbody .content, .content blockquote, .content p, 
-.tabs .tab > a:hover,.tabs .tab > a {
+.tabs .tab > a:hover,.tabs .tab > a, dl.attachbox dt {
     color: var(--base-font-color);
 }
 

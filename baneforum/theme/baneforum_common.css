@@ -26,13 +26,13 @@ dl.file dt, .pagination li.active span {
 	font-family: inherit;
 }
 
-.forum-title, .searchresults-title, h1.markdown, 
+.searchresults-title, h1.markdown, 
 h2.markdown, h3.markdown, h4.markdown, h5.markdown, h6.markdown,
 .site-description h1 {
 	font-family: var(--font-headline);
 }
 
-.posting-title, .statistics h3, .headerspace h3, .topic-title {
+.posting-title, .statistics h3, .headerspace h3, .topic-title, .forum-title {
 	font-family: var(--font-title);
 }
 
@@ -81,6 +81,8 @@ a.lastsubject {
 }
 
 .site_logo {
+	width: 12rem;
+	height: 6rem;
 	background-image: url("./images/baneforum_logo_electric.png")
 }
 
@@ -200,7 +202,7 @@ li.header dl.row-item dt, li.header dl.row-item dd {
 	margin-bottom: 2em;
 }
 
-.forumbg .header a:hover, .forabg .header a:hover, th a:hover {
+.forumbg .header a:hover, .forabg .header a:hover, th a:hover, .forum-title a:hover {
     text-decoration: none;
 }
 
@@ -360,9 +362,9 @@ dl.file dd {
 
 .button {
 	border: none;   
-    border-radius: 0.2rem;
-    box-shadow: none;
+    border-radius: 0.2rem;    
     -webkit-box-shadow: none;
+	box-shadow: none;
     padding: 0.5rem;    	
 	font-weight: inherit;
 }
