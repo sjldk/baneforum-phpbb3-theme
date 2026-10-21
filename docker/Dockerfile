@@ -2,6 +2,7 @@ ARG PHP_VERSION=8.5
 FROM php:${PHP_VERSION}-apache
 
 ARG PHPBB_VERSION=3.3.19
+ARG MARKDOWN_VERSION=1.5.0
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends unzip libpng-dev libjpeg-dev libfreetype-dev libzip-dev mariadb-client \
@@ -15,6 +16,12 @@ RUN curl -fsSL -o /tmp/phpbb.zip "https://download.phpbb.com/pub/release/3.3/${P
  && cp -a /tmp/phpBB3/. /var/www/html/ \
  && rm -rf /tmp/phpbb.zip /tmp/phpBB3 \
  && chown -R www-data:www-data /var/www/html
+
+# Same Markdown extension as production (alfredoramos/markdown, Litedown)
+RUN mkdir -p /var/www/html/ext/alfredoramos/markdown \
+ && curl -fsSL "https://github.com/AlfredoRamos/phpbb-ext-markdown/archive/refs/tags/${MARKDOWN_VERSION}.tar.gz" \
+    | tar xz -C /var/www/html/ext/alfredoramos/markdown --strip-components=1 \
+ && chown -R www-data:www-data /var/www/html/ext
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh

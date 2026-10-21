@@ -55,6 +55,11 @@ if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_styles WHERE style_path='ba
 		UPDATE phpbb_users SET user_style=(SELECT style_id FROM phpbb_styles WHERE style_path='baneforum');"
 fi
 
+# Enable the Markdown extension (same as production) once.
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='alfredoramos/markdown' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable alfredoramos/markdown
+fi
+
 # Template and style changes need a cleared cache.
 php bin/phpbbcli.php cache:purge >/dev/null 2>&1 || true
 chown -R www-data:www-data cache store files images
