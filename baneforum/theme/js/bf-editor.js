@@ -228,10 +228,15 @@ dialog input {
 	font-size: max(1rem, 16px);
 }
 
-dialog input:focus-visible,
 dialog button:focus-visible {
 	outline: 0.15rem solid var(--bf-focus);
 	outline-offset: 0.1rem;
+}
+
+/* A field lights up its own border and nothing else. */
+dialog input:focus-visible {
+	outline: none;
+	border-color: var(--bf-focus);
 }
 
 dialog p {
@@ -392,10 +397,14 @@ dialog button[value="ok"] {
 	color: var(--bf-on-accent);
 }
 
-.attachment-menu input:focus-visible,
 .attachment-menu button:focus-visible {
 	outline: 0.15rem solid var(--bf-focus);
 	outline-offset: 0.1rem;
+}
+
+.attachment-menu input:focus-visible {
+	outline: none;
+	border-color: var(--bf-focus);
 }
 
 .attachment {

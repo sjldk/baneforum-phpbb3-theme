@@ -1027,8 +1027,25 @@ input.button3:focus {
 	color: var(--color-on-accent);
 }
 
-:is(a, button, input, select, textarea, summary, [tabindex], .button, .dropdown-trigger):focus-visible {
+:is(
+	a,
+	button,
+	input:not(.inputbox),
+	select,
+	textarea:not(.inputbox),
+	summary,
+	[tabindex],
+	.button,
+	.dropdown-trigger
+):focus-visible {
 	outline: 0.1875rem solid var(--color-text) !important;
 	outline-offset: 0.125rem !important;
 	box-shadow: 0 0 0 0.3125rem var(--color-paper);
+}
+
+/* A text field lights up its own border, and nothing else. The border is 2.4 px and goes from the line colour to
+   the focus colour (3.5:1 between the two, 4.7:1 against the page), so it is also a focus line at AAA. */
+.inputbox:focus-visible {
+	outline: none;
+	box-shadow: none;
 }
