@@ -22,6 +22,7 @@ scripts/browser-tests/run.sh posting.mjs              # one test
 | `sizes.mjs <this folder>` | Uploads of 30 KB to 3.6 MB pictures (chunked uploads, server compression). |
 | `edit.mjs <post id>` | Opening and saving an old post keeps its text exactly. |
 | `smilies.mjs` | Smilies and emoji in topic, search, review, preview and signature pages. |
+| `inputs.mjs` | A focused text field lights up its border only: no outline, no halo (theme fields and the editor dialog field). |
 | `fonts.mjs [admin]` | Which font every element has, and which fonts are drawn. |
 | `axe.mjs` | axe-core (WCAG A, AA, AAA, best practice) on six pages, also with the picture menu and link dialog open. |
 | `buttons.mjs` | AAA for buttons at rest: contrast, 44 by 44 px target, name. |
