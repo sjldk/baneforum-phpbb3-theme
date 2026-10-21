@@ -60,7 +60,7 @@ export const schema = new Schema({
 			group: `inline`,
 			inline: true,
 			atom: true,
-			attrs: { index: { default: 0 }, name: { default: `` }, src: { default: `` } },
+			attrs: { index: { default: 0 }, name: { default: `` }, src: { default: `` }, image: { default: true } },
 			parseDOM: [
 				{
 					tag: `bf-attachment`,

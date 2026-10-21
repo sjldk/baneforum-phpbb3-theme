@@ -259,6 +259,7 @@ dialog button[value="ok"] {
 	display: block;
 	max-inline-size: 100%;
 	max-block-size: 16rem;
+	border: 1px solid var(--bf-border);
 	border-radius: var(--bf-radius);
 	object-fit: contain;
 }
@@ -311,4 +312,73 @@ dialog button[value="ok"] {
 .ProseMirror-selectednode {
 	outline: 0.15rem solid var(--bf-focus);
 	outline-offset: 0.1rem;
+}
+
+/* The small menu by a picture. A popover is in the top layer, placed by the script. */
+.attachment-menu {
+	inline-size: min(22rem, calc(100vw - 1rem));
+	margin: 0;
+	padding: 0.75rem;
+	border: 0.15rem solid var(--bf-border);
+	border-radius: var(--bf-radius);
+	background: var(--bf-surface);
+	color: var(--bf-text);
+}
+
+.attachment-menu label {
+	display: grid;
+	gap: 0.25rem;
+}
+
+.attachment-menu input {
+	min-block-size: var(--bf-target);
+	padding: 0 0.5rem;
+	border: 0.15rem solid var(--bf-border);
+	border-radius: var(--bf-radius);
+	background: var(--bf-field);
+	color: inherit;
+	font: inherit;
+	font-size: max(1rem, 16px);
+}
+
+.attachment-menu p {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	justify-content: space-between;
+	margin: 0.75rem 0 0;
+}
+
+.attachment-menu button {
+	min-block-size: var(--bf-target);
+	padding: 0 1rem;
+	border: 0.15rem solid var(--bf-border);
+	border-radius: var(--bf-radius);
+	background: var(--bf-field);
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+}
+
+.attachment-menu button[value="ok"] {
+	border-color: var(--bf-accent);
+	background: var(--bf-accent);
+	color: var(--bf-on-accent);
+}
+
+.attachment-menu input:focus-visible,
+.attachment-menu button:focus-visible {
+	outline: 0.15rem solid var(--bf-focus);
+	outline-offset: 0.1rem;
+}
+
+.attachment {
+	cursor: pointer;
+}
+
+/* A file is being dragged over the text. */
+bf-editable[data-dropping] {
+	border-color: var(--bf-accent);
+	border-style: dashed;
+	background: var(--bf-tint);
 }

@@ -92,16 +92,16 @@
 	check('play loads the no-cookie player at the start time', frame !== null && frame.src === 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1&rel=0&start=5', frame?.src);
 	check('play removes the button', player.shadowRoot.querySelector('button') === null);
 
-	// Images: the Image button is off without a handler. A picked file shows at once, then arrives.
+	// Images: the Attach button is off without a handler. A picked file shows at once, then arrives.
 	editor.value = 'photos:';
-	const imageButton = toolbar.querySelector('[command="--image"]');
-	check('image button is off without an upload handler', imageButton.getAttribute('aria-disabled') === 'true');
+	const attachButton = toolbar.querySelector('[command="--attach"]');
+	check('attach button is off without an upload handler', attachButton.getAttribute('aria-disabled') === 'true');
 	let finish;
 	let progress;
 	editor.uploadHandler = { upload: (file, { onProgress }) => { progress = onProgress; return new Promise((resolve) => { finish = () => resolve({ src: URL.createObjectURL(file), name: file.name, index: 0, renumber: (i) => i + 1 }); }); } };
 	view.dispatch(view.state.tr.setSelection(Selection.atEnd(view.state.doc)));
 	await new Promise((resolve) => setTimeout(resolve, 50));
-	check('image button is on with an upload handler', !imageButton.hasAttribute('aria-disabled'));
+	check('attach button is on with an upload handler', !attachButton.hasAttribute('aria-disabled'));
 	const picker = editor.shadowRoot.querySelector('input[type="file"]');
 	const transfer = new DataTransfer();
 	transfer.items.add(new File([new Uint8Array([137, 80, 78, 71])], 'photo.png', { type: 'image/png' }));

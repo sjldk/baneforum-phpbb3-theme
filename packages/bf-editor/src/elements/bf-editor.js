@@ -8,6 +8,7 @@
 // It tells the host about changes with a "bf-change" event. Read the text from `editor.value`.
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
+import { createAttachmentMenu } from '../attachment-menu.js';
 import { createMarkdownBBCodeCodec } from '../codecs/markdown-bbcode.js';
 import { createBasicCommands } from '../commands.js';
 import { assertImplements } from '../contracts.js';
@@ -18,7 +19,7 @@ import { createPlugins } from '../plugins.js';
 import { schema } from '../schema.js';
 import { template } from '../template.js';
 import { Toolbar } from '../toolbar.js';
-import { createImageCommand, createUploads } from '../upload.js';
+import { createAttachCommand, createUploads } from '../upload.js';
 import { createNodeViews } from '../views.js';
 
 /** @typedef {import('../contracts.js').Command & {shortcut?: string, toggle?: boolean}} EditorCommand */
@@ -38,8 +39,9 @@ export class BfEditor extends HTMLElement {
 	/** @type {import('../contracts.js').UploadHandler | null} */
 	#uploadHandler = null;
 	#uploads;
-	/** @type {((index: number) => string) | null} */
-	#attachmentSrc = null;
+	/** @type {((index: number) => {src?: string, description?: string} | null) | null} */
+	#attachmentInfo = null;
+	#menu;
 	#picker;
 	#status;
 	#nodeViews;
@@ -74,13 +76,20 @@ export class BfEditor extends HTMLElement {
 				this.#status.textContent = text;
 			},
 			labels: () => this.#words,
+			onFiles: (files) => this.dispatchEvent(new CustomEvent(`bf-attach-files`, { bubbles: true, detail: { files } })),
 			onBusy: (count) => this.dispatchEvent(new CustomEvent(`bf-uploading`, { bubbles: true, detail: { count } })),
+		});
+		this.#menu = createAttachmentMenu({
+			root,
+			emit: (name, detail) => this.dispatchEvent(new CustomEvent(name, { bubbles: true, detail })),
+			info: () => this.#attachmentInfo,
 		});
 		this.#nodeViews = createNodeViews(
 			root,
 			this.#uploads,
 			() => this.#words,
-			() => this.#attachmentSrc,
+			() => this.#attachmentInfo,
+			this.#menu,
 		);
 		this.#picker.addEventListener(`change`, () => {
 			if (this.#view) {
@@ -143,7 +152,7 @@ export class BfEditor extends HTMLElement {
 		return [
 			...commands,
 			...(have.has(`link`) ? [] : [createLinkCommand(schema, { ask: (current) => this.#linkDialog.ask(current) })]),
-			...(have.has(`image`) ? [] : [createImageCommand(this.#uploads, () => this.#picker.click())]),
+			...(have.has(`attach`) ? [] : [createAttachCommand(this.#uploads, () => this.#picker.click())]),
 		];
 	}
 
@@ -177,12 +186,13 @@ export class BfEditor extends HTMLElement {
 	}
 
 	/**
-	 * Finds the picture for a file that came with the text, as `[attachment=2]name[/attachment]`.
+	 * Tells the editor what the host knows about a file that came with the text, as
+	 * `[attachment=2]name[/attachment]`: where to show it from and its description.
 	 * Without it such a file shows as its name.
-	 * @param {((index: number) => string) | null} resolve
+	 * @param {((index: number) => {src?: string, description?: string} | null) | null} info
 	 */
-	set attachmentSrc(resolve) {
-		this.#attachmentSrc = resolve;
+	set attachmentInfo(info) {
+		this.#attachmentInfo = info;
 	}
 
 	/**
@@ -196,6 +206,15 @@ export class BfEditor extends HTMLElement {
 			view.dispatch(view.state.tr.replaceSelectionWith(schema.nodes.attachment.create({ index, name, src })));
 			view.focus();
 		}
+	}
+
+	/**
+	 * Which files the picker offers, as the `accept` attribute of a file field (".pdf,.zip" or "image/*").
+	 * Empty means every file.
+	 * @param {string} types
+	 */
+	set accept(types) {
+		this.#picker.accept = types;
 	}
 
 	/** How many files are still on their way. Wait for 0 before the form is sent. */
@@ -255,7 +274,7 @@ export class BfEditor extends HTMLElement {
 	#createState(text) {
 		return EditorState.create({
 			doc: this.#codec.parse(text),
-			plugins: createPlugins(schema, this.#commands, { uploads: this.#uploads }),
+			plugins: createPlugins(schema, this.#commands, { uploads: this.#uploads, menu: this.#menu }),
 		});
 	}
 

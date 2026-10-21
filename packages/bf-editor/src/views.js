@@ -6,9 +6,10 @@ import { format } from './labels.js';
  * @param {ShadowRoot} root  the editor's shadow root, which holds the templates
  * @param {ReturnType<import('./upload.js').createUploads>} uploads
  * @param {() => Record<string, string>} labels  the words to use, see labels.js
- * @param {() => ((index: number) => string) | null} resolveSrc  finds the picture of a file loaded from text, if the host can
+ * @param {() => ((index: number) => {src?: string, description?: string, image?: boolean} | null) | null} info  what the host knows about a file that came with the text
+ * @param {ReturnType<import('./attachment-menu.js').createAttachmentMenu>} menu  the small menu of a picture
  */
-export function createNodeViews(root, uploads, labels, resolveSrc) {
+export function createNodeViews(root, uploads, labels, info, menu) {
 	/** @param {string} id @returns {HTMLElement} */
 	const clone = (id) =>
 		/** @type {HTMLElement} */ (
@@ -58,15 +59,19 @@ export function createNodeViews(root, uploads, labels, resolveSrc) {
 		},
 
 		/** @type {import('prosemirror-view').NodeViewConstructor} */
-		attachment(node) {
+		attachment(node, view) {
 			const dom = clone(`attachment`);
 			const image = /** @type {HTMLImageElement} */ (dom.querySelector(`img`));
 			const name = /** @type {HTMLElement} */ (dom.querySelector(`.name`));
-			const src = node.attrs.src || resolveSrc()?.(node.attrs.index) || ``;
+			const known = info()?.(node.attrs.index);
+			// A file that is not a picture shows as its name.
+			const isImage = known?.image ?? node.attrs.image;
+			const src = isImage ? node.attrs.src || known?.src || `` : ``;
 			image.hidden = src === ``;
 			image.src = src;
-			image.alt = node.attrs.name;
+			image.alt = known?.description || node.attrs.name;
 			name.textContent = src === `` ? node.attrs.name : ``;
+			dom.addEventListener(`click`, () => menu.open(view, node, dom));
 
 			return { dom, ignoreMutation: () => true };
 		},

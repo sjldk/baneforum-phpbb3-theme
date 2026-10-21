@@ -8,8 +8,8 @@ import { Plugin } from 'prosemirror-state';
 import { format, labelsFor } from './labels.js';
 
 /** @param {DataTransfer | null | undefined} data */
-function imageFiles(data) {
-	return [...(data?.files ?? [])].filter((file) => file.type.startsWith(`image/`));
+function droppedFiles(data) {
+	return [...(data?.files ?? [])];
 }
 
 /**
@@ -19,8 +19,9 @@ function imageFiles(data) {
  * @param {(text: string) => void} options.announce  says something to screen readers
  * @param {() => Record<string, string>} [options.labels]  the words to use, see labels.js
  * @param {(count: number) => void} [options.onBusy]  called when the number of running uploads changes
+ * @param {(files: File[]) => void} [options.onFiles]  called with the files that are not pictures. Those are not shown in the text, the host keeps them in its own list.
  */
-export function createUploads({ schema, handler, announce, onBusy, labels = () => labelsFor() }) {
+export function createUploads({ schema, handler, announce, onBusy, onFiles, labels = () => labelsFor() }) {
 	let counter = 0;
 	/** @type {Map<string, AbortController>} */
 	const running = new Map();
@@ -125,13 +126,18 @@ export function createUploads({ schema, handler, announce, onBusy, labels = () =
 		},
 
 		/**
-		 * Shows the files at once and sends them in the background.
+		 * Shows the pictures at once and sends them in the background. Other files go to `onFiles`.
 		 * @param {import('prosemirror-view').EditorView} view
 		 * @param {File[]} files
 		 * @param {number} [at]  where to put them. Default: the cursor.
 		 */
 		add(view, files, at) {
 			let position = at ?? view.state.selection.to;
+			const others = files.filter((file) => !file.type.startsWith(`image/`));
+
+			if (others.length > 0) {
+				onFiles?.(others);
+			}
 
 			for (const file of files.filter((candidate) => candidate.type.startsWith(`image/`))) {
 				counter += 1;
@@ -175,16 +181,37 @@ export function createUploads({ schema, handler, announce, onBusy, labels = () =
 }
 
 /**
- * Paste and drop of image files.
+ * Paste and drop of files. While a file is dragged over the text, the text shows it can take it.
  * @param {ReturnType<typeof createUploads>} uploads
  */
 export function createUploadPlugin(uploads) {
 	return new Plugin({
 		props: {
-			handlePaste: (view, event) => {
-				const files = imageFiles(event.clipboardData);
+			handleDOMEvents: {
+				dragover: (view, event) => {
+					if (uploads.available && [...(event.dataTransfer?.types ?? [])].includes(`Files`)) {
+						view.dom.toggleAttribute(`data-dropping`, true);
+					}
 
-				if (files.length === 0 || !uploads.available) {
+					return false;
+				},
+				dragleave: (view) => {
+					view.dom.toggleAttribute(`data-dropping`, false);
+
+					return false;
+				},
+				drop: (view) => {
+					view.dom.toggleAttribute(`data-dropping`, false);
+
+					return false;
+				},
+			},
+			handlePaste: (view, event) => {
+				const files = droppedFiles(event.clipboardData);
+				const onlyFiles = [...(event.clipboardData?.types ?? [])].every((type) => type === `Files`);
+
+				// Text that comes with a file (a copied table, for example) is a paste of text.
+				if (files.length === 0 || !onlyFiles || !uploads.available) {
 					return false;
 				}
 
@@ -193,7 +220,7 @@ export function createUploadPlugin(uploads) {
 				return true;
 			},
 			handleDrop: (view, event) => {
-				const files = imageFiles(event.dataTransfer);
+				const files = droppedFiles(event.dataTransfer);
 
 				if (files.length === 0 || !uploads.available) {
 					return false;
@@ -214,10 +241,10 @@ export function createUploadPlugin(uploads) {
  * @param {() => void} pick  opens the picker
  * @returns {import('./contracts.js').Command & {toggle: boolean}}
  */
-export function createImageCommand(uploads, pick) {
+export function createAttachCommand(uploads, pick) {
 	return {
-		id: `image`,
-		label: `Image`,
+		id: `attach`,
+		label: `Attach file`,
 		toggle: false,
 		run(_state, dispatch) {
 			if (!uploads.available) {

@@ -4,7 +4,7 @@ import { EditorState, TextSelection } from 'prosemirror-state';
 import { createMarkdownBBCodeCodec } from '../src/codecs/markdown-bbcode.js';
 import { assertImplements } from '../src/contracts.js';
 import { schema } from '../src/schema.js';
-import { createImageCommand, createUploadPlugin, createUploads } from '../src/upload.js';
+import { createAttachCommand, createUploadPlugin, createUploads } from '../src/upload.js';
 import { fakeUploadHandler } from './fakes/fake-upload.js';
 
 const codec = createMarkdownBBCodeCodec(schema);
@@ -19,14 +19,16 @@ function setup(text, handler, position = 1) {
 	};
 	const said = [];
 	const busy = [];
+	const files = [];
 	const uploads = createUploads({
 		schema,
 		handler: () => handler,
 		announce: (text) => said.push(text),
 		onBusy: (count) => busy.push(count),
+		onFiles: (list) => files.push(list),
 	});
 
-	return { view, uploads, said, busy };
+	return { view, uploads, said, busy, files };
 }
 
 const kinds = (view) => {
@@ -62,11 +64,24 @@ test(`a file that is still going writes nothing to the text`, () => {
 	assert.equal(codec.serialize(view.state.doc), `hi`);
 });
 
-test(`files that are not images are ignored`, () => {
-	const { view, uploads } = setup(`hi`, fakeUploadHandler());
-	uploads.add(view, [new File([`x`], `a.pdf`, { type: `application/pdf` })]);
+test(`a file that is not a picture goes to the host's list, not into the text`, async () => {
+	const { view, uploads, files } = setup(`hi`, fakeUploadHandler());
+	const pdf = new File([`x`], `manual.pdf`, { type: `application/pdf` });
+	uploads.add(view, [pdf]);
+	await settle();
+	assert.deepEqual(files, [[pdf]]);
 	assert.deepEqual(kinds(view), []);
+	assert.equal(codec.serialize(view.state.doc), `hi`);
 	assert.equal(uploads.pending, 0);
+});
+
+test(`pictures and files together: the pictures stay in the text, the files go to the host`, async () => {
+	const { view, uploads, files } = setup(`hi`, fakeUploadHandler());
+	const zip = new File([`x`], `a.zip`, { type: `application/zip` });
+	uploads.add(view, [png(`a.png`), zip]);
+	await settle();
+	assert.deepEqual(files, [[zip]]);
+	assert.deepEqual(kinds(view), [`attachment`]);
 });
 
 test(`several files keep their order`, async () => {
@@ -156,10 +171,10 @@ test(`an answer that comes after the node was removed changes nothing`, async ()
 	assert.deepEqual(kinds(view), []);
 });
 
-test(`without a handler uploads are not available and the image command is off`, () => {
+test(`without a handler uploads are not available and the attach command is off`, () => {
 	const { view, uploads } = setup(`hi`, null);
 	assert.equal(uploads.available, false);
-	const command = createImageCommand(uploads, () => assert.fail(`must not open the picker`));
+	const command = createAttachCommand(uploads, () => assert.fail(`must not open the picker`));
 	assert.equal(command.run(view.state), false);
 	assert.equal(
 		command.run(view.state, () => {}),
@@ -167,10 +182,10 @@ test(`without a handler uploads are not available and the image command is off`,
 	);
 });
 
-test(`with a handler the image command opens the picker`, () => {
+test(`with a handler the attach command opens the picker`, () => {
 	const { view, uploads } = setup(`hi`, fakeUploadHandler());
 	let opened = 0;
-	const command = createImageCommand(uploads, () => {
+	const command = createAttachCommand(uploads, () => {
 		opened += 1;
 	});
 	assertImplements(`Command`, command);
@@ -180,17 +195,44 @@ test(`with a handler the image command opens the picker`, () => {
 	assert.equal(opened, 1);
 });
 
-test(`pasting image files starts uploads and other pastes are left alone`, async () => {
+test(`pasting files starts uploads and a paste that also holds text is left alone`, async () => {
 	const { view, uploads } = setup(`hi`, fakeUploadHandler());
 	const plugin = createUploadPlugin(uploads);
-	assert.equal(plugin.props.handlePaste(view, { clipboardData: { files: [png(`a.png`)] } }), true);
-	assert.equal(plugin.props.handlePaste(view, { clipboardData: { files: [] } }), false);
+	assert.equal(plugin.props.handlePaste(view, { clipboardData: { files: [png(`a.png`)], types: [`Files`] } }), true);
+	assert.equal(plugin.props.handlePaste(view, { clipboardData: { files: [], types: [`text/plain`] } }), false);
 	assert.equal(
-		plugin.props.handlePaste(view, { clipboardData: { files: [new File([`x`], `a.txt`, { type: `text/plain` })] } }),
+		plugin.props.handlePaste(view, { clipboardData: { files: [png(`b.png`)], types: [`text/html`, `Files`] } }),
 		false,
 	);
 	await settle();
 	assert.deepEqual(kinds(view), [`attachment`]);
+});
+
+test(`a dropped file that is not a picture goes to the host`, async () => {
+	const { view, uploads, files } = setup(`hi`, fakeUploadHandler());
+	view.posAtCoords = () => ({ pos: 1 });
+	const plugin = createUploadPlugin(uploads);
+	const zip = new File([`x`], `a.zip`, { type: `application/zip` });
+	const event = { dataTransfer: { files: [zip] }, clientX: 1, clientY: 1, preventDefault: () => {} };
+	assert.equal(plugin.props.handleDrop(view, event), true);
+	assert.deepEqual(files, [[zip]]);
+	assert.equal(codec.serialize(view.state.doc), `hi`);
+});
+
+test(`dragging a file over the text marks it, and leaving or dropping clears the mark`, () => {
+	const { view, uploads } = setup(`hi`, fakeUploadHandler());
+	const marks = new Set();
+	view.dom = { toggleAttribute: (name, on) => (on ? marks.add(name) : marks.delete(name)) };
+	const { dragover, dragleave, drop } = createUploadPlugin(uploads).props.handleDOMEvents;
+	dragover(view, { dataTransfer: { types: [`text/plain`] } });
+	assert.equal(marks.has(`data-dropping`), false);
+	dragover(view, { dataTransfer: { types: [`Files`] } });
+	assert.equal(marks.has(`data-dropping`), true);
+	dragleave(view);
+	assert.equal(marks.has(`data-dropping`), false);
+	dragover(view, { dataTransfer: { types: [`Files`] } });
+	drop(view);
+	assert.equal(marks.has(`data-dropping`), false);
 });
 
 test(`dropped image files start uploads where they were dropped`, async () => {
@@ -213,5 +255,5 @@ test(`dropped image files start uploads where they were dropped`, async () => {
 test(`without a handler a paste of an image is left to the browser`, () => {
 	const { view, uploads } = setup(`hi`, null);
 	const plugin = createUploadPlugin(uploads);
-	assert.equal(plugin.props.handlePaste(view, { clipboardData: { files: [png(`a.png`)] } }), false);
+	assert.equal(plugin.props.handlePaste(view, { clipboardData: { files: [png(`a.png`)], types: [`Files`] } }), false);
 });

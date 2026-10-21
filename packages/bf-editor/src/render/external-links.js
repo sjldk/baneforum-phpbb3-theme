@@ -42,5 +42,15 @@ export function useNewWindowLinks(root, options = {}) {
 		changed += 1;
 	}
 
+	// A link that opens a new tab on this site (a picture that opens whole) warns the same way.
+	for (const link of root.querySelectorAll(`a[target="_blank"]:not([data-bf-external], [data-bf-warned])`)) {
+		const hidden = document.createElement(`span`);
+		hidden.className = `bf-visually-hidden`;
+		hidden.textContent = ` ${text}`;
+		link.append(hidden);
+		link.setAttribute(`data-bf-warned`, ``);
+		changed += 1;
+	}
+
 	return changed;
 }

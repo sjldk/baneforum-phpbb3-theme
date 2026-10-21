@@ -6,6 +6,7 @@ import { history, redo, undo } from 'prosemirror-history';
 import { InputRule, inputRules, wrappingInputRule } from 'prosemirror-inputrules';
 import { keymap } from 'prosemirror-keymap';
 import { Plugin } from 'prosemirror-state';
+import { createAttachmentMenuPlugin } from './attachment-menu.js';
 import { youtubeProvider } from './embeds/youtube.js';
 import { setLink } from './link-command.js';
 import { defaultLinkPolicy } from './link-policy.js';
@@ -109,7 +110,7 @@ function pasteLink(schema, policy, embeds) {
 /**
  * @param {import('prosemirror-model').Schema} schema
  * @param {Array<import('./contracts.js').Command & {shortcut?: string}>} commands
- * @param {{smilies?: Record<string, string>, linkPolicy?: import('./contracts.js').LinkPolicy, embeds?: import('./contracts.js').EmbedProvider[], uploads?: ReturnType<typeof import('./upload.js').createUploads>}} [options]
+ * @param {{smilies?: Record<string, string>, linkPolicy?: import('./contracts.js').LinkPolicy, embeds?: import('./contracts.js').EmbedProvider[], uploads?: ReturnType<typeof import('./upload.js').createUploads>, menu?: ReturnType<typeof import('./attachment-menu.js').createAttachmentMenu>}} [options]
  */
 export function createPlugins(schema, commands, options = {}) {
 	/** @type {Record<string, import('prosemirror-state').Command>} */
@@ -131,6 +132,7 @@ export function createPlugins(schema, commands, options = {}) {
 
 	return [
 		...(options.uploads ? [createUploadPlugin(options.uploads)] : []),
+		...(options.menu ? [createAttachmentMenuPlugin(options.menu)] : []),
 		inputRules({ rules }),
 		keymap({
 			...shortcuts,
