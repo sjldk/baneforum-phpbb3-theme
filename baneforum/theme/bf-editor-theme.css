@@ -1,0 +1,15 @@
+/* Maps the editor's --bf-* values to the theme palette. The editor itself (bf-editor.css) names
+   no theme colour, and the palette names no editor. This file is the only place that knows both.
+   Dark mode needs nothing here: the palette changes under data-theme="dark" and this follows. */
+bf-editor {
+	--bf-radius: var(--radius);
+	--bf-accent: var(--accent);
+	--bf-focus: var(--color-focus);
+	--bf-border: var(--color-line);
+	--bf-surface: var(--color-paper);
+	--bf-field: var(--color-paper);
+	--bf-tint: var(--color-tint);
+	--bf-text: var(--color-text);
+	--bf-muted: var(--color-muted);
+	--bf-on-accent: var(--color-on-accent);
+}
