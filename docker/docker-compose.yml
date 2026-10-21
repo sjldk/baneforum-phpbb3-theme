@@ -1,0 +1,27 @@
+# Usage (from this folder): docker compose up --build
+# Board:  http://localhost:8080   Login: admin / adminadmin
+# Nothing is persisted: `docker compose down` gives a fresh board.
+# Theme files are bind-mounted, so edits show after a cache purge (see README).
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_DATABASE: phpbb
+      MARIADB_USER: phpbb
+      MARIADB_PASSWORD: phpbb
+      MARIADB_ROOT_PASSWORD: root
+
+  web:
+    build:
+      context: .
+      args:
+        PHP_VERSION: ${PHP_VERSION:-8.5}
+        PHPBB_VERSION: ${PHPBB_VERSION:-3.3.19}
+    depends_on:
+      - db
+    environment:
+      HTTP_PORT: ${HTTP_PORT:-8080}
+    ports:
+      - "${HTTP_PORT:-8080}:80"
+    volumes:
+      - ../baneforum:/var/www/html/styles/baneforum
