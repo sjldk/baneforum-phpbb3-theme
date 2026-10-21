@@ -1,0 +1,53 @@
+/* The video player card. Nothing is loaded from YouTube until the button is pressed.
+   Colours are --bf-* custom properties, set by the page, with defaults. */
+:host {
+	display: block;
+	margin: 0 0 0.75em;
+	--bf-youtube-bg: #132e4e;
+	--bf-youtube-text: #f6f8fa;
+	--bf-focus: #4e76a5;
+	--bf-radius: 0.5rem;
+	--bf-target: 2.75rem;
+}
+
+button {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	inline-size: 100%;
+	aspect-ratio: 16 / 9;
+	border: 0.15rem solid transparent;
+	border-radius: var(--bf-radius);
+	background: var(--bf-youtube-bg);
+	color: var(--bf-youtube-text);
+	cursor: pointer;
+	font: inherit;
+}
+
+button svg {
+	inline-size: 3.5rem;
+	block-size: 3.5rem;
+	fill: currentcolor;
+}
+
+button:focus-visible {
+	outline: 0.15rem solid var(--bf-focus);
+	outline-offset: 0.15rem;
+}
+
+iframe {
+	display: block;
+	inline-size: 100%;
+	aspect-ratio: 16 / 9;
+	border: 0;
+	border-radius: var(--bf-radius);
+}
+
+/* The link in the post, kept so the video can be opened on YouTube. */
+slot {
+	display: block;
+	margin-block-start: 0.25rem;
+	overflow-wrap: anywhere;
+}

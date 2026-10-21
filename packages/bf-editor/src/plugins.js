@@ -6,6 +6,7 @@ import { history, redo, undo } from 'prosemirror-history';
 import { InputRule, inputRules, wrappingInputRule } from 'prosemirror-inputrules';
 import { keymap } from 'prosemirror-keymap';
 import { Plugin } from 'prosemirror-state';
+import { youtubeProvider } from './embeds/youtube.js';
 import { setLink } from './link-command.js';
 import { defaultLinkPolicy } from './link-policy.js';
 import { defaultSmilies } from './smilies.js';
@@ -65,11 +66,13 @@ function emptyMarker() {
 
 /**
  * Pasting a web address makes a link: over selected text it links the text, otherwise the
- * address is written as a link. Any other paste is left to ProseMirror.
+ * address is written as a link. A video address pasted into an empty paragraph becomes a player.
+ * Any other paste is left to ProseMirror.
  * @param {import('prosemirror-model').Schema} schema
  * @param {import('./contracts.js').LinkPolicy} policy
+ * @param {import('./contracts.js').EmbedProvider[]} embeds
  */
-function pasteLink(schema, policy) {
+function pasteLink(schema, policy, embeds) {
 	return new Plugin({
 		props: {
 			handlePaste: (view, event) => {
@@ -77,6 +80,21 @@ function pasteLink(schema, policy) {
 
 				if (!/^(https?:\/\/|mailto:)\S+$/i.test(text)) {
 					return false;
+				}
+
+				const { $from, empty } = view.state.selection;
+				const provider = embeds.find((candidate) => candidate.match(text));
+
+				if (provider && empty && $from.parent.type === schema.nodes.paragraph && $from.parent.content.size === 0) {
+					const player = schema.nodes.embed.create({ provider: provider.id, url: text, source: `` });
+					const last = view.state.doc.lastChild === $from.parent;
+					view.dispatch(
+						view.state.tr
+							.replaceWith($from.before(), $from.after(), last ? [player, schema.nodes.paragraph.create()] : player)
+							.scrollIntoView(),
+					);
+
+					return true;
 				}
 
 				const href = policy.normalize(text);
@@ -90,7 +108,7 @@ function pasteLink(schema, policy) {
 /**
  * @param {import('prosemirror-model').Schema} schema
  * @param {Array<import('./contracts.js').Command & {shortcut?: string}>} commands
- * @param {{smilies?: Record<string, string>, linkPolicy?: import('./contracts.js').LinkPolicy}} [options]
+ * @param {{smilies?: Record<string, string>, linkPolicy?: import('./contracts.js').LinkPolicy, embeds?: import('./contracts.js').EmbedProvider[]}} [options]
  */
 export function createPlugins(schema, commands, options = {}) {
 	/** @type {Record<string, import('prosemirror-state').Command>} */
@@ -130,7 +148,7 @@ export function createPlugins(schema, commands, options = {}) {
 		history(),
 		dropCursor(),
 		gapCursor(),
-		pasteLink(schema, options.linkPolicy ?? defaultLinkPolicy),
+		pasteLink(schema, options.linkPolicy ?? defaultLinkPolicy, options.embeds ?? [youtubeProvider]),
 		emptyMarker(),
 	];
 }

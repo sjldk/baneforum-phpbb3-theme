@@ -79,6 +79,19 @@
 	await new Promise((resolve) => setTimeout(resolve, 50));
 	check('cancel changes nothing', editor.value === 'hello world');
 
+	// YouTube: a video address on its own line is a player. Nothing loads from Google until play.
+	editor.value = 'before\n\nhttps://youtu.be/dQw4w9WgXcQ?t=5\n\nafter';
+	await new Promise((resolve) => setTimeout(resolve, 100));
+	const player = editor.shadowRoot.querySelector('bf-editable bf-youtube');
+	check('video address becomes bf-youtube in the editor', player !== null && player.getAttribute('url') === 'https://youtu.be/dQw4w9WgXcQ?t=5');
+	check('player has a play button and no iframe yet', player.shadowRoot.querySelector('button') !== null && player.shadowRoot.querySelector('iframe') === null);
+	check('no request to YouTube or Google before play', !performance.getEntriesByType('resource').some((entry) => /youtube|google|ytimg/.test(entry.name)));
+	check('value still saves the address as typed', editor.value === 'before\n\nhttps://youtu.be/dQw4w9WgXcQ?t=5\n\nafter', JSON.stringify(editor.value));
+	player.shadowRoot.querySelector('button').click();
+	const frame = player.shadowRoot.querySelector('iframe');
+	check('play loads the no-cookie player at the start time', frame !== null && frame.src === 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1&rel=0&start=5', frame?.src);
+	check('play removes the button', player.shadowRoot.querySelector('button') === null);
+
 	document.getElementById('result').textContent = results.join('\n');
 </script>
 </body>

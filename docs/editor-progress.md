@@ -12,7 +12,7 @@ Goal: replace the phpBB post editor with a ProseMirror editor (`bf-` custom elem
 | 2 | Schema, Markdown codec, legacy BBCode codec, smilie map, corpus tests | Done (first version, see open items) |
 | 3 | Toolbar and editor element | Done (without link and image buttons, which come in phases 4 and 6) |
 | 4 | Links (dialog, new window, rendered posts) | Done |
-| 5 | YouTube embed | Open |
+| 5 | YouTube embed | Done |
 | 6 | Image upload, Facebook style | Open |
 | 7 | phpBB adapter in the theme | Open |
 | 8 | Smilie conversion and rendered-post scripts | Open |
@@ -93,7 +93,7 @@ docker compose -f docker/docker-compose.yml exec --user www-data -T web php /tmp
 |---|---|
 | phpBB version, charset | 3.3.19, `utf8mb4` |
 | Markdown | `alfredoramos/markdown` active. Allowed in posts and PMs, not in signatures. |
-| **MediaEmbed** | `phpbb/mediaembed` is active. Old posts embed videos with `[youtube]url[/youtube]` (644 uses) and `[media]url[/media]` (about 440). A bare YouTube link is not the format production uses. Decide the saved form in phase 5. |
+| **MediaEmbed** | `phpbb/mediaembed` is active. Old posts embed videos with `[youtube]url[/youtube]` (644 uses) and `[media]url[/media]` (about 440). A bare YouTube link is not the format production uses. Decided in phase 5: new videos are saved as a bare address (see the log). |
 | Posts using each BBCode | quote 5,055 (17%), inline attachment 2,983 (21,065 tags in total), url 1,015, youtube 539, b 469, media 417, i 350, img 285, u 160, color 57, list 55, size 49, code 10. No `[s]` strike tag at all. |
 | Markdown in real use | bold `**` in 111 posts, headings 16, `>` quote lines 303 (partly prose), tables 2. |
 | Quotes | 4,082 have no attributes, 2,017 have `post_id time user_id`, a few have `msg_id` (PMs). |
@@ -121,7 +121,6 @@ docker compose -f docker/docker-compose.yml exec --user www-data -T web php /tmp
 - Review the 59 "other" corpus differences and the 7 unstable texts.
 - `bf-render.js` is a built file that is committed in the theme. Rebuild with `scripts/bf-editor.sh build` after changing `src/`.
 - Writer for new editor-made content (new quotes, embeds, uploads) is not golden-tested against the server yet.
-- Embed form to save for new YouTube links: production uses MediaEmbed (`[youtube]`, `[media]`). Install `phpbb/mediaembed` in the Docker board in phase 5.
 - Load the production backup into a second test database and measure real post content: how many posts use which BBCode, how many use Markdown (phase 2 test data).
 - Per-user and per-forum Markdown switches on production: not checked yet.
 - Extension on PHP 8.5: it enables and renders in the test board. Longer use is untested.
@@ -146,3 +145,6 @@ cd packages/bf-editor && python3 -m http.server 8099
 | 2026-10-21 | Component structure rule: every `bf-` component has its markup and CSS as one template string in a shadow root, not built with `createElement` chains. The HTML and CSS are real files (`src/bf-editor.html`, `src/bf-editor.css`) that the build reads as text into `src/template.js`, so Biome still checks them. Script only finds the elements and hooks up events. Ids are private to the shadow root, so `commandfor` needs no per-editor counters. |
 | 2026-10-21 | Shadow DOM applied to `<bf-editor>`. The toolbar and dialog markup moved into `bf-editor.html` (icons are inline SVG there, `icons.js` is gone). `toolbar.js` and `link-dialog.js` now take the elements from the template. Page CSS no longer reaches in (checked). The theme sets `--bf-*` on `bf-editor` and they pass through. `data-theme` dark mode on an ancestor is not read inside the shadow root (`:host-context` is Chrome only), the theme palette flips the `--bf-*` values instead. Saved-post CSS (hidden text, new window arrow) is now `bf-render.css`, the only stylesheet the theme loads. 76 unit tests and 26 browser checks pass. Risk to check in the Firefox run: ProseMirror selection handling inside a shadow root. |
 | 2026-10-21 | House style: strings in JavaScript are always template literals (backticks), never `'` or `"`. ESLint `quotes: backtick` enforces it and `eslint --fix` converted all of `src`, `test`, `tools` and the build files. Import paths and property keys stay as they are. The demo pages (`demo/*.html`) are not linted and still use single quotes. |
+| 2026-10-21 | Phase 5. Saved form for a new YouTube video: the address as typed, alone in its own paragraph. Production has `media_embed_parse_urls=1`, so the server embeds it. Old `[youtube]` and `[media]` posts are loaded as players and saved exactly as they were. `src/embeds/youtube.js` (provider: watch, youtu.be, shorts, live, embed, music, start time as `t=90`, `1m30s` or `start=`), `src/embeds/paragraph.js` (a paragraph with only a video address becomes an `embed` node), `<bf-youtube>` (shadow DOM, play button, `<template>` with the iframe, loads `youtube-nocookie.com` only on click, the link stays inside as the no-JavaScript fallback). Pasting a video address into an empty paragraph makes a player. A video address with blank lines around it is written back with blank lines. |
+| 2026-10-21 | Rendered posts. The MediaEmbed output (`span[data-s9e-mediaembed=youtube]` with a lazy iframe) loads a picture from `i.ytimg.com` as soon as it is near the screen. `src/render/youtube.js` replaces it with `<bf-youtube>`, and also wraps a plain link that is alone in its paragraph (also phpBB's shortened `start ... end` text). Checked on the Docker board: 3 players, 0 iframes, 0 `ytimg` in the page. Added `phpbb/mediaembed` 2.1.0 to the test board (same as production). 93 unit tests and 32 browser checks pass. `bf-render.js` is now 7 KB. |
+| 2026-10-21 | The test board lost its install when the web container was recreated (config.php gone, database kept). Fix: drop and create the `phpbb` database, then `docker compose up -d --force-recreate web`. `phpbb_prod` is separate and was not touched. |

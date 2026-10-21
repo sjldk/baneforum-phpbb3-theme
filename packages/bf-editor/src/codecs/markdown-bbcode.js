@@ -2,6 +2,8 @@
 // Reading accepts both. Writing produces Markdown, and BBCode only for what Markdown cannot say
 // (quotes with an author, attached files, embedded videos).
 import { scanBBCode } from '../bbcode/scan.js';
+import { paragraphToEmbed } from '../embeds/paragraph.js';
+import { youtubeProvider } from '../embeds/youtube.js';
 import { PLACEHOLDER_CLOSE, PLACEHOLDER_OPEN, readMarkdown } from '../markdown/read.js';
 import { writeDocument } from '../markdown/write.js';
 import { createSmilieReplacer } from '../smilies.js';
@@ -24,11 +26,12 @@ function textOf(nodes) {
 
 /**
  * @param {import('prosemirror-model').Schema} schema
- * @param {{smilies?: Record<string, string>}} [options]
+ * @param {{smilies?: Record<string, string>, embeds?: import('../contracts.js').EmbedProvider[]}} [options]
  * @returns {import('../contracts.js').Codec}
  */
 export function createMarkdownBBCodeCodec(schema, options = {}) {
 	const replaceSmilies = createSmilieReplacer(options.smilies);
+	const embeds = options.embeds ?? [youtubeProvider];
 
 	/** @param {string} text */
 	function parse(text) {
@@ -48,7 +51,7 @@ export function createMarkdownBBCodeCodec(schema, options = {}) {
 		let run = [];
 		const flush = () => {
 			if (run.length > 0) {
-				blocks.push(...flowToBlocks(run));
+				blocks.push(...flowToBlocks(run).map((block) => paragraphToEmbed(block, schema, embeds)));
 			}
 
 			run = [];

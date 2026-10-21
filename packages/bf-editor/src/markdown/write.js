@@ -13,6 +13,15 @@ const real = { strong: `**`, em: `*`, strike: `~~` };
 // A line that starts like this would turn into a heading, list or quote on the server.
 const blockStart = /^(?:#{1,6}(?:\s|$)|[-+*]\s|\d+[.)]\s|>|```|~~~| {4}|\t)/;
 
+/**
+ * A block written as a BBCode tag, which needs no blank line around it. A video address on its
+ * own is a plain paragraph to the server, so it keeps its blank lines.
+ * @param {import('prosemirror-model').Node} block
+ */
+function isTagBlock(block) {
+	return block.type.name === `blockquote` || (block.type.name === `embed` && block.attrs.source !== ``);
+}
+
 /** @param {import('prosemirror-model').Node} doc */
 export function writeDocument(doc) {
 	/** @type {Array<{block: import('prosemirror-model').Node, text: string}>} */
@@ -24,8 +33,7 @@ export function writeDocument(doc) {
 	parts.forEach(({ block, text }, index) => {
 		if (index > 0) {
 			const previous = parts[index - 1].block;
-			const tight =
-				[`blockquote`, `embed`].includes(block.type.name) || [`blockquote`, `embed`].includes(previous.type.name);
+			const tight = isTagBlock(block) || isTagBlock(previous);
 			// A raw block remembers the blank lines it had in front of it. The server reads some
 			// blocks (lists) differently depending on them, so they are kept as they were.
 			const before = block.type.name === `raw_block` ? block.attrs.before : ``;
