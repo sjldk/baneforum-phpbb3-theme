@@ -4,7 +4,7 @@
 	{% if not S_PRIVMSGS and S_DISPLAY_USERNAME %}
 	<dl style="clear: left;">
 		<dt><label for="username">{{ lang('USERNAME') }}{{ lang('COLON') }}</label></dt>
-		<dd><input type="text" tabindex="1" name="username" id="username" size="25" value="{{ USERNAME }}" class="inputbox autowidth" /></dd>
+		<dd><input type="text" name="username" id="username" size="25" value="{{ USERNAME }}" class="inputbox autowidth" /></dd>
 	</dl>
 	{% endif %}
 
@@ -15,7 +15,7 @@
 		<dt><label for="subject">{{ lang('SUBJECT') }}{{ lang('COLON') }}</label></dt>
 		<dd>
 			{% EVENT posting_editor_subject_prepend %}
-			<input type="text" name="subject" id="subject" size="45" maxlength="{% if S_NEW_MESSAGE %}120{% else %}124{% endif %}" tabindex="2" value="{{ SUBJECT }}{{ DRAFT_SUBJECT }}" class="inputbox autowidth" />
+			<input type="text" name="subject" id="subject" size="45" maxlength="{% if S_NEW_MESSAGE %}120{% else %}124{% endif %}" value="{{ SUBJECT }}{{ DRAFT_SUBJECT }}" class="inputbox autowidth" />
 			{% EVENT posting_editor_subject_append %}
 		</dd>
 	</dl>
@@ -27,33 +27,13 @@
 
 	{% EVENT posting_editor_subject_after %}
 
-	<div id="smiley-box" class="smiley-box">
-		{% EVENT posting_editor_smilies_before %}
-		{% EVENT posting_editor_smilies_after %}
-		{% if BBCODE_STATUS %}
-		<div class="bbcode-status">
-			{% if loops.smiley|length %}<hr />{% endif %}
-			{{ BBCODE_STATUS }}<br />
-			{% if S_BBCODE_ALLOWED %}
-				{{ IMG_STATUS }}<br />
-				{{ FLASH_STATUS }}<br />
-				{{ URL_STATUS }}<br />
-			{% endif %}
-			{{ SMILIES_STATUS }}
-		</div>
-		{% endif %}
-		{% EVENT posting_editor_bbcode_status_after %}
-		{% if S_EDIT_DRAFT or S_DISPLAY_REVIEW %}
-			{% if S_DISPLAY_REVIEW %}<hr />{% endif %}
-			{% if S_EDIT_DRAFT %}<strong><a href="{{ S_UCP_ACTION }}">{{ lang('BACK_TO_DRAFTS') }}</a></strong>{% endif %}
-			{% if S_DISPLAY_REVIEW %}<strong><a href="#review">{{ lang('TOPIC_REVIEW') }}</a></strong>{% endif %}
-		{% endif %}
-	</div>
+	{# The side box (smilies, BBCode status, Markdown status, topic review link) is gone. #}
+	{% if S_EDIT_DRAFT %}<p><strong><a href="{{ S_UCP_ACTION }}">{{ lang('BACK_TO_DRAFTS') }}</a></strong></p>{% endif %}
 
 	{% EVENT posting_editor_message_before %}
 
 	<div id="message-box" class="message-box">
-		<textarea placeholder="Brug for at vedhæfte filer? Træk filerne herind." {% if S_UCP_ACTION and not S_PRIVMSGS and not S_EDIT_DRAFT %}name="signature" id="signature" style="height: 9em;"{% else %}name="message" id="message"{% endif %} rows="15" cols="76" tabindex="4" data-bf-label="{{ lang('MESSAGE_BODY') }}" class="inputbox">{{ MESSAGE }}{{ DRAFT_MESSAGE }}{{ SIGNATURE }}</textarea>
+		<textarea placeholder="Brug for at vedhæfte filer? Træk filerne herind." {% if S_UCP_ACTION and not S_PRIVMSGS and not S_EDIT_DRAFT %}name="signature" id="signature" style="height: 9em;"{% else %}name="message" id="message"{% endif %} rows="15" cols="76" data-bf-label="{{ lang('MESSAGE_BODY') }}" class="inputbox">{{ MESSAGE }}{{ DRAFT_MESSAGE }}{{ SIGNATURE }}</textarea>
 	</div>
 
 	{% EVENT posting_editor_message_after %}
@@ -74,10 +54,10 @@
 			{{ S_HIDDEN_ADDRESS_FIELD }}
 			{{ S_HIDDEN_FIELDS }}
 			{% EVENT posting_editor_submit_buttons %}
-			{% if S_HAS_DRAFTS %}<input type="submit" accesskey="d" tabindex="8" name="load" value="{{ lang('LOAD_DRAFT') }}" class="button2" onclick="load_draft = true;" />&nbsp; {% endif %}
-			{% if S_SAVE_ALLOWED %}<input type="submit" accesskey="k" tabindex="7" name="save" value="{{ lang('SAVE_DRAFT') }}" class="button2" />&nbsp; {% endif %}
-			<input type="submit" tabindex="5" name="preview" value="{{ lang('PREVIEW') }}" class="button1"{% if not S_PRIVMSGS %} onclick="document.getElementById('postform').action += '#preview';"{% endif %} />&nbsp;
-			<input type="submit" accesskey="s" tabindex="6" name="post" value="{{ lang('SUBMIT') }}" class="button1 default-submit-action" />&nbsp;
+			{% if S_HAS_DRAFTS %}<input type="submit" accesskey="d" name="load" value="{{ lang('LOAD_DRAFT') }}" class="button2" onclick="load_draft = true;" />&nbsp; {% endif %}
+			{% if S_SAVE_ALLOWED %}<input type="submit" accesskey="k" name="save" value="{{ lang('SAVE_DRAFT') }}" class="button2" />&nbsp; {% endif %}
+			<input type="submit" name="preview" value="{{ lang('PREVIEW') }}" class="button1"{% if not S_PRIVMSGS %} onclick="document.getElementById('postform').action += '#preview';"{% endif %} />&nbsp;
+			<input type="submit" accesskey="s" name="post" value="{{ lang('SUBMIT') }}" class="button1 default-submit-action" />&nbsp;
 
 		</fieldset>
 
@@ -85,26 +65,7 @@
 	</div>
 	{% endif %}
 
-	{% if not S_PRIVMSGS and not S_SHOW_DRAFTS and not (definition.SIG_EDIT == 1) %}
-		<div id="tabs" class="tabs sub-panels" data-show-panel="{% if SHOW_PANEL %}{{ SHOW_PANEL }}{% else %}options-panel{% endif %}" role="tablist">
-			<ul>
-				<li id="options-panel-tab" class="tab activetab"><a href="#tabs" data-subpanel="options-panel" role="tab" aria-controls="options-panel"><span>{{ lang('OPTIONS') }}</span></a></li>
-				{% if S_SHOW_ATTACH_BOX %}
-					<li id="attach-panel-tab" class="tab">
-						<a href="#tabs" data-subpanel="attach-panel" role="tab" aria-controls="attach-panel">
-							{{ lang('ATTACHMENTS') }} <strong id="file-total-progress" class="file-total-progress"><strong id="file-total-progress-bar" class="file-total-progress-bar"></strong></strong>
-						</a>
-					</li>
-				{% endif %}
-				{% if S_SHOW_POLL_BOX or S_POLL_DELETE %}
-					<li id="poll-panel-tab" class="tab">
-						<a href="#tabs" data-subpanel="poll-panel" role="tab" aria-controls="poll-panel">{{ lang('ADD_POLL') }}</a>
-					</li>
-				{% endif %}
-				{% EVENT posting_editor_add_panel_tab %}
-			</ul>
-		</div>
-	{% endif %}
+	{# The tabs (Options, Attachments, Add poll) are gone. The options show, the pictures are in the editor and the poll is a closed section. #}
 
 	{% if not S_SHOW_DRAFTS and not (definition.SIG_EDIT == 1) %}
 	<div class="panel bg3" id="options-panel">

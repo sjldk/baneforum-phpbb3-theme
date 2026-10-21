@@ -1,7 +1,7 @@
-<div class="navbar" role="navigation">
+<div class="navbar" role="navigation" aria-label="{{ lang('INDEX') }}">
 	<div class="inner">
 
-	<ul id="nav-footer" class="nav-footer linklist" role="menubar">
+	<ul id="nav-footer" class="nav-footer linklist">
 		<li class="breadcrumbs">
 			{% if U_SITE_HOME %}
 				{% spaceless %}
@@ -35,7 +35,7 @@
 		{% if not S_IS_BOT %}
 			{% if S_DISPLAY_MEMBERLIST %}
 				<li class="rightside" data-last-responsive="true">
-					<a href="{{ U_MEMBERLIST }}" title="{{ lang('MEMBERLIST_EXPLAIN') }}" role="menuitem">
+					<a href="{{ U_MEMBERLIST }}" title="{{ lang('MEMBERLIST_EXPLAIN') }}">
 						<i class="icon fa-group fa-fw" aria-hidden="true"></i><span>{{ lang('MEMBERLIST') }}</span>
 					</a>
 				</li>
@@ -44,7 +44,7 @@
 		{% EVENT overall_footer_teamlink_before %}
 		{% if U_TEAM %}
 			<!-- <li class="rightside" data-last-responsive="true">
-				<a href="{{ U_TEAM }}" role="menuitem">
+				<a href="{{ U_TEAM }}">
 					<i class="icon fa-shield fa-fw" aria-hidden="true"></i><span>{{ lang('THE_TEAM') }}</span>
 				</a>
 			</li> -->
@@ -52,7 +52,7 @@
 		{% EVENT overall_footer_teamlink_after %}
 		{% if U_CONTACT_US %}
 			<!-- <li class="rightside" data-last-responsive="true">
-				<a href="{{ U_CONTACT_US }}" role="menuitem">
+				<a href="{{ U_CONTACT_US }}">
 					<i class="icon fa-envelope fa-fw" aria-hidden="true"></i><span>{{ lang('CONTACT_US') }}</span>
 				</a>
 			</li> -->

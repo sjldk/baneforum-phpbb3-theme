@@ -1,0 +1,43 @@
+{# A picture is a figure that opens the whole picture in a new tab, with the writer's own description as its caption. A file is one card with its name, its size in whole KB or MB (not KiB, MiB, no decimals) and the description. The download count is not shown. #}
+<!-- EVENT attachment_file_before -->
+
+<!-- BEGIN _file -->
+	<!-- IF _file.S_DENIED -->
+	<p>[{_file.DENIED_MESSAGE}]</p>
+	<!-- ELSE -->
+		<!-- EVENT attachment_file_prepend -->
+
+		<!-- IF _file.S_THUMBNAIL -->
+		<dl class="thumbnail">
+			<dt><a href="{_file.U_DOWNLOAD_LINK}"><img src="{_file.THUMB_IMAGE}" class="postimage" alt="{% if _file.COMMENT %}{{ _file.COMMENT|e('html') }}{% else %}{{ _file.DOWNLOAD_NAME }}{% endif %}" title="{_file.DOWNLOAD_NAME} ({_file.FILESIZE} {_file.SIZE_LANG}) {_file.L_DOWNLOAD_COUNT}" /></a></dt>
+			<!-- IF _file.COMMENT --><dd> {_file.COMMENT}</dd><!-- ENDIF -->
+		</dl>
+		<!-- ENDIF -->
+
+		<!-- IF _file.S_IMAGE -->
+		<figure class="file">
+			<a href="{_file.U_INLINE_LINK}" target="_blank" rel="noopener noreferrer"><img src="{_file.U_INLINE_LINK}" class="postimage" alt="{% if _file.COMMENT %}{{ _file.COMMENT|e('html') }}{% else %}{{ _file.DOWNLOAD_NAME }}{% endif %}" /></a>
+			<!-- IF _file.COMMENT --><figcaption>{_file.COMMENT}</figcaption><!-- ENDIF -->
+		</figure>
+		<!-- ENDIF -->
+
+		<!-- IF _file.S_FILE -->
+		<span class="attachment-file">
+			{# A page with a folded corner and the file type (PDF, ZIP) on it. #}
+			{% set extension = _file.DOWNLOAD_NAME|split('.')|length > 1 ? (_file.DOWNLOAD_NAME|split('.')|last|upper|slice(0, 4)) : '' %}
+			<svg class="attachment-icon" viewBox="0 0 32 40" width="32" height="40" aria-hidden="true" focusable="false">
+				<path class="page" d="M6 2h14l10 10v24a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+				<path class="fold" d="M20 2v8a2 2 0 0 0 2 2h8"/>
+				<rect class="band" x="4" y="22" width="26" height="12" rx="2"/>
+				<text class="type" x="17" y="31.200" text-anchor="middle">{{ extension }}</text>
+			</svg>
+			<a class="attachment-name" href="{_file.U_DOWNLOAD_LINK}">{_file.DOWNLOAD_NAME}</a>
+			<span class="attachment-meta">{{ _file.FILESIZE|round }} {{ _file.SIZE_LANG|replace({'Bytes': 'B', 'KiB': 'KB', 'MiB': 'MB', 'GiB': 'GB', 'TiB': 'TB'}) }}</span>
+			<!-- IF _file.COMMENT --><span class="attachment-comment">{_file.COMMENT}</span><!-- ENDIF -->
+		</span>
+		<!-- ENDIF -->
+
+		<!-- EVENT attachment_file_append -->
+	<!-- ENDIF -->
+<!-- END _file -->
+<!-- EVENT attachment_file_after -->
