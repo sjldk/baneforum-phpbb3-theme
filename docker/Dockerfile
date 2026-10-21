@@ -3,6 +3,7 @@ FROM php:${PHP_VERSION}-apache
 
 ARG PHPBB_VERSION=3.3.19
 ARG MARKDOWN_VERSION=1.5.0
+ARG MEDIAEMBED_VERSION=2.1.0
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends unzip libpng-dev libjpeg-dev libfreetype-dev libzip-dev mariadb-client \
@@ -21,6 +22,12 @@ RUN curl -fsSL -o /tmp/phpbb.zip "https://download.phpbb.com/pub/release/3.3/${P
 RUN mkdir -p /var/www/html/ext/alfredoramos/markdown \
  && curl -fsSL "https://github.com/AlfredoRamos/phpbb-ext-markdown/archive/refs/tags/${MARKDOWN_VERSION}.tar.gz" \
     | tar xz -C /var/www/html/ext/alfredoramos/markdown --strip-components=1 \
+ && chown -R www-data:www-data /var/www/html/ext
+
+# Same media extension as production (phpbb/mediaembed): [media], [youtube] and bare links
+RUN mkdir -p /var/www/html/ext/phpbb/mediaembed \
+ && curl -fsSL "https://github.com/phpbb-extensions/mediaembed/archive/refs/tags/${MEDIAEMBED_VERSION}.tar.gz" \
+    | tar xz -C /var/www/html/ext/phpbb/mediaembed --strip-components=1 \
  && chown -R www-data:www-data /var/www/html/ext
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh

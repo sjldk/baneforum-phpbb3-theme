@@ -60,6 +60,11 @@ if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='alfredo
 	php bin/phpbbcli.php extension:enable alfredoramos/markdown
 fi
 
+# Enable the media extension (same as production) once.
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='phpbb/mediaembed' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable phpbb/mediaembed
+fi
+
 # Template and style changes need a cleared cache.
 php bin/phpbbcli.php cache:purge >/dev/null 2>&1 || true
 chown -R www-data:www-data cache store files images
