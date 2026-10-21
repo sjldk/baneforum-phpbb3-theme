@@ -1,0 +1,6 @@
+{# The external login buttons (Facebook, Google), shown on the login page. Styled in baneforum_common.css. #}
+<ul class="oauth-buttons">
+	{% for oauth in oauth %}
+		<li><a href="{{ oauth.LOGIN_URL }}">{{ oauth.SERVICE_NAME }}</a></li>
+	{% endfor %}
+</ul>

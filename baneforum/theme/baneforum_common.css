@@ -620,3 +620,37 @@ table.table1 tbody tr:hover td {
 .tabs .tab > a {
 	border-radius: var(--radius) var(--radius) 0 0;
 }
+
+/* External login buttons on the login page (login_body_oauth.html). */
+.oauth-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin: 1rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.oauth-buttons a {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-block-size: 2.75rem;
+	padding: 0 1.25rem;
+	border: 0.15rem solid var(--color-line);
+	border-radius: var(--radius);
+	background: var(--color-paper);
+	color: var(--color-text);
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.oauth-buttons a:hover {
+	background: var(--color-tint);
+	border-color: var(--accent);
+}
+
+.oauth-buttons a:focus-visible {
+	outline: 0.15rem solid var(--color-focus);
+	outline-offset: 0.1rem;
+}
