@@ -1,0 +1,45 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.6.2/schema.json",
+	"files": {
+		"includes": [
+			"packages/bf-editor/src/**",
+			"packages/bf-editor/test/**",
+			"packages/bf-editor/tools/**",
+			"packages/bf-editor/build.mjs",
+			"packages/bf-editor/package.json",
+			"packages/bf-editor/tsconfig.json",
+			"packages/bf-editor/eslint.config.js",
+			"baneforum/theme/*.css",
+			"docker/*.yml",
+			"biome.json"
+		]
+	},
+	"formatter": {
+		"indentStyle": "tab",
+		"lineWidth": 120
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single"
+		}
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"style": {
+				"noDescendingSpecificity": "off"
+			},
+			"complexity": {
+				"noImportantStyles": "off"
+			}
+		}
+	},
+	"css": {
+		"formatter": {
+			"enabled": true
+		},
+		"linter": {
+			"enabled": true
+		}
+	}
+}

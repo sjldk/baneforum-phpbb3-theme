@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bf-editor demo</title>
+<link rel="stylesheet" href="../dist/bf-editor.css">
+<style>
+	body { font: 1rem/1.5 system-ui, sans-serif; max-inline-size: 48rem; margin: 1rem auto; padding-inline: 1rem; }
+	pre { white-space: pre-wrap; background: #edf1f6; padding: 0.5rem; border-radius: 0.5rem; }
+</style>
+</head>
+<body>
+<h1>bf-editor demo</h1>
+<bf-editor label="Message" placeholder="Write something. Try **bold**, *italic*, > quote, :) and Ctrl+B."></bf-editor>
+<h2>Saved text</h2>
+<pre id="output"></pre>
+<script type="module">
+	import { defineBfEditor } from '../dist/bf-editor.js';
+	defineBfEditor();
+	const editor = document.querySelector('bf-editor');
+	const output = document.getElementById('output');
+	editor.value = '[quote="admin" post_id=1]Quoted **text**[/quote]\nA [b]legacy[/b] post with :) and a [u]raw[/u] tag.';
+	const show = () => { output.textContent = editor.value; };
+	editor.addEventListener('bf-change', show);
+	show();
+</script>
+</body>
+</html>
