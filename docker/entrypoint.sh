@@ -11,6 +11,10 @@ until "${DB[@]}" -e 'SELECT 1' >/dev/null 2>&1; do
 done
 
 if [ ! -s config.php ]; then
+	# A new container has no config.php, but the database may still hold the tables of an earlier one,
+	# and the installer stops on them. This board is for tests only, so start from an empty database.
+	"${DB[@]}" -N -e "SELECT CONCAT('DROP TABLE IF EXISTS \`', table_name, '\`;') FROM information_schema.tables WHERE table_schema='phpbb'" \
+		| (echo 'SET FOREIGN_KEY_CHECKS=0;'; cat) | "${DB[@]}"
 	echo "Installing phpBB..."
 	cat > /tmp/install-config.yml <<YML
 installer:
@@ -64,6 +68,21 @@ fi
 if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='phpbb/mediaembed' AND ext_active=1")" = 0 ]; then
 	php bin/phpbbcli.php extension:enable phpbb/mediaembed
 fi
+
+# Our own extension that makes uploaded pictures smaller on the server (mounted at ext/baneforum).
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/imagecompress' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable baneforum/imagecompress
+fi
+
+# Attachment settings for the test board: no size limit and no pixel limit of phpBB's own (its default
+# is 256 KB, which stops every photo, and it refuses big pictures before an extension can act),
+# up to 40 files. The extension above makes the pictures smaller.
+"${DB[@]}" -e "
+	UPDATE phpbb_config SET config_value='0' WHERE config_name IN ('max_filesize', 'max_filesize_pm');
+	UPDATE phpbb_config SET config_value='0' WHERE config_name='img_max_width';
+	UPDATE phpbb_config SET config_value='0' WHERE config_name='img_max_height';
+	UPDATE phpbb_config SET config_value='40' WHERE config_name='max_attachments';
+	UPDATE phpbb_extension_groups SET allow_group=1 WHERE group_name IN ('IMAGES', 'ARCHIVES', 'DOCUMENTS', 'DOWNLOADABLE_FILES');"
 
 # Template and style changes need a cleared cache.
 php bin/phpbbcli.php cache:purge >/dev/null 2>&1 || true

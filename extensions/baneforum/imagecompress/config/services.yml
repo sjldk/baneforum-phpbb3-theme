@@ -1,0 +1,12 @@
+services:
+    baneforum.imagecompress.compressor:
+        class: baneforum\imagecompress\compressor
+
+    baneforum.imagecompress.listener:
+        class: baneforum\imagecompress\event\listener
+        arguments:
+            - '@baneforum.imagecompress.compressor'
+            - '@config'
+            - '%core.root_path%'
+        tags:
+            - { name: event.listener }

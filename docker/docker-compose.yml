@@ -26,3 +26,4 @@ services:
       - "${HTTP_PORT:-8080}:80"
     volumes:
       - ../baneforum:/var/www/html/styles/baneforum
+      - ../extensions/baneforum:/var/www/html/ext/baneforum
