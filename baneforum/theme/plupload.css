@@ -49,14 +49,14 @@
 }
 
 .file-progress {
-	background-color: #CCCCCC;
+	background-color: var(--color-line);
 	display:inline-block;
 	height: 8px;
 	width: 50px;
 }
 
 .file-progress-bar, .file-total-progress-bar {
-	background-color: green;
+	background-color: var(--color-success);
 	display: block;
 	height: 100%;
 	width: 0;

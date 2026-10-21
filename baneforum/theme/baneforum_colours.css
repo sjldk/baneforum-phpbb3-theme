@@ -1,25 +1,14 @@
-:root {
-    --base-font-color: #484848;
-
-    --color-totally-white: #FFFFFF;
-    --color-almost-white: #F5F5F5;
-
-    --color-baneforum-darkgray: #285da1;
-    --color-baneforum-darkishgray:  #6E6E6E;
-    --color-baneforum-lightgray: lightgray;
-}
-
 .wrap {
-    background-color: var(--color-totally-white);
-    border-color: var(--color-totally-white);
+    background-color: var(--color-paper);
+    border-color: var(--color-paper);
 }
 
 table.markdown, table.markdown td, table.markdown th {
-	border: 0.02rem solid var(--color-baneforum-darkishgray);
+	border: 0.02rem solid var(--color-muted);
 }
 
 .attachbox dl.thumbnail {
-    border: 1px solid var(--color-baneforum-darkgray);		
+    border: 1px solid var(--accent);		
 }
 
 ul.topiclist li {
@@ -27,7 +16,7 @@ ul.topiclist li {
 }
 
 a:hover .icon.icon-gray, .pagination .icon, a:hover, dl.file dd {
-    color: var(--color-baneforum-darkgray);
+    color: var(--accent);
 }
 
 input.button2, input.button1, input.button1:hover, input.button2:hover, .button:hover, 
@@ -35,13 +24,13 @@ input.button2, input.button1, input.button1:hover, input.button2:hover, .button:
 .error,.pagination li a:hover, .pagination li a:hover .icon, 
 .pagination .dropdown-visible a.dropdown-trigger, 
 .nojs .pagination .dropdown-container:hover a.dropdown-trigger {
-    color: var(--color-almost-white);
+    color: var(--color-on-accent);
 }
 
 body, p.author, a, .postbody h3.first a, .postbody h3 a, h3,
 .postbody .content, .content blockquote, .content p, 
 .tabs .tab > a:hover,.tabs .tab > a, dl.attachbox dt {
-    color: var(--base-font-color);
+    color: var(--color-text);
 }
 
 input.button2, input.button1, input.button1:hover, 
@@ -50,33 +39,33 @@ input.button2:hover, .button:hover, .button:focus, .pagination li.active span,
 .pagination li a:hover, .pagination li a:hover .icon, 
 .pagination .dropdown-visible a.dropdown-trigger, 
 .nojs .pagination .dropdown-container:hover a.dropdown-trigger {
-    background: var(--color-baneforum-darkgray);
+    background: var(--accent);
 }
 
 .headerbar, .forabg, .forumbg, table.markdown thead {
-    background-color: var(--color-baneforum-darkgray);
+    background-color: var(--accent);
 }
 
 body, .bg1, ul.forums, .panel,.navbar,li.row:hover,.tabs .tab > a,
 .tabs .tab > a:hover, .bg2, .attachbox dl.thumbnail  {
-    background-color: var(--color-almost-white);
+    background-color: var(--color-surface);
 }
 
 .content blockquote {
-    background-color: rgb(255, 245, 235);
+    background-color: var(--color-tint);
 }
 
 .pagination li.active span {
-    border-color: var(--color-baneforum-darkgray);
+    border-color: var(--accent);
 }
 
 .button-secondary, .inputbox::placeholder, .content blockquote cite,
 .content blockquote cite a,.signature,.icon.icon-gray {
-    color: var(--color-baneforum-darkishgray);
+    color: var(--color-muted);
 }
 
 .button, .post-buttons .button, .format-buttons .button {
-    background: var(--color-baneforum-darkishgray);
+    background: var(--color-muted);
 }
 
 .signature {
@@ -84,24 +73,24 @@ body, .bg1, ul.forums, .panel,.navbar,li.row:hover,.tabs .tab > a,
 }
 
 .content blockquote, select {    
-    border-color: var(--color-baneforum-lightgray);    
+    border-color: var(--color-line);    
 }
 
 .error {    
-    background-color: darkred;
+    background-color: var(--color-danger);
 }
 
 .inputbox:hover, .inputbox {
-	border: 0.15rem solid var(--color-baneforum-lightgray);
+	border: 0.15rem solid var(--color-line);
 }
 
 li.row {
     border-top-color: transparent;
-    border-bottom-color: var(--color-baneforum-lightgray);
+    border-bottom-color: var(--color-line);
 }
 
 ul.topiclist dd {
-    border-left-color: var(--color-almost-white);
+    border-left-color: var(--color-surface);
 }
 
 dl.thumbnail dt a:hover {
@@ -113,5 +102,15 @@ ul.forums {
 }
 
 .tabs .tab > a:hover {    
-    border: 1px solid var(--color-baneforum-lightgray); 
+    border: 1px solid var(--color-line); 
+}
+
+/* WCAG AAA: prosilver uses #666666 here (5.3:1 on #f5f5f5, 7:1 needed) */
+.profile-joined, .profile-rank {
+    color: var(--color-text);
+}
+
+/* Coloured usernames in running text need more than colour to look like links (WCAG 1.4.1) */
+.stat-block a.username-coloured, p strong > a.username-coloured {
+    text-decoration: underline;
 }

@@ -1,0 +1,24 @@
+/* Colour palette.
+   Change --accent to re-colour the whole theme. Every other colour is mixed from it.
+   Text and background pairs keep at least 7:1 contrast (WCAG AAA) for the default accent.
+   If you pick a much lighter accent, check the contrast again. */
+:root {
+    --accent: #22548e;
+
+    /* Backgrounds: the accent diluted in white */
+    --color-paper: color-mix(in srgb, var(--accent) 2%, white);
+    --color-surface: color-mix(in srgb, var(--accent) 4%, white);
+    --color-tint: color-mix(in srgb, var(--accent) 8%, white);
+    --color-line: color-mix(in srgb, var(--accent) 20%, white);
+
+    /* Text and dark fills: the accent darkened with black */
+    --color-text: color-mix(in srgb, var(--accent) 55%, black);
+    --color-muted: color-mix(in srgb, var(--accent) 85%, black);
+
+    /* Text on accent and muted fills */
+    --color-on-accent: var(--color-surface);
+
+    /* Signal colours: a small share of the accent keeps them in the same family */
+    --color-danger: color-mix(in srgb, var(--accent) 10%, darkred);
+    --color-success: color-mix(in srgb, var(--accent) 10%, green);
+}
