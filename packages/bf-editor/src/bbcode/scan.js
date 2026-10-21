@@ -13,30 +13,30 @@
 /** @typedef {{node: {children: BBNode[]}, name: string | null, start: number, contentStart: number}} Open */
 
 export const knownTags = new Set([
-	'quote',
-	'b',
-	'i',
-	'u',
-	's',
-	'url',
-	'img',
-	'attachment',
-	'youtube',
-	'media',
-	'color',
-	'size',
-	'list',
-	'*',
-	'code',
-	'flash',
-	'email',
-	'font',
-	'center',
-	'spoiler',
+	`quote`,
+	`b`,
+	`i`,
+	`u`,
+	`s`,
+	`url`,
+	`img`,
+	`attachment`,
+	`youtube`,
+	`media`,
+	`color`,
+	`size`,
+	`list`,
+	`*`,
+	`code`,
+	`flash`,
+	`email`,
+	`font`,
+	`center`,
+	`spoiler`,
 ]);
 
 // The content of these is not BBCode, so it is not scanned.
-const verbatimTags = new Set(['code']);
+const verbatimTags = new Set([`code`]);
 
 const tokenPattern = /\[(\/?)([a-zA-Z*]+)((?:[=\s][^\]]*)?)\]/g;
 
@@ -51,17 +51,17 @@ export function scanBBCode(text) {
 
 	/** @param {string} value */
 	function pushText(value) {
-		if (value === '') {
+		if (value === ``) {
 			return;
 		}
 
 		const siblings = top().node.children;
 		const last = siblings[siblings.length - 1];
 
-		if (last && last.type === 'text') {
+		if (last && last.type === `text`) {
 			last.value += value;
 		} else {
-			siblings.push({ type: 'text', value });
+			siblings.push({ type: `text`, value });
 		}
 	}
 
@@ -79,7 +79,7 @@ export function scanBBCode(text) {
 		pushText(text.slice(cursor, match.index));
 		cursor = match.index + token.length;
 
-		if (closing === '') {
+		if (closing === ``) {
 			if (verbatimTags.has(name)) {
 				const closeTag = `[/${name}]`;
 				const end = text.toLowerCase().indexOf(closeTag, cursor);
@@ -87,10 +87,10 @@ export function scanBBCode(text) {
 				if (end !== -1) {
 					const source = text.slice(match.index, end + closeTag.length);
 					top().node.children.push({
-						type: 'tag',
+						type: `tag`,
 						name,
 						attrs,
-						children: [{ type: 'text', value: text.slice(cursor, end) }],
+						children: [{ type: `text`, value: text.slice(cursor, end) }],
 						source,
 					});
 					cursor = end + closeTag.length;
@@ -100,7 +100,7 @@ export function scanBBCode(text) {
 			}
 
 			/** @type {TagNode} */
-			const node = { type: 'tag', name, attrs, children: [], source: '' };
+			const node = { type: `tag`, name, attrs, children: [], source: `` };
 			stack.push({ node, name, start: match.index, contentStart: cursor });
 		} else {
 			// Find the matching open tag. Anything opened after it was never closed, so it is text.
@@ -118,7 +118,7 @@ export function scanBBCode(text) {
 			while (stack.length - 1 > depth) {
 				const broken = /** @type {Open} */ (stack.pop());
 				const parent = top().node.children;
-				parent.push({ type: 'text', value: text.slice(broken.start, broken.contentStart) });
+				parent.push({ type: `text`, value: text.slice(broken.start, broken.contentStart) });
 				parent.push(...broken.node.children);
 			}
 
@@ -135,7 +135,7 @@ export function scanBBCode(text) {
 	while (stack.length > 1) {
 		const broken = /** @type {Open} */ (stack.pop());
 		const parent = top().node.children;
-		parent.push({ type: 'text', value: text.slice(broken.start, broken.contentStart) });
+		parent.push({ type: `text`, value: text.slice(broken.start, broken.contentStart) });
 		parent.push(...broken.node.children);
 	}
 
@@ -151,10 +151,10 @@ function mergeText(nodes) {
 	for (const node of nodes) {
 		const last = merged[merged.length - 1];
 
-		if (node.type === 'text' && last?.type === 'text') {
+		if (node.type === `text` && last?.type === `text`) {
 			last.value += node.value;
 		} else {
-			if (node.type === 'tag') {
+			if (node.type === `tag`) {
 				node.children = mergeText(node.children);
 			}
 

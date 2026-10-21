@@ -12,14 +12,14 @@ async function sourceFiles(dir) {
 		entries.map((entry) => (entry.isDirectory() ? sourceFiles(join(dir, entry.name)) : [join(dir, entry.name)])),
 	);
 
-	return files.flat().filter((file) => file.endsWith('.js'));
+	return files.flat().filter((file) => file.endsWith(`.js`));
 }
 
-test('src/ mentions no host project (phpBB, jQuery, Plupload)', async () => {
-	for (const file of await sourceFiles('src')) {
-		const text = await readFile(file, 'utf8');
+test(`src/ mentions no host project (phpBB, jQuery, Plupload)`, async () => {
+	for (const file of await sourceFiles(`src`)) {
+		const text = await readFile(file, `utf8`);
 		// Comments may explain why. Only code counts.
-		const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+		const code = text.replace(/\/\*[\s\S]*?\*\//g, ``).replace(/^\s*\/\/.*$/gm, ``);
 
 		for (const pattern of forbidden) {
 			assert.ok(!pattern.test(code), `${file} matches ${pattern}`);

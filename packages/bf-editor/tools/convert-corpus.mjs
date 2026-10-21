@@ -25,7 +25,7 @@ for await (const line of createInterface({ input: createReadStream(input) })) {
 			stats.unstable += 1;
 		}
 
-		if (converted.trim() === '' && row.text.trim() !== '') {
+		if (converted.trim() === `` && row.text.trim() !== ``) {
 			stats.empty += 1;
 		}
 

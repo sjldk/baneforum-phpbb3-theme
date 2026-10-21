@@ -13,7 +13,7 @@ export function useNativeEmoji(root, options = {}) {
 	const images = options.images ?? smilieImages;
 	let replaced = 0;
 
-	for (const img of root.querySelectorAll('img.smilies, img.emoji')) {
+	for (const img of root.querySelectorAll(`img.smilies, img.emoji`)) {
 		const emoji = emojiFor(img, smilies, images);
 
 		if (emoji === null) {
@@ -35,10 +35,10 @@ export function useNativeEmoji(root, options = {}) {
  * @returns {string | null} the emoji for a picture, or null if we do not know it
  */
 function emojiFor(img, smilies, images) {
-	const alt = img.getAttribute('alt') ?? '';
+	const alt = img.getAttribute(`alt`) ?? ``;
 
 	// A Unicode emoji picture carries the character itself in its alt text.
-	if (img.classList.contains('emoji') && alt !== '') {
+	if (img.classList.contains(`emoji`) && alt !== ``) {
 		return alt;
 	}
 
@@ -46,15 +46,15 @@ function emojiFor(img, smilies, images) {
 		return smilies[alt];
 	}
 
-	const file = (img.getAttribute('src') ?? '')
-		.split('/')
+	const file = (img.getAttribute(`src`) ?? ``)
+		.split(`/`)
 		.pop()
-		?.replace(/\.\w+(\?.*)?$/, '');
+		?.replace(/\.\w+(\?.*)?$/, ``);
 
 	return file !== undefined && file in images ? images[file] : null;
 }
 
-const skipInside = 'a, code, pre, textarea, script, style, .codebox, [contenteditable="true"]';
+const skipInside = `a, code, pre, textarea, script, style, .codebox, [contenteditable="true"]`;
 
 /**
  * Old posts also have smilies typed as plain text, like ":-)", that the board never turned
@@ -76,7 +76,7 @@ export function useNativeEmojiForText(root, smilies = defaultSmilies) {
 			continue;
 		}
 
-		const text = node.nodeValue ?? '';
+		const text = node.nodeValue ?? ``;
 		const next = replace(text);
 
 		if (next !== text) {

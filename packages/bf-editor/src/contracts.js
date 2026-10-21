@@ -49,11 +49,11 @@
  */
 
 const contracts = {
-	Codec: ['id', 'parse', 'serialize'],
-	UploadHandler: ['upload'],
-	EmbedProvider: ['id', 'match', 'toUrl'],
-	LinkPolicy: ['normalize', 'attributes'],
-	Command: ['id', 'label', 'run'],
+	Codec: [`id`, `parse`, `serialize`],
+	UploadHandler: [`upload`],
+	EmbedProvider: [`id`, `match`, `toUrl`],
+	LinkPolicy: [`normalize`, `attributes`],
+	Command: [`id`, `label`, `run`],
 };
 
 /**
@@ -71,14 +71,14 @@ export function assertImplements(contract, candidate) {
 		throw new Error(`Unknown contract "${contract}"`);
 	}
 
-	if (candidate === null || typeof candidate !== 'object') {
+	if (candidate === null || typeof candidate !== `object`) {
 		throw new TypeError(`${contract}: expected an object, got ${typeof candidate}`);
 	}
 
 	const missing = members.filter((name) => !(name in candidate));
 
 	if (missing.length > 0) {
-		throw new TypeError(`${contract}: missing ${missing.join(', ')}`);
+		throw new TypeError(`${contract}: missing ${missing.join(`, `)}`);
 	}
 
 	return candidate;

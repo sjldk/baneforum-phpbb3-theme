@@ -50,13 +50,13 @@ export function createBasicCommands(schema) {
 	});
 
 	return [
-		markCommand('bold', 'Bold', strong, 'Mod-b'),
-		markCommand('italic', 'Italic', em, 'Mod-i'),
-		markCommand('strike', 'Strikethrough', strike, 'Mod-Shift-x'),
+		markCommand(`bold`, `Bold`, strong, `Mod-b`),
+		markCommand(`italic`, `Italic`, em, `Mod-i`),
+		markCommand(`strike`, `Strikethrough`, strike, `Mod-Shift-x`),
 		{
-			id: 'normal',
-			label: 'Normal text',
-			shortcut: 'Mod-Shift-0',
+			id: `normal`,
+			label: `Normal text`,
+			shortcut: `Mod-Shift-0`,
 			toggle: false,
 			run(state, dispatch) {
 				const { from, to, empty } = state.selection;
@@ -80,9 +80,9 @@ export function createBasicCommands(schema) {
 			},
 		},
 		{
-			id: 'quote',
-			label: 'Quote',
-			shortcut: 'Mod-Shift-q',
+			id: `quote`,
+			label: `Quote`,
+			shortcut: `Mod-Shift-q`,
 			toggle: true,
 			run(state, dispatch, view) {
 				return insideNode(state, schema.nodes.blockquote)

@@ -4,7 +4,8 @@ Set by the owner. Enforced by `scripts/bf-editor.sh check` (Biome, ESLint, TypeS
 
 | Rule | Tool |
 |---|---|
-| Tabs, single quotes, 120 columns, for JavaScript, JSON and the theme's CSS | Biome (`biome.json` in the repo root) |
+| Tabs, 120 columns, for JavaScript, JSON and the theme's CSS | Biome (`biome.json` in the repo root) |
+| Strings are always template literals (backticks), never `'` or `"`. Import paths and property keys cannot be, and stay as they are. | ESLint `quotes: backtick` |
 | Braces around every `if`, `else`, `for`, `while`, even for one line | ESLint `curly` (`eslint.config.js`) |
 | `} else {` on one line | Biome formatter |
 | A blank line above `if`, `for`, `while`, `do`, `switch`, `try` and `return`, unless it is the first line of its block | ESLint `padding-line-between-statements` |

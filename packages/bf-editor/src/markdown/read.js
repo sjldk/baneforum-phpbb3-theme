@@ -13,14 +13,14 @@ export { PLACEHOLDER_CLOSE, PLACEHOLDER_OPEN } from './placeholders.js';
  */
 export function readMarkdown(schema, source, placeholders, replaceSmilies) {
 	return splitBlocks(source).map((block, index) => {
-		if (block.kind === 'paragraph') {
+		if (block.kind === `paragraph`) {
 			// Spaces at the end of a line are not content. A line break is a line break.
-			const text = block.text.replace(/[ \t]+(?=\n|$)/g, '');
+			const text = block.text.replace(/[ \t]+(?=\n|$)/g, ``);
 
 			return schema.nodes.paragraph.create(null, parseInline(schema, text, placeholders, replaceSmilies));
 		}
 
 		// A raw block remembers the line breaks in front of it, except the first block of a text.
-		return schema.nodes.raw_block.create({ source: block.text, before: index === 0 ? '' : block.before });
+		return schema.nodes.raw_block.create({ source: block.text, before: index === 0 ? `` : block.before });
 	});
 }

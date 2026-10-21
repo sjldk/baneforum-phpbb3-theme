@@ -22,9 +22,9 @@ const placeholderPattern = new RegExp(`^${PLACEHOLDER_OPEN}(\\d+)${PLACEHOLDER_C
 const linkPattern = /^\[((?:[^\][\n]|\[[^\][\n]*\])*)\]\(((?:[^\s()]|\([^\s()]*\))*)\)/;
 
 /** @param {string} character */
-const isSpace = (character) => character === '' || /\s/u.test(character);
+const isSpace = (character) => character === `` || /\s/u.test(character);
 /** @param {string} character */
-const isPunctuation = (character) => character !== '' && /[\p{P}\p{S}]/u.test(character);
+const isPunctuation = (character) => character !== `` && /[\p{P}\p{S}]/u.test(character);
 
 /**
  * @param {import('prosemirror-model').Schema} schema
@@ -46,34 +46,34 @@ export function parseInline(schema, text, placeholders, replaceSmilies) {
 function tokenize(schema, text, placeholders) {
 	/** @type {Item[]} */
 	const items = [];
-	let buffer = '';
+	let buffer = ``;
 	const flush = () => {
-		if (buffer !== '') {
-			items.push({ type: 'text', value: buffer, marks: [] });
+		if (buffer !== ``) {
+			items.push({ type: `text`, value: buffer, marks: [] });
 		}
 
-		buffer = '';
+		buffer = ``;
 	};
 	const previous = () => {
-		if (buffer !== '') {
+		if (buffer !== ``) {
 			return buffer[buffer.length - 1];
 		}
 
 		const last = items[items.length - 1];
 
 		if (!last) {
-			return '';
+			return ``;
 		}
 
-		if (last.type === 'text') {
-			return (last.value ?? '').slice(-1);
+		if (last.type === `text`) {
+			return (last.value ?? ``).slice(-1);
 		}
 
-		if (last.type === 'delim') {
-			return last.value ?? '';
+		if (last.type === `delim`) {
+			return last.value ?? ``;
 		}
 
-		return last.type === 'break' ? '\n' : 'a';
+		return last.type === `break` ? `\n` : `a`;
 	};
 
 	let position = 0;
@@ -86,26 +86,26 @@ function tokenize(schema, text, placeholders) {
 
 		if (placeholder) {
 			flush();
-			items.push({ type: 'node', node: placeholders[Number(placeholder[1])], marks: [] });
+			items.push({ type: `node`, node: placeholders[Number(placeholder[1])], marks: [] });
 			position += placeholder[0].length;
 			continue;
 		}
 
-		if (character === '\n') {
+		if (character === `\n`) {
 			flush();
-			items.push({ type: 'break', marks: [] });
+			items.push({ type: `break`, marks: [] });
 			position += 1;
 			continue;
 		}
 
-		if (character === '`') {
-			const run = /^`+/.exec(rest)?.[0] ?? '`';
+		if (character === `\``) {
+			const run = /^`+/.exec(rest)?.[0] ?? `\``;
 			const end = text.indexOf(run, position + run.length);
 
-			if (end !== -1 && text[end + run.length] !== '`') {
+			if (end !== -1 && text[end + run.length] !== `\``) {
 				flush();
 				items.push({
-					type: 'node',
+					type: `node`,
 					node: schema.nodes.raw_inline.create({ source: text.slice(position, end + run.length) }),
 					marks: [],
 				});
@@ -118,13 +118,13 @@ function tokenize(schema, text, placeholders) {
 			continue;
 		}
 
-		if (character === '!' && rest[1] === '[') {
+		if (character === `!` && rest[1] === `[`) {
 			const image = linkPattern.exec(rest.slice(1));
 
 			if (image) {
 				flush();
 				items.push({
-					type: 'node',
+					type: `node`,
 					node: schema.nodes.raw_inline.create({ source: rest.slice(0, image[0].length + 1) }),
 					marks: [],
 				});
@@ -133,15 +133,15 @@ function tokenize(schema, text, placeholders) {
 			}
 		}
 
-		if (character === '[') {
+		if (character === `[`) {
 			const link = linkPattern.exec(rest);
 
 			if (link) {
 				const address = link[2];
 				flush();
 
-				if (address === '' || /["']/.test(address)) {
-					items.push({ type: 'node', node: schema.nodes.raw_inline.create({ source: link[0] }), marks: [] });
+				if (address === `` || /["']/.test(address)) {
+					items.push({ type: `node`, node: schema.nodes.raw_inline.create({ source: link[0] }), marks: [] });
 				} else {
 					const mark = schema.marks.link.create({ href: address });
 
@@ -156,16 +156,16 @@ function tokenize(schema, text, placeholders) {
 			}
 		}
 
-		if (character === '*' || character === '_' || (character === '~' && rest[1] === '~')) {
+		if (character === `*` || character === `_` || (character === `~` && rest[1] === `~`)) {
 			const run = /^(\*+|_+|~~)/.exec(rest)?.[0] ?? character;
 			flush();
 			const before = previous();
-			const after = text[position + run.length] ?? '';
+			const after = text[position + run.length] ?? ``;
 			const left = !isSpace(after) && (!isPunctuation(after) || isSpace(before) || isPunctuation(before));
 			const right = !isSpace(before) && (!isPunctuation(before) || isSpace(after) || isPunctuation(after));
-			const underscore = character === '_';
+			const underscore = character === `_`;
 			items.push({
-				type: 'delim',
+				type: `delim`,
 				value: character,
 				count: run.length,
 				original: run.length,
@@ -195,7 +195,7 @@ function matchEmphasis(schema, items) {
 	for (let closer = 0; closer < items.length; closer += 1) {
 		const close = items[closer];
 
-		if (close.type !== 'delim' || !close.canClose || close.dead) {
+		if (close.type !== `delim` || !close.canClose || close.dead) {
 			continue;
 		}
 
@@ -206,7 +206,7 @@ function matchEmphasis(schema, items) {
 				const open = items[candidate];
 
 				if (
-					open.type !== 'delim' ||
+					open.type !== `delim` ||
 					open.dead ||
 					!open.canOpen ||
 					open.value !== close.value ||
@@ -215,7 +215,7 @@ function matchEmphasis(schema, items) {
 					continue;
 				}
 
-				if (close.value === '~' && ((open.count ?? 0) < 2 || (close.count ?? 0) < 2)) {
+				if (close.value === `~` && ((open.count ?? 0) < 2 || (close.count ?? 0) < 2)) {
 					continue;
 				}
 
@@ -236,7 +236,7 @@ function matchEmphasis(schema, items) {
 			}
 
 			const open = items[opener];
-			const strike = close.value === '~';
+			const strike = close.value === `~`;
 			const use = strike || ((open.count ?? 0) >= 2 && (close.count ?? 0) >= 2) ? 2 : 1;
 			const type = strike ? schema.marks.strike : use === 2 ? schema.marks.strong : schema.marks.em;
 			const mark = type.create();
@@ -244,7 +244,7 @@ function matchEmphasis(schema, items) {
 			for (let between = opener + 1; between < closer; between += 1) {
 				items[between].marks.push(mark);
 
-				if (items[between].type === 'delim') {
+				if (items[between].type === `delim`) {
 					items[between].dead = true;
 				}
 			}
@@ -266,14 +266,14 @@ function flatten(schema, items, replaceSmilies) {
 	const nodes = [];
 
 	for (const item of items) {
-		if (item.type === 'node' && item.node) {
+		if (item.type === `node` && item.node) {
 			nodes.push(item.node);
-		} else if (item.type === 'break') {
+		} else if (item.type === `break`) {
 			nodes.push(schema.nodes.hard_break.create());
 		} else {
-			const raw = item.type === 'delim' ? (item.value ?? '').repeat(item.count ?? 0) : (item.value ?? '');
+			const raw = item.type === `delim` ? (item.value ?? ``).repeat(item.count ?? 0) : (item.value ?? ``);
 
-			if (raw === '') {
+			if (raw === ``) {
 				continue;
 			}
 

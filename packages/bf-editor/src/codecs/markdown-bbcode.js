@@ -6,9 +6,9 @@ import { PLACEHOLDER_CLOSE, PLACEHOLDER_OPEN, readMarkdown } from '../markdown/r
 import { writeDocument } from '../markdown/write.js';
 import { createSmilieReplacer } from '../smilies.js';
 
-const blockTags = new Set(['quote', 'youtube', 'media', 'list', 'code', 'flash', 'spoiler', 'center']);
+const blockTags = new Set([`quote`, `youtube`, `media`, `list`, `code`, `flash`, `spoiler`, `center`]);
 /** @type {Record<string, string>} */
-const emphasis = { b: '**', i: '*', s: '~~' };
+const emphasis = { b: `**`, i: `*`, s: `~~` };
 
 /** @typedef {import('../bbcode/scan.js').BBNode} BBNode */
 /** @typedef {import('../bbcode/scan.js').TagNode} TagNode */
@@ -19,7 +19,7 @@ const emphasis = { b: '**', i: '*', s: '~~' };
  * @param {BBNode[]} nodes
  */
 function textOf(nodes) {
-	return nodes.map((node) => (node.type === 'text' ? node.value : node.source)).join('');
+	return nodes.map((node) => (node.type === `text` ? node.value : node.source)).join(``);
 }
 
 /**
@@ -32,7 +32,7 @@ export function createMarkdownBBCodeCodec(schema, options = {}) {
 
 	/** @param {string} text */
 	function parse(text) {
-		const blocks = buildBlocks(scanBBCode(text.replace(/\r\n?/g, '\n')));
+		const blocks = buildBlocks(scanBBCode(text.replace(/\r\n?/g, `\n`)));
 
 		return schema.nodes.doc.create(null, blocks.length > 0 ? blocks : [schema.nodes.paragraph.create()]);
 	}
@@ -55,7 +55,7 @@ export function createMarkdownBBCodeCodec(schema, options = {}) {
 		};
 
 		for (const node of nodes) {
-			if (node.type === 'tag' && blockTags.has(node.name)) {
+			if (node.type === `tag` && blockTags.has(node.name)) {
 				flush();
 				blocks.push(blockFromTag(node));
 			} else {
@@ -74,7 +74,7 @@ export function createMarkdownBBCodeCodec(schema, options = {}) {
 	 */
 	function blockFromTag(tag) {
 		switch (tag.name) {
-			case 'quote': {
+			case `quote`: {
 				const inner = buildBlocks(tag.children);
 
 				return schema.nodes.blockquote.create(
@@ -82,12 +82,12 @@ export function createMarkdownBBCodeCodec(schema, options = {}) {
 					inner.length > 0 ? inner : [schema.nodes.paragraph.create()],
 				);
 			}
-			case 'youtube':
-			case 'media': {
+			case `youtube`:
+			case `media`: {
 				const url = textOf(tag.children).trim();
 
 				return schema.nodes.embed.create({
-					provider: tag.name === 'youtube' ? 'youtube' : 'media',
+					provider: tag.name === `youtube` ? `youtube` : `media`,
 					url,
 					source: tag.source,
 				});
@@ -111,15 +111,15 @@ export function createMarkdownBBCodeCodec(schema, options = {}) {
 
 			return `${PLACEHOLDER_OPEN}${placeholders.length - 1}${PLACEHOLDER_CLOSE}`;
 		};
-		let source = '';
+		let source = ``;
 
 		for (const node of run) {
 			source += inlineToMarkdown(node, stand, source);
 		}
 
-		source = source.replace(/^\n+|\n+$/g, '');
+		source = source.replace(/^\n+|\n+$/g, ``);
 
-		if (source.trim() === '') {
+		if (source.trim() === ``) {
 			return [];
 		}
 
@@ -132,17 +132,17 @@ export function createMarkdownBBCodeCodec(schema, options = {}) {
 	 * @param {string} [before]  The Markdown written so far in this run.
 	 * @returns {string}
 	 */
-	function inlineToMarkdown(node, stand, before = '') {
-		if (node.type === 'text') {
+	function inlineToMarkdown(node, stand, before = ``) {
+		if (node.type === `text`) {
 			return node.value;
 		}
 
-		const content = () => node.children.map((child) => inlineToMarkdown(child, stand)).join('');
+		const content = () => node.children.map((child) => inlineToMarkdown(child, stand)).join(``);
 
 		switch (node.name) {
-			case 'b':
-			case 'i':
-			case 's': {
+			case `b`:
+			case `i`:
+			case `s`: {
 				// Markdown emphasis cannot span a blank line, BBCode can. Mark each paragraph on its own.
 				return content()
 					.split(/(\n\s*\n)/)
@@ -151,39 +151,39 @@ export function createMarkdownBBCodeCodec(schema, options = {}) {
 							return part;
 						}
 
-						const lead = part.match(/^\s*/)?.[0] ?? '';
-						const tail = part.match(/\s*$/)?.[0] ?? '';
+						const lead = part.match(/^\s*/)?.[0] ?? ``;
+						const tail = part.match(/\s*$/)?.[0] ?? ``;
 						const core = part.slice(lead.length, part.length - tail.length);
 
-						return core === '' ? part : `${lead}${emphasis[node.name]}${core}${emphasis[node.name]}${tail}`;
+						return core === `` ? part : `${lead}${emphasis[node.name]}${core}${emphasis[node.name]}${tail}`;
 					})
-					.join('');
+					.join(``);
 			}
-			case 'url': {
+			case `url`: {
 				const label = content();
 
 				// [url]address[/url] is just the address. The server turns it into a link and shortens a long one.
 				// Glued to the word before it, an address would not be found, so it gets link syntax.
-				if (!node.attrs.startsWith('=') && /^[\w+.-]+:\/\/[^\s()<>]+$/.test(label.trim())) {
+				if (!node.attrs.startsWith(`=`) && /^[\w+.-]+:\/\/[^\s()<>]+$/.test(label.trim())) {
 					const address = label.trim();
 
-					return before === '' || /\s$/.test(before) ? address : `[${address}](${address})`;
+					return before === `` || /\s$/.test(before) ? address : `[${address}](${address})`;
 				}
 
-				const href = node.attrs.startsWith('=') ? node.attrs.slice(1).trim().replace(/^"|"$/g, '') : label.trim();
+				const href = node.attrs.startsWith(`=`) ? node.attrs.slice(1).trim().replace(/^"|"$/g, ``) : label.trim();
 
 				return /^[\w+.-]+:\/\//.test(href) && !/[\s()<>]/.test(href)
 					? `[${label}](${href})`
 					: stand(schema.nodes.raw_inline.create({ source: node.source }));
 			}
-			case 'img':
+			case `img`:
 				return stand(
 					schema.nodes.image.create({
 						src: textOf(node.children).trim(),
 					}),
 				);
-			case 'attachment': {
-				const index = Number(node.attrs.replace(/^=/, ''));
+			case `attachment`: {
+				const index = Number(node.attrs.replace(/^=/, ``));
 				const name = textOf(node.children);
 
 				return Number.isInteger(index)
@@ -196,7 +196,7 @@ export function createMarkdownBBCodeCodec(schema, options = {}) {
 	}
 
 	return {
-		id: 'markdown-bbcode',
+		id: `markdown-bbcode`,
 		parse,
 		serialize: (doc) => writeDocument(doc),
 	};
@@ -215,5 +215,5 @@ function quoteAuthor(attrs) {
 
 	const bare = attrs.match(/^=\s*([^\s\]]+)/);
 
-	return bare ? bare[1] : '';
+	return bare ? bare[1] : ``;
 }

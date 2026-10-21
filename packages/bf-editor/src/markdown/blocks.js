@@ -52,14 +52,14 @@ const continuesList = (line) => bullet.test(line) || ordered.test(line) || /^ {2
  * @returns {Block[]}
  */
 export function splitBlocks(source) {
-	const lines = source.split('\n');
+	const lines = source.split(`\n`);
 	/** @type {Block[]} */
 	const blocks = [];
 	let index = 0;
 	let breaks = 0;
 
 	while (index < lines.length) {
-		if (lines[index].trim() === '') {
+		if (lines[index].trim() === ``) {
 			breaks += 1;
 			index += 1;
 			continue;
@@ -84,7 +84,7 @@ export function splitBlocks(source) {
 			continue;
 		}
 
-		while (index < lines.length && lines[index].trim() !== '') {
+		while (index < lines.length && lines[index].trim() !== ``) {
 			index += 1;
 		}
 
@@ -92,7 +92,7 @@ export function splitBlocks(source) {
 		const pending = classify(block);
 
 		if (pending.paragraph.length > 0) {
-			blocks.push({ kind: 'paragraph', text: pending.paragraph.join('\n'), before: '\n'.repeat(breaks + 1) });
+			blocks.push({ kind: `paragraph`, text: pending.paragraph.join(`\n`), before: `\n`.repeat(breaks + 1) });
 			breaks = 0;
 		}
 
@@ -106,7 +106,7 @@ export function splitBlocks(source) {
 			for (;;) {
 				let look = end;
 
-				while (look < lines.length && lines[look].trim() === '') {
+				while (look < lines.length && lines[look].trim() === ``) {
 					look += 1;
 				}
 
@@ -126,7 +126,7 @@ export function splitBlocks(source) {
 
 				end = look;
 
-				while (end < lines.length && lines[end].trim() !== '') {
+				while (end < lines.length && lines[end].trim() !== ``) {
 					end += 1;
 				}
 			}
@@ -135,7 +135,7 @@ export function splitBlocks(source) {
 
 			// Cut out of the middle of a paragraph, the markup follows a single line break.
 			if (pending.paragraph.length > 0) {
-				blocks[blocks.length - 1].before = '\n';
+				blocks[blocks.length - 1].before = `\n`;
 			}
 
 			index = end;
@@ -155,7 +155,7 @@ export function splitBlocks(source) {
  */
 function raw(lines, from, to, breaks) {
 	// Blank lines in front count as one more line break than the blank lines themselves.
-	return { kind: 'raw', text: lines.slice(from, to).join('\n').replace(/\s+$/, ''), before: '\n'.repeat(breaks + 1) };
+	return { kind: `raw`, text: lines.slice(from, to).join(`\n`).replace(/\s+$/, ``), before: `\n`.repeat(breaks + 1) };
 }
 
 /**
