@@ -18,11 +18,66 @@ function phpbbUploader() {
 	return window.phpbb?.plupload?.uploader ?? null;
 }
 
-/** Where a file that is already attached can be shown from. @param {number} index */
-function attachmentSrc(index) {
+/** What phpBB knows about an attached file: where to show it from, its description, and if it is a picture. @param {number} index */
+function attachmentInfo(index) {
 	const attachment = window.phpbb?.plupload?.data?.[index];
 
-	return attachment ? `./download/file.php?id=${attachment.attach_id}` : ``;
+	return attachment
+		? {
+				src: `./download/file.php?id=${attachment.attach_id}`,
+				description: attachment.attach_comment ?? ``,
+				image: /\.(gif|jpe?g|png|webp|avif|bmp|tiff?|tga)$/i.test(attachment.real_filename ?? ``),
+			}
+		: null;
+}
+
+/** The row of the attachment panel for a file. It holds the fields that are sent with the form. @param {number} index */
+function attachmentRow(index) {
+	const attachment = window.phpbb?.plupload?.data?.[index];
+
+	return attachment ? document.querySelector(`[data-attach-id="${attachment.attach_id}"]`) : null;
+}
+
+/** The file types phpBB allows, as the accept attribute of a file field. */
+function acceptedTypes() {
+	const groups = window.phpbb?.plupload?.config?.filters?.mime_types ?? [];
+
+	return groups
+		.flatMap((/** @type {{extensions: string}} */ group) => group.extensions.split(`,`))
+		.map((/** @type {string} */ extension) => (extension.trim() === `*` ? `` : `.${extension.trim()}`))
+		.filter(Boolean)
+		.join(`,`);
+}
+
+/**
+ * The attachment panel of phpBB lists the files of the post. A file that is in the text is shown in
+ * the editor, so its row is hidden, and the panel only shows when a file is left that is not in the text
+ * (for example in an old post, where the files were listed under the text).
+ */
+function syncAttachmentRows() {
+	const panel = document.getElementById(`attach-panel`);
+	const text = textarea?.value ?? ``;
+	const data = window.phpbb?.plupload?.data ?? [];
+	let left = 0;
+
+	for (const row of /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll(`#file-list > .attach-row`))) {
+		const index = data.findIndex((/** @type {{attach_id: string}} */ attachment) => String(attachment.attach_id) === row.dataset.attachId);
+		const placed = index !== -1 && new RegExp(`\\[attachment=${index}\\]`).test(text);
+		row.style.display = placed ? `none` : ``;
+		left += placed ? 0 : 1;
+	}
+
+	// The description field of a row has no label in phpBB's markup. The column title is its name.
+	const title = document.querySelector(`th.attach-comment`)?.textContent?.trim() ?? ``;
+
+	for (const field of document.querySelectorAll(`#file-list textarea`)) {
+		field.setAttribute(`aria-label`, title);
+		field.setAttribute(`placeholder`, title);
+	}
+
+	if (panel) {
+		panel.toggleAttribute(`data-bf-files`, left > 0);
+	}
 }
 
 /**
@@ -69,7 +124,9 @@ function upload(file, { onProgress, signal } = {}) {
 			let link = ``;
 
 			try {
-				link = JSON.parse(answer.response).download_url?.[0] ?? ``;
+				// phpBB answers with one address as a string.
+				const { download_url: address } = JSON.parse(answer.response);
+				link = (Array.isArray(address) ? address[0] : address) ?? ``;
 			} catch {
 				link = ``;
 			}
@@ -143,7 +200,7 @@ if (typeof activate === `function`) {
 
 // The old "Place inline" button of the attachment tab calls this function.
 window.attachInline = (/** @type {number} */ index, /** @type {string} */ name) => {
-	editor?.insertAttachment({ index, name, src: attachmentSrc(index) });
+	editor?.insertAttachment({ index, name, src: attachmentInfo(index)?.src });
 };
 
 function turnOn() {
@@ -162,12 +219,66 @@ function turnOn() {
 		editor.setAttribute(`label`, textarea.dataset.bfLabel);
 	}
 
+	// Before the text is loaded, so the pictures in it can be shown at once.
+	editor.attachmentInfo = attachmentInfo;
 	textarea.before(editor);
 	editor.value = textarea.value;
-	editor.attachmentSrc = attachmentSrc;
 	editor.uploadHandler = phpbbUploader() ? { upload } : null;
+	editor.accept = acceptedTypes();
 	editor.addEventListener(`bf-change`, () => {
 		textarea.value = editor?.value ?? textarea.value;
+		syncAttachmentRows();
+	});
+	syncAttachmentRows();
+	// Files that are not pictures are not put in the text. They go to phpBB's own list under the editor.
+	editor.addEventListener(`bf-attach-files`, (/** @type {CustomEvent} */ event) => {
+		const uploader = /** @type {any} */ (phpbbUploader());
+
+		if (!uploader) {
+			return;
+		}
+
+		bridging = true;
+
+		for (const file of event.detail.files) {
+			uploader.addFile(file);
+		}
+
+		window.setTimeout(() => {
+			bridging = false;
+			syncAttachmentRows();
+		}, 500);
+	});
+	editor.addEventListener(`bf-attachment-describe`, (/** @type {CustomEvent} */ event) => {
+		const { index, description } = event.detail;
+		const attachment = window.phpbb?.plupload?.data?.[index];
+		const row = attachmentRow(index);
+
+		if (!attachment) {
+			return;
+		}
+
+		// The description is the comment of the attachment. phpBB sends it in two places.
+		attachment.attach_comment = description;
+		const field = row?.querySelector(`textarea`);
+		const hidden = row?.querySelector(`input[name$="[attach_comment]"]`);
+
+		if (field) {
+			field.value = description;
+		}
+
+		if (hidden instanceof HTMLInputElement) {
+			hidden.value = description;
+		}
+	});
+	editor.addEventListener(`bf-attachment-remove`, (/** @type {CustomEvent} */ event) => {
+		const row = attachmentRow(event.detail.index);
+		const attachId = window.phpbb?.plupload?.data?.[event.detail.index]?.attach_id;
+
+		// phpBB deletes the file, takes the tag out of the text and numbers the others again.
+		if (row && attachId !== undefined) {
+			window.phpbb.plupload.deleteFile(window.jQuery(row), attachId);
+		}
 	});
 	textarea.hidden = true;
 }
@@ -185,10 +296,14 @@ function turnOff() {
 
 // phpBB changes the text of the textarea itself when a file is removed in the attachment tab
 // (it takes out the `[attachment=N]` tag and numbers the others again). The editor follows.
+phpbbUploader()?.bind(`FilesAdded`, () => window.setTimeout(syncAttachmentRows, 0));
+phpbbUploader()?.bind(`FileUploaded`, () => window.setTimeout(syncAttachmentRows, 0));
 phpbbUploader()?.bind(`FilesRemoved`, () => {
 	if (editor && editor.uploading === 0 && textarea && textarea.value !== editor.value) {
 		editor.value = textarea.value;
 	}
+
+	syncAttachmentRows();
 });
 
 if (form && textarea) {
