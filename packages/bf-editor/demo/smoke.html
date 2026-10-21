@@ -20,7 +20,7 @@
 	const editable = editor.shadowRoot.querySelector('bf-editable');
 
 	check('toolbar has role', toolbar.getAttribute('role') === 'toolbar');
-	check('six buttons', toolbar.querySelectorAll('button').length === 6, String(toolbar.querySelectorAll('button').length));
+	check('seven buttons', toolbar.querySelectorAll('button').length === 7, String(toolbar.querySelectorAll('button').length));
 	check('buttons use invoker commands', [...toolbar.querySelectorAll('button')].every((b) => b.getAttribute('commandfor') === editable.id && b.getAttribute('command').startsWith('--')));
 	check('one tab stop', [...toolbar.querySelectorAll('button')].filter((b) => b.tabIndex === 0).length === 1);
 	check('buttons are at least 44px', [...toolbar.querySelectorAll('button')].every((b) => b.getBoundingClientRect().width >= 44 && b.getBoundingClientRect().height >= 44), String(toolbar.querySelector('button').getBoundingClientRect().width));
@@ -91,6 +91,36 @@
 	const frame = player.shadowRoot.querySelector('iframe');
 	check('play loads the no-cookie player at the start time', frame !== null && frame.src === 'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1&rel=0&start=5', frame?.src);
 	check('play removes the button', player.shadowRoot.querySelector('button') === null);
+
+	// Images: the Image button is off without a handler. A picked file shows at once, then arrives.
+	editor.value = 'photos:';
+	const imageButton = toolbar.querySelector('[command="--image"]');
+	check('image button is off without an upload handler', imageButton.getAttribute('aria-disabled') === 'true');
+	let finish;
+	let progress;
+	editor.uploadHandler = { upload: (file, { onProgress }) => { progress = onProgress; return new Promise((resolve) => { finish = () => resolve({ src: URL.createObjectURL(file), name: file.name, index: 0, renumber: (i) => i + 1 }); }); } };
+	view.dispatch(view.state.tr.setSelection(Selection.atEnd(view.state.doc)));
+	await new Promise((resolve) => setTimeout(resolve, 50));
+	check('image button is on with an upload handler', !imageButton.hasAttribute('aria-disabled'));
+	const picker = editor.shadowRoot.querySelector('input[type="file"]');
+	const transfer = new DataTransfer();
+	transfer.items.add(new File([new Uint8Array([137, 80, 78, 71])], 'photo.png', { type: 'image/png' }));
+	picker.files = transfer.files;
+	picker.dispatchEvent(new Event('change'));
+	await new Promise((resolve) => setTimeout(resolve, 50));
+	const uploadView = editor.shadowRoot.querySelector('bf-editable .upload');
+	check('picked file shows at once as an upload with a preview', uploadView !== null && uploadView.querySelector('img').src.startsWith('blob:'));
+	check('upload shows a progress bar', uploadView.querySelector('progress') !== null && editor.uploading === 1);
+	progress(0.5);
+	check('progress reaches the bar', uploadView.querySelector('progress').value === 0.5);
+	check('status is spoken in a live region', editor.shadowRoot.querySelector('output.visually-hidden').textContent === 'Uploading photo.png');
+	check('text does not contain the file yet', editor.value === 'photos:', editor.value);
+	finish();
+	await new Promise((resolve) => setTimeout(resolve, 100));
+	check('upload became an attachment', editor.shadowRoot.querySelector('bf-editable .upload') === null && editor.shadowRoot.querySelector('bf-editable .attachment img') !== null);
+	check('attachment is saved as the phpBB tag', editor.value === 'photos:[attachment=0]photo.png[/attachment]', editor.value);
+	check('arrival is spoken', editor.shadowRoot.querySelector('output.visually-hidden').textContent === 'Uploaded photo.png');
+	check('nothing is uploading any more', editor.uploading === 0);
 
 	document.getElementById('result').textContent = results.join('\n');
 </script>

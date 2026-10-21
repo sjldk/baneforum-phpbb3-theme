@@ -17,8 +17,24 @@
 	<li><button type="button" command="--link" aria-label="Link" title="Link (Ctrl+K)" aria-keyshortcuts="Control+K" aria-pressed="false">
 		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3A4 4 0 0 0 11 18.700l1-1"/></svg>
 	</button></li>
+	<li><button type="button" command="--image" aria-label="Image" title="Image" aria-disabled="true">
+		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h16v12H4zM4 16l5-5 4 4 3-3 4 4M15 9.500h.01"/></svg>
+	</button></li>
 </menu>
 <bf-editable></bf-editable>
+<input type="file" accept="image/*" multiple hidden>
+<output class="visually-hidden"></output>
+<template id="upload">
+	<span class="upload">
+		<img alt="">
+		<progress max="1" value="0"></progress>
+		<output></output>
+		<button type="button">Remove</button>
+	</span>
+</template>
+<template id="attachment">
+	<span class="attachment"><img alt=""><span class="name"></span></span>
+</template>
 <dialog aria-label="Link">
 	<form method="dialog">
 		<h2>Link</h2>

@@ -17,6 +17,8 @@ import { createPlugins } from '../plugins.js';
 import { schema } from '../schema.js';
 import { template } from '../template.js';
 import { Toolbar } from '../toolbar.js';
+import { createImageCommand, createUploadPlugin, createUploads } from '../upload.js';
+import { createNodeViews } from '../views.js';
 
 /** @typedef {import('../contracts.js').Command & {shortcut?: string, toggle?: boolean}} EditorCommand */
 
@@ -29,6 +31,12 @@ export class BfEditor extends HTMLElement {
 	#toolbar;
 	#linkDialog;
 	#editable;
+	/** @type {import('../contracts.js').UploadHandler | null} */
+	#uploadHandler = null;
+	#uploads;
+	#picker;
+	#status;
+	#nodeViews;
 	/** @type {EditorCommand[]} */
 	#commands;
 
@@ -50,7 +58,25 @@ export class BfEditor extends HTMLElement {
 		this.#toolbar = new Toolbar(/** @type {HTMLMenuElement} */ (root.querySelector(`menu`)));
 		this.#toolbar.controls(`editable`);
 		this.#linkDialog = createLinkDialog(/** @type {HTMLDialogElement} */ (root.querySelector(`dialog`)));
-		this.#commands = this.#withLink(createBasicCommands(schema));
+		this.#picker = /** @type {HTMLInputElement} */ (root.querySelector(`input[type="file"]`));
+		this.#status = /** @type {HTMLElement} */ (root.querySelector(`output.visually-hidden`));
+		this.#uploads = createUploads({
+			schema,
+			handler: () => this.#uploadHandler,
+			announce: (text) => {
+				this.#status.textContent = text;
+			},
+			onBusy: (count) => this.dispatchEvent(new CustomEvent(`bf-uploading`, { bubbles: true, detail: { count } })),
+		});
+		this.#nodeViews = createNodeViews(root, this.#uploads);
+		this.#picker.addEventListener(`change`, () => {
+			if (this.#view) {
+				this.#uploads.add(this.#view, [...(this.#picker.files ?? [])]);
+			}
+
+			this.#picker.value = ``;
+		});
+		this.#commands = this.#withBuiltIns(createBasicCommands(schema));
 	}
 
 	/** Puts the editing surface in place when the element is added to a page. */
@@ -68,6 +94,7 @@ export class BfEditor extends HTMLElement {
 		const view = new EditorView(
 			{ mount: this.#editable },
 			{
+				nodeViews: this.#nodeViews,
 				state: this.#createState(this.#value),
 				attributes: {
 					role: `textbox`,
@@ -91,14 +118,38 @@ export class BfEditor extends HTMLElement {
 	}
 
 	/**
-	 * The commands plus the link command, which needs the dialog of this editor.
+	 * The commands plus the link and image commands, which need the dialog and the file picker of this editor.
 	 * @param {EditorCommand[]} commands
 	 * @returns {EditorCommand[]}
 	 */
-	#withLink(commands) {
-		return commands.some((command) => command.id === `link`)
-			? commands
-			: [...commands, createLinkCommand(schema, { ask: (current) => this.#linkDialog.ask(current) })];
+	#withBuiltIns(commands) {
+		const have = new Set(commands.map((command) => command.id));
+
+		return [
+			...commands,
+			...(have.has(`link`) ? [] : [createLinkCommand(schema, { ask: (current) => this.#linkDialog.ask(current) })]),
+			...(have.has(`image`) ? [] : [createImageCommand(this.#uploads, () => this.#picker.click())]),
+		];
+	}
+
+	/**
+	 * Sends the files for images. Without it the Image button stays off and pasted images are ignored.
+	 * @param {import('../contracts.js').UploadHandler | null} handler
+	 */
+	set uploadHandler(handler) {
+		this.#uploadHandler =
+			handler === null
+				? null
+				: /** @type {import('../contracts.js').UploadHandler} */ (assertImplements(`UploadHandler`, handler));
+
+		if (this.#view) {
+			this.#syncToolbar(this.#view.state);
+		}
+	}
+
+	/** How many files are still on their way. Wait for 0 before the form is sent. */
+	get uploading() {
+		return this.#uploads.pending;
 	}
 
 	/** Removes the editor again when the element leaves the page. */
@@ -120,7 +171,7 @@ export class BfEditor extends HTMLElement {
 	 * @param {EditorCommand[]} commands
 	 */
 	set commands(commands) {
-		this.#commands = this.#withLink(
+		this.#commands = this.#withBuiltIns(
 			commands.map((command) => /** @type {EditorCommand} */ (assertImplements(`Command`, command))),
 		);
 	}
@@ -153,7 +204,7 @@ export class BfEditor extends HTMLElement {
 	#createState(text) {
 		return EditorState.create({
 			doc: this.#codec.parse(text),
-			plugins: createPlugins(schema, this.#commands),
+			plugins: createPlugins(schema, this.#commands, { uploads: this.#uploads }),
 		});
 	}
 

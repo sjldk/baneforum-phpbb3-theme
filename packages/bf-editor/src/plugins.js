@@ -10,6 +10,7 @@ import { youtubeProvider } from './embeds/youtube.js';
 import { setLink } from './link-command.js';
 import { defaultLinkPolicy } from './link-policy.js';
 import { defaultSmilies } from './smilies.js';
+import { createUploadPlugin } from './upload.js';
 
 /** @param {string} text */
 const escapePattern = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, `\\$&`);
@@ -108,7 +109,7 @@ function pasteLink(schema, policy, embeds) {
 /**
  * @param {import('prosemirror-model').Schema} schema
  * @param {Array<import('./contracts.js').Command & {shortcut?: string}>} commands
- * @param {{smilies?: Record<string, string>, linkPolicy?: import('./contracts.js').LinkPolicy, embeds?: import('./contracts.js').EmbedProvider[]}} [options]
+ * @param {{smilies?: Record<string, string>, linkPolicy?: import('./contracts.js').LinkPolicy, embeds?: import('./contracts.js').EmbedProvider[], uploads?: ReturnType<typeof import('./upload.js').createUploads>}} [options]
  */
 export function createPlugins(schema, commands, options = {}) {
 	/** @type {Record<string, import('prosemirror-state').Command>} */
@@ -129,6 +130,7 @@ export function createPlugins(schema, commands, options = {}) {
 	];
 
 	return [
+		...(options.uploads ? [createUploadPlugin(options.uploads)] : []),
 		inputRules({ rules }),
 		keymap({
 			...shortcuts,

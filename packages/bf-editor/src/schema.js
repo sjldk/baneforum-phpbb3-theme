@@ -60,7 +60,7 @@ export const schema = new Schema({
 			group: `inline`,
 			inline: true,
 			atom: true,
-			attrs: { index: { default: 0 }, name: { default: `` } },
+			attrs: { index: { default: 0 }, name: { default: `` }, src: { default: `` } },
 			parseDOM: [
 				{
 					tag: `bf-attachment`,
@@ -68,6 +68,22 @@ export const schema = new Schema({
 				},
 			],
 			toDOM: (node) => [`bf-attachment`, { index: String(node.attrs.index), name: node.attrs.name }],
+		},
+
+		// A file that is being sent to the server. It is shown while it goes and writes nothing.
+		// Status is "uploading" or "error". The preview address is a local one (blob:).
+		upload: {
+			group: `inline`,
+			inline: true,
+			atom: true,
+			attrs: {
+				id: { default: `` },
+				name: { default: `` },
+				src: { default: `` },
+				status: { default: `uploading` },
+				message: { default: `` },
+			},
+			toDOM: () => [`span`, { 'data-bf-upload': `` }],
 		},
 
 		// An image from another site, written as [img]address[/img].

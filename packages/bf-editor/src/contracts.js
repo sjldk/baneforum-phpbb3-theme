@@ -14,6 +14,9 @@
  * @property {string} src  Address the browser can show the file from.
  * @property {string} name  File name.
  * @property {string|number} [id]  Host specific id, for example a phpBB attachment id.
+ * @property {number} [index]  The number written in `[attachment=N]` for this file. Default 0.
+ * @property {(index: number) => number} [renumber]  How the index of every other file in the text
+ *   changes now that this one was added. phpBB puts the newest file first, so it is `(i) => i + 1`.
  */
 
 /**

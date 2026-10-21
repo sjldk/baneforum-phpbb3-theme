@@ -229,3 +229,76 @@ dialog button[value="ok"] {
 	background: var(--bf-accent);
 	color: var(--bf-on-accent);
 }
+
+.visually-hidden {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/* A picture that is on its way to the server, and one that has arrived. */
+.upload,
+.attachment {
+	display: inline-flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	max-inline-size: min(100%, 24rem);
+	margin-block: 0.25rem;
+	vertical-align: top;
+}
+
+.upload img,
+.attachment img {
+	display: block;
+	max-inline-size: 100%;
+	max-block-size: 16rem;
+	border-radius: var(--bf-radius);
+	object-fit: contain;
+}
+
+.upload[data-status="uploading"] img {
+	opacity: 0.6;
+}
+
+.upload progress {
+	inline-size: 100%;
+	accent-color: var(--bf-accent);
+}
+
+.upload[data-status="error"] progress,
+.upload[data-status="uploading"] output {
+	display: none;
+}
+
+.upload output {
+	color: var(--bf-text);
+}
+
+.upload button {
+	align-self: start;
+	min-block-size: var(--bf-target);
+	padding: 0 1rem;
+	border: 0.15rem solid var(--bf-border);
+	border-radius: var(--bf-radius);
+	background: var(--bf-field);
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+}
+
+.upload button:focus-visible {
+	outline: 0.15rem solid var(--bf-focus);
+	outline-offset: 0.1rem;
+}
+
+.attachment .name {
+	color: var(--bf-muted);
+	font-size: 0.9em;
+}
+
+.attachment img[hidden] + .name::before {
+	content: "\1F4CE\00A0";
+}
