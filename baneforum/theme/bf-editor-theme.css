@@ -1,4 +1,4 @@
-/* Maps the editor's --bf-* values to the theme palette. The editor itself (bf-editor.css) names
+/* Maps the --bf-* values of the editor and the video player to the theme palette. They name
    no theme colour, and the palette names no editor. This file is the only place that knows both.
    Dark mode needs nothing here: the palette changes under data-theme="dark" and this follows. */
 bf-editor {
@@ -12,4 +12,11 @@ bf-editor {
 	--bf-text: var(--color-text);
 	--bf-muted: var(--color-muted);
 	--bf-on-accent: var(--color-on-accent);
+}
+
+bf-youtube {
+	--bf-radius: var(--radius);
+	--bf-focus: var(--color-focus);
+	--bf-youtube-bg: var(--color-text);
+	--bf-youtube-text: var(--color-paper);
 }
