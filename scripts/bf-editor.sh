@@ -41,4 +41,5 @@ if [[ "$1" == "build" ]]; then
     mkdir -p "$root/baneforum/theme/js"
     cp "$package/dist/bf-render.js" "$root/baneforum/theme/js/bf-render.js"
     cp "$package/dist/bf-render.css" "$root/baneforum/theme/bf-render.css"
+    cp "$package/dist/bf-editor.js" "$root/baneforum/theme/js/bf-editor.js"
 fi

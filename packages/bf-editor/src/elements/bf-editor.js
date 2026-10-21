@@ -11,13 +11,14 @@ import { EditorView } from 'prosemirror-view';
 import { createMarkdownBBCodeCodec } from '../codecs/markdown-bbcode.js';
 import { createBasicCommands } from '../commands.js';
 import { assertImplements } from '../contracts.js';
+import { applyLabels, labelsFor } from '../labels.js';
 import { createLinkCommand } from '../link-command.js';
 import { createLinkDialog } from '../link-dialog.js';
 import { createPlugins } from '../plugins.js';
 import { schema } from '../schema.js';
 import { template } from '../template.js';
 import { Toolbar } from '../toolbar.js';
-import { createImageCommand, createUploadPlugin, createUploads } from '../upload.js';
+import { createImageCommand, createUploads } from '../upload.js';
 import { createNodeViews } from '../views.js';
 
 /** @typedef {import('../contracts.js').Command & {shortcut?: string, toggle?: boolean}} EditorCommand */
@@ -31,9 +32,14 @@ export class BfEditor extends HTMLElement {
 	#toolbar;
 	#linkDialog;
 	#editable;
+	#root;
+	/** @type {Record<string, string>} */
+	#words = labelsFor();
 	/** @type {import('../contracts.js').UploadHandler | null} */
 	#uploadHandler = null;
 	#uploads;
+	/** @type {((index: number) => string) | null} */
+	#attachmentSrc = null;
 	#picker;
 	#status;
 	#nodeViews;
@@ -46,6 +52,7 @@ export class BfEditor extends HTMLElement {
 		// and the page's CSS does not reach in.
 		const root = this.attachShadow({ mode: `open` });
 		root.innerHTML = template;
+		this.#root = root;
 		this.#editable = /** @type {HTMLElement} */ (root.querySelector(`bf-editable`));
 		this.#editable.id = `editable`;
 		this.#editable.addEventListener(`command`, (event) => {
@@ -66,9 +73,15 @@ export class BfEditor extends HTMLElement {
 			announce: (text) => {
 				this.#status.textContent = text;
 			},
+			labels: () => this.#words,
 			onBusy: (count) => this.dispatchEvent(new CustomEvent(`bf-uploading`, { bubbles: true, detail: { count } })),
 		});
-		this.#nodeViews = createNodeViews(root, this.#uploads);
+		this.#nodeViews = createNodeViews(
+			root,
+			this.#uploads,
+			() => this.#words,
+			() => this.#attachmentSrc,
+		);
 		this.#picker.addEventListener(`change`, () => {
 			if (this.#view) {
 				this.#uploads.add(this.#view, [...(this.#picker.files ?? [])]);
@@ -85,6 +98,8 @@ export class BfEditor extends HTMLElement {
 			return;
 		}
 
+		this.labels = {};
+
 		const placeholder = this.getAttribute(`placeholder`);
 
 		if (placeholder !== null) {
@@ -99,7 +114,7 @@ export class BfEditor extends HTMLElement {
 				attributes: {
 					role: `textbox`,
 					'aria-multiline': `true`,
-					'aria-label': this.getAttribute(`label`) ?? `Message`,
+					'aria-label': this.getAttribute(`label`) ?? this.#words.message,
 					spellcheck: `true`,
 				},
 				dispatchTransaction: (transaction) => {
@@ -133,6 +148,15 @@ export class BfEditor extends HTMLElement {
 	}
 
 	/**
+	 * Words that replace the built in ones (see labels.js). The page language chooses the rest.
+	 * @param {Record<string, string>} overrides
+	 */
+	set labels(overrides) {
+		this.#words = labelsFor(document.documentElement.lang, overrides);
+		applyLabels(this.#root, this.#words);
+	}
+
+	/**
 	 * Sends the files for images. Without it the Image button stays off and pasted images are ignored.
 	 * @param {import('../contracts.js').UploadHandler | null} handler
 	 */
@@ -144,6 +168,33 @@ export class BfEditor extends HTMLElement {
 
 		if (this.#view) {
 			this.#syncToolbar(this.#view.state);
+		}
+	}
+
+	/** @param {string} key  a word the editor uses, see labels.js */
+	labelFor(key) {
+		return this.#words[key] ?? ``;
+	}
+
+	/**
+	 * Finds the picture for a file that came with the text, as `[attachment=2]name[/attachment]`.
+	 * Without it such a file shows as its name.
+	 * @param {((index: number) => string) | null} resolve
+	 */
+	set attachmentSrc(resolve) {
+		this.#attachmentSrc = resolve;
+	}
+
+	/**
+	 * Puts a file that is already on the host at the cursor.
+	 * @param {{index: number, name: string, src?: string}} file
+	 */
+	insertAttachment({ index, name, src = `` }) {
+		const view = this.#view;
+
+		if (view) {
+			view.dispatch(view.state.tr.replaceSelectionWith(schema.nodes.attachment.create({ index, name, src })));
+			view.focus();
 		}
 	}
 

@@ -1,23 +1,23 @@
-<menu role="toolbar" aria-label="Formatting">
-	<li><button type="button" command="--bold" aria-label="Bold" title="Bold (Ctrl+B)" aria-keyshortcuts="Control+B" aria-pressed="false">
+<menu role="toolbar" data-label="formatting">
+	<li><button type="button" command="--bold" data-label="bold" aria-keyshortcuts="Control+B" aria-pressed="false">
 		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z"/></svg>
 	</button></li>
-	<li><button type="button" command="--italic" aria-label="Italic" title="Italic (Ctrl+I)" aria-keyshortcuts="Control+I" aria-pressed="false">
+	<li><button type="button" command="--italic" data-label="italic" aria-keyshortcuts="Control+I" aria-pressed="false">
 		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 5h8M6 19h8M14 5l-4 14"/></svg>
 	</button></li>
-	<li><button type="button" command="--strike" aria-label="Strikethrough" title="Strikethrough (Ctrl+Shift+X)" aria-keyshortcuts="Control+Shift+X" aria-pressed="false">
+	<li><button type="button" command="--strike" data-label="strike" aria-keyshortcuts="Control+Shift+X" aria-pressed="false">
 		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16M16.5 7.5C16 6 14.5 5 12 5c-2.5 0-4.5 1.2-4.5 3.2 0 4 9 2.5 9 6.8 0 2-2 3-4.5 3-2.6 0-4.3-1-4.8-2.8"/></svg>
 	</button></li>
-	<li><button type="button" command="--normal" aria-label="Normal text" title="Normal text (Ctrl+Shift+0)" aria-keyshortcuts="Control+Shift+0">
+	<li><button type="button" command="--normal" data-label="normal" aria-keyshortcuts="Control+Shift+0">
 		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 7h14M12 7v12M8 19h8"/></svg>
 	</button></li>
-	<li><button type="button" command="--quote" aria-label="Quote" title="Quote (Ctrl+Shift+Q)" aria-keyshortcuts="Control+Shift+Q" aria-pressed="false">
+	<li><button type="button" command="--quote" data-label="quote" aria-keyshortcuts="Control+Shift+Q" aria-pressed="false">
 		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 17c0-4 1-7 4-9M13 17c0-4 1-7 4-9M5 17h4v-4M13 17h4v-4"/></svg>
 	</button></li>
-	<li><button type="button" command="--link" aria-label="Link" title="Link (Ctrl+K)" aria-keyshortcuts="Control+K" aria-pressed="false">
+	<li><button type="button" command="--link" data-label="link" aria-keyshortcuts="Control+K" aria-pressed="false">
 		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3A4 4 0 0 0 11 18.700l1-1"/></svg>
 	</button></li>
-	<li><button type="button" command="--image" aria-label="Image" title="Image" aria-disabled="true">
+	<li><button type="button" command="--image" data-label="image" aria-disabled="true">
 		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h16v12H4zM4 16l5-5 4 4 3-3 4 4M15 9.500h.01"/></svg>
 	</button></li>
 </menu>
@@ -35,14 +35,14 @@
 <template id="attachment">
 	<span class="attachment"><img alt=""><span class="name"></span></span>
 </template>
-<dialog aria-label="Link">
+<dialog data-label="link">
 	<form method="dialog">
-		<h2>Link</h2>
-		<label>Web address <input type="text" name="href" inputmode="url" autocomplete="url" spellcheck="false"></label>
+		<h2 data-text="link">Link</h2>
+		<label><span data-text="linkAddress">Web address</span> <input type="text" name="href" inputmode="url" autocomplete="url" spellcheck="false"></label>
 		<p>
-			<button type="submit" value="remove">Remove link</button>
-			<button type="button" command="close">Cancel</button>
-			<button type="submit" value="ok">Save</button>
+			<button type="submit" value="remove" data-text="linkRemove">Remove link</button>
+			<button type="button" command="close" data-text="linkCancel">Cancel</button>
+			<button type="submit" value="ok" data-text="linkSave">Save</button>
 		</p>
 	</form>
 </dialog>

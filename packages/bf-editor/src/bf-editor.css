@@ -97,6 +97,10 @@ menu button[aria-disabled="true"] {
 
 bf-editable {
 	display: block;
+	/* Without this the browser types a non-breaking space for the last space of a line. */
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	font-variant-ligatures: none;
 	min-block-size: 12rem;
 	padding: 0.75rem;
 	border: 0.15rem solid var(--bf-border);
@@ -301,4 +305,10 @@ dialog button[value="ok"] {
 
 .attachment img[hidden] + .name::before {
 	content: "\1F4CE\00A0";
+}
+
+/* A picture or player that is selected as one piece. */
+.ProseMirror-selectednode {
+	outline: 0.15rem solid var(--bf-focus);
+	outline-offset: 0.1rem;
 }

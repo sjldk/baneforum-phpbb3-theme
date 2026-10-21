@@ -13,6 +13,7 @@
 <body>
 <h1>bf-editor demo</h1>
 <bf-editor label="Message" placeholder="Write something. Try **bold**, *italic*, > quote, :) and Ctrl+B."></bf-editor>
+<p>Try: Ctrl+K on selected text, paste a web address, paste a YouTube address on an empty line, the Image button, paste or drop a picture (a file with "fail" in its name fails).</p>
 <h2>Saved text</h2>
 <pre id="output"></pre>
 <script type="module">
@@ -20,7 +21,28 @@
 	defineBfEditor();
 	const editor = document.querySelector('bf-editor');
 	const output = document.getElementById('output');
-	editor.value = '[quote="admin" post_id=1]Quoted **text**[/quote]\nA [b]legacy[/b] post with :) and a [u]raw[/u] tag.';
+	editor.value = '[quote="admin" post_id=1]Quoted **text**[/quote]\nA [b]legacy[/b] post with :) and a [u]raw[/u] tag.\n\nhttps://youtu.be/dQw4w9WgXcQ?t=5';
+	// A pretend server: takes two seconds, shows progress, and fails for a file with "fail" in its name.
+	editor.uploadHandler = {
+		upload: (file, { onProgress, signal }) => new Promise((resolve, reject) => {
+			let done = 0;
+			const timer = setInterval(() => {
+				done += 0.1;
+				onProgress(Math.min(done, 1));
+
+				if (done >= 1) {
+					clearInterval(timer);
+
+					if (file.name.includes('fail')) {
+						reject(new Error('The file is too large.'));
+					} else {
+						resolve({ src: URL.createObjectURL(file), name: file.name, index: 0, renumber: (index) => index + 1 });
+					}
+				}
+			}, 200);
+			signal?.addEventListener('abort', () => { clearInterval(timer); reject(new DOMException('Aborted', 'AbortError')); });
+		}),
+	};
 	const show = () => { output.textContent = editor.value; };
 	editor.addEventListener('bf-change', show);
 	show();

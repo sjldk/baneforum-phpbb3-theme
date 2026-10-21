@@ -3,7 +3,9 @@
 // A card with a play button. The video player is loaded from youtube-nocookie.com only when the
 // button is pressed, so a page with a video makes no request to Google until the visitor asks.
 // The link inside the element stays visible. Without JavaScript it is all there is.
+
 import { playerUrl, youtubeProvider } from '../embeds/youtube.js';
+import { applyLabels, labelsFor } from '../labels.js';
 import { template } from '../youtube-template.js';
 
 export class BfYoutube extends HTMLElement {
@@ -11,6 +13,7 @@ export class BfYoutube extends HTMLElement {
 		super();
 		const root = this.attachShadow({ mode: `open` });
 		root.innerHTML = template;
+		applyLabels(root, labelsFor(document.documentElement.lang));
 		const button = /** @type {HTMLButtonElement} */ (root.querySelector(`button`));
 		button.addEventListener(`click`, () => this.#play(root, button));
 	}

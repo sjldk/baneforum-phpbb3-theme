@@ -1,18 +1,7 @@
 // Links to other sites in a post open in a new window. The link says so, to everyone:
 // an icon (drawn by the theme from the data attribute) and a hidden text for screen readers.
 // WCAG 3.2.5 asks for a warning before a link changes the context.
-
-const texts = {
-	en: `(opens in a new window)`,
-	da: `(åbner i et nyt vindue)`,
-};
-
-/** @param {Document} document */
-function warningText(document) {
-	const language = document.documentElement.lang.slice(0, 2).toLowerCase();
-
-	return texts[/** @type {keyof typeof texts} */ (language)] ?? texts.en;
-}
+import { labelsFor } from '../labels.js';
 
 /**
  * @param {ParentNode} root  the part of the page to look in
@@ -22,7 +11,7 @@ function warningText(document) {
 export function useNewWindowLinks(root, options = {}) {
 	const document = root.ownerDocument ?? /** @type {Document} */ (root);
 	const origin = options.origin ?? document.location?.origin ?? ``;
-	const text = options.text ?? warningText(document);
+	const text = options.text ?? labelsFor(document.documentElement.lang).newWindow;
 	let changed = 0;
 
 	for (const link of root.querySelectorAll(`a[href]:not([data-bf-external])`)) {

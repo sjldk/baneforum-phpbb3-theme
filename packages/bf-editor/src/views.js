@@ -1,11 +1,14 @@
 // How the picture nodes look inside the editing surface. The markup is in the <template>
 // elements of bf-editor.html. This file clones them and keeps them up to date.
+import { format } from './labels.js';
 
 /**
  * @param {ShadowRoot} root  the editor's shadow root, which holds the templates
  * @param {ReturnType<import('./upload.js').createUploads>} uploads
+ * @param {() => Record<string, string>} labels  the words to use, see labels.js
+ * @param {() => ((index: number) => string) | null} resolveSrc  finds the picture of a file loaded from text, if the host can
  */
-export function createNodeViews(root, uploads) {
+export function createNodeViews(root, uploads, labels, resolveSrc) {
 	/** @param {string} id @returns {HTMLElement} */
 	const clone = (id) =>
 		/** @type {HTMLElement} */ (
@@ -32,8 +35,9 @@ export function createNodeViews(root, uploads) {
 				dom.dataset.status = current.attrs.status;
 				image.src = current.attrs.src;
 				image.alt = current.attrs.name;
-				message.textContent = current.attrs.status === `error` ? `Could not upload: ${current.attrs.message}` : ``;
-				remove.textContent = current.attrs.status === `error` ? `Remove` : `Cancel`;
+				message.textContent =
+					current.attrs.status === `error` ? format(labels().uploadError, { message: current.attrs.message }) : ``;
+				remove.textContent = current.attrs.status === `error` ? labels().uploadRemove : labels().uploadCancel;
 			};
 			render(node);
 
@@ -58,10 +62,11 @@ export function createNodeViews(root, uploads) {
 			const dom = clone(`attachment`);
 			const image = /** @type {HTMLImageElement} */ (dom.querySelector(`img`));
 			const name = /** @type {HTMLElement} */ (dom.querySelector(`.name`));
-			image.hidden = node.attrs.src === ``;
-			image.src = node.attrs.src;
+			const src = node.attrs.src || resolveSrc()?.(node.attrs.index) || ``;
+			image.hidden = src === ``;
+			image.src = src;
 			image.alt = node.attrs.name;
-			name.textContent = node.attrs.src === `` ? node.attrs.name : ``;
+			name.textContent = src === `` ? node.attrs.name : ``;
 
 			return { dom, ignoreMutation: () => true };
 		},

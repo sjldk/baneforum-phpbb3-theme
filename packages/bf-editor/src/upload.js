@@ -5,6 +5,7 @@
 // When the host answers, that node becomes an `attachment` node. If it fails, the node stays
 // as an error until the writer removes it.
 import { Plugin } from 'prosemirror-state';
+import { format, labelsFor } from './labels.js';
 
 /** @param {DataTransfer | null | undefined} data */
 function imageFiles(data) {
@@ -16,9 +17,10 @@ function imageFiles(data) {
  * @param {import('prosemirror-model').Schema} options.schema
  * @param {() => import('./contracts.js').UploadHandler | null} options.handler  the handler now in use, or null
  * @param {(text: string) => void} options.announce  says something to screen readers
+ * @param {() => Record<string, string>} [options.labels]  the words to use, see labels.js
  * @param {(count: number) => void} [options.onBusy]  called when the number of running uploads changes
  */
-export function createUploads({ schema, handler, announce, onBusy }) {
+export function createUploads({ schema, handler, announce, onBusy, labels = () => labelsFor() }) {
 	let counter = 0;
 	/** @type {Map<string, AbortController>} */
 	const running = new Map();
@@ -58,7 +60,7 @@ export function createUploads({ schema, handler, announce, onBusy }) {
 
 		try {
 			if (!uploadHandler) {
-				throw new Error(`Uploading is not available here.`);
+				throw new Error(labels().uploadUnavailable);
 			}
 
 			const result = await uploadHandler.upload(file, {
@@ -89,7 +91,7 @@ export function createUploads({ schema, handler, announce, onBusy }) {
 				schema.nodes.attachment.create({ index: result.index ?? 0, name: result.name, src: result.src }),
 			);
 			view.dispatch(tr);
-			announce(`Uploaded ${result.name}`);
+			announce(format(labels().uploaded, { name: result.name }));
 		} catch (error) {
 			if (controller.signal.aborted) {
 				return;
@@ -103,7 +105,7 @@ export function createUploads({ schema, handler, announce, onBusy }) {
 				view.dispatch(view.state.tr.setNodeMarkup(position, undefined, { ...node?.attrs, status: `error`, message }));
 			}
 
-			announce(`Could not upload ${file.name}. ${message}`);
+			announce(format(labels().uploadFailed, { name: file.name, message }));
 		} finally {
 			running.delete(id);
 			progressViews.delete(id);
@@ -139,7 +141,7 @@ export function createUploads({ schema, handler, announce, onBusy }) {
 					view.state.tr.insert(position, schema.nodes.upload.create({ id, name: file.name, src, status: `uploading` })),
 				);
 				position += 1;
-				announce(`Uploading ${file.name}`);
+				announce(format(labels().uploading, { name: file.name }));
 				void send(view, id, file);
 			}
 		},
