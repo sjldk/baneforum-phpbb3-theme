@@ -8,8 +8,9 @@
 :root {
 	color-scheme: light;
 
-	/* The brand colour. Never changes between light and dark. */
-	--accent-base: #22548e;
+	/* The brand colour. Never changes between light and dark. It is a little darker than the first
+	   choice (#22548e) so that accent text on the light tint is 7.16:1 and not 6.81:1. */
+	--accent-base: #215188;
 	/* The accent used for fills, links and focus. Lighter in dark mode. */
 	--accent: var(--accent-base);
 

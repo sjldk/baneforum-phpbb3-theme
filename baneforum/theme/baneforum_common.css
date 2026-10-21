@@ -664,3 +664,371 @@ table.table1 tbody tr:hover td {
 	outline: 0.15rem solid var(--color-focus);
 	outline-offset: 0.1rem;
 }
+
+/* The posting page has no tabs. The pictures are in the editor, so the attachment panel (which
+   still holds the fields that are sent with the form) stays out of sight. */
+form:has(bf-editor) #attach-panel:not([data-bf-files]) {
+	display: none;
+}
+
+/* The editor adds files itself, so the add-file controls of the panel go. The list stays. */
+form:has(bf-editor) #attach-panel :is(.inner > p, #attach-panel-basic, #attach-panel-multi) {
+	display: none !important;
+}
+
+#poll-panel > summary {
+	cursor: pointer;
+	font-weight: 600;
+	padding: 0.5em 1em;
+}
+
+#poll-panel[open] > summary {
+	margin-bottom: 0.5em;
+}
+
+/* The message box takes the whole width. prosilver leaves 20% for the smiley box, which is gone. */
+.message-box {
+	width: 100%;
+}
+
+.message-box textarea {
+	width: 100%;
+}
+
+/* Pictures in posts: a thin line, rounded corners, and a fixed gap to the description under them. */
+.postbody img.postimage,
+figure.file img,
+dl.thumbnail img {
+	border: 1px solid var(--color-line);
+	border-radius: var(--radius);
+}
+
+figure.file {
+	margin: 0;
+}
+
+figure.file img,
+dl.thumbnail img {
+	display: block;
+	margin: 0;
+}
+
+figure.file figcaption,
+dl.thumbnail dd {
+	margin: 0.5rem 0 0;
+	padding: 0;
+	color: var(--accent);
+	font-style: italic;
+}
+
+dl.thumbnail dd {
+	font-style: normal;
+}
+
+/* Files that come with a post: one card each, in a list under the text. */
+.attachbox {
+	margin: 1.5rem 0 0;
+	padding: 0;
+	border: 0;
+	background: none;
+}
+
+.attachbox > dt {
+	margin: 0 0 0.5rem;
+	font-weight: 600;
+}
+
+.attachbox > dd {
+	margin: 0 0 0.5rem;
+	padding: 0;
+}
+
+.attachment-file {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	align-items: center;
+	gap: 0.15rem 1rem;
+	padding: 0.65rem 0.9rem;
+	border: 1px solid var(--color-line);
+	border-radius: var(--radius);
+	background: var(--color-tint);
+}
+
+/* The file icon takes its colours from the palette. */
+.attachment-icon {
+	grid-column: 1;
+	grid-row: 1 / span 2;
+	inline-size: 1.6rem;
+	block-size: 2rem;
+}
+
+.attachment-icon .page {
+	fill: var(--color-paper);
+	stroke: var(--accent);
+	stroke-width: 2;
+	stroke-linejoin: round;
+}
+
+.attachment-icon .fold {
+	fill: var(--color-tint);
+	stroke: var(--accent);
+	stroke-width: 2;
+	stroke-linejoin: round;
+}
+
+.attachment-icon .band {
+	fill: var(--accent);
+}
+
+.attachment-icon .type {
+	fill: var(--color-on-accent);
+	font-family: var(--base-font);
+	font-size: 8px;
+	font-weight: 700;
+}
+
+.attachment-name {
+	grid-column: 2;
+	grid-row: 1;
+	font-weight: 600;
+	overflow-wrap: anywhere;
+}
+
+.attachment-meta {
+	grid-column: 3;
+	grid-row: 1;
+	color: var(--color-muted);
+	font-size: var(--font-size-small);
+	white-space: nowrap;
+}
+
+.attachment-comment {
+	grid-column: 2 / span 2;
+	grid-row: 2;
+	font-style: italic;
+}
+
+/* A picture that opens in a new tab. */
+figure.file a {
+	display: inline-block;
+	line-height: 0;
+	border: 0;
+}
+
+figure.file a[data-bf-external]::after {
+	content: none;
+}
+
+figure.file a:focus-visible {
+	outline: 0.15rem solid var(--color-focus);
+	outline-offset: 0.15rem;
+	border-radius: var(--radius);
+}
+
+/* The editor places pictures itself and keeps files in the list, so the old Place inline button goes. */
+form:has(bf-editor) .file-inline-bbcode {
+	display: none !important;
+}
+
+/* The list of files under the editor: the same cards as under a post, with the description field and Delete. */
+#attach-panel {
+	background: none;
+	padding: 0;
+}
+
+#attach-panel .file-list-container,
+#attach-panel .file-list-container .inner {
+	margin: 0;
+	padding: 0;
+	background: none;
+	border: 0;
+}
+
+#attach-panel table,
+#attach-panel tbody {
+	display: block;
+	border: 0;
+}
+
+#attach-panel thead {
+	display: none;
+}
+
+#attach-panel tr.attach-row {
+	display: grid;
+	grid-template-columns: 1fr auto auto;
+	align-items: center;
+	gap: 0.5rem 1rem;
+	margin: 0 0 0.5rem;
+	padding: 0.65rem 0.9rem;
+	border: 1px solid var(--color-line);
+	border-radius: var(--radius);
+	background: var(--color-tint);
+}
+
+#attach-panel tr.attach-row > td {
+	display: block;
+	width: auto;
+	padding: 0;
+	border: 0;
+	background: none;
+}
+
+#attach-panel tr.attach-row > td.attach-name {
+	grid-column: 1;
+	grid-row: 1;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.25rem 0.75rem;
+	font-weight: 600;
+}
+
+#attach-panel tr.attach-row > td.attach-name .attach-controls {
+	margin-inline-start: auto;
+}
+
+#attach-panel td.attach-name .attach-controls input {
+	padding: 0.2em 0.8em;
+}
+
+#attach-panel td.attach-comment {
+	grid-column: 1 / -1;
+	grid-row: 2;
+}
+
+#attach-panel td.attach-comment textarea {
+	box-sizing: border-box;
+	text-align: start;
+	width: 100%;
+	min-height: 2.75rem;
+}
+
+#attach-panel td.attach-filesize {
+	grid-column: 2;
+	grid-row: 1;
+	color: var(--color-muted);
+	font-size: var(--font-size-small);
+}
+
+#attach-panel td.attach-status {
+	grid-column: 3;
+	grid-row: 1;
+}
+
+/* Buttons (WCAG AAA). Every button and every link that works like one is at least 44 by 44 pixels (2.5.5),
+   its text has 7:1 contrast in every state (1.4.6), and the keyboard focus is a 3 pixel line (2.4.13).
+   The editor follows the same rules in its own stylesheet. */
+.button,
+a.button,
+input.button1,
+input.button2,
+input.button3,
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+summary,
+.dropdown-trigger,
+.pagination li a,
+.pagination li span,
+a.mark,
+.post-buttons .button,
+.format-buttons .button {
+	box-sizing: border-box;
+	min-block-size: 2.75rem;
+	min-inline-size: 2.75rem;
+}
+
+.button,
+a.button,
+.dropdown-trigger,
+.pagination li a,
+.pagination li span,
+a.mark {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.35em;
+}
+
+input.button1,
+input.button2,
+input.button3 {
+	padding-block: 0;
+	padding-inline: 1.1em;
+}
+
+.pagination li a,
+.pagination li span,
+.pagination li.active span {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding-block: 0;
+	line-height: 1;
+}
+
+/* The links of the two navigation bars and the small page numbers of a topic in the list are targets too. */
+.navbar a,
+.row .pagination a {
+	display: inline-flex;
+	align-items: center;
+	min-block-size: 2.75rem;
+	min-inline-size: 2.75rem;
+	box-sizing: border-box;
+}
+
+.row .pagination a {
+	justify-content: center;
+}
+
+.navbar .crumb {
+	display: inline-flex;
+	align-items: center;
+}
+
+/* Text on a muted button is never the same colour as the button. */
+.button.button-secondary {
+	color: var(--color-on-accent);
+}
+
+/* prosilver switches the outline off and gives focused links and buttons colours of its own (5.9:1, and
+   1.1:1 for a Login button). Hover and keyboard focus look the same here, and the focus line always shows. */
+a:focus,
+a:active {
+	color: var(--accent);
+}
+
+/* The icon of a button has the colour of its text in every state. prosilver gave it a light blue on focus. */
+.button:focus .icon,
+.button:active .icon,
+.button-secondary:focus,
+.button-secondary:active {
+	color: var(--color-on-accent);
+}
+
+/* The Next and Previous page buttons are light, so their arrows are dark. */
+.pagination li a.button .icon {
+	color: var(--accent);
+}
+
+.pagination li a.button:hover .icon,
+.pagination li a.button:focus .icon,
+.pagination li a.button:active .icon {
+	color: var(--color-on-accent);
+}
+
+input.button1:focus,
+input.button2:focus,
+input.button3:focus {
+	border-color: transparent;
+	background: var(--accent);
+	color: var(--color-on-accent);
+}
+
+:is(a, button, input, select, textarea, summary, [tabindex], .button, .dropdown-trigger):focus-visible {
+	outline: 0.1875rem solid var(--color-text) !important;
+	outline-offset: 0.125rem !important;
+	box-shadow: 0 0 0 0.3125rem var(--color-paper);
+}
