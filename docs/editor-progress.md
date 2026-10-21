@@ -11,12 +11,12 @@ Goal: replace the phpBB post editor with a ProseMirror editor (`bf-` custom elem
 | 1 | Package scaffold, Node build in Docker, contracts and fakes, tests | Done |
 | 2 | Schema, Markdown codec, legacy BBCode codec, smilie map, corpus tests | Done (first version, see open items) |
 | 3 | Toolbar and editor element | Done (without link and image buttons, which come in phases 4 and 6) |
-| 4 | Links (dialog, new window, rendered posts) | Open |
+| 4 | Links (dialog, new window, rendered posts) | Done |
 | 5 | YouTube embed | Open |
 | 6 | Image upload, Facebook style | Open |
 | 7 | phpBB adapter in the theme | Open |
 | 8 | Smilie conversion and rendered-post scripts | Open |
-| 9 | Quality: accessibility, phones, size | Open |
+| 9 | Quality: accessibility, phones, size, Firefox test run | Open |
 | 10 | Packaging for reuse | Open |
 
 ## Decisions
@@ -30,6 +30,7 @@ Goal: replace the phpBB post editor with a ProseMirror editor (`bf-` custom elem
 | 2026-10-21 | The production `alfredoramos/markdown` extension stays. Not replaced. |
 | 2026-10-21 | Custom elements use the prefix `bf-`. |
 | 2026-10-21 | Standing rule: use the proper HTML element wherever one exists. Dialogs use `<dialog>` (opened with `showModal()`, closed with `<form method="dialog">`). A custom `bf-` element is only for what HTML has no element for. |
+| 2026-10-21 | Standing rule: use the Invoker Commands API (`command` and `commandfor` on `<button>`) where it fits, so markup does the wiring and script does less. Toolbar buttons send `--name` commands to the editing surface. The dialog's Cancel button uses `command="close"`. Browser support: see the browser rule below. |
 | 2026-10-21 | No npm packages in production if it can be avoided. A new production dependency needs approval first. `test/dependencies.test.js` enforces it. What ships: `docs/third-party.md` (in `packages/bf-editor/docs/`). |
 | 2026-10-21 | SOLID: small interfaces (`Codec`, `UploadHandler`, `EmbedProvider`, `LinkPolicy`, `Command`), the core never imports the host. |
 
@@ -134,3 +135,14 @@ cd packages/bf-editor && python3 -m http.server 8099
 # open http://localhost:8099/demo/index.html  (demo)
 # open http://localhost:8099/demo/smoke.html  (self-test, prints PASS or FAIL)
 ```
+
+| 2026-10-21 | Phase 4. `src/link-policy.js` (only http, https, mailto; a bare `example.com` gets `https://`), `src/link-command.js` (`setLink`, `removeLink`, `createLinkCommand`, Ctrl+K, toolbar button 6), `src/link-dialog.js` (native `<dialog>` with `<form method="dialog">`, answer read from the submit, not the `close` event), paste of a web address links the selection or is written as a link (`plugins.js`). Rendered posts: `src/render/external-links.js` adds `target="_blank"`, `rel="noopener noreferrer"`, `data-bf-external` and a hidden "(opens in a new window)" (English or Danish by `<html lang>`) to links to other sites. CSS for the dialog, the hidden text and the arrow icon is in `bf-editor.css`. Checked on the Docker board: the two YouTube links in topic 1 are marked. 76 unit tests and 24 browser checks pass. |
+| 2026-10-21 | Found: in headless Chrome 156 a `<dialog>` fires its `close` event only once per page when the test closes it with scripted clicks. The dialog therefore reads the button from the `submit` event. Real clicks were not checked in a headed browser. |
+| 2026-10-21 | Invoker Commands applied. Toolbar buttons carry `commandfor` (the editing surface) and `command="--bold"` and so on. `<bf-editor>` listens for the `command` event. The link dialog's Cancel is `command="close"`. Save and Remove stay submit buttons of the `method="dialog"` form. 76 unit tests and 25 browser checks pass. |
+| 2026-10-21 | Browser support is the current version and one version back. Removed the toolbar's click fallback and its `bf-command` event. |
+| 2026-10-21 | Browser support rule: Blink (Chrome, Edge) and Gecko (Firefox) are supported, current version and one back. WebKit (Safari) is welcome if it costs nothing, but nothing is built or tested for it. No fallbacks for older versions. Test with Chrome now. Firefox checks are still to do. |
+| 2026-10-21 | Philosophy: follow the web standards and the MDN documentation. If we do that, we are almost as good as we can be. Use what MDN documents as supported. No browser-specific code, no workarounds for one engine, no testing of every browser. Check MDN before choosing an API. |
+| 2026-10-21 | A Firefox test run is wanted, but later. Planned for phase 9. It will rerun `demo/smoke.html` and re-check the link dialog `close` event. |
+| 2026-10-21 | Component structure rule: every `bf-` component has its markup and CSS as one template string in a shadow root, not built with `createElement` chains. The HTML and CSS are real files (`src/bf-editor.html`, `src/bf-editor.css`) that the build reads as text into `src/template.js`, so Biome still checks them. Script only finds the elements and hooks up events. Ids are private to the shadow root, so `commandfor` needs no per-editor counters. |
+| 2026-10-21 | Shadow DOM applied to `<bf-editor>`. The toolbar and dialog markup moved into `bf-editor.html` (icons are inline SVG there, `icons.js` is gone). `toolbar.js` and `link-dialog.js` now take the elements from the template. Page CSS no longer reaches in (checked). The theme sets `--bf-*` on `bf-editor` and they pass through. `data-theme` dark mode on an ancestor is not read inside the shadow root (`:host-context` is Chrome only), the theme palette flips the `--bf-*` values instead. Saved-post CSS (hidden text, new window arrow) is now `bf-render.css`, the only stylesheet the theme loads. 76 unit tests and 26 browser checks pass. Risk to check in the Firefox run: ProseMirror selection handling inside a shadow root. |
+| 2026-10-21 | House style: strings in JavaScript are always template literals (backticks), never `'` or `"`. ESLint `quotes: backtick` enforces it and `eslint --fix` converted all of `src`, `test`, `tools` and the build files. Import paths and property keys stay as they are. The demo pages (`demo/*.html`) are not linted and still use single quotes. |

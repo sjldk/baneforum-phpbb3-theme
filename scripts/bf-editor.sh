@@ -40,5 +40,5 @@ docker run --rm \
 if [[ "$1" == "build" ]]; then
     mkdir -p "$root/baneforum/theme/js"
     cp "$package/dist/bf-render.js" "$root/baneforum/theme/js/bf-render.js"
-    cp "$package/dist/bf-editor.css" "$root/baneforum/theme/bf-editor.css"
+    cp "$package/dist/bf-render.css" "$root/baneforum/theme/bf-render.css"
 fi

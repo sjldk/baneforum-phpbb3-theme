@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <title>bf-editor smoke test</title>
-<link rel="stylesheet" href="../dist/bf-editor.css">
+
 </head>
 <body>
+<style>button { border: 9px solid red; }</style>
 <bf-editor id="e" label="Message" placeholder="Hint text"></bf-editor>
 <pre id="result">running</pre>
 <script type="module">
@@ -15,40 +16,68 @@
 	const check = (name, ok, extra = '') => results.push(`${ok ? 'PASS' : 'FAIL'} ${name} ${extra}`);
 	const editor = document.getElementById('e');
 	await new Promise((resolve) => setTimeout(resolve, 100));
-	const toolbar = editor.querySelector('menu[role="toolbar"]');
-	const editable = editor.querySelector('bf-editable');
+	const toolbar = editor.shadowRoot.querySelector('menu[role="toolbar"]');
+	const editable = editor.shadowRoot.querySelector('bf-editable');
 
 	check('toolbar has role', toolbar.getAttribute('role') === 'toolbar');
-	check('five buttons', toolbar.querySelectorAll('button').length === 5, String(toolbar.querySelectorAll('button').length));
+	check('six buttons', toolbar.querySelectorAll('button').length === 6, String(toolbar.querySelectorAll('button').length));
+	check('buttons use invoker commands', [...toolbar.querySelectorAll('button')].every((b) => b.getAttribute('commandfor') === editable.id && b.getAttribute('command').startsWith('--')));
 	check('one tab stop', [...toolbar.querySelectorAll('button')].filter((b) => b.tabIndex === 0).length === 1);
 	check('buttons are at least 44px', [...toolbar.querySelectorAll('button')].every((b) => b.getBoundingClientRect().width >= 44 && b.getBoundingClientRect().height >= 44), String(toolbar.querySelector('button').getBoundingClientRect().width));
-	check('editing surface is bf-editable, no div', editable.getAttribute('contenteditable') === 'true' && !editor.querySelector('div'));
+	check('editing surface is bf-editable, no div', editable.getAttribute('contenteditable') === 'true' && !editor.shadowRoot.querySelector('div') && !editor.querySelector('*'));
 	check('textbox role and label', editable.getAttribute('role') === 'textbox' && editable.getAttribute('aria-label') === 'Message');
 	check('placeholder shown when empty', editable.hasAttribute('data-empty') && getComputedStyle(editable, '::before').content.includes('Hint'));
+	check('page css does not reach in: page rule on button is ignored', getComputedStyle(toolbar.querySelector('button')).borderTopWidth !== '9px');
 
 	editor.value = 'hello world';
 	const view = editor.view;
 	const Selection = view.state.selection.constructor;
 	view.dispatch(view.state.tr.setSelection(Selection.create(view.state.doc, 1, 6)));
-	toolbar.querySelector('[data-command="bold"]').click();
+	toolbar.querySelector('[command="--bold"]').click();
 	check('bold button writes markdown', editor.value === '**hello** world', editor.value);
-	check('bold shows pressed', toolbar.querySelector('[data-command="bold"]').getAttribute('aria-pressed') === 'true');
+	check('bold shows pressed', toolbar.querySelector('[command="--bold"]').getAttribute('aria-pressed') === 'true');
 	view.dom.dispatchEvent(new KeyboardEvent('keydown', { key: 'i', ctrlKey: true, bubbles: true, cancelable: true }));
 	check('ctrl+i writes italic', editor.value.includes('***hello***') || editor.value.includes('*'), editor.value);
 
 	editor.value = '[quote="a" post_id=1]q[/quote]\nreply';
-	check('quote loads', editor.querySelector('blockquote') !== null);
+	check('quote loads', editor.shadowRoot.querySelector('blockquote') !== null);
 	check('value round trips', editor.value === '[quote="a" post_id=1]\nq\n[/quote]\nreply', JSON.stringify(editor.value));
 
 	toolbar.querySelector('button').focus();
 	toolbar.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true, cancelable: true }));
-	check('arrow key moves focus', document.activeElement === toolbar.querySelectorAll('button')[1]);
+	check('arrow key moves focus', editor.shadowRoot.activeElement === toolbar.querySelectorAll('button')[1]);
 
 	editor.value = 'x';
 	let changes = 0;
 	editor.addEventListener('bf-change', () => { changes += 1; });
 	view.dispatch(view.state.tr.insertText('y', 2));
 	check('bf-change event fires', changes === 1);
+
+	// Link dialog: Ctrl+K opens a native dialog, Save links the selected text.
+	editor.value = 'hello world';
+	view.dispatch(view.state.tr.setSelection(Selection.create(view.state.doc, 1, 6)));
+	view.dom.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true, cancelable: true }));
+	const dialog = editor.shadowRoot.querySelector('dialog');
+	check('ctrl+k opens the link dialog', dialog.open);
+	check('dialog is labelled', dialog.getAttribute('aria-label') === 'Link');
+	check('dialog puts focus in the address field', editor.shadowRoot.activeElement === dialog.querySelector('input'));
+	check('remove button is hidden for a new link', dialog.querySelector('button[value="remove"]').hidden);
+	dialog.querySelector('input').value = 'example.com';
+	dialog.querySelector('button[value="ok"]').click();
+	await new Promise((resolve) => setTimeout(resolve, 100));
+	check('save writes a Markdown link', editor.value === '[hello](https://example.com) world', editor.value);
+	check('link opens in a new window', editor.shadowRoot.querySelector('bf-editable a').target === '_blank');
+	check('dialog is closed', !dialog.open);
+	check('link button shows pressed in a link', (view.dispatch(view.state.tr.setSelection(Selection.create(view.state.doc, 3))), toolbar.querySelector('[command="--link"]').getAttribute('aria-pressed') === 'true'));
+	view.dom.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true, cancelable: true }));
+	check('edit shows the current address', dialog.querySelector('input').value === 'https://example.com');
+	dialog.querySelector('button[value="remove"]').click();
+	await new Promise((resolve) => setTimeout(resolve, 100));
+	check('remove takes the link off', editor.value === 'hello world', editor.value);
+	view.dom.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, bubbles: true, cancelable: true }));
+	dialog.close('cancel');
+	await new Promise((resolve) => setTimeout(resolve, 50));
+	check('cancel changes nothing', editor.value === 'hello world');
 
 	document.getElementById('result').textContent = results.join('\n');
 </script>

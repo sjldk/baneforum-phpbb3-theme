@@ -6,10 +6,12 @@ import { history, redo, undo } from 'prosemirror-history';
 import { InputRule, inputRules, wrappingInputRule } from 'prosemirror-inputrules';
 import { keymap } from 'prosemirror-keymap';
 import { Plugin } from 'prosemirror-state';
+import { setLink } from './link-command.js';
+import { defaultLinkPolicy } from './link-policy.js';
 import { defaultSmilies } from './smilies.js';
 
 /** @param {string} text */
-const escapePattern = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const escapePattern = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, `\\$&`);
 
 /**
  * Typing "**word**" makes bold, "*word*" italic, "~~word~~" strikethrough.
@@ -39,7 +41,7 @@ function smilieRule(smilies) {
 		.sort((a, b) => b.length - a.length)
 		.map(escapePattern);
 
-	return new InputRule(new RegExp(`(^|\\s)(${codes.join('|')}) $`), (state, match, start, end) => {
+	return new InputRule(new RegExp(`(^|\\s)(${codes.join(`|`)}) $`), (state, match, start, end) => {
 		const lead = match[1];
 
 		return state.tr.insertText(`${lead}${smilies[match[2]]} `, start, end);
@@ -53,9 +55,33 @@ function emptyMarker() {
 			attributes: (state) => {
 				const doc = state.doc;
 				const only = doc.firstChild;
-				const empty = doc.childCount === 1 && only?.type.name === 'paragraph' && only.content.size === 0;
+				const empty = doc.childCount === 1 && only?.type.name === `paragraph` && only.content.size === 0;
 
-				return /** @type {Record<string, string>} */ (empty ? { 'data-empty': '' } : {});
+				return /** @type {Record<string, string>} */ (empty ? { 'data-empty': `` } : {});
+			},
+		},
+	});
+}
+
+/**
+ * Pasting a web address makes a link: over selected text it links the text, otherwise the
+ * address is written as a link. Any other paste is left to ProseMirror.
+ * @param {import('prosemirror-model').Schema} schema
+ * @param {import('./contracts.js').LinkPolicy} policy
+ */
+function pasteLink(schema, policy) {
+	return new Plugin({
+		props: {
+			handlePaste: (view, event) => {
+				const text = event.clipboardData?.getData(`text/plain`).trim() ?? ``;
+
+				if (!/^(https?:\/\/|mailto:)\S+$/i.test(text)) {
+					return false;
+				}
+
+				const href = policy.normalize(text);
+
+				return href ? setLink(schema, href)(view.state, view.dispatch) : false;
 			},
 		},
 	});
@@ -64,7 +90,7 @@ function emptyMarker() {
 /**
  * @param {import('prosemirror-model').Schema} schema
  * @param {Array<import('./contracts.js').Command & {shortcut?: string}>} commands
- * @param {{smilies?: Record<string, string>}} [options]
+ * @param {{smilies?: Record<string, string>, linkPolicy?: import('./contracts.js').LinkPolicy}} [options]
  */
 export function createPlugins(schema, commands, options = {}) {
 	/** @type {Record<string, import('prosemirror-state').Command>} */
@@ -104,6 +130,7 @@ export function createPlugins(schema, commands, options = {}) {
 		history(),
 		dropCursor(),
 		gapCursor(),
+		pasteLink(schema, options.linkPolicy ?? defaultLinkPolicy),
 		emptyMarker(),
 	];
 }

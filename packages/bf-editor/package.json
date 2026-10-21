@@ -8,7 +8,7 @@
 	"main": "dist/bf-editor.js",
 	"exports": {
 		".": "./dist/bf-editor.js",
-		"./bf-editor.css": "./dist/bf-editor.css"
+		"./bf-render.css": "./dist/bf-render.css"
 	},
 	"files": [
 		"dist"

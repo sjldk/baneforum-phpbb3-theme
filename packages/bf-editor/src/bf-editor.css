@@ -1,11 +1,10 @@
-/* bf-editor styles. Every colour and size is a --bf-* custom property with a fallback,
-   so a host project themes the editor without editing this file.
+/* The editor's styles. They live inside the shadow root of <bf-editor>, so the page's CSS does
+   not reach in and these rules do not leak out. Every colour and size is a --bf-* custom
+   property with a default. Custom properties pass through the shadow boundary, so the page
+   themes the editor by setting --bf-* on bf-editor, and that wins over these defaults.
+   The dark defaults follow the system setting. */
 
-   The defaults sit in :where(), which has no weight, so any rule in the host wins without
-   needing a higher selector. The dark defaults follow the system setting, or an ancestor with
-   data-theme="dark". A host that sets its own --bf-* values covers both. */
-
-:where(bf-editor) {
+:host {
 	--bf-radius: 0.5rem;
 	--bf-accent: #22548e;
 	--bf-focus: #4e76a5;
@@ -20,7 +19,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-	:where(bf-editor) {
+	:host {
 		--bf-accent: #85a1c1;
 		--bf-focus: #7a98bb;
 		--bf-border: #183b63;
@@ -33,38 +32,13 @@
 	}
 }
 
-:where([data-theme="dark"] bf-editor) {
-	--bf-accent: #85a1c1;
-	--bf-focus: #7a98bb;
-	--bf-border: #183b63;
-	--bf-surface: #0b1b2d;
-	--bf-field: #081524;
-	--bf-tint: #0e233c;
-	--bf-text: #e4eaf1;
-	--bf-muted: #b2c3d7;
-	--bf-on-accent: #000;
-}
-
-/* A light page inside a dark system stays light. */
-:where([data-theme="light"] bf-editor) {
-	--bf-accent: #22548e;
-	--bf-focus: #4e76a5;
-	--bf-border: #d3dde8;
-	--bf-surface: #fbfcfd;
-	--bf-field: #fff;
-	--bf-tint: #edf1f6;
-	--bf-text: #132e4e;
-	--bf-muted: #1d4779;
-	--bf-on-accent: #f6f8fa;
-}
-
-bf-editor {
+:host {
 	display: block;
 	color: var(--bf-text);
 	font: inherit;
 }
 
-bf-editor > menu {
+menu {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.25rem;
@@ -78,7 +52,7 @@ bf-editor > menu {
 	border-radius: var(--bf-radius);
 }
 
-bf-editor > menu button {
+menu button {
 	display: inline-grid;
 	place-items: center;
 	inline-size: var(--bf-target);
@@ -92,7 +66,7 @@ bf-editor > menu button {
 	font: inherit;
 }
 
-bf-editor > menu button svg {
+menu button svg {
 	inline-size: 1.4rem;
 	block-size: 1.4rem;
 	fill: none;
@@ -102,21 +76,21 @@ bf-editor > menu button svg {
 	stroke-linejoin: round;
 }
 
-bf-editor > menu button:hover {
+menu button:hover {
 	background: var(--bf-field);
 }
 
-bf-editor > menu button[aria-pressed="true"] {
+menu button[aria-pressed="true"] {
 	background: var(--bf-accent);
 	color: var(--bf-on-accent);
 }
 
-bf-editor > menu button:focus-visible {
+menu button:focus-visible {
 	outline: 0.15rem solid var(--bf-focus);
 	outline-offset: 0.1rem;
 }
 
-bf-editor > menu button[aria-disabled="true"] {
+menu button[aria-disabled="true"] {
 	opacity: 0.5;
 	cursor: default;
 }
@@ -186,4 +160,72 @@ bf-editable [data-bf-raw] {
 	bf-editable {
 		transition: none;
 	}
+}
+
+/* The link dialog. A native <dialog>, so the browser handles focus and Escape. */
+dialog {
+	inline-size: min(28rem, calc(100vw - 2rem));
+	padding: 1rem;
+	border: 0.15rem solid var(--bf-border);
+	border-radius: var(--bf-radius);
+	background: var(--bf-surface);
+	color: var(--bf-text);
+}
+
+dialog::backdrop {
+	background: rgb(0 0 0 / 0.5);
+}
+
+dialog h2 {
+	margin: 0 0 0.75rem;
+	font-size: 1.1rem;
+}
+
+dialog label {
+	display: grid;
+	gap: 0.25rem;
+}
+
+dialog input {
+	min-block-size: var(--bf-target);
+	padding: 0 0.5rem;
+	border: 0.15rem solid var(--bf-border);
+	border-radius: var(--bf-radius);
+	background: var(--bf-field);
+	color: inherit;
+	/* 16px stops iOS from zooming in on the field. */
+	font: inherit;
+	font-size: max(1rem, 16px);
+}
+
+dialog input:focus-visible,
+dialog button:focus-visible {
+	outline: 0.15rem solid var(--bf-focus);
+	outline-offset: 0.1rem;
+}
+
+dialog p {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	justify-content: flex-end;
+	margin: 1rem 0 0;
+}
+
+dialog button {
+	min-inline-size: var(--bf-target);
+	min-block-size: var(--bf-target);
+	padding: 0 1rem;
+	border: 0.15rem solid var(--bf-border);
+	border-radius: var(--bf-radius);
+	background: var(--bf-field);
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+}
+
+dialog button[value="ok"] {
+	border-color: var(--bf-accent);
+	background: var(--bf-accent);
+	color: var(--bf-on-accent);
 }

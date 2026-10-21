@@ -11,11 +11,12 @@ import { EditorView } from 'prosemirror-view';
 import { createMarkdownBBCodeCodec } from '../codecs/markdown-bbcode.js';
 import { createBasicCommands } from '../commands.js';
 import { assertImplements } from '../contracts.js';
+import { createLinkCommand } from '../link-command.js';
+import { createLinkDialog } from '../link-dialog.js';
 import { createPlugins } from '../plugins.js';
 import { schema } from '../schema.js';
+import { template } from '../template.js';
 import { Toolbar } from '../toolbar.js';
-
-let counter = 0;
 
 /** @typedef {import('../contracts.js').Command & {shortcut?: string, toggle?: boolean}} EditorCommand */
 
@@ -24,50 +25,55 @@ export class BfEditor extends HTMLElement {
 	#view = null;
 	/** @type {import('../contracts.js').Codec} */
 	#codec = createMarkdownBBCodeCodec(schema);
+	#value = ``;
+	#toolbar;
+	#linkDialog;
+	#editable;
 	/** @type {EditorCommand[]} */
-	#commands = createBasicCommands(schema);
-	#value = '';
-	/** @type {Toolbar | null} */
-	#toolbar = null;
+	#commands;
 
-	/** Builds the toolbar and the editing surface when the element is added to a page. */
+	constructor() {
+		super();
+		// The markup and styles are one template in a shadow root, so ids are private to this editor
+		// and the page's CSS does not reach in.
+		const root = this.attachShadow({ mode: `open` });
+		root.innerHTML = template;
+		this.#editable = /** @type {HTMLElement} */ (root.querySelector(`bf-editable`));
+		this.#editable.id = `editable`;
+		this.#editable.addEventListener(`command`, (event) => {
+			const { command } = /** @type {Event & {command?: string}} */ (event);
+
+			if (command?.startsWith(`--`)) {
+				this.#run(command.slice(2));
+			}
+		});
+		this.#toolbar = new Toolbar(/** @type {HTMLMenuElement} */ (root.querySelector(`menu`)));
+		this.#toolbar.controls(`editable`);
+		this.#linkDialog = createLinkDialog(/** @type {HTMLDialogElement} */ (root.querySelector(`dialog`)));
+		this.#commands = this.#withLink(createBasicCommands(schema));
+	}
+
+	/** Puts the editing surface in place when the element is added to a page. */
 	connectedCallback() {
 		if (this.#view) {
 			return;
 		}
 
-		counter += 1;
-		const id = `bf-editable-${counter}`;
-		const toolbar = new Toolbar(document);
-		toolbar.controls(id);
-		toolbar.items = this.#commands.map(({ id: commandId, label, shortcut, toggle }) => ({
-			id: commandId,
-			label,
-			shortcut,
-			toggle: toggle ?? false,
-		}));
-		toolbar.element.addEventListener('bf-command', (event) => this.#run(/** @type {CustomEvent} */ (event).detail.id));
-		this.#toolbar = toolbar;
-
-		const editable = document.createElement('bf-editable');
-		editable.id = id;
-		const placeholder = this.getAttribute('placeholder');
+		const placeholder = this.getAttribute(`placeholder`);
 
 		if (placeholder !== null) {
-			editable.dataset.placeholder = placeholder;
+			this.#editable.dataset.placeholder = placeholder;
 		}
 
-		this.replaceChildren(toolbar.element, editable);
-
 		const view = new EditorView(
-			{ mount: editable },
+			{ mount: this.#editable },
 			{
 				state: this.#createState(this.#value),
 				attributes: {
-					role: 'textbox',
-					'aria-multiline': 'true',
-					'aria-label': this.getAttribute('label') ?? 'Message',
-					spellcheck: 'true',
+					role: `textbox`,
+					'aria-multiline': `true`,
+					'aria-label': this.getAttribute(`label`) ?? `Message`,
+					spellcheck: `true`,
 				},
 				dispatchTransaction: (transaction) => {
 					const state = view.state.apply(transaction);
@@ -75,13 +81,24 @@ export class BfEditor extends HTMLElement {
 					this.#syncToolbar(state);
 
 					if (transaction.docChanged) {
-						this.dispatchEvent(new CustomEvent('bf-change', { bubbles: true }));
+						this.dispatchEvent(new CustomEvent(`bf-change`, { bubbles: true }));
 					}
 				},
 			},
 		);
 		this.#view = view;
 		this.#syncToolbar(view.state);
+	}
+
+	/**
+	 * The commands plus the link command, which needs the dialog of this editor.
+	 * @param {EditorCommand[]} commands
+	 * @returns {EditorCommand[]}
+	 */
+	#withLink(commands) {
+		return commands.some((command) => command.id === `link`)
+			? commands
+			: [...commands, createLinkCommand(schema, { ask: (current) => this.#linkDialog.ask(current) })];
 	}
 
 	/** Removes the editor again when the element leaves the page. */
@@ -95,7 +112,7 @@ export class BfEditor extends HTMLElement {
 	 * @param {import('../contracts.js').Codec} codec
 	 */
 	set codec(codec) {
-		this.#codec = /** @type {import('../contracts.js').Codec} */ (assertImplements('Codec', codec));
+		this.#codec = /** @type {import('../contracts.js').Codec} */ (assertImplements(`Codec`, codec));
 	}
 
 	/**
@@ -103,7 +120,9 @@ export class BfEditor extends HTMLElement {
 	 * @param {EditorCommand[]} commands
 	 */
 	set commands(commands) {
-		this.#commands = commands.map((command) => /** @type {EditorCommand} */ (assertImplements('Command', command)));
+		this.#commands = this.#withLink(
+			commands.map((command) => /** @type {EditorCommand} */ (assertImplements(`Command`, command))),
+		);
 	}
 
 	/** The text to save, written by the codec. */
