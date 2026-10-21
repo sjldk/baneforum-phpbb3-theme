@@ -1,25 +1,25 @@
-		<!-- EVENT overall_footer_content_after -->
+		{% EVENT overall_footer_content_after %}
 	</div>
 
-<!-- EVENT overall_footer_page_body_after -->
+{% EVENT overall_footer_page_body_after %}
 
 <div id="page-footer" class="page-footer" role="contentinfo">
-	<!-- INCLUDE navbar_footer.html -->
+	{% include 'navbar_footer.html' %}
 
 	<div class="copyright">
-		<!-- EVENT overall_footer_copyright_prepend -->
-		<!--{CREDIT_LINE}-->
+		{% EVENT overall_footer_copyright_prepend %}
+		<!--{{ CREDIT_LINE }}-->
 		Copyright Baneforum - &Aring;rhus 2017 
-		<!-- EVENT overall_footer_copyright_append -->
-		<!-- IF DEBUG_OUTPUT --><br />{DEBUG_OUTPUT}<!-- ENDIF -->
-		<!-- IF U_ACP --><br /><br /><a href="{U_ACP}">{L_ACP}</a><!-- ENDIF -->
+		{% EVENT overall_footer_copyright_append %}
+		{% if DEBUG_OUTPUT %}<br />{{ DEBUG_OUTPUT }}{% endif %}
+		{% if U_ACP %}<br /><br /><a href="{{ U_ACP }}">{{ lang('ACP') }}</a>{% endif %}
 	</div>
 
-	<div id="darkenwrapper" class="darkenwrapper" data-ajax-error-title="{L_AJAX_ERROR_TITLE}" data-ajax-error-text="{L_AJAX_ERROR_TEXT}" data-ajax-error-text-abort="{L_AJAX_ERROR_TEXT_ABORT}" data-ajax-error-text-timeout="{L_AJAX_ERROR_TEXT_TIMEOUT}" data-ajax-error-text-parsererror="{L_AJAX_ERROR_TEXT_PARSERERROR}">
+	<div id="darkenwrapper" class="darkenwrapper" data-ajax-error-title="{{ lang('AJAX_ERROR_TITLE') }}" data-ajax-error-text="{{ lang('AJAX_ERROR_TEXT') }}" data-ajax-error-text-abort="{{ lang('AJAX_ERROR_TEXT_ABORT') }}" data-ajax-error-text-timeout="{{ lang('AJAX_ERROR_TEXT_TIMEOUT') }}" data-ajax-error-text-parsererror="{{ lang('AJAX_ERROR_TEXT_PARSERERROR') }}">
 		<div id="darken" class="darken">&nbsp;</div>
 	</div>
 
-	<div id="phpbb_alert" class="phpbb_alert" data-l-err="{L_ERROR}" data-l-timeout-processing-req="{L_TIMEOUT_PROCESSING_REQ}">
+	<div id="phpbb_alert" class="phpbb_alert" data-l-err="{{ lang('ERROR') }}" data-l-timeout-processing-req="{{ lang('TIMEOUT_PROCESSING_REQ') }}">
 		<a href="#" class="alert_close">
 			<i class="icon fa-times-circle fa-fw" aria-hidden="true"></i>
 		</a>
@@ -37,30 +37,30 @@
 
 <div>
 	<a id="bottom" class="anchor" accesskey="z"></a>
-	<!-- IF not S_IS_BOT -->{RUN_CRON_TASK}<!-- ENDIF -->
+	{% if not S_IS_BOT %}{{ RUN_CRON_TASK }}{% endif %}
 </div>
 
-<script type="text/javascript" src="{T_JQUERY_LINK}"></script>
-<!-- IF S_ALLOW_CDN --><script type="text/javascript">window.jQuery || document.write('\x3Cscript src="{T_ASSETS_PATH}/javascript/jquery.min.js?assets_version={T_ASSETS_VERSION}">\x3C/script>');</script><!-- ENDIF -->
-<script type="text/javascript" src="{T_ASSETS_PATH}/javascript/core.js?assets_version={T_ASSETS_VERSION}"></script>
-<!-- INCLUDEJS forum_fn.js -->
-<!-- INCLUDEJS ajax.js -->
-<!-- IF S_ALLOW_CDN -->
+<script type="text/javascript" src="{{ T_JQUERY_LINK }}"></script>
+{% if S_ALLOW_CDN %}<script type="text/javascript">window.jQuery || document.write('\x3Cscript src="{{ T_ASSETS_PATH }}/javascript/jquery-3.7.1.min.js?assets_version={{ T_ASSETS_VERSION }}">\x3C/script>');</script>{% endif %}
+<script type="text/javascript" src="{{ T_ASSETS_PATH }}/javascript/core.js?assets_version={{ T_ASSETS_VERSION }}"></script>
+{% INCLUDEJS 'forum_fn.js' %}
+{% INCLUDEJS 'ajax.js' %}
+{% if S_ALLOW_CDN %}
 	<script type="text/javascript">
 		(function($){
 			var $fa_cdn = $('head').find('link[rel="stylesheet"]').first(),
 				$span = $('<span class="fa" style="display:none"></span>').appendTo('body');
 			if ($span.css('fontFamily') !== 'FontAwesome' ) {
-				$fa_cdn.after('<link href="{T_ASSETS_PATH}/css/font-awesome.min.css" rel="stylesheet">');
+				$fa_cdn.after('<link href="{{ T_ASSETS_PATH }}/css/font-awesome.min.css" rel="stylesheet">');
 				$fa_cdn.remove();
 			}
 			$span.remove();
 		})(jQuery);
 	</script>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- IF S_COOKIE_NOTICE -->
-	<script src="{T_ASSETS_PATH}/cookieconsent/cookieconsent.min.js?assets_version={T_ASSETS_VERSION}"></script>
+{% if S_COOKIE_NOTICE %}
+	<script src="{{ T_ASSETS_PATH }}/cookieconsent/cookieconsent.min.js?assets_version={{ T_ASSETS_VERSION }}"></script>
 	<script>
 		window.addEventListener("load", function(){
 			window.cookieconsent.initialise({
@@ -74,20 +74,20 @@
 				},
 				"theme": "classic",
 				"content": {
-					"message": "{LA_COOKIE_CONSENT_MSG}",
-					"dismiss": "{LA_COOKIE_CONSENT_OK}",
-					"link": "{LA_COOKIE_CONSENT_INFO}"
+					"message": "{{ LA_COOKIE_CONSENT_MSG }}",
+					"dismiss": "{{ LA_COOKIE_CONSENT_OK }}",
+					"link": "{{ LA_COOKIE_CONSENT_INFO }}"
 				}
 			})});
 	</script>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- EVENT overall_footer_after -->
+{% EVENT overall_footer_after %}
 
-<!-- IF S_PLUPLOAD --><!-- INCLUDE plupload.html --><!-- ENDIF -->
-{$SCRIPTS}
+{% if S_PLUPLOAD %}{% include 'plupload.html' %}{% endif %}
+{{ definition.SCRIPTS }}
 
-<!-- EVENT overall_footer_body_after -->
+{% EVENT overall_footer_body_after %}
 
 <!-- Start of StatCounter Code for Default Guide -->
 	<script type="text/javascript">
