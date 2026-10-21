@@ -1,0 +1,6 @@
+node_modules/
+package-lock.json
+*.png
+photo.jpg
+manual.pdf
+pack.zip

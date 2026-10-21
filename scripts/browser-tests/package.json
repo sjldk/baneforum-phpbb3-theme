@@ -1,0 +1,10 @@
+{
+	"name": "bf-browser-tests",
+	"private": true,
+	"type": "module",
+	"description": "Browser tests for the Docker board. Dev tools only, not part of the theme or the editor.",
+	"devDependencies": {
+		"axe-core": "^4.10.0",
+		"puppeteer-core": "^24.0.0"
+	}
+}
