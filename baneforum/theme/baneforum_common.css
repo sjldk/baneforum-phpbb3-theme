@@ -3,6 +3,8 @@
 	--font-headline: "Oswald", "Arial Narrow", sans-serif;
 	--font-title: var(--base-font);
 	--font-comic: "Comic Sans", sans-serif;
+	/* One monospace stack for code blocks, inline code and keys. phpBB and the Markdown extension each set their own. */
+	--font-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
 
 	--base-font-size: 0.95em;
 
@@ -529,6 +531,14 @@ body .copyright :is(span, a, p) {
    Exceptions: icon fonts, code and the site title. */
 body :not(.icon, .fa, code, pre, kbd, samp, .site-description h1) {
 	font-family: var(--base-font) !important;
+}
+
+code,
+pre,
+kbd,
+samp {
+	font-family: var(--font-mono) !important;
+	font-size: 0.9em;
 }
 
 body :is(h2, h3, h4) {

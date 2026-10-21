@@ -43,22 +43,6 @@
 <link href="{{ ROOT_PATH }}styles/prosilver/theme/common.css?assets_version={{ T_ASSETS_VERSION }}" rel="stylesheet" />
 <link href="{{ ROOT_PATH }}styles/prosilver/theme/colours.css?assets_version={{ T_ASSETS_VERSION }}" rel="stylesheet" />
 
-{% if S_ALLOW_CDN %}
-<script>
-	WebFontConfig = {
-		google: {
-			families: ['Open+Sans:600:cyrillic-ext,latin,greek-ext,greek,vietnamese,latin-ext,cyrillic']
-		}
-	};
-
-	(function(d) {
-		var wf = d.createElement('script'), s = d.scripts[0];
-		wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js';
-		wf.async = true;
-		s.parentNode.insertBefore(wf, s);
-	})(document);
-</script>
-{% endif %}
 <link href="{{ T_FONT_AWESOME_LINK }}" rel="stylesheet">
 <link href="{{ T_STYLESHEET_LINK }}" rel="stylesheet">
 <link href="{{ T_STYLESHEET_LANG_LINK }}" rel="stylesheet">
