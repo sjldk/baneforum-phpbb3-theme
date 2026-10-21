@@ -1,0 +1,6 @@
+/* Less noise: Index, forum and topic pages: the blocks below the content.
+   Covers who is online, users browsing this forum, statistics, forum permissions and birthdays.
+   (The index template no longer prints online, statistics and birthdays at all.) */
+.stat-block {
+	display: none;
+}

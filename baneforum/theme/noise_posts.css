@@ -1,0 +1,5 @@
+/* Less noise: Poster mini-profile next to posts and private messages: post count and join date. */
+.postprofile .profile-posts,
+.postprofile .profile-joined {
+	display: none;
+}

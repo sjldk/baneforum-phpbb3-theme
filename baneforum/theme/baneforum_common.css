@@ -1,62 +1,89 @@
 :root {
-	--base-font: "Roboto", sans-serif;	
-	--font-headline: "Oswald", sans-serif;
-	--font-title: "Roboto Slab", serif;
+	--base-font: "Inter", system-ui, sans-serif;
+	--font-headline: "Oswald", "Arial Narrow", sans-serif;
+	--font-title: var(--base-font);
 	--font-comic: "Comic Sans", sans-serif;
 
-	--base-font-size: 0.8em;
+	--base-font-size: 0.95em;
+
+	--font-size-small: 0.85em;
+	--font-size-h3: 1.2em;
+	--font-size-h2: 1.6em;
+	--font-size-h1: 2.6em;
+
+	--radius: 0.5rem;
 }
 
 body {
-	background: url("images/background.jpg")  no-repeat fixed center;
-	
+	background: url("images/background.jpg") no-repeat fixed center;
+
 	font-family: var(--base-font);
-	font-size: var(--base-font-size);	
+	font-size: var(--base-font-size);
 }
 
-body, fieldset, h1, h2, h3 {	
+body,
+fieldset,
+h1,
+h2,
+h3 {
 	text-transform: none;
 }
 
-fieldset, .button, .postbody .content, a.forumtitle, a.topictitle, 
-p.author, .attachbox dt, .message-box textarea,
-dl.faq, .postbody h3, .content p,input, input.button1, 
-input.button2, input.button3, select, textarea, dl.file, 
-dl.file dt, .pagination li.active span {
+fieldset,
+.button,
+.postbody .content,
+a.forumtitle,
+a.topictitle,
+p.author,
+.attachbox dt,
+.message-box textarea,
+dl.faq,
+.postbody h3,
+.content p,
+input,
+input.button1,
+input.button2,
+input.button3,
+select,
+textarea,
+dl.file,
+dl.file dt,
+.pagination li.active span {
 	font-family: inherit;
 }
 
-.searchresults-title, h1.markdown, 
-h2.markdown, h3.markdown, h4.markdown, h5.markdown, h6.markdown,
 .site-description h1 {
 	font-family: var(--font-headline);
 }
 
-.posting-title, .statistics h3, .headerspace h3, .topic-title, .forum-title {
+.posting-title,
+.statistics h3,
+.headerspace h3,
+.topic-title,
+.forum-title {
 	font-family: var(--font-title);
+	font-weight: 600;
 }
 
 .attachbox dl.thumbnail {
 	font-family: var(--font-comic);
 }
 
-fieldset, .content, p, p.author, .postbody .content,
-.signature, input.button1, input.button2, 
-input.button3, .content blockquote, blockquote cite, 
-li.header dl.row-item dt, li.header dl.row-item dd, .attachbox {
+fieldset,
+.content,
+p,
+p.author,
+.postbody .content,
+.signature,
+input.button1,
+input.button2,
+input.button3,
+.content blockquote,
+blockquote cite,
+li.header dl.row-item dt,
+li.header dl.row-item dd,
+.attachbox {
 	font-size: inherit;
-}
-
-select, input, textarea, .message-box textarea {
-	font-size: 1.2em;
-}
-
-.panel p {
-	font-size: unset;
-}
-
-.action-bar {
-	font-size: 1.2em;
 }
 
 .username-coloured {
@@ -64,11 +91,12 @@ select, input, textarea, .message-box textarea {
 }
 
 .postbody .content {
-	font-style: normal;	
+	font-style: normal;
 	margin: 1.5rem 0 1.5rem 0;
 }
 
-a.forumtitle, a.topictitle {
+a.forumtitle,
+a.topictitle {
 	font-weight: normal;
 }
 
@@ -83,20 +111,16 @@ a.lastsubject {
 .site_logo {
 	width: 12rem;
 	height: 6rem;
-	background-image: url("./images/baneforum_logo_electric.png")
+	background-image: url("./images/baneforum_logo_electric.png");
 }
 
 .breadcrumbs .crumb {
 	font-weight: normal;
 }
 
-.postbody h3, .postbody h3.first {
+.postbody h3,
+.postbody h3.first {
 	font-weight: bold;
-	font-size: 1.2em;
-}
-
-.postbody {
-	font-size: 1.15em;
 }
 
 .bfYoutube {
@@ -114,19 +138,19 @@ dl.thumbnail dt a:hover img {
 	border: none;
 }
 
-dl.thumbnail dd {	
+dl.thumbnail dd {
 	font-style: normal;
 }
 
 .attachbox {
 	border: 0;
-	margin: 0 0 1.5em 0;	
+	margin: 0 0 1.5em 0;
 	background-color: transparent;
-	padding: 0;	
+	padding: 0;
 }
 
-.attachbox dt {	
-	text-transform: none;	
+.attachbox dt {
+	text-transform: none;
 }
 
 .attachbox dd {
@@ -138,13 +162,14 @@ dl.thumbnail dd {
 	padding: 1em;
 }
 
-input.button2, input.button1 {	
+input.button2,
+input.button1 {
 	background-image: none;
-    border: none;    
-    padding: 0.5em 1em;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;    
+	border: none;
+	padding: 0.5em 1em;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
 	font-weight: normal;
 	border-radius: 0.2em;
 }
@@ -153,7 +178,8 @@ input.button2, input.button1 {
 	margin-bottom: 1em;
 }
 
-li.header dd, li.header dt {
+li.header dd,
+li.header dt {
 	text-transform: none;
 	font-weight: normal;
 }
@@ -163,17 +189,17 @@ li.header dd, li.header dt {
 	background-image: url("images/baneforum_top.png");
 }
 
-.navbar, .forabg, .forumbg, .wrap {
+.navbar,
+.forabg,
+.forumbg,
+.wrap {
 	border-radius: 0em;
 }
 
-.forabg, .forumbg {
+.forabg,
+.forumbg {
 	background-image: none;
 	padding: 0;
-}
-
-.site-description h1 {
-	font-size: 3em;
 }
 
 .post {
@@ -193,17 +219,22 @@ li.header dd, li.header dt {
 	margin: 0 0 0.6em 0;
 }
 
-li.header dl.row-item dt, li.header dl.row-item dd {
+li.header dl.row-item dt,
+li.header dl.row-item dd {
 	padding-top: 1em;
-	padding-bottom: 1em;	
+	padding-bottom: 1em;
 }
 
-.forabg, .forumbg {
+.forabg,
+.forumbg {
 	margin-bottom: 2em;
 }
 
-.forumbg .header a:hover, .forabg .header a:hover, th a:hover, .forum-title a:hover {
-    text-decoration: none;
+.forumbg .header a:hover,
+.forabg .header a:hover,
+th a:hover,
+.forum-title a:hover {
+	text-decoration: none;
 }
 
 li.header dl.row-item dt .list-inner {
@@ -211,7 +242,7 @@ li.header dl.row-item dt .list-inner {
 }
 
 .action-bar {
-	margin: 2em 0 2em 0;	
+	margin: 2em 0 2em 0;
 }
 
 .responsive-hide strong {
@@ -231,10 +262,10 @@ blockquote cite > div {
 }
 
 .panel {
-	border-radius: 0;	
+	border-radius: 0;
 }
 
-.panel p {	
+.panel p {
 	margin: 0.5rem 0 0.5rem 0;
 }
 
@@ -247,12 +278,13 @@ input.inputbox {
 	padding: 0.5rem;
 }
 
-.forum-title, .topic-title, .searchresults-title {	
-	font-size: 2rem;
+.forum-title,
+.topic-title,
+.searchresults-title {
 	font-weight: bold;
 }
 
-.section-search .page-body .panel div.inner  {
+.section-search .page-body .panel div.inner {
 	padding: 1em;
 }
 
@@ -262,13 +294,14 @@ input.inputbox {
     box-shadow: 0px 0px 14px 2px rgba(0,0,0,0.15);
 } */
 
-.advanced-search-link, .jumpbox-return {
+.advanced-search-link,
+.jumpbox-return {
 	display: none;
 }
 
-.statistics h3, .headerspace h3  {	
-    text-transform: none;
-	font-size: 0.9rem;
+.statistics h3,
+.headerspace h3 {
+	text-transform: none;
 	border: none;
 }
 
@@ -280,7 +313,7 @@ input.inputbox {
 	margin: 2rem 0;
 }
 
-.pagination li.active span {	
+.pagination li.active span {
 	font-weight: bold;
 }
 
@@ -295,13 +328,13 @@ input.inputbox {
 	height: 2.3rem;
 }
 
-li.pagejump  {
+li.pagejump {
 	border-radius: 2rem;
-    height: 0.9rem;
-    min-width: 0.9rem;
+	height: 0.9rem;
+	min-width: 0.9rem;
 }
 
-.action-bar .button-search {	
+.action-bar .button-search {
 	margin-right: 0.5rem;
 }
 
@@ -333,7 +366,7 @@ textarea {
 	line-height: normal;
 }
 
-dl.attachbox dt {    
+dl.attachbox dt {
 	border: 0;
 	font-weight: bold;
 }
@@ -343,7 +376,7 @@ dl.attachbox dt {
 	border: 0;
 }
 
-.attachbox dl.thumbnail {	
+.attachbox dl.thumbnail {
 	text-align: center;
 }
 
@@ -356,29 +389,25 @@ dl.attachbox dt {
 	border: none;
 }
 
-dl.file dd {
-	font-size: 0.9em;	
-}
-
 .button {
-	border: none;   
-    border-radius: 0.2rem;    
-    -webkit-box-shadow: none;
+	border: none;
+	border-radius: 0.2rem;
+	-webkit-box-shadow: none;
 	box-shadow: none;
-    padding: 0.5rem;    	
+	padding: 0.5rem;
 	font-weight: inherit;
 }
 
-input.button1:hover, 
+input.button1:hover,
 input.button2:hover,
 .button:hover,
 .button:focus {
 	border: none;
-	text-shadow: none;	
+	text-shadow: none;
 }
 
 .post-buttons .button,
-.format-buttons .button {	
+.format-buttons .button {
 	margin-right: 0.2rem;
 	min-width: 2rem;
 }
@@ -407,7 +436,8 @@ input.button2:hover,
 	margin: 1rem 0 1rem 0;
 }
 
-.bfYoutube, div.inline-attachment {
+.bfYoutube,
+div.inline-attachment {
 	margin: 1.5rem 0 1.5rem 0;
 }
 
@@ -420,11 +450,12 @@ table.markdown th {
 }
 
 .posting-title {
-	margin-bottom: 2rem;	
+	margin-bottom: 2rem;
 	font-weight: bold;
 }
 
-.posting-title a, posting-title a:hover {
+.posting-title a,
+posting-title a:hover {
 	text-decoration: none;
 }
 
@@ -433,7 +464,159 @@ table.markdown th {
 	padding: 0.5rem;
 }
 
-.inputbox::placeholder  {    
+.inputbox::placeholder {
 	text-align: center;
-    font-size: 1rem;
+}
+
+/* Type scale
+   Phpbb sets many different sizes. Here all body text gets one size (--base-font-size),
+   and only the entries below differ. !important is needed to beat prosilver's selectors. */
+body
+	:is(
+		div,
+		p,
+		span,
+		a,
+		strong,
+		b,
+		em,
+		cite,
+		time,
+		label,
+		dl,
+		dt,
+		dd,
+		ul,
+		ol,
+		li,
+		table,
+		th,
+		td,
+		fieldset,
+		legend,
+		blockquote
+	) {
+	font-size: 1em !important;
+}
+
+/* Form fields: at least 16px, otherwise iOS zooms in when a field gets focus */
+body :is(input, select, textarea, option, button) {
+	font-size: max(1em, 16px) !important;
+}
+
+body :is(h1, .site-description h1) {
+	font-size: var(--font-size-h1) !important;
+}
+body h2,
+body .forum-title,
+body .topic-title,
+body .searchresults-title {
+	font-size: var(--font-size-h2) !important;
+}
+body h3,
+body h4,
+body a.forumtitle,
+body a.topictitle,
+body .postbody h3 {
+	font-size: var(--font-size-h3) !important;
+}
+body .copyright,
+body .copyright :is(span, a, p) {
+	font-size: var(--font-size-small) !important;
+}
+
+/* One font everywhere: prosilver sets Verdana, Trebuchet, Arial, Open Sans and more in different places.
+   Exceptions: icon fonts, code and the site title. */
+body :not(.icon, .fa, code, pre, kbd, samp, .site-description h1) {
+	font-family: var(--base-font) !important;
+}
+
+body :is(h2, h3, h4) {
+	font-weight: 600 !important;
+}
+
+/* One look for every table and list header (table.table1 and ul.topiclist) */
+:is(ul.topiclist li.header, table.table1 thead) :is(dt, dd, th, a, span, .list-inner) {
+	color: var(--color-on-accent);
+	font-weight: 600;
+	text-transform: none;
+}
+
+ul.topiclist li.header {
+	background-color: var(--accent);
+}
+
+ul.topiclist li.header :is(dt, dd) {
+	padding-top: 0.8em;
+	padding-bottom: 0.8em;
+}
+
+table.table1 {
+	width: 100%;
+	border: 0;
+	border-collapse: collapse;
+}
+
+table.table1 thead th {
+	background-color: var(--accent);
+	padding: 0.8em 0.6em;
+	text-align: left;
+	vertical-align: middle;
+	line-height: 1.3;
+	border: 0;
+}
+
+table.table1 tbody td {
+	padding: 0.6em;
+	border: 0;
+	border-bottom: 1px solid var(--color-line);
+	color: var(--color-text);
+}
+
+table.table1 tbody tr:hover td {
+	background-color: var(--color-surface);
+}
+
+/* Rounded corners on every block. overflow: hidden makes the coloured rows inside follow the corners. */
+:is(
+	.wrap,
+	.headerbar,
+	.navbar,
+	.forabg,
+	.forumbg,
+	.panel,
+	.post,
+	.rules,
+	.attachbox,
+	.codebox,
+	.content blockquote,
+	.cp-menu .navigation,
+	.dropdown,
+	.dropdown-extended,
+	.search-box .inputbox,
+	.message-box textarea,
+	.pagination li a,
+	.pagination li span,
+	.button,
+	input.button1,
+	input.button2,
+	input.button3,
+	.inputbox,
+	select,
+	textarea,
+	table.table1,
+	ul.topiclist li.header,
+	.error,
+	.successbox,
+	.noticebox
+) {
+	border-radius: var(--radius);
+}
+
+:is(.forabg, .forumbg, .panel, .post, .navigation) {
+	overflow: hidden;
+}
+
+.tabs .tab > a {
+	border-radius: var(--radius) var(--radius) 0 0;
 }

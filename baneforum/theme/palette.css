@@ -1,24 +1,59 @@
 /* Colour palette.
-   Change --accent to re-colour the whole theme. Every other colour is mixed from it.
+   Change --accent-base to re-colour the whole theme. Every other colour is mixed from it.
    Text and background pairs keep at least 7:1 contrast (WCAG AAA) for the default accent.
-   If you pick a much lighter accent, check the contrast again. */
+   If you pick a much lighter accent, check the contrast again.
+
+   Dark mode is prepared but not switched on. Put data-theme="dark" on <html> and the block at
+   the end swaps the mix recipe. Nothing else in the theme names a colour, they all read these. */
 :root {
-    --accent: #22548e;
+	color-scheme: light;
 
-    /* Backgrounds: the accent diluted in white */
-    --color-paper: color-mix(in srgb, var(--accent) 2%, white);
-    --color-surface: color-mix(in srgb, var(--accent) 4%, white);
-    --color-tint: color-mix(in srgb, var(--accent) 8%, white);
-    --color-line: color-mix(in srgb, var(--accent) 20%, white);
+	/* The brand colour. Never changes between light and dark. */
+	--accent-base: #22548e;
+	/* The accent used for fills, links and focus. Lighter in dark mode. */
+	--accent: var(--accent-base);
 
-    /* Text and dark fills: the accent darkened with black */
-    --color-text: color-mix(in srgb, var(--accent) 55%, black);
-    --color-muted: color-mix(in srgb, var(--accent) 85%, black);
+	/* Backgrounds: the accent diluted in white */
+	--color-paper: color-mix(in srgb, var(--accent-base) 2%, white);
+	--color-surface: color-mix(in srgb, var(--accent-base) 4%, white);
+	--color-tint: color-mix(in srgb, var(--accent-base) 8%, white);
+	--color-line: color-mix(in srgb, var(--accent-base) 20%, white);
 
-    /* Text on accent and muted fills */
-    --color-on-accent: var(--color-surface);
+	/* Focus border on inputs: 4.4:1 against the page, and 3.4:1 against the unfocused border (WCAG 2.4.13) */
+	--color-focus: color-mix(in srgb, var(--accent-base) 80%, white);
 
-    /* Signal colours: a small share of the accent keeps them in the same family */
-    --color-danger: color-mix(in srgb, var(--accent) 10%, darkred);
-    --color-success: color-mix(in srgb, var(--accent) 10%, green);
+	/* Text and dark fills: the accent darkened with black */
+	--color-text: color-mix(in srgb, var(--accent-base) 55%, black);
+	--color-muted: color-mix(in srgb, var(--accent-base) 85%, black);
+
+	/* Text on accent and muted fills */
+	--color-on-accent: var(--color-surface);
+
+	/* Signal colours: a small share of the accent keeps them in the same family */
+	--color-danger: color-mix(in srgb, var(--accent-base) 10%, darkred);
+	--color-success: color-mix(in srgb, var(--accent-base) 10%, green);
+}
+
+/* Dark mode. Backgrounds are the accent diluted in black, text is the accent diluted in white.
+   Contrast was calculated for the default accent: text 13 to 15:1, muted 9 to 10:1, accent on
+   paper 6.9:1, focus on paper 6.2:1, dark text on the accent fill 7.9:1. */
+:root[data-theme="dark"] {
+	color-scheme: dark;
+
+	--accent: color-mix(in srgb, var(--accent-base) 55%, white);
+
+	--color-paper: color-mix(in srgb, var(--accent-base) 25%, black);
+	--color-surface: color-mix(in srgb, var(--accent-base) 32%, black);
+	--color-tint: color-mix(in srgb, var(--accent-base) 42%, black);
+	--color-line: color-mix(in srgb, var(--accent-base) 70%, black);
+
+	--color-focus: color-mix(in srgb, var(--accent-base) 60%, white);
+
+	--color-text: color-mix(in srgb, var(--accent-base) 12%, white);
+	--color-muted: color-mix(in srgb, var(--accent-base) 35%, white);
+
+	--color-on-accent: black;
+
+	--color-danger: color-mix(in srgb, var(--accent-base) 10%, #ff8080);
+	--color-success: color-mix(in srgb, var(--accent-base) 10%, #70d070);
 }

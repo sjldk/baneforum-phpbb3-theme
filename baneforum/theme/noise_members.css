@@ -1,0 +1,5 @@
+/* Less noise: Member list: the column with custom profile fields (location, website and so on).
+   Scoped to memberlist.php because the online list also uses an "info" column. */
+.section-memberlist .forumbg-table :is(th, td).info {
+	display: none;
+}

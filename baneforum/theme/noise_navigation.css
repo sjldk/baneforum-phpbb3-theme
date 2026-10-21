@@ -1,0 +1,8 @@
+/* Less noise: Jump-to box with its "return to forum" link, and the repeated page count at the bottom of one-page lists.
+   The bottom pagination is only hidden when there is a single page (no page links). */
+.jumpbox,
+.action-bar.actions-jump,
+.action-bar.bar-bottom .pagination:not(:has(ul)),
+.action-bar.bottom .pagination:not(:has(ul)) {
+	display: none;
+}

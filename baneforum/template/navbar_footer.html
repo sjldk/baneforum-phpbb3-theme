@@ -31,14 +31,8 @@
 		{% endif %}
 
 		{% EVENT overall_footer_timezone_before %}
-		<li class="rightside">{{ S_TIMEZONE }}</li>
 		{% EVENT overall_footer_timezone_after %}
 		{% if not S_IS_BOT %}
-			<li class="rightside">
-				<a href="{{ U_DELETE_COOKIES }}" data-ajax="true" data-refresh="true" role="menuitem">
-					<i class="icon fa-trash fa-fw" aria-hidden="true"></i><span>{{ lang('DELETE_COOKIES') }}</span>
-				</a>
-			</li>
 			{% if S_DISPLAY_MEMBERLIST %}
 				<li class="rightside" data-last-responsive="true">
 					<a href="{{ U_MEMBERLIST }}" title="{{ lang('MEMBERLIST_EXPLAIN') }}" role="menuitem">
