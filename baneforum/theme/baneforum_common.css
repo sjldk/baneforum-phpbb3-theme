@@ -1408,42 +1408,52 @@ input#subject {
 	margin: 0;
 }
 
-/* Lists of topics and forums: calmer. The title is the one larger line, the "by ... on ..." line, the counts and the
-   last post are smaller and softer, and the rows are tighter. The !important matches the title rule above. */
+/* Lists of topics and forums: the subject stands out, the rest is quiet. The title is larger, heavier and in the accent
+   colour. The line under it ("by ... on ... in ..."), the counts and the last post are small and soft. The !important
+   is needed because the rule near the top gives every div, dt, dd and link 1em with !important. */
 body ul.topiclist li.row :is(a.topictitle, a.forumtitle) {
-	font-size: 1.0625rem !important;
+	font-size: 1.1875rem !important;
 	line-height: 1.3;
 }
 
 ul.topiclist li.row dl {
-	margin: 0.65rem 0;
+	margin: 0.7rem 0;
 }
 
-ul.topiclist li.row dt .list-inner {
-	font-size: var(--font-size-small);
+body ul.topiclist li.row dt .list-inner {
+	font-size: 0.8125rem !important;
 	line-height: 1.5;
 	color: var(--color-muted);
 }
 
-ul.topiclist li.row dt .list-inner :is(a.topictitle, a.forumtitle) {
-	display: inline-block;
-	margin-bottom: 0.1rem;
+ul.topiclist li.row dt .list-inner a:not(.topictitle, .forumtitle),
+ul.topiclist li.row dd.lastpost a {
+	color: inherit;
 }
 
-ul.topiclist li.row dd {
-	font-size: var(--font-size-small);
+ul.topiclist li.row dt .list-inner :is(a.topictitle, a.forumtitle) {
+	display: inline-block;
+	margin-bottom: 0.15rem;
+}
+
+body ul.topiclist li.row dd {
+	font-size: 0.8125rem !important;
 	line-height: 1.45;
 	color: var(--color-muted);
 }
 
-ul.topiclist li.row :is(dd.posts, dd.views, dd.topics) {
-	font-size: 1rem;
+body ul.topiclist li.row :is(dd.posts, dd.views, dd.topics) {
+	font-size: 0.9375rem !important;
 	font-variant-numeric: tabular-nums;
-	color: var(--color-text);
 }
 
 ul.topiclist li.row dd.lastpost > span {
 	display: block;
+}
+
+/* The page numbers next to a title are buttons, not small print. */
+body ul.topiclist li.row .pagination {
+	font-size: 0.9375rem !important;
 }
 
 /* Messages and questions: native <dialog> elements (see js/bf-dialogs.js). The browser centres them in the top
