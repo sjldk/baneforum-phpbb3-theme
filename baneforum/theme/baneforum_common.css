@@ -1062,3 +1062,70 @@ input.button3:focus {
 .button .icon {
 	font-size: 1.25em;
 }
+
+/* Status icons of forums and topics are Font Awesome 4.7 glyphs, the font phpBB already loads, and take the palette
+   colours. Read and unread look the same here, an unread row is marked by its bar and bold title (below). Small glyphs after the
+   shape mark a locked topic (padlock) and a hot topic (lightning bolt). Prosilver sets the class
+   on the dl. */
+dl.row-item {
+	background-image: none;
+}
+
+dl.row-item:is([class*="forum_"], [class*="topic_"], [class*="sticky_"], [class*="announce_"], [class*="global_"]) {
+	--bf-shape: "\f0e5";
+	--bf-color: var(--color-muted);
+	--bf-lock: "";
+	--bf-hot: "";
+}
+
+dl.row-item[class*="forum_"] { --bf-shape: "\f114"; }
+dl.row-item[class*="forum_"][class*="_subforum"] { --bf-shape: "\f115"; }
+dl.row-item[class*="forum_link"] { --bf-shape: "\f08e"; }
+dl.row-item:is([class*="announce_"], [class*="global_"]) { --bf-shape: "\f0a1"; }
+dl.row-item[class*="sticky_"] { --bf-shape: "\f08d"; }
+dl.row-item[class*="topic_moved"] { --bf-shape: "\f064"; }
+
+
+dl.row-item[class*="_locked"] { --bf-lock: "\f023"; }
+dl.row-item[class*="_hot"] { --bf-hot: "\f0e7"; }
+
+dl.row-item:is([class*="forum_"], [class*="topic_"], [class*="sticky_"], [class*="announce_"], [class*="global_"])::before,
+dl.row-item:is([class*="forum_"], [class*="topic_"], [class*="sticky_"], [class*="announce_"], [class*="global_"])::after {
+	position: absolute;
+	inset-block-start: 50%;
+	color: var(--bf-color);
+	font-family: FontAwesome !important;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	pointer-events: none;
+}
+
+dl.row-item:is([class*="forum_"], [class*="topic_"], [class*="sticky_"], [class*="announce_"], [class*="global_"])::before {
+	content: var(--bf-shape);
+	inset-inline-start: 0.625rem;
+	inline-size: 2rem;
+	translate: 0 -50%;
+	font-size: 1.375rem;
+	text-align: center;
+}
+
+dl.row-item:is([class*="forum_"], [class*="topic_"], [class*="sticky_"], [class*="announce_"], [class*="global_"])::after {
+	content: var(--bf-lock) var(--bf-hot);
+	inset-inline-start: 2.125rem;
+	translate: 0 0.125rem;
+	font-size: 1.125rem;
+	letter-spacing: 0.1em;
+}
+
+/* Prosilver's icon sizes are 20, 16, 10 and 8 px. Here they follow the text, so the "unread post" icon beside a
+   topic title (icon-md, 10 px) is as big as the title. */
+.icon.icon-xl { font-size: 1.75em; }
+.icon.icon-lg { font-size: 1.375em; }
+.icon.icon-md { font-size: 1em; }
+.icon.icon-sm { font-size: 0.8em; }
+
+/* Posts are speech bubbles everywhere. prosilver uses a document (fa-file, fa-file-o) in menus and for the
+   unread post link, so the same glyphs as the status icons replace it. */
+.icon.fa-file::before { content: "\f075"; }
+.icon.fa-file-o::before { content: "\f0e5"; }
