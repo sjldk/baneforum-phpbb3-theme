@@ -1,19 +1,15 @@
-/* Like and dislike buttons: a small floating pill at the bottom left of the post.
-   Colours come from the style's variables, with plain fallbacks for other styles. */
+/* Like and dislike buttons in a toolbar across the bottom of each post. The votes sit on the left and the
+   back-to-top link on the right. Colours come from the style's variables, with plain fallbacks for other styles. */
 
 .bf-votes {
+	clear: both;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	justify-content: flex-start;
 	gap: 0.25rem;
-	width: fit-content;
-	margin: 1rem auto 0.25rem 0;
-	padding: 0.25rem;
-	border: 1px solid var(--color-line, #ccd5e0);
-	border-radius: 2rem;
-	background: var(--color-surface, #fff);
-	box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 0.15);
+	margin-top: 1rem;
+	padding: 0.5rem 0 0;
+	border-top: 1px solid var(--color-line, #ccd5e0);
 }
 
 .bf-votes-form {
@@ -29,7 +25,7 @@
 	min-width: 2.75rem;
 	padding: 0 0.75rem;
 	border: 2px solid transparent;
-	border-radius: 2rem;
+	border-radius: 0.5rem;
 	background: transparent;
 	color: var(--color-text, #1d2b3c);
 	font: inherit;
@@ -76,6 +72,24 @@
 	overflow: hidden;
 	clip-path: inset(50%);
 	white-space: nowrap;
+}
+
+/* Back to top, at the right end of the toolbar. prosilver's own link is hidden. */
+a.bf-vote,
+a.bf-vote:hover,
+a.bf-vote:focus {
+	color: var(--color-text, #1d2b3c);
+	font-weight: inherit;
+	text-decoration: none;
+}
+
+.bf-top {
+	margin-inline-start: auto;
+	justify-content: center;
+}
+
+.post:has(.bf-votes) .back2top {
+	display: none;
 }
 
 /* Tooltip for a button that cannot be used. It shows on hover and on keyboard focus. */
@@ -151,8 +165,8 @@
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 0.75rem;
-	padding: 0.75rem 1rem;
 	margin-block-end: 1rem;
+	padding: 0.75rem 1rem;
 	border: 1px solid var(--color-danger, #a01010);
 	border-radius: 0.5rem;
 	color: var(--color-danger, #a01010);
@@ -177,67 +191,4 @@
 .bf-collapsed-toggle:focus-visible {
 	outline: 3px solid var(--color-focus, #215188);
 	outline-offset: 2px;
-}
-
-
-/* Side by side (profile on the right): the text column is as tall as the post, so the pill can sit at the bottom.
-   Stacked on a phone it stays under the text. */
-@media (min-width: 43.8125em) {
-	.post:has(.bf-votes) > .inner {
-		display: flex;
-		flex-direction: row-reverse;
-		justify-content: space-between;
-	}
-
-	.post:has(.bf-votes) .postbody {
-		display: flex;
-		flex-direction: column;
-		float: none;
-		min-width: 0;
-	}
-
-	.post:has(.bf-votes) .postbody > [id^="post_content"] {
-		display: flex;
-		flex: 1;
-		flex-direction: column;
-	}
-
-	.post:has(.bf-votes) .postbody > [id^="post_content"] > * {
-		flex: none;
-	}
-
-	.post:has(.bf-votes) .content {
-		padding-bottom: 1rem;
-	}
-
-	.post:has(.bf-votes) .bf-votes {
-		margin-top: auto;
-		margin-bottom: -1.25rem;
-	}
-}
-
-/* The back-to-top link lives in the pill, after a thin divider. prosilver's own link is hidden. */
-a.bf-vote,
-a.bf-vote:hover,
-a.bf-vote:focus {
-	color: var(--color-text, #1d2b3c);
-	font-weight: inherit;
-	text-decoration: none;
-}
-
-.bf-top {
-	margin-inline-start: 0.25rem;
-	justify-content: center;
-}
-
-.bf-top::before {
-	content: "";
-	position: absolute;
-	inset-block: 0.5rem;
-	inset-inline-start: -0.25rem;
-	border-inline-start: 1px solid var(--color-line, #ccd5e0);
-}
-
-.post:has(.bf-votes) .back2top {
-	display: none;
 }
