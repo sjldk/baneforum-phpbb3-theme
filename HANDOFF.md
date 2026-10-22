@@ -1,107 +1,80 @@
 # Handoff
 
-Last updated 2026-10-22. Read this first. The long log is `docs/editor-progress.md`.
+Last updated 2026-10-22 (evening). Read this first. The long log is `docs/editor-progress.md`.
 
 ## What this repo is
 
-The Baneforum phpBB 3.3 theme (`baneforum/`), and a new post editor for it (`packages/bf-editor/`, a ProseMirror editor
-as `bf-` web components). The editor writes Markdown, reads old BBCode, and sends pictures and files through
-phpBB's own uploader. A Docker test board (`docker/`) mirrors production: phpBB 3.3.19, PHP 8.5, the Markdown
-and MediaEmbed extensions.
-
-## Where we are
-
-| Phase | What | Status |
-|---|---|---|
-| 0 to 3 | Test board, package, codecs, toolbar | Done |
-| 4 | Links (Ctrl+K dialog, paste, new window) | Done |
-| 5 | YouTube player (`<bf-youtube>`, no request to Google until play) | Done |
-| 6 | Pictures and files: picker, paste, drag and drop, preview, progress | Done |
-| 7 | phpBB adapter (`baneforum/theme/js/bf-phpbb.js`) | Done for posts, replies, edits, PMs. Signatures open. |
-| 8 | Smilies to emoji, render script | Done |
-| 9 | Quality: keyboard walkthrough, screen reader, zoom, phones, size budget, Firefox run | **Next** |
-| 10 | Packaging for reuse | Open |
-
-Everything is committed and pushed after the last "cp". Test board (8080) works again.
-
-## What works now (checked in Chrome on the test board)
-
-- Editor on the reply, new topic and PM pages. The textarea stays as fallback and is hidden. The "Disable Markdown" box turns the editor off.
-- A post that is opened and saved again keeps its text exactly (the textarea is only rewritten when the writer changes something).
-- Pictures go in the text, with a menu on click (description, delete). Other files (PDF, ZIP) go to a list under the editor and under the post, as cards with an SVG file icon.
-- The server makes pictures smaller: extension `extensions/baneforum/imagecompress` (JPEG and PNG, 1920 by 1200, turns photos upright by EXIF).
-- The editor follows the board language (`<html lang>`): Danish and English built in.
-- Posting page: no tabs, no side box, full width message box. Poll is a closed `<details>`.
-- Buttons are WCAG AAA in the whole theme and the editor: 7:1 text, 44 px targets, 3px focus line, all states. axe-core finds nothing but one heading order warning inside post content.
+The Baneforum phpBB 3.3 theme (`baneforum/`, style `baneforumblue`, child of prosilver), a post editor for it
+(`packages/bf-editor/`, ProseMirror as `bf-` web components, writes Markdown, reads old BBCode) and three phpBB
+extensions in `extensions/baneforum/` (`imagecompress`, `likes`, `censor`). The Docker test board (`docker/`) mirrors
+production: phpBB 3.3.19, PHP 8.5, the Markdown and MediaEmbed extensions.
 
 ## How to run things
 
 | Task | Command |
 |---|---|
-| Test board | `docker compose -f docker/docker-compose.yml up -d --build`, then http://localhost:8080 |
-| Editor build, tests, lint, types | `scripts/bf-editor.sh build` / `test` / `check` (Node runs in a container) |
-| Purge phpBB cache after a template change | `sh docker/purge-cache.sh` |
-| Editor demo page | `cd packages/bf-editor && python3 -m http.server 8099`, then `/demo/index.html` |
-| Browser tests | see `scripts/browser-tests/README.md` (`fixtures.sh` once, then `run.sh <script>`) |
+| Start the test board, set it up, fill it with dummy data | `docker/test-env.sh` (http://localhost:8080, `admin` / `adminadmin`, users alice, bob, carol with the same password) |
+| Purge the phpBB cache after a template change | `sh docker/purge-cache.sh` |
+| Editor build, tests, lint | `scripts/bf-editor.sh build` / `test` / `check`. Build before you commit a change in `packages/bf-editor/src`: the built copies in `baneforum/theme/js/` are committed. (`check` reports old errors, none in files touched today.) |
+| Browser tests | `scripts/browser-tests/run.sh posting.mjs` (12 checks), `dialogs.mjs` (5 checks). See `scripts/browser-tests/README.md`. Chrome runs on the host. |
+| Compare computed styles before and after a CSS change | `run.sh snap.mjs out.json "<selectors>"` on 25 pages. A 1px width difference on the preferences page is noise. |
+| Pack the extensions as zips for another board | `scripts/package-extensions.sh [--bump patch\|minor\|major] [name ...]`. The zips go to `dist/` (git-ignored). |
+| Production copy board (8081) | See the phpbb skill (`.claude/skills/phpbb/SKILL.md`) |
 
-`scripts/bf-editor.sh build` also copies `bf-editor.js`, `bf-render.js` and `bf-render.css` into `baneforum/theme/`. Those copies are committed. Build before you commit a change in `packages/bf-editor/src`.
+Push: if it fails with "publickey", unlock the SSH key (`ssh-add ~/.ssh/id_github_rsa`).
 
-## Earlier this day (2026-10-22)
+## Where we are
 
-| What | State |
+| Area | State |
 |---|---|
-| Firefox | Editor smoke test ran in Firefox 157 (Puppeteer, WebDriver BiDi). No FAIL lines in the last 40 lines seen, full output not checked. `run.sh` takes `BROWSER=firefox`, `connect.mjs` is the shared helper. **Board tests in Firefox have not run yet.** |
-| Production copy board (8081) | Works. Production tree in `local-data/phpbb`, files in `local-data/production/files`, database clone `phpbb_try`. Login `Baneforum.dk` / `adminadmin`. Not clicked through yet. |
-| `docs/production-install.md` | New. Deploy steps. Not tested on a server. |
-| `.claude/skills/phpbb/SKILL.md` | New. Boards, traps, tests. Add new findings there. |
-| Picture click | Thumbnails and linked pictures now open in a new tab (`attachment.html`, `render/attachments.js`). Built, not yet checked in a browser. |
+| Editor (phases 0 to 8) | Done for posts, replies, edits and PMs. Signatures open. Phase 9 (keyboard walkthrough, screen reader, zoom, phones, size budget, Firefox board tests) is next. Phase 10 (packaging for reuse) open. |
+| Theme | Under active polish. See "Today". |
+| Extensions | `likes` and `censor` are new and enabled on the test board. Not installed on production. |
+| Replacing prosilver CSS | `buttons.css` and `forms.css` are ours now. Nine prosilver files still load. See "Next". |
 
-## Theme work, 2026-10-22 (after the editor work above)
+## Today (2026-10-22), checked in Chrome on the test board unless noted
 
-All on the test board (http://localhost:8080). **Nothing here was checked in a browser by Claude.** Chrome is not
-installed on this machine and the Firefox DevTools tool had no connection. The user looked at screenshots and
-reported back. Check each item on the board before you trust it.
+**Posting page**
+- The option checkboxes (BBCode, smilies, URLs, signature, "Disable Markdown") are gone from `posting_editor.html`. The panel stays for notify, lock, sticky type, delete and edit reason. The editor is always on (`bf-phpbb.js` no longer waits for the Markdown box).
+- Quote: the cursor sits on a new line after the quote (`bf-editor` `focusEnd()`, called when the URL has `mode=quote`).
+- The Quote buttons of the topic review work again. The template override had dropped phpBB's `editor.js`. It is back, and `bf-phpbb.js` sends `insert_text()` to the editor (`insertText()`).
+- Topic review is a `<details>` bar with a chevron (`posting_topic_review.html`). Closed by default.
+- Form rows are a CSS grid from 43.8125em (`fieldset.fields1/2 dl`), labels centred against the field. The subject field starts after its label and fills the row.
 
-| Area | What changed | Where |
-|---|---|---|
-| Links (WCAG 1.4.1) | Titles in lists and links in posts: `--accent`. Links in posts are bold. Underline on hover. Standalone links need no underline. | `baneforum_colours.css` |
-| Menus | No height cap and no scrolling inside menus | `baneforum_common.css` |
-| Sizes | Fixed `px` in the theme CSS became `rem`, breakpoints became `em`. Kept: 1px lines, the 16px field minimum (iOS zoom), `px` inside SVG. Prosilver itself still has about 690 `px` values. | three CSS files |
-| Icons | `.icon` is `1.25em`. Prosilver size classes (`icon-md` and so on) are `em` | `baneforum_common.css` |
-| Status icons | Font Awesome 4.7 glyphs drawn from the row class on the `dl` (comment, folder, bullhorn, pin). Badges: padlock (locked), bolt (hot). The "mine" dot was removed. | `baneforum_common.css` |
-| Unread rows | Bold title and a bar at the start of the row. Read and unread icons look the same. | `baneforum_common.css`, `baneforum_colours.css` |
-| Hidden links | The arrow after a user name in "last post" and the red bubble after an unread title are hidden, with the whole link (no empty link to tab to). The jump to the latest or first unread post is gone. | `baneforum_common.css` |
-| Post icons | `fa-file` and `fa-file-o` show as speech bubbles | `baneforum_common.css` |
-| Row layout | Flex rows from 700 px: the title centres beside the icon. Page numbers sit in a grid cell beside the title. | `baneforum_common.css` |
-| Form controls | `--color-control` (accent 65% with white, about 3.2:1) is the border of fields, selects and checkboxes. Checkboxes are custom. `--color-focus` is the full accent now. | `palette.css`, `baneforum_colours.css` |
-| Fixes | No dashed blink on the post box. No border under the last row. No accent behind the list blocks (dark corners). User names have no group colour. User icon in the top bar when there is no avatar. | various |
+**Dialogs and notices**
+- Messages and questions are native `<dialog>` elements (`#phpbb_alert` and `#phpbb_confirm` in `overall_footer.html`, `js/bf-dialogs.js`, `dialog.phpbb_alert` CSS). Post delete and restore ask in them, then the page reloads.
+- Deleted-post notice: red box with round corners, Delete (filled) and Restore (outline). "Deleted post:" is visually hidden.
 
-**Open**
+**Look**
+- `--border-control` (0.15rem) is the border of every control: text fields, selects, checkboxes, radio buttons, post buttons, pagination, like buttons.
+- Post buttons: light tint, hover with the control border. Pagination looks the same. Radio buttons and selects are styled like the checkboxes and fields.
+- Square corners on a small screen for wrap, header and navbars. No "Online" ribbon. Copyright removed from the footer. The admin link is an icon in the footer bar. The back-to-top arrow sits in the gap between posts. Topic and forum lists have smaller, calmer text.
+
+**Extensions**
+- `likes`: votes are stored as a keyed hash of member and post (`voter_key.php`, key file `store/baneforum_votes.key`), with no user id and no time. Nobody can see who voted. The collapse note sits in the toolbar. Icons bounce on click. The buttons are smaller. **Boards that already have the extension must purge it and enable it again (the first migration changed).** Back up the key file.
+- `censor`: replaces phpBB's word censor, same ACP list, leaves URLs alone. Test: `docker compose exec web php ext/baneforum/censor/tests/censor_test.php`.
+
+**CSS ancestry**
+- `baneforum/theme/buttons.css` and `forms.css` replace prosilver's files (same rules, in rem, no vendor prefixes). `overall_header.html` loads them in the same place as the old links. Checked with `snap.mjs`: no differences.
+
+## Next
 
 | Item | Note |
 |---|---|
-| Hidden "Unread" text for screen readers | Bold and the bar only show to sighted users. Needs copies of `viewforum_body.html` and `forumlist_body.html`. Not started. |
-| Jump to the first unread post | Lost with the red bubble. Could make the title link there. |
-| Prosilver `px` values | Not converted. About 690 values. Risky for the avatar and image offsets. |
-| Checks not done | Dark mode, topics with many pages, memberlist checkboxes, admin control panel, the editor's own fields, radio buttons. |
-| `--color-focus` change | Also changes the focus line on login buttons and attachment links. |
-| Old GIFs | `baneforum/theme/images/*.gif` status images are unused now. |
+| Replace the other prosilver CSS files | `content.css` next, then `colours.css`, `common.css`, `cp.css`, `links.css`, `base.css`, `utilities.css`, `icons.css`, `normalize.css`. Check each with `snap.mjs` before and after, and keep the same position in `overall_header.html`. |
+| Optimise the CSS | After all files are ours: merge our overrides into the replaced files, drop dead rules and `!important`, deduplicate. The user asked for this. |
+| `dl`/`dt` layouts | Form rows are a grid now. Topic rows and other lists still use prosilver's floats and flex. |
+| Pagination "…" dropdown | Prosilver fills it dark when open. Not restyled. |
+| Not looked at | The like bounce while moving, topic lists at narrow widths, dark mode of today's changes, other forms with the new grid (login, user control panel), the dialogs on a phone. |
+| Editor phase 9 | See the table above. |
+| Likes | Production board and notifications. A who-voted list is deliberately not wanted. |
+| Hidden "Unread" text for screen readers | Needs copies of `viewforum_body.html` and `forumlist_body.html`. |
+| Prosilver `px` values | About 690 left. Replacing the files removes them. |
 
-**Dummy data:** `docker/dummy-data.sh` fills the test board with forums and topics in every status. Users `alice`, `bob`,
-`carol`, password `adminadmin`. Log in as `admin` to see read and unread. It stops if the board is already filled.
-If a new board has odd guest permissions after it, run `UPDATE phpbb_users SET user_permissions=''` and purge the cache.
+## Things to know
 
-**Push:** if the push fails with "publickey", run `ssh-add ~/.ssh/id_github_rsa` first (no SSH agent by default).
-
-## Like extension, 2026-10-22 (started, not committed)
-
-`extensions/baneforum/likes` gives every post a like and a dislike button. It is enabled on the test board (8080) only.
-
-| Item | State |
-|---|---|
-| Table `phpbb_baneforum_votes` (post, user, +1/-1), permission `u_baneforum_vote` (standard and full user roles) | Done, migration `m1_initial` |
-| Vote route `/app.php/baneforum/vote/{id}` (POST, link hash, JSON or redirect) | Done, tested with curl as alice: like, toggle off, switch, bad hash |
-| Rules: no vote on own post, guests see counts and a login note, unapproved posts refused | Done |
-| Buttons in `viewtopic_body_postrow_post_content_footer` event, `votes.js`, `votes.css` | Written. **Nobody has looked at it in a browser.** |
-| Danish and English text | Done |
-| Not done | Dark mode and look check, a browser test, the production board, who-voted list, notifications. Rule test: `docker compose exec web php ext/baneforum/likes/tests/votes_test.php`. |
+- `extensions/baneforum` is owned by `sjl` now (it was `www-data`). A new extension folder inside the container needs `docker exec -u root` and `chown 1000:1000`.
+- Switch the test board between prosilver and our theme with `UPDATE phpbb_config SET config_value=(SELECT style_id FROM phpbb_styles WHERE style_path='baneforum') WHERE config_name='default_style'` and the same for `phpbb_users.user_style` (use `prosilver` for the other way). It is on our theme now.
+- Post 105 on the test board has demo votes (6 dislikes), so the collapse shows.
+- Two old git stashes (`stale-working-before-merge`, `before pull`) are covered by the commits. Drop them when you agree.
+- Traps found are in the phpbb skill. Add new ones there.
