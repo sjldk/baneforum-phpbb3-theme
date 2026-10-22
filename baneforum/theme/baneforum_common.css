@@ -1118,6 +1118,12 @@ dl.row-item:is([class*="forum_"], [class*="topic_"], [class*="sticky_"], [class*
 	letter-spacing: 0.1em;
 }
 
+/* No arrow after the user name in the last post column. The arrow was the link to the latest post. The whole
+   link is hidden, so there is no empty link left to tab to. */
+a:has(> .icon.fa-external-link-square) {
+	display: none;
+}
+
 /* Prosilver's icon sizes are 20, 16, 10 and 8 px. Here they follow the text, so the "unread post" icon beside a
    topic title (icon-md, 10 px) is as big as the title. */
 .icon.icon-xl { font-size: 1.75em; }
