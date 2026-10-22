@@ -566,3 +566,9 @@ form.mcp_approve > p.post-notice > strong {
 	clip-path: inset(50%);
 	white-space: nowrap;
 }
+
+/* The text beside a post (rank, post count, join date, the name when it has no link) was #666, 5.4:1. It is now the muted
+   text colour of the palette, above 7:1 (WCAG AAA). */
+.postprofile {
+	color: var(--color-muted);
+}

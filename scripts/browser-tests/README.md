@@ -16,6 +16,7 @@ scripts/browser-tests/run.sh posting.mjs              # one test
 | Script | What it checks |
 |---|---|
 | `smoke.sh` | The editor alone (`demo/smoke.html`): toolbar, link dialog, YouTube player, picture upload with a fake host. |
+| `axe-pages.mjs` | axe-core (WCAG A, AA, AAA) on the pages the theme work touches, with the delete dialog open and at phone width. Last run: no problems. |
 | `dialogs.mjs` | Delete and restore of a post ask in a native `<dialog>` on the same page: opens as a modal, Escape cancels, confirming deletes and restores. Makes a throwaway reply. |
 | `snap.mjs <out.json> <selector>...` | Computed styles of the matching elements on 25 pages. Run it before and after a CSS change and compare the two files. Used when a prosilver CSS file is replaced by our own. |
 | `posting.mjs` | Reply page: the editor, no option boxes, a picture upload, saving the post. |
