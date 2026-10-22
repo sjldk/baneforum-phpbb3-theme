@@ -1149,3 +1149,57 @@ body dl.row-item[class*="_unread"] :is(a.topictitle, a.forumtitle) {
 a:has(> .icon.fa-file.icon-red) {
 	display: none;
 }
+
+/* Rows of forums and topics: the title is centred beside the status icon. Prosilver floats the columns and has the
+   title at the top of the row, so a row made tall by the last post column leaves the title high above its icon.
+   Flex lets the columns fill the row, the title centres, and the column lines run the full height (no more
+   padding and negative margin trick). Below 700px prosilver stacks the columns, so nothing changes there. */
+@media (min-width: 43.75em) {
+	ul.topiclist li.row dl.row-item {
+		display: flex;
+		align-items: center;
+	}
+
+	ul.topiclist li.row dl.row-item dt {
+		float: none;
+		flex: 1 1 0;
+		min-inline-size: 0;
+		width: auto;
+		margin: 0;
+	}
+
+	ul.topiclist li.row dl.row-item dt .list-inner {
+		margin-inline-end: 0;
+	}
+
+	/* A topic with page numbers: title and poster line on the left, the page numbers on the right, centred beside
+	   them. A long list of numbers takes room from the title, and wraps inside its own box. */
+	ul.topiclist li.row dl.row-item dt .list-inner:has(.pagination) {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: center;
+		column-gap: 1rem;
+	}
+
+	ul.topiclist li.row dl.row-item dt .list-inner:has(.pagination) > * {
+		grid-column: 1;
+	}
+
+	ul.topiclist li.row dl.row-item dt .list-inner:has(.pagination) > .pagination {
+		grid-column: 2;
+		grid-row: 1 / span 6;
+		margin: 0;
+		max-inline-size: 18rem;
+	}
+
+	ul.topiclist li.row dl.row-item dd {
+		float: none;
+		flex: none;
+		align-self: stretch;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		margin: 0;
+		padding-block: 0.25rem;
+	}
+}
