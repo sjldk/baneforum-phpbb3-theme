@@ -16,7 +16,9 @@ scripts/browser-tests/run.sh posting.mjs              # one test
 | Script | What it checks |
 |---|---|
 | `smoke.sh` | The editor alone (`demo/smoke.html`): toolbar, link dialog, YouTube player, picture upload with a fake host. |
-| `posting.mjs` | Reply page: the editor, the Markdown box, a picture upload, saving the post. |
+| `dialogs.mjs` | Delete and restore of a post ask in a native `<dialog>` on the same page: opens as a modal, Escape cancels, confirming deletes and restores. Makes a throwaway reply. |
+| `snap.mjs <out.json> <selector>...` | Computed styles of the matching elements on 25 pages. Run it before and after a CSS change and compare the two files. Used when a prosilver CSS file is replaced by our own. |
+| `posting.mjs` | Reply page: the editor, no option boxes, a picture upload, saving the post. |
 | `pictures.mjs <photo.jpg path>` | A picture in the text: preview, the menu, the description, Preview, delete. Needs `photo.jpg`. |
 | `files.mjs <this folder>` | A PDF and a ZIP (picker and drop) go to the file list, a picture goes in the text, the post shows both. |
 | `sizes.mjs <this folder>` | Uploads of 30 KB to 3.6 MB pictures (chunked uploads, server compression). |

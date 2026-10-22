@@ -1,0 +1,154 @@
+/* Buttons. Replaces prosilver's buttons.css, which is no longer loaded. Same rules, in rem and without the
+   vendor prefixes and the right-to-left and "small-icon" leftovers this board does not use. It loads in the
+   same place in overall_header.html, so the order against prosilver's other files is unchanged. */
+
+.button {
+	display: inline-block;
+	padding: 0.125rem 0.5rem;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	font-family: "Open Sans", "Droid Sans", Verdana, Arial, Helvetica;
+	line-height: 1.4;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	touch-action: manipulation;
+	cursor: pointer;
+	user-select: none;
+	border: 1px solid transparent;
+	border-radius: 0.25rem;
+}
+
+.button:focus,
+.button:hover {
+	text-decoration: none;
+	outline: none;
+}
+
+.caret {
+	border-left: 1px solid;
+	position: relative;
+	right: -0.375rem;
+}
+
+.caret i {
+	vertical-align: top;
+}
+
+/* Search buttons */
+.button-search,
+.button-search-end {
+	float: left;
+	border-radius: 0;
+	margin: 0;
+	padding: 0.125rem 0.3125rem;
+}
+
+.button-search-end {
+	border-left-width: 0;
+	border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.search-header .button-search,
+.search-header .button-search-end {
+	border-top-width: 0;
+	border-bottom-width: 0;
+	padding: 0.1875rem 0.3125rem;
+}
+
+.search-header .button-search-end {
+	border-right-width: 0;
+}
+
+.button-icon-only {
+	padding-left: 0.1875rem;
+	padding-right: 0.1875rem;
+}
+
+/* Contact icons of a poster */
+.contact-icons.dropdown-contents {
+	min-width: 0;
+	padding: 0;
+	font-size: 0;
+}
+
+.contact-icon {
+	background-repeat: no-repeat;
+	display: block;
+	height: 1rem;
+	width: 1rem;
+}
+
+.contact-icons a {
+	border-bottom: 1px dotted;
+	border-right: 1px dotted;
+	display: block;
+	float: left;
+	padding: 0.5rem;
+}
+
+.contact-icons .last-cell {
+	border-right: none;
+}
+
+.contact-icons div:last-child a {
+	border-bottom: none;
+}
+
+.contact-icons div {
+	clear: left;
+}
+
+/* The buttons of a post (edit, quote, report...) */
+.post-buttons {
+	float: right;
+	list-style: none;
+	margin-top: 0.125rem;
+}
+
+.has-profile .post-buttons {
+	float: none;
+	position: absolute;
+	margin: 0;
+	right: 0;
+	top: 0.3125rem;
+}
+
+.post-buttons > li {
+	float: left;
+	margin-right: 0.1875rem;
+}
+
+.post-buttons .button,
+.format-buttons .button {
+	padding-left: 0.1875rem;
+	padding-right: 0.1875rem;
+}
+
+.hastouch .post-buttons {
+	margin-right: 0.625rem;
+}
+
+.post-buttons .button span {
+	font-size: 0;
+}
+
+/* The menu of the buttons in a post, when they are folded */
+.post-buttons .dropdown {
+	top: 1.125rem;
+}
+
+.post-buttons .dropdown a {
+	display: block;
+	font-size: 1.2em;
+	text-align: right;
+}
+
+.hasjs .postbody .post-buttons {
+	max-width: 40%;
+}
+
+button::-moz-focus-inner {
+	padding: 0;
+	border: 0;
+}
