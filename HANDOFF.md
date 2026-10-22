@@ -92,3 +92,16 @@ reported back. Check each item on the board before you trust it.
 If a new board has odd guest permissions after it, run `UPDATE phpbb_users SET user_permissions=''` and purge the cache.
 
 **Push:** if the push fails with "publickey", run `ssh-add ~/.ssh/id_github_rsa` first (no SSH agent by default).
+
+## Like extension, 2026-10-22 (started, not committed)
+
+`extensions/baneforum/likes` gives every post a like and a dislike button. It is enabled on the test board (8080) only.
+
+| Item | State |
+|---|---|
+| Table `phpbb_baneforum_votes` (post, user, +1/-1), permission `u_baneforum_vote` (standard and full user roles) | Done, migration `m1_initial` |
+| Vote route `/app.php/baneforum/vote/{id}` (POST, link hash, JSON or redirect) | Done, tested with curl as alice: like, toggle off, switch, bad hash |
+| Rules: no vote on own post, guests see counts and a login note, unapproved posts refused | Done |
+| Buttons in `viewtopic_body_postrow_post_content_footer` event, `votes.js`, `votes.css` | Written. **Nobody has looked at it in a browser.** |
+| Danish and English text | Done |
+| Not done | Dark mode and look check, a browser test, the production board, who-voted list, notifications. Rule test: `docker compose exec web php ext/baneforum/likes/tests/votes_test.php`. |
