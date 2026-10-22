@@ -1,0 +1,6 @@
+baneforum_likes_vote:
+    path: /baneforum/vote/{post_id}
+    defaults: { _controller: baneforum.likes.controller:handle }
+    methods: [POST]
+    requirements:
+        post_id: \d+

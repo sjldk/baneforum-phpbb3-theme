@@ -1,0 +1,21 @@
+{
+	"name": "baneforum/likes",
+	"type": "phpbb-extension",
+	"description": "Like and dislike buttons on every post.",
+	"license": "GPL-2.0-only",
+	"version": "1.0.0",
+	"require": {
+		"php": ">=8.1"
+	},
+	"extra": {
+		"display-name": "Baneforum likes",
+		"soft-require": {
+			"phpbb/phpbb": ">=3.3.0"
+		}
+	},
+	"authors": [
+		{
+			"name": "Baneforum"
+		}
+	]
+}

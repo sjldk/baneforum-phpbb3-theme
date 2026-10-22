@@ -1,0 +1,31 @@
+parameters:
+    baneforum.likes.table: '%core.table_prefix%baneforum_votes'
+
+services:
+    baneforum.likes.votes:
+        class: baneforum\likes\votes
+        arguments:
+            - '@dbal.conn'
+            - '%baneforum.likes.table%'
+
+    baneforum.likes.listener:
+        class: baneforum\likes\event\listener
+        arguments:
+            - '@baneforum.likes.votes'
+            - '@auth'
+            - '@user'
+            - '@controller.helper'
+        tags:
+            - { name: event.listener }
+
+    baneforum.likes.controller:
+        class: baneforum\likes\controller\vote
+        arguments:
+            - '@baneforum.likes.votes'
+            - '@auth'
+            - '@user'
+            - '@language'
+            - '@request'
+            - '@dbal.conn'
+            - '%core.root_path%'
+            - '%core.php_ext%'
