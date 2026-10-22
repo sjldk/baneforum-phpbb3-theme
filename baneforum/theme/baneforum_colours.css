@@ -189,13 +189,19 @@ p strong > a.username-coloured {
 
 /* Links without an underline (WCAG 1.4.1, 1.4.3). Links in a block of text need a cue besides colour: bold in the
    accent colour. Colour alone cannot work, the body text is too dark for 3:1 against it and 4.5:1 against the page.
-   Titles in lists are bold in the accent colour too. Both get an underline on hover. Focus is in baneforum_common.css. */
+   Titles in lists are in the accent colour. Both get an underline on hover. Focus is in baneforum_common.css. */
 body a.topictitle,
 body a.forumtitle,
 body .postbody h3 a,
 .content a.postlink {
 	color: var(--accent);
 	font-weight: 600;
+}
+
+/* Titles in a list are normal weight when read. Unread ones are bold, see baneforum_common.css. */
+body a.topictitle,
+body a.forumtitle {
+	font-weight: 400;
 }
 
 body a.topictitle:hover,

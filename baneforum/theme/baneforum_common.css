@@ -1129,3 +1129,23 @@ dl.row-item:is([class*="forum_"], [class*="topic_"], [class*="sticky_"], [class*
    unread post link, so the same glyphs as the status icons replace it. */
 .icon.fa-file::before { content: "\f075"; }
 .icon.fa-file-o::before { content: "\f0e5"; }
+
+/* Unread rows: a bar at the start of the row and a bold title. Read titles are normal weight. Bold is the cue that
+   does not rest on colour (WCAG 1.4.1), the bar has 7.7:1 against the page (1.4.11). */
+li.row {
+	border-inline-start: 0.25rem solid transparent;
+}
+
+li.row:has(dl.row-item[class*="_unread"]) {
+	border-inline-start-color: var(--accent);
+}
+
+body dl.row-item[class*="_unread"] :is(a.topictitle, a.forumtitle) {
+	font-weight: 700;
+}
+
+/* No red speech bubble after an unread title. The bar and the bold title mark the row now. The bubble was the
+   link to the first unread post, so the whole link is hidden (no empty link to tab to). */
+a:has(> .icon.fa-file.icon-red) {
+	display: none;
+}
