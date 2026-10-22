@@ -615,12 +615,16 @@ table.table1 tbody tr:hover td {
 	select,
 	textarea,
 	table.table1,
-	ul.topiclist li.header,
 	.error,
 	.successbox,
 	.noticebox
 ) {
 	border-radius: var(--radius);
+}
+
+/* The list header sits on top of the rows, so only its top corners are round. */
+ul.topiclist li.header {
+	border-radius: var(--radius) var(--radius) 0 0;
 }
 
 :is(.forabg, .forumbg, .panel, .post, .navigation) {
