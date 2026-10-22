@@ -48,7 +48,12 @@ Push: if it fails with "publickey", unlock the SSH key (`ssh-add ~/.ssh/id_githu
 **Look**
 - `--border-control` (0.15rem) is the border of every control: text fields, selects, checkboxes, radio buttons, post buttons, pagination, like buttons.
 - Post buttons: light tint, hover with the control border. Pagination looks the same. Radio buttons and selects are styled like the checkboxes and fields.
+- Topic and forum lists: the title is 19px in the accent colour, the line under it, the counts and the last post are 13px and soft.
 - Square corners on a small screen for wrap, header and navbars. No "Online" ribbon. Copyright removed from the footer. The admin link is an icon in the footer bar. The back-to-top arrow sits in the gap between posts. Topic and forum lists have smaller, calmer text.
+
+**Accessibility**
+- axe-core (A, AA, AAA) finds nothing on the pages we touched: `run.sh axe-pages.mjs`. Fixed today: contrast beside a post, names for the quote links of the topic review, the dialog's close cross, and the icon-only menu links on a phone (`js/bf-a11y.js`).
+- Not met on purpose: AAA target size 44px. Text fields are about 34px, like and dialog buttons about 36px (AA minimum 24px is met). Still to do: screen reader, keyboard walkthrough of the dialog, zoom, dark mode.
 
 **Extensions**
 - `likes`: votes are stored as a keyed hash of member and post (`voter_key.php`, key file `store/baneforum_votes.key`), with no user id and no time. Nobody can see who voted. The collapse note sits in the toolbar. Icons bounce on click. The buttons are smaller. **Boards that already have the extension must purge it and enable it again (the first migration changed).** Back up the key file.
