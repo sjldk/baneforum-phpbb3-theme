@@ -21,6 +21,9 @@ $lang = array_merge($lang, [
 	'BF_VOTE_GROUP'             => 'Synes godt om eller ikke om dette indlæg',
 	'BF_VOTE_LIKE'              => 'Synes godt om',
 	'BF_VOTE_DISLIKE'           => 'Synes ikke om',
+	'BF_VOTE_HIDDEN'            => 'Dette indlæg har mange "synes ikke om" og er foldet sammen.',
+	'BF_VOTE_SHOW'              => 'Vis indlæg',
+	'BF_VOTE_HIDE'              => 'Skjul indlæg',
 	'BF_VOTE_LOGIN'             => 'Log ind for at stemme på indlæg.',
 	'BF_VOTE_OWN'               => 'Du kan ikke stemme på dit eget indlæg.',
 

@@ -21,6 +21,9 @@ $lang = array_merge($lang, [
 	'BF_VOTE_GROUP'             => 'Like or dislike this post',
 	'BF_VOTE_LIKE'              => 'Like',
 	'BF_VOTE_DISLIKE'           => 'Dislike',
+	'BF_VOTE_HIDDEN'            => 'This post has many dislikes and is collapsed.',
+	'BF_VOTE_SHOW'              => 'Show post',
+	'BF_VOTE_HIDE'              => 'Hide post',
 	'BF_VOTE_LOGIN'             => 'Log in to like or dislike posts.',
 	'BF_VOTE_OWN'               => 'You cannot vote on your own post.',
 

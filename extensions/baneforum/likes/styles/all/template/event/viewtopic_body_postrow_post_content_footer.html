@@ -1,4 +1,10 @@
-<div class="bf-votes" role="group" aria-label="{{ lang('BF_VOTE_GROUP') }}">
+{% if postrow.S_BF_VOTE_LOW %}
+<div class="bf-collapsed-note">
+	<p>{{ lang('BF_VOTE_HIDDEN') }}</p>
+	<button type="button" class="bf-collapsed-toggle" aria-expanded="false" data-show="{{ lang('BF_VOTE_SHOW') }}" data-hide="{{ lang('BF_VOTE_HIDE') }}">{{ lang('BF_VOTE_SHOW') }}</button>
+</div>
+{% endif %}
+<div class="bf-votes" role="group" aria-label="{{ lang('BF_VOTE_GROUP') }}" data-limit="{{ postrow.BF_VOTE_HIDE_ABOVE }}"{% if postrow.S_BF_VOTE_LOW %} data-low{% endif %}>
 	{% if postrow.S_BF_VOTE_CAN %}
 	<form class="bf-votes-form" method="post" action="{{ postrow.U_BF_VOTE }}">
 		<input type="hidden" name="hash" value="{{ postrow.BF_VOTE_HASH }}">
@@ -7,24 +13,30 @@
 			<span class="bf-vote-label">{{ lang('BF_VOTE_LIKE') }}</span>
 			<span class="bf-vote-count">{{ postrow.BF_VOTE_UP }}</span>
 		</button>
-		<button type="submit" name="value" value="down" class="bf-vote{% if postrow.BF_VOTE_MINE == -1 %} is-active{% endif %}" aria-pressed="{% if postrow.BF_VOTE_MINE == -1 %}true{% else %}false{% endif %}">
+		<button type="submit" name="value" value="down" class="bf-vote{% if postrow.BF_VOTE_MINE == -1 %} is-active{% endif %}{% if postrow.S_BF_VOTE_LOW %} is-over{% endif %}" aria-pressed="{% if postrow.BF_VOTE_MINE == -1 %}true{% else %}false{% endif %}">
 			<i class="icon fa-fw {% if postrow.BF_VOTE_MINE == -1 %}fa-thumbs-down{% else %}fa-thumbs-o-down{% endif %}" aria-hidden="true"></i>
 			<span class="bf-vote-label">{{ lang('BF_VOTE_DISLIKE') }}</span>
 			<span class="bf-vote-count">{{ postrow.BF_VOTE_DOWN }}</span>
 		</button>
 	</form>
 	{% else %}
-	<span class="bf-vote is-readonly">
+	{% set bf_why = postrow.S_BF_VOTE_GUEST ? lang('BF_VOTE_LOGIN') : (postrow.S_BF_VOTE_OWN ? lang('BF_VOTE_OWN') : '') %}
+	<button type="button" class="bf-vote is-readonly" aria-disabled="true"{% if bf_why %} data-tip="{{ bf_why }}"{% endif %}>
 		<i class="icon fa-fw fa-thumbs-o-up" aria-hidden="true"></i>
 		<span class="bf-vote-label">{{ lang('BF_VOTE_LIKE') }}</span>
-		<span class="bf-vote-count">{{ postrow.BF_VOTE_UP }}</span>
-	</span>
-	<span class="bf-vote is-readonly">
+		<span class="bf-vote-count">{{ postrow.BF_VOTE_UP }}</span>{% if bf_why %}
+		<span class="bf-vote-label">{{ bf_why }}</span>{% endif %}
+	</button>
+	<button type="button" class="bf-vote is-readonly{% if postrow.S_BF_VOTE_LOW %} is-over{% endif %}" aria-disabled="true"{% if bf_why %} data-tip="{{ bf_why }}"{% endif %}>
 		<i class="icon fa-fw fa-thumbs-o-down" aria-hidden="true"></i>
 		<span class="bf-vote-label">{{ lang('BF_VOTE_DISLIKE') }}</span>
-		<span class="bf-vote-count">{{ postrow.BF_VOTE_DOWN }}</span>
-	</span>
-	<span class="bf-votes-note">{% if postrow.S_BF_VOTE_GUEST %}{{ lang('BF_VOTE_LOGIN') }}{% elseif postrow.S_BF_VOTE_OWN %}{{ lang('BF_VOTE_OWN') }}{% endif %}</span>
+		<span class="bf-vote-count">{{ postrow.BF_VOTE_DOWN }}</span>{% if bf_why %}
+		<span class="bf-vote-label">{{ bf_why }}</span>{% endif %}
+	</button>
 	{% endif %}
+	<a href="#top" class="bf-vote bf-top" title="{{ lang('BACK_TO_TOP') }}">
+		<i class="icon fa-fw fa-chevron-up" aria-hidden="true"></i>
+		<span class="bf-vote-label">{{ lang('BACK_TO_TOP') }}</span>
+	</a>
 	<span class="bf-votes-status" role="status" aria-live="polite"></span>
 </div>

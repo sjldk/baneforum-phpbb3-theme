@@ -76,6 +76,8 @@ class listener implements EventSubscriberInterface
 		$post_row['BF_VOTE_DOWN'] = $counts['down'];
 		$post_row['BF_VOTE_MINE'] = $counts['mine'];
 		$post_row['S_BF_VOTE_CAN'] = $can;
+		$post_row['S_BF_VOTE_LOW'] = $counts['down'] > votes::HIDE_ABOVE;
+		$post_row['BF_VOTE_HIDE_ABOVE'] = votes::HIDE_ABOVE;
 		$post_row['S_BF_VOTE_GUEST'] = $member <= 1;
 		$post_row['S_BF_VOTE_OWN'] = $member > 1 && $member === (int) $event['poster_id'];
 

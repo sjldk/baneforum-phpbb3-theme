@@ -1,11 +1,19 @@
-/* Like and dislike buttons. Colours come from the style's variables, with plain fallbacks for other styles. */
+/* Like and dislike buttons: a small floating pill at the bottom left of the post.
+   Colours come from the style's variables, with plain fallbacks for other styles. */
 
 .bf-votes {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 0.5rem;
-	margin-block: 0.75rem 0.25rem;
+	justify-content: flex-start;
+	gap: 0.25rem;
+	width: fit-content;
+	margin: 1rem auto 0.25rem 0;
+	padding: 0.25rem;
+	border: 1px solid var(--color-line, #ccd5e0);
+	border-radius: 2rem;
+	background: var(--color-surface, #fff);
+	box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 0.15);
 }
 
 .bf-votes-form {
@@ -13,41 +21,46 @@
 }
 
 .bf-vote {
+	position: relative;
 	display: inline-flex;
 	align-items: center;
-	gap: 0.4rem;
+	gap: 0.3rem;
 	min-height: 2.75rem;
 	min-width: 2.75rem;
-	padding: 0.25rem 0.875rem;
-	border: 1px solid var(--color-control, #6b7f99);
-	border-radius: 0.5rem;
-	background: var(--color-surface, #fff);
+	padding: 0 0.75rem;
+	border: 2px solid transparent;
+	border-radius: 2rem;
+	background: transparent;
 	color: var(--color-text, #1d2b3c);
 	font: inherit;
-	line-height: 1.2;
+	line-height: 1;
 	cursor: pointer;
 }
 
-button.bf-vote:hover {
+.bf-vote:hover:not(.is-readonly) {
 	background: var(--color-tint, #eef2f7);
 }
 
-button.bf-vote:focus-visible {
+/* prosilver draws a dotted line on every focused button. A click should not leave it; keyboard focus keeps its line. */
+.bf-vote:focus:not(:focus-visible),
+.bf-collapsed-toggle:focus:not(:focus-visible) {
+	outline: none;
+}
+
+.bf-vote:focus-visible {
 	outline: 3px solid var(--color-focus, #215188);
 	outline-offset: 2px;
 }
 
-/* A chosen vote has a thick border and a filled icon, so colour is not the only sign. */
+/* A chosen vote has a ring, a tint and a filled icon, so colour is not the only sign. */
 .bf-vote.is-active {
-	border-width: 3px;
-	padding: calc(0.25rem - 2px) calc(0.875rem - 2px);
+	border-color: var(--color-control, #6b7f99);
 	background: var(--color-tint, #eef2f7);
-	font-weight: 700;
 }
 
 .bf-vote.is-readonly {
 	cursor: default;
-	border-color: var(--color-line, #ccd5e0);
+	opacity: 0.75;
 }
 
 .bf-vote-count {
@@ -55,13 +68,50 @@ button.bf-vote:focus-visible {
 	font-weight: 700;
 }
 
+/* The words stay for screen readers. */
+.bf-vote-label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/* Tooltip for a button that cannot be used. It shows on hover and on keyboard focus. */
+.bf-vote[data-tip]::after {
+	content: attr(data-tip);
+	position: absolute;
+	left: 0;
+	bottom: calc(100% + 0.5rem);
+	width: max-content;
+	max-width: min(18rem, 80vw);
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.5rem;
+	background: var(--color-text, #1d2b3c);
+	color: var(--color-paper, #fff);
+	font-size: 0.875rem;
+	line-height: 1.3;
+	text-align: left;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	z-index: 10;
+}
+
+.bf-vote[data-tip]:hover::after,
+.bf-vote[data-tip]:focus-visible::after {
+	opacity: 1;
+	visibility: visible;
+}
+
 .bf-votes.is-busy .bf-vote {
 	opacity: 0.6;
 	pointer-events: none;
 }
 
-.bf-votes-note,
 .bf-votes-status {
+	padding-inline: 0.5rem;
 	color: var(--color-muted, #3a4e66);
 }
 
@@ -70,7 +120,124 @@ button.bf-vote:focus-visible {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-	.bf-vote {
-		transition: background-color 0.15s;
+	.bf-vote,
+	.bf-vote[data-tip]::after {
+		transition: background-color 0.15s, opacity 0.15s;
 	}
+}
+
+/* Too many dislikes: the dislike button turns red, and the post folds up behind a note.
+   The fold only starts once the script has run, so the post is never stuck shut without it. */
+.bf-vote.is-over {
+	border-color: var(--color-danger, #a01010);
+	color: var(--color-danger, #a01010);
+}
+
+.bf-vote.is-over.is-readonly,
+.bf-vote.is-over:hover {
+	background: color-mix(in srgb, var(--color-danger, #a01010) 12%, transparent);
+}
+
+.bf-collapsed-note {
+	display: none;
+}
+
+.post:has(.bf-votes[data-low].is-ready):not(.bf-shown) :is(.content, .attachbox, .signature, .notice, .rules) {
+	display: none;
+}
+
+.post:has(.bf-votes[data-low].is-ready) .bf-collapsed-note {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.75rem 1rem;
+	margin-block-end: 1rem;
+	border: 1px solid var(--color-danger, #a01010);
+	border-radius: 0.5rem;
+	color: var(--color-danger, #a01010);
+}
+
+.bf-collapsed-note p {
+	margin: 0;
+	font-weight: 700;
+}
+
+.bf-collapsed-toggle {
+	min-height: 2.75rem;
+	padding: 0 1rem;
+	border: 2px solid var(--color-danger, #a01010);
+	border-radius: 0.5rem;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
+}
+
+.bf-collapsed-toggle:focus-visible {
+	outline: 3px solid var(--color-focus, #215188);
+	outline-offset: 2px;
+}
+
+
+/* Side by side (profile on the right): the text column is as tall as the post, so the pill can sit at the bottom.
+   Stacked on a phone it stays under the text. */
+@media (min-width: 43.8125em) {
+	.post:has(.bf-votes) > .inner {
+		display: flex;
+		flex-direction: row-reverse;
+		justify-content: space-between;
+	}
+
+	.post:has(.bf-votes) .postbody {
+		display: flex;
+		flex-direction: column;
+		float: none;
+		min-width: 0;
+	}
+
+	.post:has(.bf-votes) .postbody > [id^="post_content"] {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+	}
+
+	.post:has(.bf-votes) .postbody > [id^="post_content"] > * {
+		flex: none;
+	}
+
+	.post:has(.bf-votes) .content {
+		padding-bottom: 1rem;
+	}
+
+	.post:has(.bf-votes) .bf-votes {
+		margin-top: auto;
+		margin-bottom: -1.25rem;
+	}
+}
+
+/* The back-to-top link lives in the pill, after a thin divider. prosilver's own link is hidden. */
+a.bf-vote,
+a.bf-vote:hover,
+a.bf-vote:focus {
+	color: var(--color-text, #1d2b3c);
+	font-weight: inherit;
+	text-decoration: none;
+}
+
+.bf-top {
+	margin-inline-start: 0.25rem;
+	justify-content: center;
+}
+
+.bf-top::before {
+	content: "";
+	position: absolute;
+	inset-block: 0.5rem;
+	inset-inline-start: -0.25rem;
+	border-inline-start: 1px solid var(--color-line, #ccd5e0);
+}
+
+.post:has(.bf-votes) .back2top {
+	display: none;
 }

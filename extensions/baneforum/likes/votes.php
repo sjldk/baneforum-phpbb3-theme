@@ -17,6 +17,9 @@ class votes
 	public const UP = 1;
 	public const DOWN = -1;
 
+	/** A post with more dislikes than this is collapsed. */
+	public const HIDE_ABOVE = 5;
+
 	public function __construct(
 		protected driver_interface $db,
 		protected string $table
