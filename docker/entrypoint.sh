@@ -74,6 +74,16 @@ if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='banefor
 	php bin/phpbbcli.php extension:enable baneforum/imagecompress
 fi
 
+# Our own like and dislike buttons.
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/likes' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable baneforum/likes
+fi
+
+# Our own word censor. It leaves URLs alone (phpBB's own censor changes addresses and breaks links).
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/censor' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable baneforum/censor
+fi
+
 # Attachment settings for the test board: no size limit and no pixel limit of phpBB's own (its default
 # is 256 KB, which stops every photo, and it refuses big pictures before an extension can act),
 # up to 40 files. The extension above makes the pictures smaller.

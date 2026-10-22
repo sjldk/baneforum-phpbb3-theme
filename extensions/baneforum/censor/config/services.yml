@@ -1,0 +1,12 @@
+services:
+    baneforum.censor.censor:
+        class: baneforum\censor\censor
+        arguments:
+            - '@text_formatter.data_access'
+
+    baneforum.censor.listener:
+        class: baneforum\censor\event\listener
+        arguments:
+            - '@baneforum.censor.censor'
+        tags:
+            - { name: event.listener }

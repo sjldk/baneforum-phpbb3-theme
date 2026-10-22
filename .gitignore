@@ -2,3 +2,6 @@
 # Production copies for testing: database backups and uploaded files
 /local-data/*
 !/local-data/README.md
+
+# Packed extensions (scripts/package-extensions.sh)
+/dist/

@@ -45,6 +45,7 @@ The install steps for production are in `docs/production-install.md`.
 | Prosilver caps menus at 300px and scrolls inside them, and fixes icons at 14px | `baneforum_common.css` removes the cap and sets icons to `1.25em`. Prosilver itself still has about 690 `px` values. |
 | Extension routes are in `config/routing.yml`, not `routes.yml` | A wrong name gives `RouteNotFoundException` and a fatal error on every page that makes the URL. Purge the cache after the fix. |
 | `extensions/baneforum` is owned by `www-data` (Docker made it) | Create a new extension folder with `docker exec -u root docker-web-1 mkdir`, then `chown 1000:1000` it. Then you can write in it. |
+| phpBB's word censor changes words inside URLs (`maerklin.de` becomes `Märklin.de`) and breaks links | It censors the whole HTML including `href` (`renderer.php`, `censorHtml($html, true)`). `extensions/baneforum/censor` takes the core censor out and censors text only, keeping URLs. The ACP word list is still used. Test: `docker compose exec web php ext/baneforum/censor/tests/censor_test.php` |
 | Facebook and Google login buttons | Stay. 14 production users are linked. Styles are in `login_body_oauth.html`. |
 
 ## Template overrides in this style
