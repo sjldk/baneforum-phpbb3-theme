@@ -26,14 +26,10 @@ class m1_initial extends \phpbb\db\migration\migration
 				$this->table_prefix . 'baneforum_votes' => [
 					'COLUMNS' => [
 						'post_id'    => ['UINT', 0],
-						'user_id'    => ['UINT', 0],
+						'voter'      => ['VCHAR:64', ''],
 						'vote_value' => ['TINT:4', 0],
-						'vote_time'  => ['TIMESTAMP', 0],
 					],
-					'PRIMARY_KEY' => ['post_id', 'user_id'],
-					'KEYS' => [
-						'user_id' => ['INDEX', 'user_id'],
-					],
+					'PRIMARY_KEY' => ['post_id', 'voter'],
 				],
 			],
 		];

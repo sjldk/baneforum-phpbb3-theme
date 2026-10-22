@@ -28,9 +28,11 @@
 		<span class="bf-vote-label">{{ bf_why }}</span>{% endif %}
 	</button>
 	{% endif %}
-	<a href="#top" class="bf-vote bf-top" title="{{ lang('BACK_TO_TOP') }}">
-		<i class="icon fa-fw fa-chevron-up" aria-hidden="true"></i>
-		<span class="bf-vote-label">{{ lang('BACK_TO_TOP') }}</span>
-	</a>
+	{% if postrow.S_BF_VOTE_LOW %}
+	<div class="bf-collapsed-note">
+		<p>{{ lang('BF_VOTE_HIDDEN') }}</p>
+		<button type="button" class="bf-collapsed-toggle" aria-expanded="false" data-show="{{ lang('BF_VOTE_SHOW') }}" data-hide="{{ lang('BF_VOTE_HIDE') }}">{{ lang('BF_VOTE_SHOW') }}</button>
+	</div>
+	{% endif %}
 	<span class="bf-votes-status" role="status" aria-live="polite"></span>
 </div>

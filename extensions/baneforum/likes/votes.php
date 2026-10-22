@@ -10,7 +10,8 @@ namespace baneforum\likes;
 use phpbb\db\driver\driver_interface;
 
 /**
- * Stores one vote per member per post: +1 for a like, -1 for a dislike.
+ * Stores one vote per member per post: +1 for a like, -1 for a dislike. The table does not say who voted
+ * and when. See voter_key.
  */
 class votes
 {
@@ -22,7 +23,8 @@ class votes
 
 	public function __construct(
 		protected driver_interface $db,
-		protected string $table
+		protected string $table,
+		protected voter_key $voter_key
 	) {
 	}
 
@@ -76,8 +78,16 @@ class votes
 
 		if ($user_id > 1)
 		{
+			// The table holds a hash per member and post, not the member. Work out the member's hashes and look for those.
+			$voters = [];
+
+			foreach (array_keys($result) as $id)
+			{
+				$voters[$this->voter_key->voter($user_id, $id)] = $id;
+			}
+
 			$sql = "SELECT post_id, vote_value FROM {$this->table}
-				WHERE user_id = " . (int) $user_id . " AND $in";
+				WHERE " . $this->db->sql_in_set('voter', array_keys($voters)) . " AND $in";
 			$rows = $this->db->sql_query($sql);
 
 			while ($row = $this->db->sql_fetchrow($rows))
@@ -103,7 +113,8 @@ class votes
 
 		if ($next !== $current)
 		{
-			$where = 'post_id = ' . $post_id . ' AND user_id = ' . $user_id;
+			$voter = $this->voter_key->voter($user_id, $post_id);
+			$where = 'post_id = ' . $post_id . " AND voter = '" . $this->db->sql_escape($voter) . "'";
 
 			if ($next === 0)
 			{
@@ -113,17 +124,13 @@ class votes
 			{
 				$this->db->sql_query('INSERT INTO ' . $this->table . ' ' . $this->db->sql_build_array('INSERT', [
 					'post_id'    => $post_id,
-					'user_id'    => $user_id,
+					'voter'      => $voter,
 					'vote_value' => $next,
-					'vote_time'  => time(),
 				]));
 			}
 			else
 			{
-				$this->db->sql_query('UPDATE ' . $this->table . ' SET ' . $this->db->sql_build_array('UPDATE', [
-					'vote_value' => $next,
-					'vote_time'  => time(),
-				]) . " WHERE $where");
+				$this->db->sql_query('UPDATE ' . $this->table . ' SET vote_value = ' . $next . " WHERE $where");
 			}
 		}
 

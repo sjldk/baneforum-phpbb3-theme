@@ -37,6 +37,15 @@
 
 		event.preventDefault();
 
+		// A quick bounce of the icon, at once, before the answer comes back.
+		var icon = button.querySelector('.icon');
+		icon.classList.remove('bf-bounce');
+		void icon.offsetWidth;
+		icon.classList.add('bf-bounce');
+		icon.addEventListener('animationend', function () {
+			icon.classList.remove('bf-bounce');
+		}, { once: true });
+
 		var form = button.form;
 		var group = form.closest('.bf-votes');
 		var status = group.querySelector('.bf-votes-status');
