@@ -57,7 +57,7 @@ Everything is committed and pushed. The tree is clean after the last "cp".
 | `.claude/skills/phpbb/SKILL.md` | New. Boards, traps, tests. Add new findings there. |
 | Picture click | Thumbnails and linked pictures now open in a new tab (`attachment.html`, `render/attachments.js`). Built, not yet checked in a browser. |
 
-**Push:** the last 7 commits were not pushed (no SSH agent on this machine: `ssh-add ~/.ssh/id_github_rsa`, then `git push`). One commit message has a typo ("bræt" for "board").
+**Push:** everything is pushed. One commit message (Docker, port 8081) has a typo ("bræt" for "board"). It stays as it is. If the push fails with "publickey", run `ssh-add ~/.ssh/id_github_rsa` first (no SSH agent by default).
 
 **Next:** fix the test board, run `posting`, `inputs`, `files`, `edit` and `axe` in Firefox (also against 8081), then the rest of phase 9.
 
