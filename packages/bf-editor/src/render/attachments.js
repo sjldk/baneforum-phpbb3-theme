@@ -1,5 +1,6 @@
 // Saved posts, two things about attached files:
-//   - a picture that is not in a link opens whole in a new tab when it is clicked (a `[img]` picture)
+//   - a picture opens in a new tab when it is clicked: a picture that is not in a link gets one (a `[img]` picture),
+//     a picture in a link without a target (a thumbnail, a linked `[img]`) gets `target=_blank`
 //   - a file that was placed in the text (an old post, `[attachment=1]manual.pdf[/attachment]`) moves
 //     to the list of files under the post, so every file is in the same place
 import { labelsFor } from '../labels.js';
@@ -13,7 +14,15 @@ export function useAttachmentList(root) {
 	let changed = 0;
 
 	for (const image of root.querySelectorAll(`img.postimage`)) {
-		if (image.closest(`a`)) {
+		const existing = image.closest(`a`);
+
+		if (existing) {
+			if (!existing.hasAttribute(`target`)) {
+				existing.target = `_blank`;
+				existing.rel = `noopener noreferrer`;
+				changed += 1;
+			}
+
 			continue;
 		}
 
