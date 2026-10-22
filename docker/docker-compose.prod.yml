@@ -1,0 +1,26 @@
+# A second board that runs the production phpBB tree (local-data/phpbb) on a copy of the production
+# database (phpbb_try, made by docker/prod-try.sh). Use together with the main file:
+#   docker compose -f docker/docker-compose.yml -f docker/docker-compose.prod.yml up -d prod
+# Board: http://localhost:8081   Nothing here is sent to production.
+services:
+  prod:
+    build:
+      context: .
+      args:
+        PHP_VERSION: ${PHP_VERSION:-8.5}
+    depends_on:
+      - db
+    user: root
+    entrypoint: ["docker-php-entrypoint"]
+    command: ["apache2-foreground"]
+    environment:
+      APACHE_RUN_USER: "#${UID:-1000}"
+      APACHE_RUN_GROUP: "#${GID:-1000}"
+    ports:
+      - "8081:80"
+    volumes:
+      - ../local-data/phpbb:/var/www/html
+      - ./prod-config.php:/var/www/html/config.php:ro
+      - ../local-data/production/files:/var/www/html/files
+      - ../baneforum:/var/www/html/styles/baneforum
+      - ../extensions/baneforum:/var/www/html/ext/baneforum
