@@ -1,28 +1,28 @@
 /* Responsive Design
 ---------------------------------------- */
 
-@media (max-width: 320px) {
+@media (max-width: 20em) {
 	select,
 	.inputbox {
-		max-width: 240px;
+		max-width: 15rem;
 	}
 }
 
 /* Notifications list
 ----------------------------------------*/
-@media (max-width: 350px) {
+@media (max-width: 21.875em) {
 	.dropdown-extended .dropdown-contents {
 		width: auto;
 	}
 }
 
-@media (max-width: 430px) {
+@media (max-width: 26.875em) {
 	.action-bar .search-box .inputbox {
-		width: 120px;
+		width: 7.5rem;
 	}
 
 	.section-viewtopic .search-box .inputbox {
-		width: 57px;
+		width: 3.5625rem;
 	}
 
 	.action-bar .search-box .inputbox ::-moz-placeholder {
@@ -38,14 +38,14 @@
 	}
 }
 
-@media (max-width: 500px) {
+@media (max-width: 31.25em) {
 	dd label {
 		white-space: normal;
 	}
 
 	select,
 	.inputbox {
-		max-width: 260px;
+		max-width: 16.25rem;
 	}
 
 	.captcha-panel dd.captcha {
@@ -64,17 +64,17 @@
 	}
 
 	dl.details dd {
-		margin-left: 20px;
+		margin-left: 1.25rem;
 	}
 
 	p.responsive-center {
 		float: none;
 		text-align: center;
-		margin-bottom: 5px;
+		margin-bottom: 0.3125rem;
 	}
 
 	.action-bar > div {
-		margin-bottom: 5px;
+		margin-bottom: 0.3125rem;
 	}
 
 	.action-bar > .pagination {
@@ -85,7 +85,7 @@
 	}
 
 	.action-bar > .pagination li.page-jump {
-		margin: 0 2px;
+		margin: 0 0.125rem;
 	}
 
 	p.jumpbox-return {
@@ -94,11 +94,11 @@
 
 	.display-options > label:nth-child(1) {
 		display: block;
-		margin-bottom: 5px;
+		margin-bottom: 0.3125rem;
 	}
 
 	.attach-controls {
-		margin-top: 5px;
+		margin-top: 0.3125rem;
 		width: 100%;
 	}
 
@@ -107,7 +107,7 @@
 	}
 }
 
-@media (max-width: 550px) {
+@media (max-width: 34.375em) {
 	ul.topiclist.forums dt {
 		margin-right: 0;
 	}
@@ -121,7 +121,7 @@
 	}
 }
 
-@media (max-width: 700px) {
+@media (max-width: 43.75em) {
 	.responsive-hide {
 		display: none !important;
 	}
@@ -149,8 +149,8 @@
 		border: none;
 		border-radius: 0;
 		margin: 0;
-		min-width: 290px;
-		padding: 0 5px;
+		min-width: 18.125rem;
+		padding: 0 0.3125rem;
 	}
 
 	/* Common block wrappers
@@ -162,15 +162,15 @@
 	.post,
 	.panel {
 		border-radius: 0;
-		margin-left: -5px;
-		margin-right: -5px;
+		margin-left: -0.3125rem;
+		margin-right: -0.3125rem;
 	}
 
 	.cp-main .forabg,
 	.cp-main .forumdb,
 	.cp-main .post,
 	.cp-main .panel {
-		border-radius: 7px;
+		border-radius: 0.4375rem;
 	}
 
 	/* Logo block
@@ -185,14 +185,14 @@
 		/* change display value to inline-block to show logo */
 		display: none;
 		float: none;
-		padding: 10px;
+		padding: 0.625rem;
 	}
 
 	.site-description h1,
 	.site-description p {
 		text-align: inherit;
 		float: none;
-		margin: 5px;
+		margin: 0.3125rem;
 		line-height: 1.2em;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -206,7 +206,7 @@
 	/* Navigation
 	----------------------------------------*/
 	.headerbar + .navbar {
-		margin-top: -5px;
+		margin-top: -0.3125rem;
 	}
 
 	/* Search
@@ -221,7 +221,7 @@
 		text-align: center;
 		text-transform: none;
 		line-height: 1em;
-		padding-bottom: 4px;
+		padding-bottom: 0.25rem;
 	}
 
 	ul.topiclist li.header dt,
@@ -246,11 +246,11 @@
 	}
 
 	ul.topiclist dt .list-inner.with-mark {
-		padding-right: 34px;
+		padding-right: 2.125rem;
 	}
 
 	ul.topiclist dt .list-inner {
-		min-height: 28px;
+		min-height: 1.75rem;
 	}
 
 	ul.topiclist li.header dt .list-inner {
@@ -267,13 +267,13 @@
 	/* Forums and topics lists
 	----------------------------------------*/
 	ul.topiclist.forums dt {
-		margin-right: -250px;
+		margin-right: -15.625rem;
 	}
 
 	ul.topiclist dd.mark {
 		display: block;
 		position: absolute;
-		right: 5px;
+		right: 0.3125rem;
 		top: 0;
 		margin: 0;
 		width: auto;
@@ -299,18 +299,18 @@
 		vertical-align: bottom;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		max-width: 100px;
+		max-width: 6.25rem;
 	}
 
 	/* Pagination
 	----------------------------------------*/
 	.pagination > ul {
-		margin: 5px 0 0;
+		margin: 0.3125rem 0 0;
 	}
 
 	.row .pagination {
-		margin-top: 2px;
-		margin-bottom: 2px;
+		margin-top: 0.125rem;
+		margin-bottom: 0.125rem;
 	}
 
 	.row .pagination .ellipsis + li {
@@ -343,13 +343,13 @@
 	}
 
 	table.responsive tr {
-		margin: 2px 0;
+		margin: 0.125rem 0;
 	}
 
 	table.responsive td {
 		width: auto !important;
 		text-align: left !important;
-		padding: 4px;
+		padding: 0.25rem;
 	}
 
 	table.responsive td.empty {
@@ -362,12 +362,12 @@
 
 	table.responsive td > dfn:after {
 		content: ":";
-		padding-right: 5px;
+		padding-right: 0.3125rem;
 	}
 
 	table.responsive span.rank-img {
 		float: none;
-		padding-right: 5px;
+		padding-right: 0.3125rem;
 	}
 
 	table.responsive.memberlist td:first-child input[type="checkbox"] {
@@ -386,7 +386,7 @@
 	fieldset dd,
 	fieldset.fields1 dd,
 	fieldset.fields2 dd {
-		margin-left: 20px;
+		margin-left: 1.25rem;
 	}
 
 	textarea,
@@ -399,7 +399,7 @@
 
 	dl.pmlist dt {
 		width: auto !important;
-		margin-bottom: 5px;
+		margin-bottom: 0.3125rem;
 	}
 
 	dl.pmlist dd {
@@ -408,7 +408,7 @@
 	}
 
 	dl.pmlist dd:first-of-type {
-		padding-left: 20px;
+		padding-left: 1.25rem;
 	}
 
 	.smiley-box,
@@ -418,7 +418,7 @@
 	}
 
 	.smiley-box {
-		margin-top: 5px;
+		margin-top: 0.3125rem;
 	}
 
 	.bbcode-status {
@@ -433,7 +433,7 @@
 
 	.colour-palette td {
 		display: inline-block;
-		margin-right: 2px;
+		margin-right: 0.125rem;
 	}
 
 	.horizontal-palette td:nth-child(2n),
@@ -443,19 +443,19 @@
 
 	fieldset.quick-login label {
 		display: block;
-		margin-bottom: 5px;
+		margin-bottom: 0.3125rem;
 		white-space: normal;
 	}
 
 	fieldset.quick-login label > span {
 		display: inline-block;
-		min-width: 100px;
+		min-width: 6.25rem;
 	}
 
 	fieldset.quick-login input.inputbox {
 		width: 85%;
-		max-width: 300px;
-		margin-left: 20px;
+		max-width: 18.75rem;
+		margin-left: 1.25rem;
 	}
 
 	fieldset.quick-login label[for="autologin"] {
@@ -480,7 +480,7 @@
 	}
 
 	fieldset.polls dd.resultbar {
-		padding-left: 20px;
+		padding-left: 1.25rem;
 	}
 
 	fieldset.polls dd.poll_option_percent {
@@ -489,7 +489,7 @@
 
 	fieldset.polls dd.resultbar,
 	fieldset.polls dd.poll_option_percent {
-		margin-top: 5px;
+		margin-top: 0.3125rem;
 	}
 
 	/* Post
@@ -511,10 +511,10 @@
 	.post .postprofile {
 		width: auto;
 		border-width: 0 0 1px 0;
-		padding-bottom: 5px;
+		padding-bottom: 0.3125rem;
 		margin: 0;
-		margin-bottom: 5px;
-		min-height: 40px;
+		margin-bottom: 0.3125rem;
+		min-height: 2.5rem;
 		overflow: hidden;
 	}
 
@@ -539,13 +539,13 @@
 	}
 
 	.postprofile .avatar {
-		margin-right: 5px;
+		margin-right: 0.3125rem;
 	}
 
 	.postprofile .avatar img {
 		width: auto !important;
 		height: auto !important;
-		max-height: 32px;
+		max-height: 2rem;
 	}
 
 	.has-profile .postbody h3 {
@@ -554,12 +554,12 @@
 	}
 
 	.has-profile .post-buttons {
-		right: 30px;
-		top: 15px;
+		right: 1.875rem;
+		top: 0.9375rem;
 	}
 
 	.online {
-		background-size: 40px;
+		background-size: 2.5rem;
 	}
 
 	/* Misc stuff
@@ -580,17 +580,17 @@
 	fieldset.display-options label {
 		display: block;
 		clear: both;
-		margin-bottom: 5px;
+		margin-bottom: 0.3125rem;
 	}
 
 	dl.mini dd.pm-legend {
 		float: left;
-		min-width: 200px;
+		min-width: 12.5rem;
 	}
 
 	.topicreview {
-		margin: 0 -5px;
-		padding: 0 5px;
+		margin: 0 -0.3125rem;
+		padding: 0 0.3125rem;
 	}
 
 	fieldset.display-actions {
@@ -599,7 +599,7 @@
 
 	.phpbb_alert {
 		width: auto;
-		margin: 0 5px;
+		margin: 0 0.3125rem;
 	}
 
 	.attach-comment dfn {
@@ -607,41 +607,41 @@
 	}
 }
 
-@media (min-width: 700px) {
+@media (min-width: 43.75em) {
 	.postbody {
 		width: 70%;
 	}
 }
 
-@media (min-width: 850px) {
+@media (min-width: 53.125em) {
 	.postbody {
 		width: 76%;
 	}
 }
 
-@media (max-width: 850px) {
+@media (max-width: 53.125em) {
 	.postprofile {
 		width: 28%;
 	}
 }
 
-@media (min-width: 701px) and (max-width: 950px) {
+@media (min-width: 43.8125em) and (max-width: 59.375em) {
 	.row .pagination {
-		margin-top: 2px;
-		margin-bottom: 2px;
+		margin-top: 0.125rem;
+		margin-bottom: 0.125rem;
 	}
 
 	ul.topiclist dt {
-		margin-right: -410px;
+		margin-right: -25.625rem;
 	}
 
 	ul.topiclist dt .list-inner {
-		margin-right: 410px;
+		margin-right: 25.625rem;
 	}
 
 	dd.posts,
 	dd.topics,
 	dd.views {
-		width: 80px;
+		width: 5rem;
 	}
 }

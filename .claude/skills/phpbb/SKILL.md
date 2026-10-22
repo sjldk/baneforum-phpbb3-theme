@@ -41,6 +41,8 @@ The install steps for production are in `docs/production-install.md`.
 | Production `server_name`, cookie domain and secure cookie | Set by `prod-try.sh` for localhost in the clone. Never import those values back. |
 | On the copy board the founder is user 2, `Baneforum.dk` | There is no user named `admin`. |
 | StatCounter loads from `overall_footer.html` | A tracker. Not changed. Ask the owner. |
+| Fixed `px` sizes in the theme CSS | Use `rem`, and `em` in media queries. Keep 1px borders, the 16px minimum of form fields (iOS zoom) and `px` inside SVG (`.attachment-icon .type`), because SVG text scales with its viewBox. |
+| Prosilver caps menus at 300px and scrolls inside them, and fixes icons at 14px | `baneforum_common.css` removes the cap and sets icons to `1.25em`. Prosilver itself still has about 690 `px` values. |
 | Facebook and Google login buttons | Stay. 14 production users are linked. Styles are in `login_body_oauth.html`. |
 
 ## Template overrides in this style
