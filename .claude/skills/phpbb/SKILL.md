@@ -43,6 +43,8 @@ The install steps for production are in `docs/production-install.md`.
 | StatCounter loads from `overall_footer.html` | A tracker. Not changed. Ask the owner. |
 | Fixed `px` sizes in the theme CSS | Use `rem`, and `em` in media queries. Keep 1px borders, the 16px minimum of form fields (iOS zoom) and `px` inside SVG (`.attachment-icon .type`), because SVG text scales with its viewBox. |
 | Prosilver caps menus at 300px and scrolls inside them, and fixes icons at 14px | `baneforum_common.css` removes the cap and sets icons to `1.25em`. Prosilver itself still has about 690 `px` values. |
+| Extension routes are in `config/routing.yml`, not `routes.yml` | A wrong name gives `RouteNotFoundException` and a fatal error on every page that makes the URL. Purge the cache after the fix. |
+| `extensions/baneforum` is owned by `www-data` (Docker made it) | Create a new extension folder with `docker exec -u root docker-web-1 mkdir`, then `chown 1000:1000` it. Then you can write in it. |
 | Facebook and Google login buttons | Stay. 14 production users are linked. Styles are in `login_body_oauth.html`. |
 
 ## Template overrides in this style
