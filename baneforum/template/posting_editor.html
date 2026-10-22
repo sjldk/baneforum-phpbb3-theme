@@ -15,7 +15,7 @@
 		<dt><label for="subject">{{ lang('SUBJECT') }}{{ lang('COLON') }}</label></dt>
 		<dd>
 			{% EVENT posting_editor_subject_prepend %}
-			<input type="text" name="subject" id="subject" size="45" maxlength="{% if S_NEW_MESSAGE %}120{% else %}124{% endif %}" value="{{ SUBJECT }}{{ DRAFT_SUBJECT }}" class="inputbox autowidth" />
+			<input type="text" name="subject" id="subject" size="45" maxlength="{% if S_NEW_MESSAGE %}120{% else %}124{% endif %}" value="{{ SUBJECT }}{{ DRAFT_SUBJECT }}" class="inputbox" />
 			{% EVENT posting_editor_subject_append %}
 		</dd>
 	</dl>
@@ -67,24 +67,19 @@
 
 	{# The tabs (Options, Attachments, Add poll) are gone. The options show, the pictures are in the editor and the poll is a closed section. #}
 
+	{# The BBCode button row is gone (the editor has its own toolbar), but phpBB's editor.js is still needed: the
+	   "Quote" buttons of the topic review call addquote() in it. bf-phpbb.js sends the text to the editor. #}
+	<script>
+		var form_name = 'postform';
+		var text_name = {% if definition.SIG_EDIT == 1 %}'signature'{% else %}'message'{% endif %};
+	</script>
+	<!-- INCLUDEJS {T_ASSETS_PATH}/javascript/editor.js -->
+
 	{% if not S_SHOW_DRAFTS and not (definition.SIG_EDIT == 1) %}
 	<div class="panel bg3" id="options-panel">
 		<div class="inner">
 
 		<fieldset class="fields1">
-			{% EVENT posting_editor_options_prepend %}
-			{% if S_BBCODE_ALLOWED %}
-				<div><label for="disable_bbcode"><input type="checkbox" name="disable_bbcode" id="disable_bbcode"{{ S_BBCODE_CHECKED }} /> {{ lang('DISABLE_BBCODE') }}</label></div>
-			{% endif %}
-			{% if S_SMILIES_ALLOWED %}
-				<div><label for="disable_smilies"><input type="checkbox" name="disable_smilies" id="disable_smilies"{{ S_SMILIES_CHECKED }} /> {{ lang('DISABLE_SMILIES') }}</label></div>
-			{% endif %}
-			{% if S_LINKS_ALLOWED %}
-				<div><label for="disable_magic_url"><input type="checkbox" name="disable_magic_url" id="disable_magic_url"{{ S_MAGIC_URL_CHECKED }} /> {{ lang('DISABLE_MAGIC_URL') }}</label></div>
-			{% endif %}
-			{% if S_SIG_ALLOWED %}
-				<div><label for="attach_sig"><input type="checkbox" name="attach_sig" id="attach_sig"{{ S_SIGNATURE_CHECKED }} /> {{ lang('ATTACH_SIG') }}</label></div>
-			{% endif %}
 			{% if S_NOTIFY_ALLOWED %}
 				<div><label for="notify"><input type="checkbox" name="notify" id="notify"{{ S_NOTIFY_CHECKED }} /> {{ lang('NOTIFY_REPLY') }}</label></div>
 			{% endif %}

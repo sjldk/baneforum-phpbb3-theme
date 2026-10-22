@@ -6,7 +6,8 @@
 //   editor.codec     a Codec, turns text into a document and back (default: Markdown with BBCode)
 //   editor.commands  extra toolbar actions
 // It tells the host about changes with a "bf-change" event. Read the text from `editor.value`.
-import { EditorState } from 'prosemirror-state';
+import { Slice } from 'prosemirror-model';
+import { EditorState, TextSelection } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { createAttachmentMenu } from '../attachment-menu.js';
 import { createMarkdownBBCodeCodec } from '../codecs/markdown-bbcode.js';
@@ -263,6 +264,58 @@ export class BfEditor extends HTMLElement {
 	/** Puts the cursor in the editing surface. */
 	focus() {
 		this.#view?.focus();
+	}
+
+	/**
+	 * Puts the cursor on the last line, ready to write. If the text ends in a block that cannot be left with
+	 * the keyboard (a quote), an empty paragraph is added after it, so the writer has a line outside it.
+	 */
+	focusEnd() {
+		const view = this.#view;
+
+		if (!view) {
+			return;
+		}
+
+		let transaction = view.state.tr;
+
+		if (view.state.doc.lastChild?.type !== schema.nodes.paragraph) {
+			transaction = transaction.insert(view.state.doc.content.size, schema.nodes.paragraph.create());
+		}
+
+		view.dispatch(transaction.setSelection(TextSelection.atEnd(transaction.doc)).scrollIntoView());
+		view.focus();
+	}
+
+	/**
+	 * Puts text (in the codec's format, for example a quote) at the cursor. The cursor ends after it. If it ends in a
+	 * quote, an empty paragraph follows, so the writer has a line outside the quote.
+	 * @param {string} text
+	 */
+	insertText(text) {
+		const view = this.#view;
+
+		if (!view) {
+			return;
+		}
+
+		let transaction = view.state.tr.replaceSelection(new Slice(this.#codec.parse(text).content, 0, 0));
+		const { $head } = transaction.selection;
+
+		for (let depth = $head.depth; depth > 0; depth--) {
+			if ($head.node(depth).type === schema.nodes.blockquote) {
+				const after = $head.after(depth);
+
+				transaction = transaction.insert(after, schema.nodes.paragraph.create());
+				transaction = transaction.setSelection(TextSelection.create(transaction.doc, after + 1));
+				break;
+			}
+		}
+
+		view.dispatch(transaction.scrollIntoView());
+		view.focus();
+		// A click on a link that jumps to the editor takes the focus when it ends, after this call. Take it back.
+		setTimeout(() => view.focus(), 0);
 	}
 
 	/** The ProseMirror view, for hosts that need to reach in. */

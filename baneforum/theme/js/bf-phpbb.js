@@ -1,14 +1,13 @@
 // The phpBB adapter for <bf-editor>. The editor itself knows nothing about phpBB. This file
 // binds it to the posting form:
 //   - the textarea stays in the page. It holds the text that is sent, and it is the fallback
-//     when the editor is off (the "Disable Markdown" box is ticked) or JavaScript is missing
+//     when JavaScript is missing
 //   - pictures are sent by phpBB's own uploader (Plupload), so chunking, the hidden
 //     attachment fields, the limits and the permission checks stay exactly as phpBB makes them
 import { defineBfEditor } from './bf-editor.js';
 
 const form = document.getElementById(`postform`);
 const textarea = form?.querySelector(`textarea#message`);
-const markdownBox = document.getElementById(`disable_markdown`);
 
 /** @type {HTMLElement & Record<string, any> | null} */
 let editor = null;
@@ -198,6 +197,19 @@ if (typeof activate === `function`) {
 	window.activateSubPanel = (/** @type {string} */ id) => (bridging && id === `attach-panel` ? undefined : activate(id));
 }
 
+// phpBB's "Quote" buttons (in the topic review) and its BBCode buttons put text in the textarea with insert_text().
+// The textarea is hidden behind the editor, so the text goes into the editor instead.
+const phpbbInsertText = window.insert_text;
+window.insert_text = (/** @type {string} */ text, /** @type {boolean} */ spaces, /** @type {boolean} */ popup) => {
+	if (editor && !popup) {
+		editor.insertText(spaces ? ` ${text} ` : text);
+
+		return;
+	}
+
+	phpbbInsertText?.(text, spaces, popup);
+};
+
 // The old "Place inline" button of the attachment tab calls this function.
 window.attachInline = (/** @type {number} */ index, /** @type {string} */ name) => {
 	editor?.insertAttachment({ index, name, src: attachmentInfo(index)?.src });
@@ -283,17 +295,6 @@ function turnOn() {
 	textarea.hidden = true;
 }
 
-function turnOff() {
-	if (!editor || !textarea) {
-		return;
-	}
-
-	textarea.value = editor.value;
-	editor.remove();
-	editor = null;
-	textarea.hidden = false;
-}
-
 // phpBB changes the text of the textarea itself when a file is removed in the attachment tab
 // (it takes out the `[attachment=N]` tag and numbers the others again). The editor follows.
 phpbbUploader()?.bind(`FilesAdded`, () => window.setTimeout(syncAttachmentRows, 0));
@@ -327,12 +328,12 @@ if (form && textarea) {
 		true,
 	);
 
-	// The Markdown extension's own box: ticked means this post is plain text, so no editor.
-	if (markdownBox) {
-		markdownBox.addEventListener(`change`, () => (markdownBox.checked ? turnOff() : turnOn()));
+	// The Markdown extension's own box is not in the template. The editor is always on.
+	// Without JavaScript the plain textarea stays.
+	turnOn();
 
-		if (!markdownBox.checked) {
-			turnOn();
-		}
+	// Quoting: the text ends in the quote. The cursor goes on a line after it, outside the quote, ready to write.
+	if (new URLSearchParams(window.location.search).get(`mode`) === `quote`) {
+		editor?.focusEnd();
 	}
 }
