@@ -1056,3 +1056,9 @@ input.button3:focus {
 	max-height: none;
 	overflow: visible;
 }
+
+/* Icons follow the text next to them. prosilver fixes them at 14 px. */
+.icon,
+.button .icon {
+	font-size: 1.25em;
+}
