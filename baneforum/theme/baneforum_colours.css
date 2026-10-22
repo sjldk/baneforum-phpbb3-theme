@@ -129,10 +129,6 @@ li.row:hover,
 	border-color: var(--color-line);
 }
 
-select {
-	border-color: var(--color-control);
-}
-
 .error {
 	background-color: var(--color-danger);
 }
@@ -142,23 +138,29 @@ select {
 .inputbox,
 .inputbox:hover,
 .inputbox:focus,
+select,
+select:hover,
+select:focus,
 .search-box .inputbox,
 .search-box .inputbox:hover {
-	border: 0.15rem solid var(--color-control);
+	border: var(--border-control) solid var(--color-control);
 }
 
 .inputbox:focus,
+select:focus,
 .search-box .inputbox:focus {
 	border-color: var(--color-focus);
 }
 
 /* Prosilver fades everything for 0.5s. A short fade on the border colour only. */
-.inputbox {
+.inputbox,
+select {
 	transition: border-color 0.1s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.inputbox {
+	.inputbox,
+	select {
 		transition: none;
 	}
 }
@@ -291,17 +293,25 @@ li.notification-disapproved strong {
 
 /* Checkboxes in the palette. The box border is the width of the text fields, --color-control, the same as the text fields (3.2:1, WCAG 1.4.11 needs 3:1), a checked box is filled
    with --accent and has a tick in --color-on-accent. The box is 1.5 rem, above the 24 px target size (2.5.8).
-   The focus line comes from baneforum_common.css. Radio buttons are not changed. */
+   The focus line comes from baneforum_common.css. Radio buttons below follow the same rules, round, with a dot. */
 input[type="checkbox"] {
 	appearance: none;
 	-webkit-appearance: none;
 	display: inline-grid;
 	place-items: center;
 	flex: none;
+	box-sizing: border-box;
 	inline-size: 1.5rem;
 	block-size: 1.5rem;
+	min-inline-size: 1.5rem;
+	min-block-size: 1.5rem;
+	max-inline-size: 1.5rem;
+	max-block-size: 1.5rem;
+	aspect-ratio: 1;
+	align-self: center;
+	padding: 0;
 	margin: 0 0.4em 0 0;
-	border: 0.15rem solid var(--color-control);
+	border: var(--border-control) solid var(--color-control);
 	border-radius: 0.3125rem;
 	transition: border-color 0.1s ease;
 	background: var(--color-paper);
@@ -357,4 +367,202 @@ input[type="checkbox"]:disabled:checked {
 		appearance: auto;
 		-webkit-appearance: auto;
 	}
+}
+
+/* Radio buttons: same size, border and colours as the checkboxes. A chosen button is filled with --accent and has a dot. */
+input[type="radio"] {
+	appearance: none;
+	-webkit-appearance: none;
+	display: inline-grid;
+	place-items: center;
+	flex: none;
+	box-sizing: border-box;
+	inline-size: 1.5rem;
+	block-size: 1.5rem;
+	min-inline-size: 1.5rem;
+	min-block-size: 1.5rem;
+	max-inline-size: 1.5rem;
+	max-block-size: 1.5rem;
+	aspect-ratio: 1;
+	align-self: center;
+	padding: 0;
+	margin: 0 0.4em 0 0;
+	border: var(--border-control) solid var(--color-control);
+	border-radius: 50%;
+	transition: border-color 0.1s ease;
+	background: var(--color-paper);
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+input[type="radio"]::before {
+	content: "";
+	inline-size: 0.625rem;
+	block-size: 0.625rem;
+	border-radius: 50%;
+	background: var(--color-on-accent);
+	transform: scale(0);
+}
+
+input[type="radio"]:checked {
+	border-color: var(--accent);
+	background: var(--accent);
+}
+
+input[type="radio"]:checked::before {
+	transform: scale(1);
+}
+
+input[type="radio"]:focus-visible {
+	border-color: var(--color-focus);
+}
+
+input[type="radio"]:disabled {
+	border-color: var(--color-line);
+	cursor: not-allowed;
+}
+
+input[type="radio"]:disabled:checked {
+	background: var(--color-line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	input[type="radio"] {
+		transition: none;
+	}
+}
+
+@media (forced-colors: active) {
+	input[type="radio"] {
+		appearance: auto;
+		-webkit-appearance: auto;
+	}
+}
+
+/* Prosilver puts an "Online" ribbon in the corner of a post whose writer is online. It is gone. */
+.post.online,
+.online {
+	background-image: none;
+}
+
+/* The buttons under a post (edit, quote, report...) were solid dark blue. Now a light tint with dark text.
+   On hover and focus they get the border and a deeper tint, like the like buttons. */
+.post-buttons .button,
+.post-buttons .button .icon,
+.post-buttons .button span {
+	color: var(--color-muted);
+}
+
+.post-buttons .button {
+	background: var(--color-tint);
+	border: var(--border-control) solid var(--color-line);
+}
+
+.post-buttons .button:hover,
+.post-buttons .button:focus-visible {
+	background: color-mix(in srgb, var(--color-tint) 60%, var(--color-line));
+	border-color: var(--color-control);
+}
+
+/* The page numbers next to a topic title and in the page bars look like the buttons under a post: the same
+   radius and border width in every state, a light tint, dark blue text, and on hover a deeper tint with the
+   control border. The current page stays filled. Prosilver gives the page numbers in a topic row a 2px
+   radius and removes the border on hover, so these rules name the .button class to win over its row rules. */
+.pagination li a.button,
+.pagination li a.button:hover,
+.pagination li a.button:focus-visible,
+.pagination li.active span,
+.pagination li.ellipsis span {
+	border-width: var(--border-control);
+	border-style: solid;
+	border-radius: var(--radius);
+}
+
+.pagination li a.button {
+	background: var(--color-tint);
+	border-color: var(--color-line);
+	color: var(--color-muted);
+}
+
+.pagination li a.button:hover,
+.pagination li a.button:focus-visible {
+	background: color-mix(in srgb, var(--color-tint) 60%, var(--color-line));
+	border-color: var(--color-control);
+	color: var(--color-muted);
+}
+
+.pagination li a.button:hover .icon,
+.pagination li a.button:focus-visible .icon {
+	background: none;
+	color: var(--color-muted);
+}
+
+/* Selects get the same field colours as the text fields (prosilver gives them a grey that the fields do not have). */
+select {
+	background-color: #fff;
+	color: #333;
+}
+
+/* The notices in a post (deleted, waiting for approval): a soft red box with round corners, and buttons in the same
+   red. "Delete" is filled, because it cannot be undone. "Restore" is an outline. */
+p.post-notice {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem 0.75rem;
+	padding: 0.6rem 0.9rem;
+	border: var(--border-control) solid color-mix(in srgb, var(--color-danger) 35%, var(--color-paper));
+	border-radius: var(--radius);
+	background: color-mix(in srgb, var(--color-danger) 11%, var(--color-paper));
+	color: var(--color-text);
+}
+
+form > p.post-notice strong {
+	line-height: 1.4;
+}
+
+p.post-notice :is(input.button1, input.button2) {
+	min-height: 2.25rem;
+	padding: 0 1rem;
+	border: var(--border-control) solid var(--color-danger);
+	border-radius: var(--radius);
+	background: transparent;
+	color: var(--color-danger);
+	font: inherit;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.15s, color 0.15s;
+}
+
+p.post-notice :is(input.button1, input.button2):hover,
+p.post-notice :is(input.button1, input.button2):focus-visible {
+	background: color-mix(in srgb, var(--color-danger) 14%, transparent);
+	color: var(--color-danger);
+}
+
+p.post-notice input.button2 {
+	background: var(--color-danger);
+	color: var(--color-paper);
+}
+
+p.post-notice input.button2:hover,
+p.post-notice input.button2:focus-visible {
+	background: color-mix(in srgb, var(--color-danger) 80%, black);
+	color: var(--color-paper);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	p.post-notice :is(input.button1, input.button2) {
+		transition: none;
+	}
+}
+
+/* "Deleted post:" next to the two buttons is not shown. It stays for screen readers, so the buttons keep their context. */
+form.mcp_approve > p.post-notice > strong {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
 }

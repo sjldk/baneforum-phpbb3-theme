@@ -210,6 +210,30 @@ li.header dt {
 	margin: 1em 0 1em 0;
 }
 
+/* The back-to-top arrow sits in the space between two posts, at the right edge, not inside the post. */
+.post:has(.back2top) {
+	margin-bottom: 2.75rem;
+	/* Prosilver hides what passes the box, and that would cut the arrow off. The inner box still holds the floats. */
+	overflow: visible;
+}
+
+.back2top {
+	position: absolute;
+	inset-inline-end: 0;
+	bottom: -2.5rem;
+	height: 2.25rem;
+}
+
+.back2top .top {
+	float: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 2.25rem;
+	min-height: 2.25rem;
+	margin: 0;
+}
+
 .content blockquote {
 	background-image: none;
 	border-radius: 0.5em;
@@ -267,6 +291,10 @@ blockquote cite > div {
 	border-radius: 0;
 }
 
+#options-panel {
+	padding: 1rem 1.5rem;
+}
+
 .panel p {
 	margin: 0.5rem 0 0.5rem 0;
 }
@@ -277,7 +305,7 @@ fieldset dt {
 
 input.inputbox {
 	border-radius: 0.2rem;
-	padding: 0.5rem;
+	padding: 0.3rem 0.5rem;
 }
 
 .forum-title,
@@ -461,9 +489,10 @@ posting-title a:hover {
 	text-decoration: none;
 }
 
-.inputbox {
+.inputbox,
+select {
 	border-radius: 0.5rem;
-	padding: 0.5rem;
+	padding: 0.3rem 0.5rem;
 }
 
 .inputbox::placeholder {
@@ -589,9 +618,6 @@ table.table1 tbody tr:hover td {
 
 /* Rounded corners on every block. overflow: hidden makes the coloured rows inside follow the corners. */
 :is(
-	.wrap,
-	.headerbar,
-	.navbar,
 	.forabg,
 	.forumbg,
 	.panel,
@@ -620,6 +646,16 @@ table.table1 tbody tr:hover td {
 	.noticebox
 ) {
 	border-radius: var(--radius);
+}
+
+/* The page, its header and the navbars have round corners on a wide screen. On a small screen they run edge to edge, so their
+   corners are square. They are not in the list above, because that list is too specific for a media query to win. */
+@media (min-width: 43.8125em) {
+	.wrap,
+	.headerbar,
+	.navbar {
+		border-radius: var(--radius);
+	}
 }
 
 /* The list header sits on top of the rows, so only its top corners are round. */
@@ -680,10 +716,80 @@ form:has(bf-editor) #attach-panel :is(.inner > p, #attach-panel-basic, #attach-p
 	display: none !important;
 }
 
+/* The topic review is a details element. The summary is a bar with a chevron, so it is clear it opens.
+   Open, the bar stays on top of the posts, which sit in a box under it. The page scrolls, not a 300px box. */
+.topic-review {
+	margin-block: 1rem;
+}
+
+.topic-review > summary {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.6rem 1rem;
+	border: var(--border-control) solid var(--color-line);
+	border-radius: 0.5rem;
+	background: var(--color-tint);
+	color: var(--color-muted);
+	font-weight: 600;
+	cursor: pointer;
+	list-style: none;
+}
+
+.topic-review > summary::-webkit-details-marker {
+	display: none;
+}
+
+.topic-review > summary::before {
+	content: "";
+	flex: none;
+	inline-size: 0.6rem;
+	block-size: 0.6rem;
+	border-inline-end: 0.15rem solid currentcolor;
+	border-block-end: 0.15rem solid currentcolor;
+	transform: translateY(-0.15rem) rotate(45deg);
+	transition: transform 0.15s;
+}
+
+.topic-review[open] > summary::before {
+	transform: translateY(0.1rem) rotate(-135deg);
+}
+
+.topic-review > summary:hover {
+	border-color: var(--color-control);
+}
+
+.topic-review[open] > summary {
+	border-end-start-radius: 0;
+	border-end-end-radius: 0;
+}
+
+.topic-review[open] > .topicreview {
+	padding: 0.5rem 1rem;
+	border: var(--border-control) solid var(--color-line);
+	border-top: 0;
+	border-radius: 0 0 0.5rem 0.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.topic-review > summary::before {
+		transition: none;
+	}
+}
+
+.topic-review .topicreview {
+	height: auto;
+	overflow: visible;
+}
+
+#poll-panel {
+	padding: 1rem 1.5rem;
+}
+
 #poll-panel > summary {
 	cursor: pointer;
 	font-weight: 600;
-	padding: 0.5em 1em;
+	padding: 0.5em 0;
 }
 
 #poll-panel[open] > summary {
@@ -1222,4 +1328,209 @@ a:has(> .icon.fa-file.icon-red) {
 		margin: 0;
 		padding-block: 0.25rem;
 	}
+}
+
+/* Form rows as a grid (wide screens). The label is the first column, the field and its notes are the second.
+   The label sits in the first row, centred against the field, not against the notes below it. A row with a
+   text area keeps the label at the top. Below 43.75em the stacked layout in baneforum_responsive.css applies. */
+@media (min-width: 43.8125em) {
+	fieldset:is(.fields1, .fields2) dl {
+		display: grid;
+		grid-template-columns: minmax(0, 15em) minmax(0, 1fr);
+		column-gap: 1rem;
+		row-gap: 0.4rem;
+		align-items: center;
+	}
+
+	fieldset:is(.fields1, .fields2) dl > dt {
+		grid-column: 1;
+		grid-row: 1;
+		float: none;
+		width: auto;
+		margin: 0;
+		padding: 0;
+	}
+
+	fieldset:is(.fields1, .fields2) dl > dd {
+		grid-column: 2;
+		margin: 0;
+	}
+
+	fieldset:is(.fields1, .fields2) dl:has(textarea) > dt {
+		align-self: start;
+		padding-top: 0.4rem;
+	}
+}
+
+/* A control and the words next to it sit on one line, centred on each other. */
+label:has(> input:is([type="checkbox"], [type="radio"], .inputbox)) {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+}
+
+label:has(> input[type="radio"]) {
+	margin-inline-end: 0.75rem;
+}
+
+label > input:is([type="checkbox"], [type="radio"]) {
+	margin: 0;
+}
+
+/* The subject row: the field starts right after the word "Subject:" and runs to the right edge. The grid of the form
+   rows above gives the label 15em, which leaves a gap here. */
+@media (min-width: 43.8125em) {
+	fieldset:is(.fields1, .fields2) dl:has(> dd > input#subject),
+	dl:has(> dd > input#subject) {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		column-gap: 1rem;
+		align-items: center;
+	}
+
+	dl:has(> dd > input#subject) > dt {
+		float: none;
+		width: auto;
+		margin: 0;
+		padding: 0;
+	}
+
+	dl:has(> dd > input#subject) > dd {
+		margin: 0;
+	}
+}
+
+/* The subject field fills the row, from the label to the right edge. */
+input#subject {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 100%;
+	margin: 0;
+}
+
+/* Lists of topics and forums: calmer. The title is the one larger line, the "by ... on ..." line, the counts and the
+   last post are smaller and softer, and the rows are tighter. The !important matches the title rule above. */
+body ul.topiclist li.row :is(a.topictitle, a.forumtitle) {
+	font-size: 1.0625rem !important;
+	line-height: 1.3;
+}
+
+ul.topiclist li.row dl {
+	margin: 0.65rem 0;
+}
+
+ul.topiclist li.row dt .list-inner {
+	font-size: var(--font-size-small);
+	line-height: 1.5;
+	color: var(--color-muted);
+}
+
+ul.topiclist li.row dt .list-inner :is(a.topictitle, a.forumtitle) {
+	display: inline-block;
+	margin-bottom: 0.1rem;
+}
+
+ul.topiclist li.row dd {
+	font-size: var(--font-size-small);
+	line-height: 1.45;
+	color: var(--color-muted);
+}
+
+ul.topiclist li.row :is(dd.posts, dd.views, dd.topics) {
+	font-size: 1rem;
+	font-variant-numeric: tabular-nums;
+	color: var(--color-text);
+}
+
+ul.topiclist li.row dd.lastpost > span {
+	display: block;
+}
+
+/* Messages and questions: native <dialog> elements (see js/bf-dialogs.js). The browser centres them in the top
+   layer and dims the page behind them. Prosilver's .phpbb_alert positions a div by hand, so that is reset. */
+dialog.phpbb_alert {
+	position: fixed;
+	inset: 0;
+	z-index: auto;
+	width: min(36rem, calc(100vw - 2rem));
+	max-height: min(85vh, 40rem);
+	height: fit-content;
+	margin: auto;
+	padding: 1.25rem 1.5rem 1.5rem;
+	overflow: auto;
+	border: var(--border-control) solid var(--color-line);
+	border-radius: var(--radius);
+	background: var(--color-paper);
+	color: var(--color-text);
+	box-shadow: 0 1rem 3rem rgb(0 0 0 / 0.25);
+}
+
+/* Prosilver hides .phpbb_alert with display: none, which would also hide an open dialog. */
+dialog.phpbb_alert[open] {
+	display: block;
+}
+
+dialog.phpbb_alert::backdrop {
+	background: rgb(10 25 45 / 0.55);
+}
+
+dialog.phpbb_alert .alert_close {
+	float: right;
+	margin: 0 0 0.5rem 0.5rem;
+}
+
+dialog.phpbb_alert .alert_title {
+	margin-top: 0;
+}
+
+dialog.phpbb_alert .alert_text > :is(p, label, select, textarea, input) {
+	font-size: 1em;
+}
+
+dialog.phpbb_alert .alert_text textarea {
+	box-sizing: border-box;
+	width: 100%;
+}
+
+/* The questions have small forms in them (the delete of a post asks for a reason). Each label is a column: the
+   words, the help text, the field. A checkbox and its words stay on one line. */
+dialog.phpbb_alert {
+	overflow-x: hidden;
+}
+
+dialog.phpbb_alert .alert_text label {
+	display: grid;
+	gap: 0.25rem;
+	margin: 0 0 0.75rem;
+	padding: 0;
+}
+
+dialog.phpbb_alert .alert_text label:has(> input[type="checkbox"]) {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+dialog.phpbb_alert .alert_text label br {
+	display: none;
+}
+
+dialog.phpbb_alert .alert_text label > span {
+	font-size: var(--font-size-small);
+	color: var(--color-muted);
+}
+
+dialog.phpbb_alert .alert_text label input.inputbox {
+	box-sizing: border-box;
+	width: 100% !important;
+	max-width: 100%;
+	margin: 0;
+}
+
+dialog.phpbb_alert .alert_text fieldset.submit-buttons {
+	display: flex;
+	justify-content: center;
+	gap: 0.75rem;
+	margin: 1rem 0 0;
+	padding: 0;
 }

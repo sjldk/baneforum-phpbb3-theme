@@ -8,6 +8,8 @@
 :root {
 	color-scheme: light;
 
+	/* The border width of every control: text fields, checkboxes, radio buttons, and the buttons under a post and in the like bar. */
+	--border-control: 0.15rem;
 	/* The brand colour. Never changes between light and dark. It is a little darker than the first
 	   choice (#22548e) so that accent text on the light tint is 7.16:1 and not 6.81:1. */
 	--accent-base: #215188;

@@ -41,6 +41,13 @@
 				</li>
 			{% endif %}
 		{% endif %}
+		{% if U_ACP and not S_IS_BOT %}
+			<li class="rightside">
+				<a href="{{ U_ACP }}" title="{{ lang('ACP') }}">
+					<i class="icon fa-user-secret fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('ACP') }}</span>
+				</a>
+			</li>
+		{% endif %}
 		{% EVENT overall_footer_teamlink_before %}
 		{% if U_TEAM %}
 			<!-- <li class="rightside" data-last-responsive="true">
