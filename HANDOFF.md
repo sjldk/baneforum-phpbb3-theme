@@ -22,7 +22,7 @@ and MediaEmbed extensions.
 | 9 | Quality: keyboard walkthrough, screen reader, zoom, phones, size budget, Firefox run | **Next** |
 | 10 | Packaging for reuse | Open |
 
-Everything is committed and pushed. The tree is clean after the last "cp".
+Everything is committed and pushed after the last "cp". Test board (8080) works again.
 
 ## What works now (checked in Chrome on the test board)
 
@@ -46,69 +46,49 @@ Everything is committed and pushed. The tree is clean after the last "cp".
 
 `scripts/bf-editor.sh build` also copies `bf-editor.js`, `bf-render.js` and `bf-render.css` into `baneforum/theme/`. Those copies are committed. Build before you commit a change in `packages/bf-editor/src`.
 
-## This session (2026-10-22)
+## Earlier this day (2026-10-22)
 
 | What | State |
 |---|---|
 | Firefox | Editor smoke test ran in Firefox 157 (Puppeteer, WebDriver BiDi). No FAIL lines in the last 40 lines seen, full output not checked. `run.sh` takes `BROWSER=firefox`, `connect.mjs` is the shared helper. **Board tests in Firefox have not run yet.** |
-| Test board (8080) | **Broken**: empty `config.php`, leftover tables. Fix: first trap in the phpbb skill. The permission check refused the database drop. |
 | Production copy board (8081) | Works. Production tree in `local-data/phpbb`, files in `local-data/production/files`, database clone `phpbb_try`. Login `Baneforum.dk` / `adminadmin`. Not clicked through yet. |
 | `docs/production-install.md` | New. Deploy steps. Not tested on a server. |
 | `.claude/skills/phpbb/SKILL.md` | New. Boards, traps, tests. Add new findings there. |
 | Picture click | Thumbnails and linked pictures now open in a new tab (`attachment.html`, `render/attachments.js`). Built, not yet checked in a browser. |
 
-**Push:** everything is pushed. One commit message (Docker, port 8081) has a typo ("bræt" for "board"). It stays as it is. If the push fails with "publickey", run `ssh-add ~/.ssh/id_github_rsa` first (no SSH agent by default).
+## Theme work, 2026-10-22 (after the editor work above)
 
-**Next:** fix the test board, run `posting`, `inputs`, `files`, `edit` and `axe` in Firefox (also against 8081), then the rest of phase 9.
+All on the test board (http://localhost:8080). **Nothing here was checked in a browser by Claude.** Chrome is not
+installed on this machine and the Firefox DevTools tool had no connection. The user looked at screenshots and
+reported back. Check each item on the board before you trust it.
 
-## Rules the owner set (also in the docs)
+| Area | What changed | Where |
+|---|---|---|
+| Links (WCAG 1.4.1) | Titles in lists and links in posts: `--accent`. Links in posts are bold. Underline on hover. Standalone links need no underline. | `baneforum_colours.css` |
+| Menus | No height cap and no scrolling inside menus | `baneforum_common.css` |
+| Sizes | Fixed `px` in the theme CSS became `rem`, breakpoints became `em`. Kept: 1px lines, the 16px field minimum (iOS zoom), `px` inside SVG. Prosilver itself still has about 690 `px` values. | three CSS files |
+| Icons | `.icon` is `1.25em`. Prosilver size classes (`icon-md` and so on) are `em` | `baneforum_common.css` |
+| Status icons | Font Awesome 4.7 glyphs drawn from the row class on the `dl` (comment, folder, bullhorn, pin). Badges: padlock (locked), bolt (hot). The "mine" dot was removed. | `baneforum_common.css` |
+| Unread rows | Bold title and a bar at the start of the row. Read and unread icons look the same. | `baneforum_common.css`, `baneforum_colours.css` |
+| Hidden links | The arrow after a user name in "last post" and the red bubble after an unread title are hidden, with the whole link (no empty link to tab to). The jump to the latest or first unread post is gone. | `baneforum_common.css` |
+| Post icons | `fa-file` and `fa-file-o` show as speech bubbles | `baneforum_common.css` |
+| Row layout | Flex rows from 700 px: the title centres beside the icon. Page numbers sit in a grid cell beside the title. | `baneforum_common.css` |
+| Form controls | `--color-control` (accent 65% with white, about 3.2:1) is the border of fields, selects and checkboxes. Checkboxes are custom. `--color-focus` is the full accent now. | `palette.css`, `baneforum_colours.css` |
+| Fixes | No dashed blink on the post box. No border under the last row. No accent behind the list blocks (dark corners). User names have no group colour. User icon in the top bar when there is no avatar. | various |
 
-- Follow the web standards and MDN. Use the proper HTML element. Use Invoker Commands (`command`, `commandfor`) and the Popover API where they fit.
-- Browsers: Blink and Gecko, current version and one back. WebKit only if free. No fallbacks for older ones.
-- Every `bf-` component has its markup and CSS as one template in a shadow root (`src/bf-editor.html`, `.css`, built into `template.js`).
-- JavaScript strings are always backticks (ESLint enforces it). Braces everywhere, blank line above `if`, `for`, `return` and so on. Biome formats.
-- No npm package in production code without approval.
-- WCAG AAA wherever it costs little. Test with the scripts, do not guess.
-- "cp" means commit and push, in logical commits. Never a Co-Authored-By line.
+**Open**
 
-## Things to know
-
-Most of these now live in `.claude/skills/phpbb/SKILL.md`. Keep that file as the one source.
-
-- **The test board is disposable.** After `docker compose up --force-recreate web` the entrypoint drops old tables and installs again. `phpbb_prod` (a copy of the production database) lives in the same database container. Do not run `docker compose down -v` unless you can import the backup again (`local-data/`, git-ignored).
-- **phpBB refuses a form sent in the same second the page was made.** Tests wait 1.5 seconds before an upload.
-- **phpBB checks picture size before any extension runs.** So on the board and on production `img_max_width`, `img_max_height`, `max_filesize` (and `max_filesize_pm`) must be 0, and the extension does the shrinking.
-- **The attachment panel of phpBB is kept** (hidden unless there are files that are not in the text). It holds the hidden fields that are sent with the form. Plupload still does the uploading, the editor hands it the files.
-- `bf-phpbb.js` holds back phpBB's error dialog while an editor upload runs, because the picture shows its own error.
-- The theme loads a StatCounter script from `overall_footer.html` (a tracker). Not changed. Ask the owner.
-- Facebook and Google login buttons stay (14 production users are linked to them). They have new button styles in `login_body_oauth.html`.
-
-## Open items
-
-| Item | Notes |
+| Item | Note |
 |---|---|
-| Phase 9 | Keyboard walkthrough, screen reader notes, zoom and reflow, phones at 320, 375, 414 and 768 px (iOS fields 16 px), reduced motion, bundle size (budget 150 KB gzip, `bf-editor.js` is about 260 KB before gzip), **Firefox test run** (the owner wants it, planned here; check ProseMirror selection inside a shadow root and the dialog `close` event). |
-| Phase 10 | `exports`, README, licence check, no phpBB in the core. Move `scripts/browser-tests` and the Firefox run into CI if wanted. |
-| Signatures | The signature textarea (`#signature`) has no editor yet. Signatures take no Markdown on production (`media_embed_allow_sig` 0, Markdown not allowed in signatures). |
-| Production steps (owner) | Copy `extensions/baneforum/imagecompress` to `ext/baneforum/imagecompress`, enable it in the ACP, set picture width and height limits to 0 (and `max_filesize_pm` to 0). Check PHP has GD with JPEG and PNG and what `memory_limit` is. Deploy the theme. |
-| Smilies | Existing posts are not changed in the database. The render script swaps smilie pictures for emoji on screen. A bulk change is optional later. |
-| Corpus | 59 posts whose rendering differs from phpBB's (see the log, phase 2) are not reviewed yet. |
-| Editor strings | Only Danish and English. Other languages fall back to English. Add a language in `src/labels.js`. |
-| Heading order | One axe warning inside post content (a Markdown heading after an h3 post title). Content, not theme. |
-| Not checked | ACP and MCP pages, other browsers, real production content, phones. |
+| Hidden "Unread" text for screen readers | Bold and the bar only show to sighted users. Needs copies of `viewforum_body.html` and `forumlist_body.html`. Not started. |
+| Jump to the first unread post | Lost with the red bubble. Could make the title link there. |
+| Prosilver `px` values | Not converted. About 690 values. Risky for the avatar and image offsets. |
+| Checks not done | Dark mode, topics with many pages, memberlist checkboxes, admin control panel, the editor's own fields, radio buttons. |
+| `--color-focus` change | Also changes the focus line on login buttons and attachment links. |
+| Old GIFs | `baneforum/theme/images/*.gif` status images are unused now. |
 
-## Files worth knowing
+**Dummy data:** `docker/dummy-data.sh` fills the test board with forums and topics in every status. Users `alice`, `bob`,
+`carol`, password `adminadmin`. Log in as `admin` to see read and unread. It stops if the board is already filled.
+If a new board has odd guest permissions after it, run `UPDATE phpbb_users SET user_permissions=''` and purge the cache.
 
-| Path | What |
-|---|---|
-| `.claude/skills/phpbb/SKILL.md` | phpBB traps, the two boards, test commands |
-| `docs/production-install.md` | Steps for the production deploy |
-| `docker/docker-compose.prod.yml`, `docker/prod-try.sh` | The production copy board |
-| `docs/editor-progress.md` | The full log and decisions, newest at the bottom |
-| `packages/bf-editor/src/` | The editor. `elements/bf-editor.js` wires everything. `upload.js`, `attachment-menu.js`, `link-*.js`, `embeds/`, `render/` |
-| `packages/bf-editor/docs/` | Code style, third party list, phase 0 findings |
-| `baneforum/theme/js/bf-phpbb.js` | The phpBB adapter. Read this to see how the editor meets phpBB |
-| `baneforum/template/` | Template overrides: posting, attachment cards, navigation, login |
-| `baneforum/theme/baneforum_common.css` | Buttons AAA, attachment cards, picture style, posting page |
-| `extensions/baneforum/imagecompress/` | Server side picture compression, with `tests/compressor_test.php` |
-| `scripts/browser-tests/` | Browser tests, the AAA audits, the font audit |
+**Push:** if the push fails with "publickey", run `ssh-add ~/.ssh/id_github_rsa` first (no SSH agent by default).
