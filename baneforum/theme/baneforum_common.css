@@ -1049,3 +1049,10 @@ input.button3:focus {
 	outline: none;
 	box-shadow: none;
 }
+
+/* A menu grows with its items. prosilver cuts it at 300 px (350 px for notifications) and scrolls inside it. */
+.dropdown .dropdown-contents,
+.dropdown-extended ul {
+	max-height: none;
+	overflow: visible;
+}
