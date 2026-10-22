@@ -20,8 +20,11 @@
 	--color-tint: color-mix(in srgb, var(--accent-base) 8%, white);
 	--color-line: color-mix(in srgb, var(--accent-base) 20%, white);
 
-	/* Focus border on inputs: 4.4:1 against the page, and 3.4:1 against the unfocused border (WCAG 2.4.13) */
-	--color-focus: color-mix(in srgb, var(--accent-base) 80%, white);
+	/* Border of form controls (fields, selects, checkboxes). 3.2:1 against the page, the lightest that passes WCAG 1.4.11 */
+	--color-control: color-mix(in srgb, var(--accent) 65%, white);
+
+	/* Focus border on inputs: the full accent, 7.7:1 against the page and clearly darker than the control border */
+	--color-focus: var(--accent-base);
 
 	/* Text and dark fills: the accent darkened with black */
 	--color-text: color-mix(in srgb, var(--accent-base) 55%, black);

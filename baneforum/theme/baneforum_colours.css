@@ -120,9 +120,12 @@ li.row:hover,
 	border-top-color: transparent;
 }
 
-.content blockquote,
-select {
+.content blockquote {
 	border-color: var(--color-line);
+}
+
+select {
+	border-color: var(--color-control);
 }
 
 .error {
@@ -136,7 +139,7 @@ select {
 .inputbox:focus,
 .search-box .inputbox,
 .search-box .inputbox:hover {
-	border: 0.15rem solid var(--color-line);
+	border: 0.15rem solid var(--color-control);
 }
 
 .inputbox:focus,
@@ -273,4 +276,74 @@ li.notification-disapproved strong {
 
 .badge {
 	background-color: var(--color-danger);
+}
+
+/* Checkboxes in the palette. The box border is the width of the text fields, --color-control, the same as the text fields (3.2:1, WCAG 1.4.11 needs 3:1), a checked box is filled
+   with --accent and has a tick in --color-on-accent. The box is 1.5 rem, above the 24 px target size (2.5.8).
+   The focus line comes from baneforum_common.css. Radio buttons are not changed. */
+input[type="checkbox"] {
+	appearance: none;
+	-webkit-appearance: none;
+	display: inline-grid;
+	place-items: center;
+	flex: none;
+	inline-size: 1.5rem;
+	block-size: 1.5rem;
+	margin: 0 0.4em 0 0;
+	border: 0.15rem solid var(--color-control);
+	border-radius: 0.3125rem;
+	transition: border-color 0.1s ease;
+	background: var(--color-paper);
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+input[type="checkbox"]::before {
+	content: "";
+	inline-size: 0.875rem;
+	block-size: 0.875rem;
+	background: var(--color-on-accent);
+	clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0, 43% 62%);
+	transform: scale(0);
+}
+
+input[type="checkbox"]:checked,
+input[type="checkbox"]:indeterminate {
+	border-color: var(--accent);
+	background: var(--accent);
+}
+
+input[type="checkbox"]:checked::before {
+	transform: scale(1);
+}
+
+input[type="checkbox"]:indeterminate::before {
+	clip-path: polygon(0 40%, 100% 40%, 100% 60%, 0 60%);
+	transform: scale(1);
+}
+
+input[type="checkbox"]:focus-visible {
+	border-color: var(--color-focus);
+}
+
+input[type="checkbox"]:disabled {
+	border-color: var(--color-line);
+	cursor: not-allowed;
+}
+
+input[type="checkbox"]:disabled:checked {
+	background: var(--color-line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	input[type="checkbox"] {
+		transition: none;
+	}
+}
+
+@media (forced-colors: active) {
+	input[type="checkbox"] {
+		appearance: auto;
+		-webkit-appearance: auto;
+	}
 }
