@@ -74,10 +74,15 @@ input.button2:hover,
 }
 
 .headerbar,
-.forabg,
-.forumbg,
 table.markdown thead {
 	background-color: var(--accent);
+}
+
+/* The header row of a list has the accent itself. A blue background behind the whole block showed as a dark fringe
+   on the rounded bottom corners. */
+.forabg,
+.forumbg {
+	background-color: transparent;
 }
 
 body,
@@ -276,6 +281,12 @@ li.notification-disapproved strong {
 
 .badge {
 	background-color: var(--color-danger);
+}
+
+/* Group colours (red administrators, green moderators) are not used. phpBB writes them as an inline style, so
+   !important is needed. Names look like any other user name. */
+.username-coloured {
+	color: inherit !important;
 }
 
 /* Checkboxes in the palette. The box border is the width of the text fields, --color-control, the same as the text fields (3.2:1, WCAG 1.4.11 needs 3:1), a checked box is filled

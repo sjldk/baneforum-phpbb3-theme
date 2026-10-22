@@ -693,6 +693,10 @@ form:has(bf-editor) #attach-panel :is(.inner > p, #attach-panel-basic, #attach-p
 
 .message-box textarea {
 	width: 100%;
+	/* prosilver gives the box a transparent dashed outline and fades every property for 0.5s. When the focus line
+	   (solid) leaves, the style flips to dashed at once and the colour fades, so a dashed line blinks. */
+	outline: none;
+	transition: none;
 }
 
 /* Pictures in posts: a thin line, rounded corners, and a fixed gap to the description under them. */
@@ -1061,6 +1065,12 @@ input.button3:focus {
 .icon,
 .button .icon {
 	font-size: 1.25em;
+}
+
+/* The last row of a list has no line under it. The block already ends there. */
+ul.topiclist li.row:last-child,
+table.table1 tbody tr:last-child td {
+	border-bottom-color: transparent;
 }
 
 /* Status icons of forums and topics are Font Awesome 4.7 glyphs, the font phpBB already loads, and take the palette
