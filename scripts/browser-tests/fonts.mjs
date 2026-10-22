@@ -1,8 +1,8 @@
 // Font audit: which font-family does each element have, and which platform fonts are really drawn.
-import puppeteer from 'puppeteer-core';
+import { connect } from './connect.mjs';
 import { login } from './login.mjs';
 
-const browser = await puppeteer.connect({ browserURL: `http://127.0.0.1:9222` });
+const browser = await connect();
 const pages = (process.argv[3] ? [process.argv[3]] : [
 	`index.php`, `viewforum.php?f=2`, `viewtopic.php?t=1`, `memberlist.php`, `memberlist.php?mode=viewprofile&u=2`, `search.php`, `faq.php`,
 	`ucp.php`, `ucp.php?i=pm&mode=compose`, `posting.php?mode=reply&t=1`, `posting.php?mode=post&f=2`, `ucp.php?i=ucp_profile&mode=signature`,

@@ -1,8 +1,8 @@
-import puppeteer from 'puppeteer-core';
+import { connect } from './connect.mjs';
 import { login } from './login.mjs';
 
 const HOST = process.argv[2];
-const browser = await puppeteer.connect({ browserURL: `http://127.0.0.1:9222` });
+const browser = await connect();
 const page = await browser.newPage();
 await page.setCacheEnabled(false);
 await login(page);

@@ -1,8 +1,8 @@
-import puppeteer from 'puppeteer-core';
+import { connect } from './connect.mjs';
 import { login } from './login.mjs';
 
 const DIR = process.argv[2];
-const browser = await puppeteer.connect({ browserURL: `http://127.0.0.1:9222` });
+const browser = await connect();
 const page = await browser.newPage();
 await page.setViewport({ width: 1000, height: 1200 });
 await page.setCacheEnabled(false);

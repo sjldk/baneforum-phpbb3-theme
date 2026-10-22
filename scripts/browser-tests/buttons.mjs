@@ -3,10 +3,10 @@
 //   2.5.5  target size 44 by 44 CSS pixels
 //   2.4.13 focus appearance: an outline at least 2px thick with 3:1 contrast against what is behind it
 //   4.1.2  a name
-import puppeteer from 'puppeteer-core';
+import { connect } from './connect.mjs';
 import { login } from './login.mjs';
 
-const browser = await puppeteer.connect({ browserURL: `http://127.0.0.1:9222` });
+const browser = await connect();
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Runs in the page. Finds the buttons and measures them in the state the page is in.

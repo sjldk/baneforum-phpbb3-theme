@@ -1,7 +1,7 @@
-import puppeteer from 'puppeteer-core';
+import { connect } from './connect.mjs';
 import { login } from './login.mjs';
 
-const browser = await puppeteer.connect({ browserURL: `http://127.0.0.1:9222` });
+const browser = await connect();
 const page = await browser.newPage();
 const out = [];
 const check = (name, ok, extra = ``) => out.push(`${ok ? `PASS` : `FAIL`} ${name} ${extra}`);

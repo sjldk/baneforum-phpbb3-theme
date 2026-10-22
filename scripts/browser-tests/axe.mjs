@@ -1,9 +1,9 @@
 import fs from 'node:fs';
-import puppeteer from 'puppeteer-core';
+import { connect } from './connect.mjs';
 import { login } from './login.mjs';
 
 const axeSource = fs.readFileSync(`/w/node_modules/axe-core/axe.min.js`, `utf8`);
-const browser = await puppeteer.connect({ browserURL: `http://127.0.0.1:9222` });
+const browser = await connect();
 const page = await browser.newPage();
 await page.setViewport({ width: 1000, height: 1000 });
 await page.setCacheEnabled(false);
