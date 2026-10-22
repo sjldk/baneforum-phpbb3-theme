@@ -46,6 +46,19 @@ Everything is committed and pushed. The tree is clean after the last "cp".
 
 `scripts/bf-editor.sh build` also copies `bf-editor.js`, `bf-render.js` and `bf-render.css` into `baneforum/theme/`. Those copies are committed. Build before you commit a change in `packages/bf-editor/src`.
 
+## This session (2026-10-22)
+
+| What | State |
+|---|---|
+| Firefox | Editor smoke test ran in Firefox 157 (Puppeteer, WebDriver BiDi). No FAIL lines in the last 40 lines seen, full output not checked. `run.sh` takes `BROWSER=firefox`, `connect.mjs` is the shared helper. **Board tests in Firefox have not run yet.** |
+| Test board (8080) | **Broken**: empty `config.php`, leftover tables. Fix: first trap in the phpbb skill. The permission check refused the database drop. |
+| Production copy board (8081) | Works. Production tree in `local-data/phpbb`, files in `local-data/production/files`, database clone `phpbb_try`. Login `Baneforum.dk` / `adminadmin`. Not clicked through yet. |
+| `docs/production-install.md` | New. Deploy steps. Not tested on a server. |
+| `.claude/skills/phpbb/SKILL.md` | New. Boards, traps, tests. Add new findings there. |
+| Picture click | Thumbnails and linked pictures now open in a new tab (`attachment.html`, `render/attachments.js`). Built, not yet checked in a browser. |
+
+**Next:** fix the test board, run `posting`, `inputs`, `files`, `edit` and `axe` in Firefox (also against 8081), then the rest of phase 9.
+
 ## Rules the owner set (also in the docs)
 
 - Follow the web standards and MDN. Use the proper HTML element. Use Invoker Commands (`command`, `commandfor`) and the Popover API where they fit.
@@ -57,6 +70,8 @@ Everything is committed and pushed. The tree is clean after the last "cp".
 - "cp" means commit and push, in logical commits. Never a Co-Authored-By line.
 
 ## Things to know
+
+Most of these now live in `.claude/skills/phpbb/SKILL.md`. Keep that file as the one source.
 
 - **The test board is disposable.** After `docker compose up --force-recreate web` the entrypoint drops old tables and installs again. `phpbb_prod` (a copy of the production database) lives in the same database container. Do not run `docker compose down -v` unless you can import the backup again (`local-data/`, git-ignored).
 - **phpBB refuses a form sent in the same second the page was made.** Tests wait 1.5 seconds before an upload.
@@ -84,6 +99,9 @@ Everything is committed and pushed. The tree is clean after the last "cp".
 
 | Path | What |
 |---|---|
+| `.claude/skills/phpbb/SKILL.md` | phpBB traps, the two boards, test commands |
+| `docs/production-install.md` | Steps for the production deploy |
+| `docker/docker-compose.prod.yml`, `docker/prod-try.sh` | The production copy board |
 | `docs/editor-progress.md` | The full log and decisions, newest at the bottom |
 | `packages/bf-editor/src/` | The editor. `elements/bf-editor.js` wires everything. `upload.js`, `attachment-menu.js`, `link-*.js`, `embeds/`, `render/` |
 | `packages/bf-editor/docs/` | Code style, third party list, phase 0 findings |
