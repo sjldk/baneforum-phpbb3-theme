@@ -46,6 +46,7 @@ The install steps for production are in `docs/production-install.md`.
 | Extension routes are in `config/routing.yml`, not `routes.yml` | A wrong name gives `RouteNotFoundException` and a fatal error on every page that makes the URL. Purge the cache after the fix. |
 | `extensions/baneforum` is owned by `www-data` (Docker made it) | Create a new extension folder with `docker exec -u root docker-web-1 mkdir`, then `chown 1000:1000` it. Then you can write in it. |
 | phpBB's word censor changes words inside URLs (`maerklin.de` becomes `Märklin.de`) and breaks links | It censors the whole HTML including `href` (`renderer.php`, `censorHtml($html, true)`). `extensions/baneforum/censor` takes the core censor out and censors text only, keeping URLs. The ACP word list is still used. Test: `docker compose exec web php ext/baneforum/censor/tests/censor_test.php` |
+| Check our overrides against a new phpBB release | `scripts/prosilver-diff.sh <new-version>` shows what prosilver changed since the release in `docs/prosilver-reviewed`, for the files we override, plus a list of changed files we do not override. Read the diffs, copy what you need by hand, then write the new version into `docs/prosilver-reviewed`. |
 | Facebook and Google login buttons | Stay. 14 production users are linked. Styles are in `login_body_oauth.html`. |
 
 ## Template overrides in this style
