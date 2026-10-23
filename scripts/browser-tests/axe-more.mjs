@@ -24,7 +24,7 @@ const all = [
 	[`search results, posts`, `search.php?keywords=reply&sr=posts&sf=all`],
 	[`member list`, `memberlist.php`],
 	[`profile`, `memberlist.php?mode=viewprofile&u=2`],
-	[`reply with review`, `posting.php?mode=reply&t=14`],
+	[`reply with review`, `posting.php?mode=reply&t=${process.env.TOPIC ?? 14}`],
 	[`topic with pictures`, process.env.TOPIC ? `viewtopic.php?t=${process.env.TOPIC}` : `viewtopic.php?t=22`],
 	[`board index`, `index.php`],
 ];
@@ -47,7 +47,7 @@ for (const theme of [`light`, `dark`]) {
 		await page.evaluate(`document.querySelector('#review')?.setAttribute('open', '')`);
 		await page.evaluate(src);
 		const found = await page.evaluate(async () => (await window.axe.run(document, { runOnly: { type: `tag`, values: [`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa`, `wcag2aaa`] } })).violations
-			.map((v) => `[${v.impact}] ${v.id} x${v.nodes.length} :: ${v.nodes.slice(0, 2).map((n) => n.target.join(` `).slice(0, 60) + ` ` + (n.any[0]?.message ?? n.all[0]?.message ?? ``).slice(0, 90)).join(` | `)}`));
+			.map((v) => `[${v.impact}] ${v.id} x${v.nodes.length} :: ${v.nodes.slice(0, 2).map((n) => n.target.join(` `).slice(0, 60) + ` ` + (n.any[0]?.message ?? n.all[0]?.message ?? n.none[0]?.message ?? ``).slice(0, 90)).join(` | `)}`));
 		console.log(`${found.length ? `FAIL` : `PASS`} ${theme} ${name}: ${found.length}`);
 		for (const f of found) {
 			console.log(`     ${f}`);
