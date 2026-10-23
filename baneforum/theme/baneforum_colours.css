@@ -632,3 +632,15 @@ dl.details :is(dt, dd) {
 a.postlink {
 	color: var(--accent);
 }
+
+/* The notice box (.rules: download notice, board disabled) has the same soft red as the notices in a post, with the palette text.
+   prosilver has red text on pink, which fails the contrast. */
+div.rules {
+	border-color: color-mix(in srgb, var(--color-danger) 35%, var(--color-paper));
+	background-color: color-mix(in srgb, var(--color-danger) 11%, var(--color-paper));
+	color: var(--color-text);
+}
+
+div.rules :is(a, strong, h3, h4) {
+	color: var(--color-text);
+}

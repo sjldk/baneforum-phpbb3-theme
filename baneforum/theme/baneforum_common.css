@@ -1929,4 +1929,5 @@ a.button2 {
 	border: 0;
 	border-radius: var(--radius);
 	text-decoration: none;
+	vertical-align: middle;
 }
