@@ -113,7 +113,7 @@ fieldset.fields2 dd {
 
 /* Form elements */
 dt label {
-	font-weight: bold;
+	font-weight: 600;
 	text-align: left;
 }
 
@@ -330,7 +330,7 @@ a.button1, input.button1, input.button3, a.button2, input.button2 {
 }
 
 a.button1, input.button1 {
-	font-weight: bold;
+	font-weight: 600;
 	border: 1px solid transparent;
 }
 
@@ -381,7 +381,7 @@ input.button1:focus, input.button2:focus, input.button3:focus {
 .search-box .inputbox {
 	background-image: none;
 	border-right-width: 0;
-	border-radius: 0.25rem 0 0 0.25rem;
+	border-radius: var(--radius) 0 0 var(--radius);
 	float: left;
 	height: 1.5rem;
 	padding: 0.1875rem;
@@ -391,7 +391,7 @@ input.button1:focus, input.button2:focus, input.button3:focus {
 /* Search box (header)
 --------------------------------------------- */
 .search-header {
-	border-radius: 0.25rem;
+	border-radius: var(--radius);
 	display: block;
 	float: right;
 	margin-right: 0.3125rem;

@@ -6,12 +6,19 @@
 	/* One monospace stack for code blocks, inline code and keys. phpBB and the Markdown extension each set their own. */
 	--font-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
 
-	--base-font-size: 0.95em;
+	/* The type scale: five sizes, in rem so they never add up through nested elements. Two weights, 400 and 600
+	   (700 only in the banner title). */
+	--text-meta: 0.8125rem;
+	--text-body: 0.95rem;
+	--text-heading: 1.125rem;
+	--text-title: 1.5rem;
+	--text-banner: 2.5rem;
 
-	--font-size-small: 0.85em;
-	--font-size-h3: 1.2em;
-	--font-size-h2: 1.6em;
-	--font-size-h1: 2.6em;
+	--base-font-size: var(--text-body);
+	--font-size-small: var(--text-meta);
+	--font-size-h3: var(--text-heading);
+	--font-size-h2: var(--text-title);
+	--font-size-h1: var(--text-banner);
 
 	--radius: 0.5rem;
 }
@@ -135,7 +142,7 @@ a.lastsubject {
 
 .postbody h3,
 .postbody h3.first {
-	font-weight: bold;
+	font-weight: 600;
 }
 
 .bfYoutube {
@@ -186,7 +193,7 @@ input.button1 {
 	text-decoration: none;
 	display: inline-block;
 	font-weight: normal;
-	border-radius: 0.2em;
+	border-radius: var(--radius);
 }
 
 .attach-panel-multi input.button2 {
@@ -249,7 +256,7 @@ li.header dt {
 
 .content blockquote {
 	background-image: none;
-	border-radius: 0.5em;
+	border-radius: var(--radius);
 	padding: 1em;
 	margin: 1em 0 1em 0;
 }
@@ -317,14 +324,14 @@ fieldset dt {
 }
 
 input.inputbox {
-	border-radius: 0.2rem;
+	border-radius: var(--radius);
 	padding: 0.3rem 0.5rem;
 }
 
 .forum-title,
 .topic-title,
 .searchresults-title {
-	font-weight: bold;
+	font-weight: 600;
 }
 
 .section-search .page-body .panel div.inner {
@@ -357,7 +364,7 @@ input.inputbox {
 }
 
 .pagination li.active span {
-	font-weight: bold;
+	font-weight: 600;
 }
 
 .format-buttons {
@@ -397,11 +404,11 @@ li.pagejump {
 
 select.bbcode-size {
 	margin-right: 0.5rem;
-	border-radius: 0.2rem;
+	border-radius: var(--radius);
 }
 
 textarea {
-	border-radius: 0.2rem;
+	border-radius: var(--radius);
 	margin-top: 0.5rem;
 }
 
@@ -411,7 +418,7 @@ textarea {
 
 dl.attachbox dt {
 	border: 0;
-	font-weight: bold;
+	font-weight: 600;
 }
 
 .attachbox dl.thumbnail dt {
@@ -434,7 +441,7 @@ dl.attachbox dt {
 
 .button {
 	border: none;
-	border-radius: 0.2rem;
+	border-radius: var(--radius);
 	-webkit-box-shadow: none;
 	box-shadow: none;
 	padding: 0.5rem;
@@ -497,7 +504,7 @@ table.markdown th {
 
 .posting-title {
 	margin-bottom: 2rem;
-	font-weight: bold;
+	font-weight: 600;
 }
 
 .posting-title a,
@@ -507,7 +514,7 @@ posting-title a:hover {
 
 .inputbox,
 select {
-	border-radius: 0.5rem;
+	border-radius: var(--radius);
 	padding: 0.3rem 0.5rem;
 }
 
@@ -546,8 +553,8 @@ body
 	font-size: 1em !important;
 }
 
-/* Form fields: at least 16px, otherwise iOS zooms in when a field gets focus */
-body :is(input, select, textarea, option, button) {
+/* Text fields: at least 16px, otherwise iOS zooms in when a field gets focus. Buttons do not need it. */
+body :is(input, select, textarea, option) {
 	font-size: max(1em, 16px) !important;
 }
 
@@ -586,7 +593,7 @@ samp {
 	font-size: 0.9em;
 }
 
-body :is(h2, h3, h4) {
+body :is(h2, h3, h4, strong, b, th, .username, .username-coloured) {
 	font-weight: 600 !important;
 }
 
@@ -744,7 +751,7 @@ form:has(bf-editor) #attach-panel :is(.inner > p, #attach-panel-basic, #attach-p
 	gap: 0.75rem;
 	padding: 0.6rem 1rem;
 	border: var(--border-control) solid var(--color-line);
-	border-radius: 0.5rem;
+	border-radius: var(--radius);
 	background: var(--color-tint);
 	color: var(--color-muted);
 	font-weight: 600;
@@ -1118,43 +1125,11 @@ input.button3 {
 	align-items: center;
 }
 
-/* Text on a muted button is never the same colour as the button. */
-.button.button-secondary {
-	color: var(--color-on-accent);
-}
-
 /* prosilver switches the outline off and gives focused links and buttons colours of its own (5.9:1, and
    1.1:1 for a Login button). Hover and keyboard focus look the same here, and the focus line always shows. */
 a:focus,
 a:active {
 	color: var(--accent);
-}
-
-/* The icon of a button has the colour of its text in every state. prosilver gave it a light blue on focus. */
-.button:focus .icon,
-.button:active .icon,
-.button-secondary:focus,
-.button-secondary:active {
-	color: var(--color-on-accent);
-}
-
-/* The Next and Previous page buttons are light, so their arrows are dark. */
-.pagination li a.button .icon {
-	color: var(--accent);
-}
-
-.pagination li a.button:hover .icon,
-.pagination li a.button:focus .icon,
-.pagination li a.button:active .icon {
-	color: var(--color-on-accent);
-}
-
-input.button1:focus,
-input.button2:focus,
-input.button3:focus {
-	border-color: transparent;
-	background: var(--accent);
-	color: var(--color-on-accent);
 }
 
 :is(
@@ -1428,8 +1403,8 @@ input#subject {
    colour. The line under it ("by ... on ... in ..."), the counts and the last post are small and soft. The !important
    is needed because the rule near the top gives every div, dt, dd and link 1em with !important. */
 body ul.topiclist li.row :is(a.topictitle, a.forumtitle) {
-	font-size: 1.1875rem !important;
-	line-height: 1.3;
+	font-size: var(--text-heading) !important;
+	line-height: 1.4;
 }
 
 ul.topiclist li.row dl {
@@ -1437,7 +1412,7 @@ ul.topiclist li.row dl {
 }
 
 body ul.topiclist li.row dt .list-inner {
-	font-size: 0.8125rem !important;
+	font-size: var(--text-meta) !important;
 	line-height: 1.5;
 	color: var(--color-muted);
 }
@@ -1453,13 +1428,13 @@ ul.topiclist li.row dt .list-inner :is(a.topictitle, a.forumtitle) {
 }
 
 body ul.topiclist li.row dd {
-	font-size: 0.8125rem !important;
+	font-size: var(--text-meta) !important;
 	line-height: 1.45;
 	color: var(--color-muted);
 }
 
 body ul.topiclist li.row :is(dd.posts, dd.views, dd.topics) {
-	font-size: 0.9375rem !important;
+	font-size: var(--text-body) !important;
 	font-variant-numeric: tabular-nums;
 }
 
@@ -1469,7 +1444,7 @@ ul.topiclist li.row dd.lastpost > span {
 
 /* The page numbers next to a title are buttons, not small print. */
 body ul.topiclist li.row .pagination {
-	font-size: 0.9375rem !important;
+	font-size: var(--text-body) !important;
 }
 
 /* Messages and questions: native <dialog> elements (see js/bf-dialogs.js). The browser centres them in the top

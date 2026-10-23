@@ -39,7 +39,7 @@
 .bf-featured__topic,
 .bf-featured__topic:hover {
 	color: #fff;
-	font-weight: bold;
+	font-weight: 600;
 	overflow-wrap: anywhere;
 }
 

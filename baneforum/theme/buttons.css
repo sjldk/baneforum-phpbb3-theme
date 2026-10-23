@@ -5,7 +5,7 @@
 .button {
 	display: inline-block;
 	padding: 0.125rem 0.5rem;
-	font-size: 0.8125rem;
+	font-size: var(--text-meta);
 	font-weight: 600;
 	font-family: "Open Sans", "Droid Sans", Verdana, Arial, Helvetica;
 	line-height: 1.4;
@@ -16,7 +16,7 @@
 	cursor: pointer;
 	user-select: none;
 	border: 1px solid transparent;
-	border-radius: 0.25rem;
+	border-radius: var(--radius);
 }
 
 .button:focus,
