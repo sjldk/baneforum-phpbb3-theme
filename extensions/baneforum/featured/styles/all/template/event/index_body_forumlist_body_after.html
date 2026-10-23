@@ -1,12 +1,10 @@
 {% if loops.bf_featured|length %}
 <aside class="bf-featured" aria-labelledby="bf-featured-title">
-	<h2 id="bf-featured-title" class="bf-featured-title">{{ lang('BF_FEATURED_TITLE') }}</h2>
+	<h2 id="bf-featured-title" class="bf-index-title">{{ lang('BF_FEATURED_TITLE') }}</h2>
 	<ol class="bf-featured-list">
 		{% for post in loops.bf_featured %}
 		<li class="bf-featured-item">
-			<a class="bf-featured-picture" href="{{ post.U_POST }}" tabindex="-1" aria-hidden="true">
-				<img src="{{ post.U_PICTURE }}" alt="" loading="lazy">
-			</a>
+			<img class="bf-featured-picture" src="{{ post.U_PICTURE }}" alt="" loading="lazy">
 			<div class="bf-featured-body">
 				<a class="bf-featured-topic" href="{{ post.U_POST }}">{{ post.TITLE }}</a>
 				<span class="bf-featured-meta">{{ post.AUTHOR }} &middot; {{ post.TIME }}</span>

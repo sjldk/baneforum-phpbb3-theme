@@ -60,7 +60,7 @@ class listener implements EventSubscriberInterface
 
 			$this->template->assign_block_vars('bf_featured', [
 				'TITLE'     => $post['topic_title'],
-				'AUTHOR'    => get_username_string('full', (int) $post['poster_id'], $post['username'], $post['user_colour'], $post['post_username']),
+				'AUTHOR'    => get_username_string('username', (int) $post['poster_id'], $post['username'], $post['user_colour'], $post['post_username']),
 				'TIME'      => $this->user->format_date((int) $post['post_time']),
 				'U_PICTURE' => append_sid($this->root_path . 'download/file.' . $this->php_ext, $picture),
 				'U_POST'    => append_sid($this->root_path . 'viewtopic.' . $this->php_ext, $topic) . '#p' . (int) $post['post_id'],
