@@ -1,0 +1,59 @@
+/* Highlighted posts with a picture on the front page. Colours come from the style's variables, with plain fallbacks for other styles. */
+
+.bf-featured {
+	margin: 0 0 1.5rem;
+}
+
+.bf-featured-title {
+	margin: 0 0 0.5rem;
+}
+
+.bf-featured-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+	gap: 1rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.bf-featured-card {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	border: 1px solid var(--color-line, #ccd5e0);
+	border-radius: 0.5rem;
+	background: var(--color-surface, #fff);
+}
+
+.bf-featured-picture {
+	display: block;
+	aspect-ratio: 4 / 3;
+	background: var(--color-tint, #eef2f7);
+}
+
+.bf-featured-picture img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.bf-featured-body {
+	padding: 0.75rem;
+}
+
+.bf-featured-topic {
+	margin: 0 0 0.25rem;
+	font-size: 1.1em;
+}
+
+.bf-featured-snippet {
+	margin: 0 0 0.5rem;
+}
+
+.bf-featured-meta {
+	margin: 0;
+	font-size: 0.85em;
+	color: color-mix(in srgb, var(--color-text, #1d2b3c) 65%, gray);
+}
