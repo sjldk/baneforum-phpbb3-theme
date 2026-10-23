@@ -79,7 +79,10 @@ input.button2:hover,
 	background: var(--accent);
 }
 
-.headerbar,
+.headerbar {
+	background-color: var(--color-banner);
+}
+
 table.markdown thead {
 	background-color: var(--color-fill);
 }

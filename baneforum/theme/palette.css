@@ -1,67 +1,77 @@
 /* Colour palette.
-   Change --accent-base to re-colour the whole theme. Every other colour is mixed from it.
-   Text and background pairs keep at least 7:1 contrast (WCAG AAA) for the default accent.
-   If you pick a much lighter accent, check the contrast again.
+   Three kinds of colour:
+   - The brand colour --accent-base. Change it to re-colour the header rows, links, buttons and focus.
+     Light and dark mode both mix their accent colours from it.
+   - The banner colour --color-banner, for the top banner only.
+   - Neutral greys for the page, panels, lines and text. They do not depend on the accent. Light mode is white and
+     light grey, dark mode is dark grey.
+   Text and background pairs keep at least 7:1 contrast (WCAG AAA) for the default accent. If you pick a much lighter
+   accent, check the contrast again.
 
-   Dark mode is prepared but not switched on. Put data-theme="dark" on <html> and the block at
-   the end swaps the mix recipe. Nothing else in the theme names a colour, they all read these. */
+   Dark mode is switched on by data-theme="dark" on <html> (extensions/baneforum/darkmode). The block at the end
+   swaps the colours. Nothing else in the theme names a colour, they all read these. */
 :root {
 	color-scheme: light;
 
 	/* The border width of every control: text fields, checkboxes, radio buttons, and the buttons under a post and in the like bar. */
 	--border-control: 0.15rem;
 	/* The brand colour. Never changes between light and dark. A dark red, so pictures of any
-	   colour sit well on the page. Accent text on the light tint is 7.1:1 and light text on the accent fill 7.6:1 (WCAG AAA), among the lightest dark reds that pass. Earlier values: blue #215188, graphite #3a3f45, greys #4a4f55 and #5f646a, teal-slate #455254, slate blue #465061. */
+	   colour sit well on the page. Accent text on the light tint is 7.2:1 and light text on the accent fill 7.5:1 (WCAG AAA). Earlier values: blue #215188, graphite #3a3f45, greys #4a4f55 and #5f646a, teal-slate #455254, slate blue #465061. */
 	--accent-base: #873636;
 	/* The accent used for fills, links and focus. Lighter in dark mode. */
 	--accent: var(--accent-base);
 
-	/* Backgrounds: the accent diluted in white */
-	--color-paper: color-mix(in srgb, var(--accent-base) 2%, white);
-	--color-surface: color-mix(in srgb, var(--accent-base) 4%, white);
-	--color-tint: color-mix(in srgb, var(--accent-base) 8%, white);
-	--color-line: color-mix(in srgb, var(--accent-base) 20%, white);
+	/* Backgrounds and lines: white and light grey */
+	--color-paper: #ffffff;
+	--color-surface: #f7f7f7;
+	--color-tint: #f2f2f2;
+	--color-line: #d6d6d6;
 
-	/* Border of form controls (fields, selects, checkboxes). 3.2:1 against the page, the lightest that passes WCAG 1.4.11 */
-	--color-control: color-mix(in srgb, var(--accent) 65%, white);
+	/* Border of form controls (fields, selects, checkboxes). 3.3 to 3.7:1 against the backgrounds, enough for WCAG 1.4.11 */
+	--color-control: #858585;
 
-	/* Focus border on inputs: the full accent, 7.7:1 against the page and clearly darker than the control border */
+	/* Focus border on inputs: the full accent, 8:1 against the page and clearly darker than the control border */
 	--color-focus: var(--accent-base);
 
-	/* Text and dark fills: the accent darkened with black */
-	--color-text: color-mix(in srgb, var(--accent-base) 55%, black);
-	--color-muted: color-mix(in srgb, var(--accent-base) 85%, black);
+	/* Text and dark fills: dark grey */
+	--color-text: #1f1f1f;
+	--color-muted: #444444;
 
 	/* Text on accent and muted fills */
 	--color-on-accent: var(--color-surface);
 
-	/* Large fills: the banner and the header row of every list and table. Same as the accent in light mode.
+	/* Large fills: the header row of every list and table. Same as the accent in light mode.
 	   In dark mode the accent is light (so links reach 7:1), so these fills use the deep brand colour instead. */
 	--color-fill: var(--accent);
 	--color-on-fill: var(--color-on-accent);
+
+	/* The top banner has a colour of its own, the same in light and dark mode. The white title on it is 7.6:1. */
+	--color-banner: #215188;
 
 	/* Signal colours: a small share of the accent keeps them in the same family */
 	--color-danger: color-mix(in srgb, var(--accent-base) 10%, darkred);
 	--color-success: color-mix(in srgb, var(--accent-base) 10%, green);
 }
 
-/* Dark mode. Backgrounds are the accent diluted in black, text is the accent diluted in white.
-   Contrast was calculated for the default accent: text 13 to 15:1, muted 9 to 10:1, accent on
-   paper 6.9:1, focus on paper 6.2:1, dark text on the accent fill 7.9:1. */
+/* Dark mode: dark grey backgrounds, light grey text, and a light version of the accent for links.
+   Contrast was calculated for the default accent: text 12 to 15:1, muted 8 to 10:1, accent on
+   the backgrounds 7.7 to 9.2:1, controls 4.2 to 5:1, light text on the accent fill 7.3:1. */
 :root[data-theme="dark"] {
 	color-scheme: dark;
 
-	--accent: color-mix(in srgb, var(--accent-base) 40%, white);
+	--accent: color-mix(in srgb, var(--accent-base) 36%, white);
 
-	--color-paper: color-mix(in srgb, var(--accent-base) 25%, black);
-	--color-surface: color-mix(in srgb, var(--accent-base) 32%, black);
-	--color-tint: color-mix(in srgb, var(--accent-base) 42%, black);
-	--color-line: color-mix(in srgb, var(--accent-base) 70%, black);
+	--color-paper: #1b1b1b;
+	--color-surface: #232323;
+	--color-tint: #2a2a2a;
+	--color-line: #444444;
 
-	--color-focus: color-mix(in srgb, var(--accent-base) 60%, white);
+	--color-control: #8a8a8a;
 
-	--color-text: color-mix(in srgb, var(--accent-base) 12%, white);
-	--color-muted: color-mix(in srgb, var(--accent-base) 35%, white);
+	--color-focus: var(--accent);
+
+	--color-text: #ececec;
+	--color-muted: #c6c6c6;
 
 	--color-on-accent: black;
 
