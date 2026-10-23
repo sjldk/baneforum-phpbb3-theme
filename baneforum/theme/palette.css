@@ -1,6 +1,6 @@
 /* Colour palette.
    Change --accent-base to re-colour the whole theme. Every other colour is mixed from it.
-   Body text keeps 7:1 contrast (WCAG AAA). Accent text and fills keep at least 5:1 (AA) for the default accent.
+   Text and background pairs keep at least 7:1 contrast (WCAG AAA) for the default accent.
    If you pick a much lighter accent, check the contrast again.
 
    Dark mode is prepared but not switched on. Put data-theme="dark" on <html> and the block at
@@ -10,9 +10,9 @@
 
 	/* The border width of every control: text fields, checkboxes, radio buttons, and the buttons under a post and in the like bar. */
 	--border-control: 0.15rem;
-	/* The brand colour. Never changes between light and dark. A soft neutral grey, so pictures of any
-	   colour sit well on the page. Accent text on the light tint is 5.4:1 and white on the accent fill 5.7:1 (WCAG AA). Plain text is still 11:1 or more. Earlier values: blue #215188, graphite #3a3f45, grey #4a4f55 (7:1). */
-	--accent-base: #5f646a;
+	/* The brand colour. Never changes between light and dark. A soft grey with a slight teal cast, so pictures of any
+	   colour sit well on the page. Accent text on the light tint is 7.2:1 and light text on the accent fill 7.6:1 (WCAG AAA), among the lightest teal-greys that pass. Earlier values: blue #215188, graphite #3a3f45, greys #4a4f55 and #5f646a. */
+	--accent-base: #455254;
 	/* The accent used for fills, links and focus. Lighter in dark mode. */
 	--accent: var(--accent-base);
 
