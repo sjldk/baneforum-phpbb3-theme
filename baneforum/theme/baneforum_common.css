@@ -22,6 +22,13 @@ html {
 	background: url("images/background.jpg") no-repeat fixed center / cover;
 }
 
+/* Dark theme: the same photo under a wash of the page colour, so it stays a quiet background. */
+:root[data-theme="dark"] {
+	background:
+		linear-gradient(color-mix(in srgb, var(--color-paper) 85%, transparent), color-mix(in srgb, var(--color-paper) 85%, transparent)) fixed,
+		url("images/background.jpg") no-repeat fixed center / cover;
+}
+
 body {
 	background: none;
 
@@ -582,13 +589,13 @@ body :is(h2, h3, h4) {
 
 /* One look for every table and list header (table.table1 and ul.topiclist) */
 :is(ul.topiclist li.header, table.table1 thead) :is(dt, dd, th, a, span, .list-inner) {
-	color: var(--color-on-accent);
+	color: var(--color-on-fill);
 	font-weight: 600;
 	text-transform: none;
 }
 
 ul.topiclist li.header {
-	background-color: var(--accent);
+	background-color: var(--color-fill);
 }
 
 ul.topiclist li.header :is(dt, dd) {
@@ -603,7 +610,7 @@ table.table1 {
 }
 
 table.table1 thead th {
-	background-color: var(--accent);
+	background-color: var(--color-fill);
 	padding: 0.8em 0.6em;
 	text-align: left;
 	vertical-align: middle;

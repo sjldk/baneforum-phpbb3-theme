@@ -35,6 +35,11 @@
 	/* Text on accent and muted fills */
 	--color-on-accent: var(--color-surface);
 
+	/* Large fills: the banner and the header row of every list and table. Same as the accent in light mode.
+	   In dark mode the accent is light (so links reach 7:1), so these fills use the deep brand colour instead. */
+	--color-fill: var(--accent);
+	--color-on-fill: var(--color-on-accent);
+
 	/* Signal colours: a small share of the accent keeps them in the same family */
 	--color-danger: color-mix(in srgb, var(--accent-base) 10%, darkred);
 	--color-success: color-mix(in srgb, var(--accent-base) 10%, green);
@@ -46,7 +51,7 @@
 :root[data-theme="dark"] {
 	color-scheme: dark;
 
-	--accent: color-mix(in srgb, var(--accent-base) 55%, white);
+	--accent: color-mix(in srgb, var(--accent-base) 40%, white);
 
 	--color-paper: color-mix(in srgb, var(--accent-base) 25%, black);
 	--color-surface: color-mix(in srgb, var(--accent-base) 32%, black);
@@ -59,6 +64,9 @@
 	--color-muted: color-mix(in srgb, var(--accent-base) 35%, white);
 
 	--color-on-accent: black;
+
+	--color-fill: var(--accent-base);
+	--color-on-fill: color-mix(in srgb, var(--accent-base) 6%, white);
 
 	--color-danger: color-mix(in srgb, var(--accent-base) 10%, #ff8080);
 	--color-success: color-mix(in srgb, var(--accent-base) 10%, #70d070);

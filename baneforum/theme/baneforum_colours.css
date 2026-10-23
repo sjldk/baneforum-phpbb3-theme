@@ -48,6 +48,11 @@ a,
 .postbody h3.first a,
 .postbody h3 a,
 .bf-index__title,
+label,
+li.row strong,
+h2,
+h4,
+.panel,
 h3,
 .postbody .content,
 .content blockquote,
@@ -76,7 +81,7 @@ input.button2:hover,
 
 .headerbar,
 table.markdown thead {
-	background-color: var(--accent);
+	background-color: var(--color-fill);
 }
 
 /* The header row of a list has the accent itself. A blue background behind the whole block showed as a dark fringe
