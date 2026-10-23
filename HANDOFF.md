@@ -1,6 +1,6 @@
 # Handoff
 
-Last updated 2026-10-22 (evening). Read this first. The long log is `docs/editor-progress.md`.
+Last updated 2026-10-23. Read this first. The long log is `docs/editor-progress.md`.
 
 ## What this repo is
 
@@ -19,6 +19,7 @@ production: phpBB 3.3.19, PHP 8.5, the Markdown and MediaEmbed extensions.
 | Browser tests | `scripts/browser-tests/run.sh posting.mjs` (12 checks), `dialogs.mjs` (5 checks). See `scripts/browser-tests/README.md`. Chrome runs on the host. |
 | Compare computed styles before and after a CSS change | `run.sh snap.mjs out.json "<selectors>"` on 25 pages. A 1px width difference on the preferences page is noise. |
 | Pack the extensions as zips for another board | `scripts/package-extensions.sh [--bump patch\|minor\|major] [name ...]`. The zips go to `dist/` (git-ignored). |
+| What did prosilver change since the release we last reviewed? | `scripts/prosilver-diff.sh <new-version>` (for example 3.3.20). It diffs the old and new prosilver for the files we override and lists the changed files we do not override. Reviewed so far: 3.3.19, kept in `docs/prosilver-reviewed`. Write the new version there when you are done. |
 | Production copy board (8081) | See the phpbb skill (`.claude/skills/phpbb/SKILL.md`) |
 
 Push: if it fails with "publickey", unlock the SSH key (`ssh-add ~/.ssh/id_github_rsa`).
@@ -31,8 +32,17 @@ Push: if it fails with "publickey", unlock the SSH key (`ssh-add ~/.ssh/id_githu
 | Theme | Under active polish. See "Today". |
 | Extensions | `likes` and `censor` are new and enabled on the test board. Not installed on production. |
 | Replacing prosilver CSS | `buttons.css` and `forms.css` are ours now. Nine prosilver files still load. See "Next". |
+| Prosilver 3.3.19 | All our overrides are checked against it. Nothing open. |
 
-## Today (2026-10-22), checked in Chrome on the test board unless noted
+## Today (2026-10-23)
+
+- **Popup and print pages:** they had no prosilver CSS. `template/baneforum_css.html` now holds the CSS link list. `overall_header.html` and the new `simple_header.html` (popups) both include it. `theme/print.css` is prosilver's, unchanged (print views returned 404 for it). It still has the old design.
+- **Prosilver 3.3.19 check:** our overrides came from prosilver 3.3.0 to 3.3.11. Real gaps, now fixed: `{% apply spaceless %}` in `navbar_footer.html`, and the two delete checkboxes in separate `if` blocks in `posting_editor.html`. Everything else was already ours or in a section we removed.
+- **Background image:** `cover`, and it sits on `html` now. Prosilver gives `html` a background colour, so a body background stopped where the page stopped when zoomed out. `body` has `background: none`, and `body` is out of the surface-colour list in `baneforum_colours.css`.
+- **Quick login:** the text fields have `min-width: 10rem` (your edit, committed).
+- **Not checked:** the background in a browser at different zoom levels and on a phone (iOS ignores `fixed`). `snap.mjs` after the header include and the background move. Popup and print pages in a browser.
+
+## 2026-10-22, checked in Chrome on the test board unless noted
 
 **Posting page**
 - The option checkboxes (BBCode, smilies, URLs, signature, "Disable Markdown") are gone from `posting_editor.html`. The panel stays for notify, lock, sticky type, delete and edit reason. The editor is always on (`bf-phpbb.js` no longer waits for the Markdown box).
@@ -66,6 +76,7 @@ Push: if it fails with "publickey", unlock the SSH key (`ssh-add ~/.ssh/id_githu
 
 | Item | Note |
 |---|---|
+| Check today's changes | Background on `html` (zoom out, phone), popup and print pages, `snap.mjs` on the header change. |
 | Replace the other prosilver CSS files | `content.css` next, then `colours.css`, `common.css`, `cp.css`, `links.css`, `base.css`, `utilities.css`, `icons.css`, `normalize.css`. Check each with `snap.mjs` before and after, and keep the same position in `overall_header.html`. |
 | Optimise the CSS | After all files are ours: merge our overrides into the replaced files, drop dead rules and `!important`, deduplicate. The user asked for this. |
 | `dl`/`dt` layouts | Form rows are a grid now. Topic rows and other lists still use prosilver's floats and flex. |
