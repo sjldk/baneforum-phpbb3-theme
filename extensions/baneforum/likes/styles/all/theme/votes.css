@@ -1,4 +1,5 @@
-/* Like and dislike buttons in a toolbar across the bottom of each post. Colours come from the style's variables, with plain fallbacks for other styles. */
+/* Like and dislike buttons in a small bar under each post, in the same style as the buttons of the post and the toolbar of the
+   editor: a bar in the tint colour with flat buttons. Colours come from the style's variables, with plain fallbacks for other styles. */
 
 .bf-votes {
 	clear: both;
@@ -6,9 +7,11 @@
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 0.25rem;
+	inline-size: fit-content;
 	margin-top: 1rem;
-	padding: 0.5rem 0 0;
-	border-top: 1px solid var(--color-line, #ccd5e0);
+	padding: 0.25rem;
+	border-radius: var(--radius, 0.5rem);
+	background: var(--color-tint, #eef2f7);
 	/* The text colour of the style, toned down towards grey so the toolbar is calm. Still above 7:1 on the page colour. */
 	--bf-vote-ink: color-mix(in srgb, var(--color-text, #1d2b3c) 55%, gray);
 }
