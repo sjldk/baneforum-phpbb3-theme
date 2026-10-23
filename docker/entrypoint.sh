@@ -79,6 +79,11 @@ if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='banefor
 	php bin/phpbbcli.php extension:enable baneforum/likes
 fi
 
+# Our own front page block with highlighted posts that have pictures.
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/featured' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable baneforum/featured
+fi
+
 # Our own word censor. It leaves URLs alone (phpBB's own censor changes addresses and breaks links).
 if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/censor' AND ext_active=1")" = 0 ]; then
 	php bin/phpbbcli.php extension:enable baneforum/censor
