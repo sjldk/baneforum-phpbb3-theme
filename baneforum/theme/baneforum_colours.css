@@ -71,7 +71,20 @@ table.markdown thead {
    on the rounded bottom corners. */
 .forabg,
 .forumbg {
+	background-color: var(--color-surface);
+}
+
+/* The rows of a list lie on the panel of their section: no shading of every other row, no lines between the columns,
+   and a tint when the pointer is on a row. */
+ul.topiclist li.row.bg1,
+ul.topiclist li.row.bg2,
+ul.topiclist.forums,
+ul.topiclist.topics {
 	background-color: transparent;
+}
+
+ul.topiclist li.row:hover {
+	background-color: var(--color-tint);
 }
 
 .bg1,
@@ -159,7 +172,7 @@ li.row {
 }
 
 ul.topiclist dd {
-	border-left-color: var(--color-surface);
+	border-left-color: transparent;
 }
 
 dl.thumbnail dt a:hover {
