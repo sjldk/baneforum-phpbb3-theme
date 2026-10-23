@@ -1,5 +1,5 @@
 export { scanBBCode } from './bbcode/scan.js';
-export { createMarkdownBBCodeCodec } from './codecs/markdown-bbcode.js';
+export { createBBCodeCodec } from './codecs/bbcode.js';
 export { createBasicCommands } from './commands.js';
 export { assertImplements, contractNames } from './contracts.js';
 export { defineBfEditor } from './define.js';

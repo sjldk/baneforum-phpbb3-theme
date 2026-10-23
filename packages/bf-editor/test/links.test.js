@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { JSDOM } from 'jsdom';
 import { EditorState, TextSelection } from 'prosemirror-state';
-import { createMarkdownBBCodeCodec } from '../src/codecs/markdown-bbcode.js';
+import { createBBCodeCodec } from '../src/codecs/bbcode.js';
 import { assertImplements } from '../src/contracts.js';
 import { createLinkCommand, currentLink, removeLink, setLink } from '../src/link-command.js';
 import { defaultLinkPolicy } from '../src/link-policy.js';
@@ -10,7 +10,7 @@ import { createPlugins } from '../src/plugins.js';
 import { useNewWindowLinks } from '../src/render/external-links.js';
 import { schema } from '../src/schema.js';
 
-const codec = createMarkdownBBCodeCodec(schema);
+const codec = createBBCodeCodec(schema);
 
 function stateWith(text, from, to = from) {
 	const state = EditorState.create({ doc: codec.parse(text) });
@@ -61,28 +61,28 @@ test(`link mark shows as an <a> that opens in a new window`, () => {
 	assert.equal(attrs.rel, `noopener noreferrer`);
 });
 
-test(`setLink links the selected text and writes Markdown`, () => {
+test(`setLink links the selected text and writes BBCode`, () => {
 	const state = apply(setLink(schema, `https://example.com`), stateWith(`hello world`, 1, 6));
-	assert.equal(codec.serialize(state.doc), `[hello](https://example.com) world`);
+	assert.equal(codec.serialize(state.doc), `[url=https://example.com]hello[/url] world`);
 });
 
 test(`setLink with no selection writes the address as the link`, () => {
 	const state = apply(setLink(schema, `https://example.com`), stateWith(`ab`, 2));
-	assert.equal(codec.serialize(state.doc), `a[https://example.com](https://example.com)b`);
+	assert.equal(codec.serialize(state.doc), `a[url]https://example.com[/url]b`);
 });
 
 test(`setLink with the cursor inside a link changes the whole link`, () => {
-	const state = apply(setLink(schema, `https://new.example`), stateWith(`[hello](https://old.example) x`, 3));
-	assert.equal(codec.serialize(state.doc), `[hello](https://new.example) x`);
+	const state = apply(setLink(schema, `https://new.example`), stateWith(`[url=https://old.example]hello[/url] x`, 3));
+	assert.equal(codec.serialize(state.doc), `[url=https://new.example]hello[/url] x`);
 });
 
 test(`currentLink finds the address under the cursor`, () => {
-	assert.equal(currentLink(stateWith(`[hello](https://old.example) x`, 3), schema), `https://old.example`);
+	assert.equal(currentLink(stateWith(`[url=https://old.example]hello[/url] x`, 3), schema), `https://old.example`);
 	assert.equal(currentLink(stateWith(`plain`, 2), schema), ``);
 });
 
 test(`removeLink with the cursor inside takes off the whole link`, () => {
-	const state = apply(removeLink(schema), stateWith(`[hello](https://old.example) x`, 3));
+	const state = apply(removeLink(schema), stateWith(`[url=https://old.example]hello[/url] x`, 3));
 	assert.equal(codec.serialize(state.doc), `hello x`);
 });
 
@@ -108,7 +108,7 @@ test(`the link command asks, cleans the answer and applies it`, async () => {
 	command.run(view.state, view.dispatch, view);
 	await new Promise((resolve) => setImmediate(resolve));
 	assert.deepEqual(asked, [``]);
-	assert.equal(codec.serialize(view.state.doc), `[hello](https://example.com)`);
+	assert.equal(codec.serialize(view.state.doc), `[url=https://example.com]hello[/url]`);
 });
 
 test(`the link command drops an address the policy refuses`, async () => {
@@ -181,13 +181,13 @@ function pasteInto(state, text) {
 test(`paste: an address over selected text links the text`, () => {
 	const { handled, view } = pasteInto(stateWith(`hello world`, 1, 6), `https://example.com/x`);
 	assert.equal(handled, true);
-	assert.equal(codec.serialize(view.state.doc), `[hello](https://example.com/x) world`);
+	assert.equal(codec.serialize(view.state.doc), `[url=https://example.com/x]hello[/url] world`);
 });
 
 test(`paste: an address with no selection is written as a link`, () => {
 	const { handled, view } = pasteInto(stateWith(`a`, 2), `https://example.com`);
 	assert.equal(handled, true);
-	assert.equal(codec.serialize(view.state.doc), `a[https://example.com](https://example.com)`);
+	assert.equal(codec.serialize(view.state.doc), `a[url]https://example.com[/url]`);
 });
 
 test(`paste: ordinary text and unsafe addresses are left to the editor`, () => {

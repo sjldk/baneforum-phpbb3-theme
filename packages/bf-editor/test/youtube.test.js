@@ -2,14 +2,14 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { JSDOM } from 'jsdom';
 import { EditorState, TextSelection } from 'prosemirror-state';
-import { createMarkdownBBCodeCodec } from '../src/codecs/markdown-bbcode.js';
+import { createBBCodeCodec } from '../src/codecs/bbcode.js';
 import { assertImplements } from '../src/contracts.js';
 import { parseStart, playerUrl, youtubeProvider } from '../src/embeds/youtube.js';
 import { createPlugins } from '../src/plugins.js';
 import { useYoutubePlayers } from '../src/render/youtube.js';
 import { schema } from '../src/schema.js';
 
-const codec = createMarkdownBBCodeCodec(schema);
+const codec = createBBCodeCodec(schema);
 const id = `dQw4w9WgXcQ`;
 
 test(`the provider satisfies the EmbedProvider contract`, () => {
@@ -155,7 +155,7 @@ test(`paste: a video address in an empty paragraph becomes a player with a parag
 test(`paste: a video address in the middle of text stays a link`, () => {
 	const { view } = pasteInto(stateWith(`ab`, 2), `https://youtu.be/${id}`);
 	assert.equal(view.state.doc.firstChild.type.name, `paragraph`);
-	assert.match(codec.serialize(view.state.doc), /^a\[https:\/\/youtu\.be\/.*\]\(https:\/\/youtu\.be\/.*\)b$/);
+	assert.match(codec.serialize(view.state.doc), /^a\[url\]https:\/\/youtu\.be\/.*\[\/url\]b$/);
 });
 
 function stateWith(text, position) {
