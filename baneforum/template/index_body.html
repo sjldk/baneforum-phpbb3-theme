@@ -12,9 +12,9 @@
 {% EVENT index_body_markforums_after %}
 
 {# The forum list, with room beside it for blocks from extensions (featured posts) #}
-<div class="bf-index-columns">
-	<div class="bf-index-main">
-		<h2 class="bf-index-title">{{ lang('FORUMS') }}</h2>
+<div class="bf-index">
+	<div class="bf-index__main">
+		<h2 class="bf-index__title">{{ lang('FORUMS') }}</h2>
 		{% include 'forumlist_body.html' %}
 	</div>
 	{% EVENT index_body_forumlist_body_after %}

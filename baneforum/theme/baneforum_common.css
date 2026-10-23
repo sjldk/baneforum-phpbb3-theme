@@ -1550,3 +1550,26 @@ dialog.phpbb_alert .alert_text fieldset.submit-buttons {
 	margin: 1rem 0 0;
 	padding: 0;
 }
+
+/* Front page: the forum list with room beside it for blocks from extensions, such as featured posts.
+   The heading over each column keeps both lists starting at the same level. */
+.bf-index {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	align-items: flex-start;
+}
+
+.bf-index__main {
+	flex: 1 1 28rem;
+	min-width: 0;
+}
+
+.bf-index__side {
+	flex: 0 1 18rem;
+	min-width: 0;
+}
+
+.bf-index__title {
+	margin: 0 0 0.5rem;
+}
