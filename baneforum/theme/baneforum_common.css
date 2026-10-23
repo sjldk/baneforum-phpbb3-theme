@@ -16,8 +16,14 @@
 	--radius: 0.5rem;
 }
 
+/* The image is on html, not body. Prosilver gives html a background colour, so a body background
+   would stop where the page content stops (zoomed out, or on a short page). */
+html {
+	background: url("images/background.jpg") no-repeat fixed center / cover;
+}
+
 body {
-	background: url("images/background.jpg") no-repeat fixed center;
+	background: none;
 
 	font-family: var(--base-font);
 	font-size: var(--base-font-size);
