@@ -1,6 +1,6 @@
 :root {
 	--base-font: "Inter", system-ui, sans-serif;
-	--font-headline: var(--base-font);
+	--font-headline: "Barlow Semi Condensed", var(--base-font);
 	--font-title: var(--base-font);
 	--font-comic: "Comic Sans", sans-serif;
 	/* One monospace stack for code blocks, inline code and keys. phpBB and the Markdown extension each set their own. */
@@ -60,7 +60,9 @@ dl.file dt,
 	font-family: inherit;
 }
 
-.site-description h1 {
+.site-description h1,
+h1,
+h2 {
 	font-family: var(--font-headline);
 }
 
@@ -563,8 +565,8 @@ body .copyright :is(span, a, p) {
 }
 
 /* One font everywhere: prosilver sets Verdana, Trebuchet, Arial, Open Sans and more in different places.
-   Exceptions: icon fonts, code and the site title. */
-body :not(.icon, .fa, code, pre, kbd, samp, .site-description h1) {
+   Exceptions: icon fonts, code, the site title and the h1 and h2 headings (they use --font-headline). */
+body :not(.icon, .fa, code, pre, kbd, samp, .site-description h1, h1, h2, h1 *, h2 *) {
 	font-family: var(--base-font) !important;
 }
 

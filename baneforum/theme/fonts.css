@@ -15,3 +15,20 @@
 	src: url("fonts/inter-italic-latin.woff2") format("woff2");
 }
 
+/* Headline font: a little narrower and taller than Inter. Two static weights, no italic. */
+@font-face {
+	font-family: "Barlow Semi Condensed";
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url("fonts/barlow-semi-condensed-latin-600.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Barlow Semi Condensed";
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url("fonts/barlow-semi-condensed-latin-700.woff2") format("woff2");
+}
+
