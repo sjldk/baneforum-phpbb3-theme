@@ -87,7 +87,7 @@ for (const url of mode === `guest` ? [`ucp.php?mode=login`, `index.php`, `ucp.ph
 	for (const [family, info] of Object.entries(data)) {
 		const first = family.split(`,`)[0].replace(/"/g, ``);
 
-		if (!/^(Inter|Oswald)/.test(first) || /,\s*(Verdana|Arial|Helvetica|Trebuchet|Open Sans)/i.test(family) === true) {
+		if (!/^Inter/.test(first) || /,\s*(Verdana|Arial|Helvetica|Trebuchet|Open Sans)/i.test(family) === true) {
 			console.log(`  ${info.count}x ${family}  e.g. ${info.samples.join(`, `)}`);
 		}
 	}

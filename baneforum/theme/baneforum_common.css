@@ -1,6 +1,6 @@
 :root {
 	--base-font: "Inter", system-ui, sans-serif;
-	--font-headline: "Oswald", "Arial Narrow", sans-serif;
+	--font-headline: var(--base-font);
 	--font-title: var(--base-font);
 	--font-comic: "Comic Sans", sans-serif;
 	/* One monospace stack for code blocks, inline code and keys. phpBB and the Markdown extension each set their own. */
