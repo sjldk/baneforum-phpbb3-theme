@@ -15,13 +15,13 @@
 	</form>
 	{% else %}
 	{% set bf_why = postrow.S_BF_VOTE_GUEST ? lang('BF_VOTE_LOGIN') : (postrow.S_BF_VOTE_OWN ? lang('BF_VOTE_OWN') : '') %}
-	<button type="button" class="bf-vote is-readonly" aria-disabled="true"{% if bf_why %} data-tip="{{ bf_why }}"{% endif %}>
+	<button type="button" class="bf-vote is-readonly" aria-disabled="true"{% if bf_why %} title="{{ bf_why }}"{% endif %}>
 		<i class="icon fa-fw fa-thumbs-o-up" aria-hidden="true"></i>
 		<span class="bf-vote-label">{{ lang('BF_VOTE_LIKE') }}</span>
 		<span class="bf-vote-count">{{ postrow.BF_VOTE_UP }}</span>{% if bf_why %}
 		<span class="bf-vote-label">{{ bf_why }}</span>{% endif %}
 	</button>
-	<button type="button" class="bf-vote is-readonly{% if postrow.S_BF_VOTE_LOW %} is-over{% endif %}" aria-disabled="true"{% if bf_why %} data-tip="{{ bf_why }}"{% endif %}>
+	<button type="button" class="bf-vote is-readonly{% if postrow.S_BF_VOTE_LOW %} is-over{% endif %}" aria-disabled="true"{% if bf_why %} title="{{ bf_why }}"{% endif %}>
 		<i class="icon fa-fw fa-thumbs-o-down" aria-hidden="true"></i>
 		<span class="bf-vote-label">{{ lang('BF_VOTE_DISLIKE') }}</span>
 		<span class="bf-vote-count">{{ postrow.BF_VOTE_DOWN }}</span>{% if bf_why %}
