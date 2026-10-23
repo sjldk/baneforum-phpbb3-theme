@@ -17,6 +17,6 @@ bf-editor {
 bf-youtube {
 	--bf-radius: var(--radius);
 	--bf-focus: var(--color-focus);
-	--bf-youtube-bg: var(--color-text);
-	--bf-youtube-text: var(--color-paper);
+	--bf-youtube-bg: var(--color-tint);
+	--bf-youtube-text: var(--color-text);
 }
