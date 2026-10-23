@@ -25,18 +25,8 @@ dl.file dd {
 }
 
 input.button2,
-input.button1,
-input.button1:hover,
-input.button2:hover,
-.button:hover,
-.button:focus,
-.button:hover .icon,
-.button .icon,
-.button,
 .pagination li.active span,
 .error,
-.pagination li a:hover,
-.pagination li a:hover .icon,
 .pagination .dropdown-visible a.dropdown-trigger,
 .nojs .pagination .dropdown-container:hover a.dropdown-trigger {
 	color: var(--color-on-accent);
@@ -63,17 +53,7 @@ dl.attachbox dt {
 	color: var(--color-text);
 }
 
-input.button2,
-input.button1,
-input.button1:hover,
-input.button2:hover,
-.button:hover,
-.button:focus,
 .pagination li.active span,
-.post-buttons .button:hover,
-.format-buttons .button:hover,
-.pagination li a:hover,
-.pagination li a:hover .icon,
 .pagination .dropdown-visible a.dropdown-trigger,
 .nojs .pagination .dropdown-container:hover a.dropdown-trigger {
 	background: var(--accent);
@@ -114,19 +94,12 @@ li.row:hover,
 	border-color: var(--accent);
 }
 
-.button-secondary,
 .inputbox::placeholder,
 .content blockquote cite,
 .content blockquote cite a,
 .signature,
 .icon.icon-gray {
 	color: var(--color-muted);
-}
-
-.button,
-.post-buttons .button,
-.format-buttons .button {
-	background: var(--color-muted);
 }
 
 .signature {
@@ -158,6 +131,13 @@ select:focus,
 select:focus,
 .search-box .inputbox:focus {
 	border-color: var(--color-focus);
+}
+
+/* One field colour, the page colour. prosilver gives the quick login fields a grey of their own. */
+.inputbox,
+fieldset.quick-login input.inputbox {
+	background-color: var(--color-paper);
+	color: var(--color-text);
 }
 
 /* Prosilver fades everything for 0.5s. A short fade on the border colour only. */
@@ -488,43 +468,10 @@ input[type="radio"]:disabled:checked {
 	outline-offset: 0.1rem;
 }
 
-/* The page numbers next to a topic title and in the page bars look like the buttons under a post: the same
-   radius and border width in every state, a light tint, dark blue text, and on hover a deeper tint with the
-   control border. The current page stays filled. Prosilver gives the page numbers in a topic row a 2px
-   radius and removes the border on hover, so these rules name the .button class to win over its row rules. */
-.pagination li a.button,
-.pagination li a.button:hover,
-.pagination li a.button:focus-visible,
-.pagination li.active span,
-.pagination li.ellipsis span {
-	border-width: var(--border-control);
-	border-style: solid;
-	border-radius: var(--radius);
-}
-
-.pagination li a.button {
-	background: var(--color-tint);
-	border-color: var(--color-line);
-	color: var(--color-muted);
-}
-
-.pagination li a.button:hover,
-.pagination li a.button:focus-visible {
-	background: color-mix(in srgb, var(--color-tint) 60%, var(--color-line));
-	border-color: var(--color-control);
-	color: var(--color-muted);
-}
-
-.pagination li a.button:hover .icon,
-.pagination li a.button:focus-visible .icon {
-	background: none;
-	color: var(--color-muted);
-}
-
 /* Selects get the same field colours as the text fields (prosilver gives them a grey that the fields do not have). */
 select {
-	background-color: #fff;
-	color: #333;
+	background-color: var(--color-paper);
+	color: var(--color-text);
 }
 
 /* The notices in a post (deleted, waiting for approval): a soft red box with round corners, and buttons in the same
@@ -597,20 +544,55 @@ form.mcp_approve > p.post-notice > strong {
 	color: var(--color-muted);
 }
 
-/* Regular buttons, in both themes: the surface, text, border and hover colours come from the --color-button tokens of the
-   palette. Light mode has a light grey with dark text, dark mode a dark grey with light text. The light accent would
-   make them the brightest thing on the dark page. The pagination numbers and the like buttons are not touched. */
-:root :is(input.button1, input.button2, input.button3, .button:not(.post-buttons .button), .format-buttons .button) {
+/* Buttons: three levels, the same in both themes. The colours come from the palette.
+   Primary: the one main action of a page: Submit, Login, New Topic, Post Reply (and the current page number above).
+   Secondary: every other button with a label: Preview, Save draft, Register, the topic tools.
+   Quiet: flat icon buttons that sit in a bar like the editor toolbar: the buttons of a post (above) and the page numbers.
+   The rules name :root, so they win over prosilver and over older rules. :where() keeps the exceptions from adding weight.
+   The red notice buttons in a post (p.post-notice) have their own look and are left out. */
+:root :is(input.button2, input.button3, .button):where(:not(.button-icon-only, .pagination li a.button, [href*="mode=post"], [href*="mode=reply"], p.post-notice *)) {
 	background: var(--color-button);
 	border-color: var(--color-button-border);
 	color: var(--color-on-button);
 }
 
-:root :is(input.button1, input.button2, input.button3, .button:not(.post-buttons .button), .format-buttons .button):is(:hover, :focus, :active) {
+:root :is(input.button2, input.button3, .button):where(:not(.button-icon-only, .pagination li a.button, [href*="mode=post"], [href*="mode=reply"], p.post-notice *)):is(:hover, :focus, :active) {
 	background: var(--color-button-hover);
 	color: var(--color-on-button);
 }
 
-:root :is(.button, .button-secondary, .pagination li a.button) .icon {
-	color: var(--color-on-button);
+:root :is(input.button1, a.button[href*="mode=post"], a.button[href*="mode=reply"]):where(:not(p.post-notice *)) {
+	background: var(--color-primary);
+	border-color: transparent;
+	color: var(--color-on-primary);
+}
+
+:root :is(input.button1, a.button[href*="mode=post"], a.button[href*="mode=reply"]):where(:not(p.post-notice *)):is(:hover, :focus, :active) {
+	background: var(--color-primary-hover);
+	color: var(--color-on-primary);
+}
+
+/* Page numbers are quiet buttons: flat, a deeper tint on hover. The current page is the filled one (see above). */
+:root .pagination li a.button,
+:root .pagination li.active span,
+:root .pagination li.ellipsis span {
+	border: var(--border-control) solid transparent;
+	border-radius: var(--radius);
+}
+
+:root .pagination li a.button {
+	background: transparent;
+	color: var(--color-text);
+}
+
+:root .pagination li a.button:is(:hover, :focus, :active) {
+	background: color-mix(in srgb, var(--color-tint) 60%, var(--color-line));
+	color: var(--color-text);
+}
+
+/* The icon of a button has the colour of its text in every state. prosilver gives it a light blue on focus. */
+:root .button .icon,
+:root .button:is(:hover, :focus, :active) .icon {
+	background: none;
+	color: inherit;
 }

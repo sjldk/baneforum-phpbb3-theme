@@ -55,6 +55,12 @@
 	--color-on-button: var(--color-text);
 	--color-button-border: var(--color-control);
 
+	/* The one main action of a page (Submit, Login, New Topic, Post Reply, the current page number): filled dark
+	   grey with white text (8:1), darker on hover (12:1). */
+	--color-primary: var(--accent-base);
+	--color-primary-hover: color-mix(in srgb, var(--accent-base) 70%, black);
+	--color-on-primary: #ffffff;
+
 	/* Signal colours: a small share of the accent keeps them in the same family */
 	--color-danger: color-mix(in srgb, var(--accent-base) 10%, darkred);
 	--color-success: color-mix(in srgb, var(--accent-base) 10%, green);
@@ -91,6 +97,11 @@
 	--color-button-hover: var(--accent-base);
 	--color-on-button: var(--color-on-fill);
 	--color-button-border: var(--color-line);
+
+	/* The main action is the one bright button on the dark page: the light accent with black text (11:1). */
+	--color-primary: var(--accent);
+	--color-primary-hover: color-mix(in srgb, var(--accent) 80%, white);
+	--color-on-primary: #000000;
 
 	--color-danger: color-mix(in srgb, var(--accent-base) 10%, #ff8080);
 	--color-success: color-mix(in srgb, var(--accent-base) 10%, #70d070);
