@@ -63,6 +63,7 @@ A file here replaces the one in prosilver. Check the prosilver original of the s
 | Editor alone in Chrome | `scripts/browser-tests/smoke.sh` |
 | A browser test on the board | `scripts/browser-tests/run.sh <script.mjs>` (Chrome) or `BROWSER=firefox scripts/browser-tests/run.sh <script.mjs>` |
 | Firefox | Puppeteer talks WebDriver BiDi. `states.mjs` uses the Chrome DevTools protocol and is Chrome only. |
+| Style sheet page | `baneforum/theme/styleguide.html` shows every button level, surface, heading, list row, post card and form field in both themes. Open `/styles/baneforum/theme/styleguide.html` on the test board after a style change, and run `styleguide.mjs`. Add a new part of the theme to it. |
 | Another board | The tests use `http://localhost:8080`. Change the host in `login.mjs` and the scripts for 8081. |
 
 Details: `scripts/browser-tests/README.md`.
