@@ -453,9 +453,10 @@ input[type="radio"]:disabled:checked {
 	background: var(--color-tint);
 }
 
-/* The posts alternate between the surface (bg2) and the tint colour (bg1). On the tint rows the bar uses the surface colour. */
-.bg1 .post-buttons {
-	background: var(--color-surface);
+/* All posts have the same surface (the cards are told apart by space, not by shading). */
+.post.has-profile.bg1,
+.post.has-profile.bg2 {
+	background-color: var(--color-surface);
 }
 
 .post-buttons .button,
@@ -608,4 +609,14 @@ form.mcp_approve > p.post-notice > strong {
 :root .button:is(:hover, :focus, :active) .icon {
 	background: none;
 	color: inherit;
+}
+
+/* Code blocks use the palette: prosilver has a fixed green on white (4.2:1) in the light theme. */
+.codebox {
+	background-color: var(--color-paper);
+	border-color: var(--color-line);
+}
+
+.codebox code {
+	color: var(--color-text);
 }

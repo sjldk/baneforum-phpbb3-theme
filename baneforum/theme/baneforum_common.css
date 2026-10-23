@@ -1643,3 +1643,153 @@ ul.topiclist li.header dl.row-item dt,
 ul.topiclist li.header dl.row-item dt .list-inner {
 	text-align: start;
 }
+
+/* Posts: one card per post, the same on every screen. The author is a compact line above the post (avatar, name, rank,
+   and the contact icon) instead of a column beside it, so the text gets the full width and nothing is separated by a
+   vertical line. The buttons of the post sit at the right end of that line. All posts have the same surface, the cards
+   are separated by space, and there is no arrow after every post (one button at the corner of the page does that). */
+.post.has-profile {
+	padding: 1rem 1.25rem 1.25rem;
+	margin: 0 0 1rem;
+	overflow: hidden;
+}
+
+.post.has-profile .inner {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.post.has-profile .postprofile {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0 0.5rem;
+	float: none;
+	width: auto;
+	min-height: 2.75rem;
+	margin: 0 0 0.75rem;
+	padding: 0;
+	border: 0;
+	overflow: visible;
+}
+
+.post.has-profile .postprofile dt {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0;
+	font-size: var(--text-body);
+}
+
+.post.has-profile .postprofile .avatar-container {
+	margin: 0;
+	overflow: visible;
+}
+
+.post.has-profile .postprofile .avatar-container::after {
+	content: none;
+}
+
+.post.has-profile .postprofile .avatar {
+	display: block;
+	margin: 0;
+}
+
+.post.has-profile .postprofile .avatar img {
+	display: block;
+	inline-size: 2.5rem !important;
+	block-size: 2.5rem !important;
+	max-height: none;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+/* Only the rank and the contact icon stay beside the name. The post count, the join date and the other profile lines
+   are on the profile page. */
+.post.has-profile .postprofile dd {
+	display: none;
+}
+
+.post.has-profile .postprofile dd.profile-rank {
+	display: block;
+	margin: 0;
+	font-size: var(--text-meta);
+}
+
+.post.has-profile .postprofile dd.profile-contact {
+	display: block;
+	margin: 0;
+}
+
+.post.has-profile .postprofile dd.profile-contact > strong {
+	display: none;
+}
+
+.post.has-profile .postbody {
+	position: static;
+	float: none;
+	width: auto;
+	margin: 0;
+	padding: 0;
+}
+
+.post.has-profile .postbody h3,
+.post.has-profile .postbody h3.first {
+	margin: 0 0 0.125rem;
+	padding-inline-end: 12rem;
+}
+
+.post.has-profile .post-buttons {
+	position: absolute;
+	inset-block-start: 0;
+	inset-inline-end: 0;
+	margin: 0;
+}
+
+/* The line "by name » date" is only the date, the name is above. A flex line drops the space before the date. */
+.post.has-profile .postbody p.author {
+	display: flex;
+	align-items: center;
+}
+
+.post.has-profile .postbody p.author .responsive-hide {
+	display: none;
+}
+
+/* No avatar: no empty box (and no gap) before the name. */
+.post.has-profile .postprofile .avatar-container:not(:has(.avatar)) {
+	display: none;
+}
+
+.post.has-profile .back2top {
+	display: none;
+}
+
+/* One back-to-top button for the page, at the corner of the window. It is hidden until the page has scrolled
+   (js/bf-top.js), and so it is not in the tab order while it is not shown. */
+.bf-top {
+	position: fixed;
+	inset-block-end: 1rem;
+	inset-inline-end: 1rem;
+	z-index: 5;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	inline-size: 2.75rem;
+	block-size: 2.75rem;
+	border: var(--border-control) solid var(--color-line);
+	border-radius: var(--radius);
+	background: var(--color-surface);
+	color: var(--color-text);
+	box-shadow: 0 0.125rem 0.5rem rgb(0 0 0 / 0.2);
+}
+
+.bf-top[hidden] {
+	display: none;
+}
+
+.bf-top:is(:hover, :focus-visible) {
+	background: var(--color-tint);
+}
