@@ -1,6 +1,7 @@
 // axe-core (WCAG A, AA, AAA) in the light and the dark theme on the pages that the other tests skip: the control panel, private
 // messages, search, the member list, a profile, the reply page with the topic review, and a topic with pictures.
 // Prints one line per page and theme, and the problems. Exit code 1 if there are any.
+// Another board: BASE=http://localhost:8081 GUEST=1 (guest: no login, only the pages a guest can open; PAGES=a,b picks pages).
 import fs from 'node:fs';
 import { connect } from './connect.mjs';
 import { login } from './login.mjs';
@@ -8,9 +9,13 @@ import { login } from './login.mjs';
 const src = fs.readFileSync(`/w/node_modules/axe-core/axe.min.js`, `utf8`);
 const browser = await connect();
 const page = await browser.newPage();
-await login(page);
+const base = process.env.BASE ?? `http://localhost:8080`;
 
-const pages = [
+if (!process.env.GUEST) {
+	await login(page);
+}
+
+const all = [
 	[`control panel`, `ucp.php`],
 	[`private messages, compose`, `ucp.php?i=pm&mode=compose`],
 	[`private messages, inbox`, `ucp.php?i=pm&folder=inbox`],
@@ -20,15 +25,17 @@ const pages = [
 	[`member list`, `memberlist.php`],
 	[`profile`, `memberlist.php?mode=viewprofile&u=2`],
 	[`reply with review`, `posting.php?mode=reply&t=14`],
-	[`topic with pictures`, `viewtopic.php?t=22`],
+	[`topic with pictures`, process.env.TOPIC ? `viewtopic.php?t=${process.env.TOPIC}` : `viewtopic.php?t=22`],
 	[`board index`, `index.php`],
 ];
 
+const wanted = process.env.PAGES?.split(`,`);
+const pages = wanted ? all.filter(([name]) => wanted.includes(name)) : process.env.GUEST ? all.filter(([name]) => !/control|private|profile settings/.test(name)) : all;
 let problems = 0;
 
 for (const theme of [`light`, `dark`]) {
 	for (const [name, url] of pages) {
-		await page.goto(`http://localhost:8080/${url}`, { waitUntil: `networkidle0` });
+		await page.goto(`${base}/${url}`, { waitUntil: `networkidle0` });
 		await page.evaluate((t) => {
 			localStorage.setItem(`bf-theme`, t);
 			if (t === `dark`) {
