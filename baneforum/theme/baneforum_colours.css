@@ -581,11 +581,12 @@ form.mcp_approve > p.post-notice > strong {
 	color: var(--color-muted);
 }
 
-/* Regular buttons, in both themes: the surface, text and hover colours come from the --color-button tokens of the
-   palette. Light mode has a mid grey with white text, dark mode a dark grey with light text. The light accent would
+/* Regular buttons, in both themes: the surface, text, border and hover colours come from the --color-button tokens of the
+   palette. Light mode has a light grey with dark text, dark mode a dark grey with light text. The light accent would
    make them the brightest thing on the dark page. The pagination numbers and the like buttons are not touched. */
 :root :is(input.button1, input.button2, input.button3, .button, .post-buttons .button, .format-buttons .button) {
 	background: var(--color-button);
+	border-color: var(--color-button-border);
 	color: var(--color-on-button);
 }
 
