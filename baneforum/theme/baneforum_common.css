@@ -60,9 +60,7 @@ dl.file dt,
 	font-family: inherit;
 }
 
-.site-description h1,
-h1,
-h2 {
+.site-description h1 {
 	font-family: var(--font-headline);
 }
 
@@ -565,8 +563,8 @@ body .copyright :is(span, a, p) {
 }
 
 /* One font everywhere: prosilver sets Verdana, Trebuchet, Arial, Open Sans and more in different places.
-   Exceptions: icon fonts, code, the site title and the h1 and h2 headings (they use --font-headline). */
-body :not(.icon, .fa, code, pre, kbd, samp, .site-description h1, h1, h2, h1 *, h2 *) {
+   Exceptions: icon fonts, code and the site title. */
+body :not(.icon, .fa, code, pre, kbd, samp, .site-description h1) {
 	font-family: var(--base-font) !important;
 }
 
