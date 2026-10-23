@@ -51,7 +51,7 @@ class listener implements EventSubscriberInterface
 
 		foreach ($this->finder->find($forums) as $post)
 		{
-			$picture = ['id' => (int) $post['attachment_id']];
+			$picture = ['id' => (int) $post['attach_id']];
 			if ($post['thumbnail'])
 			{
 				$picture['t'] = 1;

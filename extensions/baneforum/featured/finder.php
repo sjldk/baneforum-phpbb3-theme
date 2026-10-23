@@ -54,7 +54,7 @@ class finder
 			? "LEFT JOIN (SELECT post_id, SUM(vote_value) AS score FROM $votes GROUP BY post_id) v ON v.post_id = p.post_id"
 			: '';
 
-		$sql = 'SELECT a.attachment_id, a.thumbnail, p.post_id, p.topic_id, p.forum_id, p.post_text,
+		$sql = 'SELECT a.attach_id, a.thumbnail, p.post_id, p.topic_id, p.forum_id, p.post_text,
 				p.post_time, p.poster_id, p.post_username, t.topic_title, u.username, u.user_colour, ' . $score . ' AS score
 			FROM ' . $this->prefix . 'attachments a
 			JOIN ' . $this->prefix . 'posts p ON p.post_id = a.post_msg_id
@@ -66,7 +66,7 @@ class finder
 				AND a.mimetype LIKE \'image/%\'
 				AND ' . $score . ' >= 0
 				AND ' . $this->visibility->get_forums_visibility_sql('post', $forum_ids, 'p.') . '
-			ORDER BY score DESC, p.post_time DESC, a.attachment_id ASC';
+			ORDER BY score DESC, p.post_time DESC, a.attach_id ASC';
 		$result = $this->db->sql_query_limit($sql, self::ROWS);
 
 		$posts = [];
