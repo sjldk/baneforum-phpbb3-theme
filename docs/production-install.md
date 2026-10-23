@@ -13,6 +13,7 @@ The theme needs no change to those two extensions.
 | Theme and editor | `baneforum/` | `styles/baneforum/` |
 | Image extension | `extensions/baneforum/imagecompress/` | `ext/baneforum/imagecompress/` |
 | Censor extension | `extensions/baneforum/censor/` | `ext/baneforum/censor/` |
+| Editor extension (required by the editor) | `extensions/baneforum/editor/` | `ext/baneforum/editor/` |
 
 `baneforum/theme/bf-editor.js`, `bf-render.js` and `bf-render.css` are built files. They are committed.
 You do not need Node on the server.
@@ -39,6 +40,7 @@ From the repo root, with the server as `SERVER` and the board in `/var/www/banef
 rsync -av --delete baneforum/ SERVER:/var/www/baneforum/styles/baneforum/
 rsync -av extensions/baneforum/imagecompress/ SERVER:/var/www/baneforum/ext/baneforum/imagecompress/
 rsync -av extensions/baneforum/censor/ SERVER:/var/www/baneforum/ext/baneforum/censor/
+rsync -av extensions/baneforum/editor/ SERVER:/var/www/baneforum/ext/baneforum/editor/
 ```
 
 - [ ] Both folders are owned by the web user (for example `www-data`), the same as the rest of the board.
@@ -46,7 +48,7 @@ rsync -av extensions/baneforum/censor/ SERVER:/var/www/baneforum/ext/baneforum/c
 
 ## 4. Enable in the ACP
 
-- [ ] Customise, Manage extensions: enable **Baneforum image compress** and **Baneforum censor**. The censor keeps the ACP word list but leaves URLs alone. Check `alfredoramos/markdown` and `phpbb/mediaembed` stay enabled.
+- [ ] Customise, Manage extensions: enable **Baneforum editor** first. The editor saves BBCode and needs it: it adds the `[s]` BBCode, and it tells the editor which stored posts were written in Markdown. Without it a Markdown post that is opened and saved would lose its formatting. Then enable **Baneforum image compress** and **Baneforum censor**. The censor keeps the ACP word list but leaves URLs alone. Check `alfredoramos/markdown` and `phpbb/mediaembed` stay enabled.
 - [ ] Likes: the votes hold a keyed hash, never a user id, so nobody can see who voted. The key is the file `store/baneforum_votes.key`, made on the first vote. Include it in backups. Without it, old votes still count but nobody's own vote is recognised, so they can vote again.
 - [ ] Customise, Styles, Install styles: install **baneforumblue** if it is not installed. If it is already installed, open Customise, Styles, and click Refresh on it so phpBB reads the new templates.
 - [ ] Make it the default style, or keep the old one default until you have tested.

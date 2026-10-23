@@ -1,7 +1,7 @@
 # Progress log: Baneforum editor
 
 Plan: `~/.claude/plans/let-s-plan-make-a-modular-torvalds.md` (approved 2026-10-21).
-Goal: replace the phpBB post editor with a ProseMirror editor (`bf-` custom elements), Markdown for new text, legacy BBCode on load.
+Goal: replace the phpBB post editor with a ProseMirror editor (`bf-` custom elements). Saved format: BBCode (since 2026-10-23, before that Markdown). Old Markdown posts are converted to BBCode when opened.
 
 ## Status
 
@@ -23,7 +23,8 @@ Goal: replace the phpBB post editor with a ProseMirror editor (`bf-` custom elem
 
 | Date | Decision |
 |---|---|
-| 2026-10-21 | Convert old BBCode posts to Markdown when edited. Unsupported tags stay as raw text. |
+| 2026-10-21 | Convert old BBCode posts to Markdown when edited. Unsupported tags stay as raw text. **Replaced on 2026-10-23: the saved format is BBCode, see below.** |
+| 2026-10-23 | The saved format is BBCode, so the board does not depend on the `alfredoramos/markdown` extension. A post that was written in Markdown is converted to BBCode when it is opened. Which posts are Markdown is read from the stored XML (`extensions/baneforum/editor`, `markdown_detector.php`): 272 of 29,203 production posts. Any other post is read as BBCode only, so a `*` or `#` in it is only a character. The editor adds `<input name="disable_markdown" value="1">` to the form, so the board saves the text as BBCode (works with the Markdown extension 1.2.0 on production and 1.5.0 on the test board). Strikethrough is the new `[s]` BBCode (made by the editor extension). Markdown to BBCode: headings become `[size][b]`, lists `[list]`, code and tables `[code]`, quotes `[quote]`, reference links `[url]`. Not convertible, kept as text: horizontal rules (`---`), inline code (backticks), sub and superscript. Corpus check (`tools/convert-corpus.mjs` then `scripts/render_compare.php`): 45 of 30,374 messages show different text after conversion, none crashed. Test: `scripts/browser-tests/markdown.mjs`. Plan for converting the stored posts in the database: `markdown-to-bbcode-plan.md`. |
 | 2026-10-21 | Drop the smilie picker. Every smilie, phpBB smilie picture, phpBB emoji picture and text smilie (`:)`) becomes a real Unicode emoji. In saved posts a small render script does it on screen. In the editor it happens when a post is loaded and while typing. No bulk change of the database. |
 | 2026-10-21 | Core package in `packages/bf-editor`, no phpBB code inside. Thin adapter in the theme. |
 | 2026-10-21 | Markdown reader and writer: our own, no micromark (replaces the first choice, to keep npm code out of production). |
