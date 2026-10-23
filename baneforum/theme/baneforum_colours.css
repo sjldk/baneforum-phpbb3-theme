@@ -580,3 +580,20 @@ form.mcp_approve > p.post-notice > strong {
 .postprofile {
 	color: var(--color-muted);
 }
+
+/* Dark theme: regular buttons have a dark surface and light text, a little lighter on hover and focus. The light accent
+   they have in the light theme would make them the brightest thing on the page. The pagination numbers and the like
+   buttons are not touched. */
+:root[data-theme="dark"] :is(input.button1, input.button2, input.button3, .button, .post-buttons .button, .format-buttons .button) {
+	background: var(--color-button);
+	color: var(--color-on-button);
+}
+
+:root[data-theme="dark"] :is(input.button1, input.button2, input.button3, .button, .post-buttons .button, .format-buttons .button):is(:hover, :focus, :active) {
+	background: var(--color-button-hover);
+	color: var(--color-on-button);
+}
+
+:root[data-theme="dark"] :is(.button, .button-secondary, .pagination li a.button) .icon {
+	color: var(--color-on-button);
+}

@@ -78,6 +78,12 @@
 	--color-fill: var(--accent-base);
 	--color-on-fill: color-mix(in srgb, var(--accent-base) 6%, white);
 
+	/* Regular buttons: a dark surface with light text (9.7:1), a little lighter on hover and focus (7.3:1).
+	   The light accent would make them the brightest thing on the page. Used by baneforum_colours.css. */
+	--color-button: color-mix(in srgb, var(--accent-base) 80%, black);
+	--color-button-hover: var(--accent-base);
+	--color-on-button: var(--color-on-fill);
+
 	--color-danger: color-mix(in srgb, var(--accent-base) 10%, #ff8080);
 	--color-success: color-mix(in srgb, var(--accent-base) 10%, #70d070);
 }
