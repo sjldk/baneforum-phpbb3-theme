@@ -581,19 +581,19 @@ form.mcp_approve > p.post-notice > strong {
 	color: var(--color-muted);
 }
 
-/* Dark theme: regular buttons have a dark surface and light text, a little lighter on hover and focus. The light accent
-   they have in the light theme would make them the brightest thing on the page. The pagination numbers and the like
-   buttons are not touched. */
-:root[data-theme="dark"] :is(input.button1, input.button2, input.button3, .button, .post-buttons .button, .format-buttons .button) {
+/* Regular buttons, in both themes: the surface, text and hover colours come from the --color-button tokens of the
+   palette. Light mode has a mid grey with white text, dark mode a dark grey with light text. The light accent would
+   make them the brightest thing on the dark page. The pagination numbers and the like buttons are not touched. */
+:root :is(input.button1, input.button2, input.button3, .button, .post-buttons .button, .format-buttons .button) {
 	background: var(--color-button);
 	color: var(--color-on-button);
 }
 
-:root[data-theme="dark"] :is(input.button1, input.button2, input.button3, .button, .post-buttons .button, .format-buttons .button):is(:hover, :focus, :active) {
+:root :is(input.button1, input.button2, input.button3, .button, .post-buttons .button, .format-buttons .button):is(:hover, :focus, :active) {
 	background: var(--color-button-hover);
 	color: var(--color-on-button);
 }
 
-:root[data-theme="dark"] :is(.button, .button-secondary, .pagination li a.button) .icon {
+:root :is(.button, .button-secondary, .pagination li a.button) .icon {
 	color: var(--color-on-button);
 }

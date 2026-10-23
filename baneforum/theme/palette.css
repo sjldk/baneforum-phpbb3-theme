@@ -48,6 +48,11 @@
 	/* The top banner has a colour of its own, the same in light and dark mode. The white title on it is 7.6:1. */
 	--color-banner: #215188;
 
+	/* Regular buttons: a mid grey with white text (7.1:1), darker on hover and focus (9.7:1). The lightest grey that keeps AAA. */
+	--color-button: #585858;
+	--color-button-hover: #444444;
+	--color-on-button: #ffffff;
+
 	/* Signal colours: a small share of the accent keeps them in the same family */
 	--color-danger: color-mix(in srgb, var(--accent-base) 10%, darkred);
 	--color-success: color-mix(in srgb, var(--accent-base) 10%, green);
