@@ -1888,7 +1888,22 @@ ul.topiclist li.header dl.row-item dt .list-inner {
 	border: 0;
 }
 
-/* Space between the subject field and the editor below it. */
+/* One space, 1rem, everywhere in the editor box: from the border to the fields, and between the subject, the toolbar and the
+   text area. The space under the toolbar is inside the editor, and is set by its --bf-gap. */
+#postingbox {
+	--bf-gap: 1rem;
+	padding: 1rem;
+}
+
 #postingbox dl:has(#subject) {
-	margin-bottom: 1rem;
+	margin: 0 0 1rem;
+	padding: 0;
+}
+
+#postingbox dl:has(#subject) :is(dt, dd) {
+	margin-block: 0;
+}
+
+#postingbox :is(bf-editor, .message-box) {
+	margin: 0;
 }
