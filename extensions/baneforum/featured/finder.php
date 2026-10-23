@@ -10,28 +10,23 @@ namespace baneforum\featured;
 use phpbb\content_visibility;
 use phpbb\db\driver\driver_interface;
 use phpbb\db\tools\tools_interface;
-use phpbb\textformatter\s9e\utils;
 
 /**
- * Finds the posts to show on the front page: posts with a picture, best liked first, then newest.
+ * Finds the posts to feature on the front page: posts with a picture, best liked first, then newest.
  * A post with more dislikes than likes is left out. Without the likes extension, newest first.
  */
 class finder
 {
 	/** How many posts to show. */
-	public const LIMIT = 6;
+	public const LIMIT = 5;
 
 	/** How many picture rows to read. One post can have many pictures, and only the first one is used. */
-	protected const ROWS = 120;
-
-	/** Longest snippet, in characters. */
-	public const SNIPPET = 180;
+	protected const ROWS = 60;
 
 	public function __construct(
 		protected driver_interface $db,
 		protected tools_interface $db_tools,
 		protected content_visibility $visibility,
-		protected utils $utils,
 		protected string $prefix
 	) {
 	}
@@ -54,7 +49,7 @@ class finder
 			? "LEFT JOIN (SELECT post_id, SUM(vote_value) AS score FROM $votes GROUP BY post_id) v ON v.post_id = p.post_id"
 			: '';
 
-		$sql = 'SELECT a.attach_id, a.thumbnail, p.post_id, p.topic_id, p.forum_id, p.post_text,
+		$sql = 'SELECT a.attach_id, a.thumbnail, p.post_id, p.topic_id, p.forum_id,
 				p.post_time, p.poster_id, p.post_username, t.topic_title, u.username, u.user_colour, ' . $score . ' AS score
 			FROM ' . $this->prefix . 'attachments a
 			JOIN ' . $this->prefix . 'posts p ON p.post_id = a.post_msg_id
@@ -72,40 +67,10 @@ class finder
 		$posts = [];
 		while (($row = $this->db->sql_fetchrow($result)) && count($posts) < self::LIMIT)
 		{
-			$id = (int) $row['post_id'];
-			if (!isset($posts[$id]))
-			{
-				$row['snippet'] = $this->snippet((string) $row['post_text']);
-				$posts[$id] = $row;
-			}
+			$posts[(int) $row['post_id']] ??= $row;
 		}
 		$this->db->sql_freeresult($result);
 
 		return $posts;
-	}
-
-	/**
-	 * Plain text from the stored post: no formatting, no addresses, one line, cut at a word.
-	 */
-	public function snippet(string $stored): string
-	{
-		$text = $this->utils->clean_formatting($stored);
-		$text = preg_replace('~https?://\S+~u', '', $text) ?? $text;
-		$text = trim(preg_replace('~\s+~u', ' ', $text) ?? $text);
-
-		if (function_exists('censor_text'))
-		{
-			$text = censor_text($text);
-		}
-
-		if (mb_strlen($text) <= self::SNIPPET)
-		{
-			return $text;
-		}
-
-		$cut = mb_substr($text, 0, self::SNIPPET);
-		$space = mb_strrpos($cut, ' ');
-
-		return rtrim($space > self::SNIPPET / 2 ? mb_substr($cut, 0, $space) : $cut, ' ,.;:-') . '…';
 	}
 }

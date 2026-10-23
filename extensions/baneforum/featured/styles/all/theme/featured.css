@@ -1,7 +1,20 @@
-/* Highlighted posts with a picture on the front page. Colours come from the style's variables, with plain fallbacks for other styles. */
+/* Featured posts in a column beside the forum list on the front page. Colours come from the style's variables, with plain fallbacks for other styles. */
+
+.bf-index-columns {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	align-items: flex-start;
+}
+
+.bf-index-main {
+	flex: 1 1 28rem;
+	min-width: 0;
+}
 
 .bf-featured {
-	margin: 0 0 1.5rem;
+	flex: 0 1 18rem;
+	min-width: 0;
 }
 
 .bf-featured-title {
@@ -9,26 +22,31 @@
 }
 
 .bf-featured-list {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-	gap: 1rem;
 	margin: 0;
 	padding: 0;
 	list-style: none;
-}
-
-.bf-featured-card {
-	display: flex;
-	flex-direction: column;
-	overflow: hidden;
 	border: 1px solid var(--color-line, #ccd5e0);
 	border-radius: 0.5rem;
 	background: var(--color-surface, #fff);
 }
 
+.bf-featured-item {
+	display: flex;
+	gap: 0.75rem;
+	align-items: center;
+	padding: 0.6rem 0.75rem;
+}
+
+.bf-featured-item + .bf-featured-item {
+	border-top: 1px solid var(--color-line, #ccd5e0);
+}
+
 .bf-featured-picture {
-	display: block;
-	aspect-ratio: 4 / 3;
+	flex: none;
+	width: 3rem;
+	height: 3rem;
+	overflow: hidden;
+	border-radius: 0.35rem;
 	background: var(--color-tint, #eef2f7);
 }
 
@@ -40,20 +58,18 @@
 }
 
 .bf-featured-body {
-	padding: 0.75rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+	min-width: 0;
 }
 
 .bf-featured-topic {
-	margin: 0 0 0.25rem;
-	font-size: 1.1em;
-}
-
-.bf-featured-snippet {
-	margin: 0 0 0.5rem;
+	font-weight: bold;
+	overflow-wrap: anywhere;
 }
 
 .bf-featured-meta {
-	margin: 0;
 	font-size: 0.85em;
 	color: color-mix(in srgb, var(--color-text, #1d2b3c) 65%, gray);
 }

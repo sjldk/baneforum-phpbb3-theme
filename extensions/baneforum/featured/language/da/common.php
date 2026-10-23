@@ -16,5 +16,5 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
-	'BF_FEATURED_TITLE' => 'Fremhævede billeder',
+	'BF_FEATURED_TITLE' => 'Fremhævede indlæg',
 ]);

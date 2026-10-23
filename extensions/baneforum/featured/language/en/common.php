@@ -16,5 +16,5 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
-	'BF_FEATURED_TITLE' => 'Highlighted pictures',
+	'BF_FEATURED_TITLE' => 'Featured posts',
 ]);
