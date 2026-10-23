@@ -11,9 +11,13 @@
 {% endif %}
 {% EVENT index_body_markforums_after %}
 
-{% include 'forumlist_body.html' %}
-
-{% EVENT index_body_forumlist_body_after %}
+{# The forum list, with room beside it for blocks from extensions (featured posts) #}
+<div class="bf-index-columns">
+	<div class="bf-index-main">
+		{% include 'forumlist_body.html' %}
+	</div>
+	{% EVENT index_body_forumlist_body_after %}
+</div>
 
 {% if not S_USER_LOGGED_IN and not S_IS_BOT %}
 	<form method="post" action="{{ S_LOGIN_ACTION }}" class="headerspace">
