@@ -1880,3 +1880,15 @@ ul.topiclist li.header dl.row-item dt .list-inner {
 		margin-inline: 0;
 	}
 }
+
+/* The heading of the posting page ("Post a new topic") is above the editor box, like the heading of a list above its panel. */
+.posting-heading {
+	margin: 1.5rem 0 0.5rem;
+	padding: 0;
+	border: 0;
+}
+
+/* Space between the subject field and the editor below it. */
+#postingbox dl:has(#subject) {
+	margin-bottom: 1rem;
+}
