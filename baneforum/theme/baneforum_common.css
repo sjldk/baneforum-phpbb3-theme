@@ -1793,3 +1793,61 @@ ul.topiclist li.header dl.row-item dt .list-inner {
 .bf-top:is(:hover, :focus-visible) {
 	background: var(--color-tint);
 }
+
+/* Page top: a lower banner, and one row under it. The breadcrumbs are at the left of that row, the links and the account
+   at the right. The links beside the menu (FAQ, appearance, ACP, MCP, messages, notifications) are icons with a tooltip and
+   a hidden text for screen readers. The row wraps to two lines when it is too narrow for both. */
+.site_logo {
+	width: 9rem;
+	height: 4.5rem;
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.headerbar {
+	padding-block: 0.5rem;
+}
+
+.navbar > .inner {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0 0.5rem;
+}
+
+.navbar #nav-breadcrumbs {
+	order: -1;
+	flex: 1 1 22rem;
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.navbar #nav-main {
+	order: 1;
+	flex: 0 1 auto;
+	margin: 0 0 0 auto;
+	padding: 0;
+	border: 0;
+}
+
+.navbar #nav-main > li:not(#quick-links, #username_logged_in, :has(.fa-power-off, .fa-pencil-square-o)) > a > span:not(.badge) {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/* The header row is a grid too (see the list rules above), so prosilver's float trick (a wide negative margin on the title
+   and the same positive margin inside it) is switched off for it on wide screens. */
+@media (min-width: 43.75em) {
+	ul.topiclist li.header dl.row-item dt,
+	ul.topiclist li.header dl.row-item dt .list-inner {
+		float: none;
+		width: auto;
+		margin-inline: 0;
+	}
+}
