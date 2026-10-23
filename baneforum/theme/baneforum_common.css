@@ -1907,3 +1907,10 @@ ul.topiclist li.header dl.row-item dt .list-inner {
 #postingbox :is(bf-editor, .message-box) {
 	margin: 0;
 }
+
+/* The title of the last post in a list row is a link, so it is at least 24px high (WCAG 2.5.8). */
+a.lastsubject {
+	display: inline-block;
+	min-block-size: 1.5rem;
+	line-height: 1.5rem;
+}

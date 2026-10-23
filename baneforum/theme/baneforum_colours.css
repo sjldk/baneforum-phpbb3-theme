@@ -627,3 +627,8 @@ form.mcp_approve > p.post-notice > strong {
 dl.details :is(dt, dd) {
 	color: var(--color-text);
 }
+
+/* Links in signatures and other places outside .content: prosilver's light blue (3.5:1) becomes the palette accent. */
+a.postlink {
+	color: var(--accent);
+}

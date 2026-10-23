@@ -10,7 +10,8 @@
 		<!-- IF _file.S_THUMBNAIL -->
 		<dl class="thumbnail">
 			<dt><a href="{_file.U_DOWNLOAD_LINK}" target="_blank" rel="noopener noreferrer"><img src="{_file.THUMB_IMAGE}" class="postimage" alt="{% if _file.COMMENT %}{{ _file.COMMENT|e('html') }}{% else %}{{ _file.DOWNLOAD_NAME }}{% endif %}" title="{_file.DOWNLOAD_NAME} ({_file.FILESIZE} {_file.SIZE_LANG}) {_file.L_DOWNLOAD_COUNT}" /></a></dt>
-			<!-- IF _file.COMMENT --><dd> {_file.COMMENT}</dd><!-- ENDIF -->
+			{# A <dt> needs a <dd> after it (valid definition list), so a picture without a description gets an empty hidden one. #}
+			<!-- IF _file.COMMENT --><dd> {_file.COMMENT}</dd><!-- ELSE --><dd hidden></dd><!-- ENDIF -->
 		</dl>
 		<!-- ENDIF -->
 
