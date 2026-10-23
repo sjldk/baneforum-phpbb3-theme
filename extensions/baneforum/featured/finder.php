@@ -14,11 +14,16 @@ use phpbb\db\tools\tools_interface;
 /**
  * Finds the posts to feature on the front page: posts with a picture, best liked first, then newest.
  * A post with more dislikes than likes is left out. Without the likes extension, newest first.
+ * Posts from the last WINDOW_DAYS come first. Older posts fill the rest, so the list is never empty
+ * when the board has posts with pictures.
  */
 class finder
 {
 	/** How many posts to show. */
 	public const LIMIT = 5;
+
+	/** Posts newer than this many days go before older ones. */
+	public const WINDOW_DAYS = 30;
 
 	/** How many picture rows to read. One post can have many pictures, and only the first one is used. */
 	protected const ROWS = 60;
@@ -61,7 +66,8 @@ class finder
 				AND a.mimetype LIKE \'image/%\'
 				AND ' . $score . ' >= 0
 				AND ' . $this->visibility->get_forums_visibility_sql('post', $forum_ids, 'p.') . '
-			ORDER BY score DESC, p.post_time DESC, a.attach_id ASC';
+			ORDER BY CASE WHEN p.post_time >= ' . (time() - self::WINDOW_DAYS * 86400) . ' THEN 1 ELSE 0 END DESC,
+				score DESC, p.post_time DESC, a.attach_id ASC';
 		$result = $this->db->sql_query_limit($sql, self::ROWS);
 
 		$posts = [];
