@@ -84,6 +84,11 @@ if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='banefor
 	php bin/phpbbcli.php extension:enable baneforum/featured
 fi
 
+# Our own switch for the dark theme.
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/darkmode' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable baneforum/darkmode
+fi
+
 # Our own word censor. It leaves URLs alone (phpBB's own censor changes addresses and breaks links).
 if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/censor' AND ext_active=1")" = 0 ]; then
 	php bin/phpbbcli.php extension:enable baneforum/censor

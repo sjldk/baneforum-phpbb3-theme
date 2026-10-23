@@ -25,7 +25,7 @@ for (const url of [`ucp.php?mode=login`, `index.php`, `ucp.php?mode=register`]) 
 			out.sizes[px] = (out.sizes[px] ?? 0) + 1;
 			const family = cs.fontFamily.split(`,`)[0].replace(/"/g, ``);
 
-			if (!/^(Inter|FontAwesome)$/.test(family)) {
+			if (!/^(Inter|Barlow Semi Condensed|FontAwesome)$/.test(family)) {
 				out.odd.push(`${el.tagName.toLowerCase()}.${el.className}: ${cs.fontFamily}`);
 			}
 		}
