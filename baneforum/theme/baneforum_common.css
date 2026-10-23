@@ -451,8 +451,11 @@ input.button2:hover,
 
 .post-buttons .button,
 .format-buttons .button {
-	margin-right: 0.2rem;
 	min-width: 2rem;
+}
+
+.format-buttons .button {
+	margin-right: 0.2rem;
 }
 
 .pagination li.active span {
