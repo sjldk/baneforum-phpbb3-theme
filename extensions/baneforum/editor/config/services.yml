@@ -1,0 +1,14 @@
+services:
+    baneforum.editor.markdown_detector:
+        class: baneforum\editor\markdown_detector
+
+    baneforum.editor.listener:
+        class: baneforum\editor\event\listener
+        arguments:
+            - '@baneforum.editor.markdown_detector'
+            - '@dbal.conn'
+            - '@request'
+            - '%core.table_prefix%posts'
+            - '%core.table_prefix%privmsgs'
+        tags:
+            - { name: event.listener }
