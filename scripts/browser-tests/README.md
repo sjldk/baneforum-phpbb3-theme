@@ -19,6 +19,7 @@ scripts/browser-tests/run.sh posting.mjs              # one test
 | `axe-pages.mjs` | axe-core (WCAG A, AA, AAA) on the pages the theme work touches, with the delete dialog open and at phone width. Last run: no problems. |
 | `dialogs.mjs` | Delete and restore of a post ask in a native `<dialog>` on the same page: opens as a modal, Escape cancels, confirming deletes and restores. Makes a throwaway reply. |
 | `snap.mjs <out.json> <selector>...` | Computed styles of the matching elements on 25 pages. Run it before and after a CSS change and compare the two files. Used when a prosilver CSS file is replaced by our own. |
+| `markdown.mjs` | A post written in Markdown is converted to BBCode when opened, still shows the same after an unchanged save, and is plain BBCode when opened again. Makes one throwaway reply. |
 | `posting.mjs` | Reply page: the editor, no option boxes, a picture upload, saving the post. |
 | `pictures.mjs <photo.jpg path>` | A picture in the text: preview, the menu, the description, Preview, delete. Needs `photo.jpg`. |
 | `files.mjs <this folder>` | A PDF and a ZIP (picker and drop) go to the file list, a picture goes in the text, the post shows both. |
