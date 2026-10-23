@@ -147,8 +147,8 @@ fieldset.quick-login {
 	margin-top: 0.3125rem;
 }
 
-fieldset.quick-login input {
-	width: auto;
+fieldset.quick-login input[type="text"], fieldset.quick-login input[type="password"] {
+	min-width: 10rem;
 }
 
 fieldset.quick-login input.inputbox {
