@@ -1931,3 +1931,50 @@ a.button2 {
 	text-decoration: none;
 	vertical-align: middle;
 }
+
+/* The contact menu of a post: a list of the ways to reach the member, each with its icon and its name. prosilver makes a grid of
+   bare icons and hides the words with a tiny font size, which the type scale (1em for every span) switches off. */
+.contact-icons {
+	display: flex;
+	flex-direction: column;
+	min-inline-size: 12rem;
+	padding: 0.25rem;
+}
+
+.contact-icons > div {
+	display: contents;
+}
+
+.contact-icons a {
+	float: none;
+	display: flex;
+	align-items: center;
+	inline-size: auto;
+	block-size: auto;
+	min-block-size: 2.75rem;
+	padding: 0 0.75rem;
+	border-radius: var(--radius);
+	white-space: nowrap;
+}
+
+.contact-icons a:is(:hover, :focus-visible) {
+	background: var(--color-tint);
+}
+
+/* The icon keeps prosilver's 16px box and its sprite position. Its own words stay hidden, the name comes from the title of the link. */
+.contact-icons .contact-icon {
+	flex: none;
+	overflow: hidden;
+	white-space: nowrap;
+	text-indent: 100%;
+}
+
+.contact-icons a::after {
+	content: attr(title);
+	margin-inline-start: 0.75rem;
+}
+
+/* The menu of a post may reach past the card. */
+.post.has-profile {
+	overflow: visible;
+}

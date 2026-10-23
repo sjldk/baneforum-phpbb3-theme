@@ -644,3 +644,72 @@ div.rules {
 div.rules :is(a, strong, h3, h4) {
 	color: var(--color-text);
 }
+
+/* Menus (quick links, user menu, topic tools, notifications, contact): one look. A soft panel with a hairline border, items
+   at least 44px high with room around the icon, no pointer triangle, and the icons and dates in the muted palette colour. */
+.dropdown-contents {
+	padding: 0.25rem;
+	border: 1px solid var(--color-line);
+	border-radius: var(--radius);
+	background-color: var(--color-paper);
+	box-shadow: 0 0.25rem 1rem rgb(0 0 0 / 0.18);
+	color: var(--color-text);
+}
+
+.dropdown .pointer {
+	display: none;
+}
+
+.dropdown-contents > li {
+	padding: 0;
+	border: 0;
+}
+
+.dropdown-contents > li > a,
+.dropdown-contents > li > span {
+	display: flex;
+	align-items: center;
+	gap: 0.625rem;
+	min-block-size: 2.75rem;
+	padding: 0 0.75rem;
+	border-radius: var(--radius);
+}
+
+.dropdown-contents > li > a:is(:hover, :focus-visible) {
+	background: var(--color-tint);
+}
+
+.dropdown-contents > li.separator {
+	min-block-size: 0;
+	margin: 0.25rem 0.5rem;
+	border-top: 1px solid var(--color-line);
+}
+
+.dropdown-contents .icon {
+	flex: none;
+	color: var(--color-muted);
+}
+
+/* Notifications: a plain header and footer on the tint, dates in the muted colour. */
+.dropdown-extended .dropdown-contents {
+	padding: 0;
+	overflow: hidden;
+}
+
+.dropdown-extended :is(.header, .footer) {
+	background: var(--color-tint);
+	color: var(--color-text);
+	font-size: var(--text-meta);
+	font-weight: 600;
+	text-transform: none;
+}
+
+.dropdown-extended .header a,
+.dropdown-extended .footer a {
+	color: var(--color-text);
+}
+
+.dropdown-extended .notification_text .notification-time,
+.dropdown-extended time {
+	color: var(--color-muted);
+}
