@@ -1,6 +1,6 @@
 <?php
 /**
- * Baneforum dark theme switch
+ * Baneforum appearance switch
  *
  * @license GNU General Public License, version 2 (GPL-2.0-only)
  */

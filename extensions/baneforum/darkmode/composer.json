@@ -1,14 +1,14 @@
 {
 	"name": "baneforum/darkmode",
 	"type": "phpbb-extension",
-	"description": "A switch for the dark theme. The choice is kept in the browser.",
+	"description": "A switch between the light and the dark theme. The choice is kept in the browser.",
 	"license": "GPL-2.0-only",
 	"version": "0.1.0",
 	"require": {
 		"php": ">=8.1"
 	},
 	"extra": {
-		"display-name": "Baneforum dark theme switch",
+		"display-name": "Baneforum appearance switch",
 		"soft-require": {
 			"phpbb/phpbb": ">=3.3.0"
 		}

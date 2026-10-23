@@ -1,6 +1,6 @@
 <?php
 /**
- * Baneforum dark theme switch, English
+ * Baneforum appearance switch, English
  *
  * @license GNU General Public License, version 2 (GPL-2.0-only)
  */
@@ -16,6 +16,6 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
-	'BF_DARK_THEME'         => 'Dark theme',
-	'BF_DARK_THEME_EXPLAIN' => 'Switch the dark theme on or off. The choice is kept in this browser.',
+	'BF_APPEARANCE'         => 'Appearance',
+	'BF_APPEARANCE_EXPLAIN' => 'Switch between the light and the dark theme. The choice is kept in this browser.',
 ]);

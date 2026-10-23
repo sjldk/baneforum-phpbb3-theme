@@ -1,4 +1,4 @@
-/* The dark theme switch. The choice is kept in localStorage under "bf-theme" ("dark" or "light").
+/* The appearance switch (light or dark theme). The choice is kept in localStorage under "bf-theme" ("dark" or "light").
    The small script in the page head has already set data-theme before the page was drawn. */
 (function () {
 	'use strict';
