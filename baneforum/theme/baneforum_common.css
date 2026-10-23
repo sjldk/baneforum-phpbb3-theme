@@ -1914,3 +1914,19 @@ a.lastsubject {
 	min-block-size: 1.5rem;
 	line-height: 1.5rem;
 }
+
+/* Link buttons (a.button1, a.button2, such as "Register" on the login page) have the shape of the other buttons. */
+a.button1,
+a.button2 {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	min-block-size: 2.75rem;
+	min-inline-size: 2.75rem;
+	padding-block: 0;
+	padding-inline: 1.1em;
+	border: 0;
+	border-radius: var(--radius);
+	text-decoration: none;
+}

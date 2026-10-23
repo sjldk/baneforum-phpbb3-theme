@@ -33,7 +33,7 @@
 	{% EVENT posting_editor_message_before %}
 
 	<div id="message-box" class="message-box">
-		<textarea placeholder="Brug for at vedhæfte filer? Træk filerne herind." {% if S_UCP_ACTION and not S_PRIVMSGS and not S_EDIT_DRAFT %}name="signature" id="signature" style="height: 9em;"{% else %}name="message" id="message"{% endif %} rows="15" cols="76" data-bf-label="{{ lang('MESSAGE_BODY') }}" class="inputbox">{{ MESSAGE }}{{ DRAFT_MESSAGE }}{{ SIGNATURE }}</textarea>
+		<textarea placeholder="{% if S_USER_LANG starts with 'da' %}Brug for at vedhæfte filer? Træk filerne herind.{% else %}Need to attach files? Drag the files in here.{% endif %}" {% if S_UCP_ACTION and not S_PRIVMSGS and not S_EDIT_DRAFT %}name="signature" id="signature" style="height: 9em;"{% else %}name="message" id="message"{% endif %} rows="15" cols="76" data-bf-label="{{ lang('MESSAGE_BODY') }}" class="inputbox">{{ MESSAGE }}{{ DRAFT_MESSAGE }}{{ SIGNATURE }}</textarea>
 	</div>
 
 	{% EVENT posting_editor_message_after %}

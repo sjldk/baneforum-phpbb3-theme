@@ -566,24 +566,24 @@ form.mcp_approve > p.post-notice > strong {
    Quiet: flat icon buttons that sit in a bar like the editor toolbar: the buttons of a post (above) and the page numbers.
    The rules name :root, so they win over prosilver and over older rules. :where() keeps the exceptions from adding weight.
    The red notice buttons in a post (p.post-notice) have their own look and are left out. */
-:root :is(input.button2, input.button3, .button):where(:not(.button-icon-only, .pagination li a.button, [href*="mode=post&"], [href*="mode=reply&"], p.post-notice *)) {
+:root :is(input.button2, a.button2, input.button3, .button):where(:not(.button-icon-only, .pagination li a.button, [href*="mode=post&"], [href*="mode=reply&"], p.post-notice *)) {
 	background: var(--color-button);
 	border-color: var(--color-button-border);
 	color: var(--color-on-button);
 }
 
-:root :is(input.button2, input.button3, .button):where(:not(.button-icon-only, .pagination li a.button, [href*="mode=post&"], [href*="mode=reply&"], p.post-notice *)):is(:hover, :focus, :active) {
+:root :is(input.button2, a.button2, input.button3, .button):where(:not(.button-icon-only, .pagination li a.button, [href*="mode=post&"], [href*="mode=reply&"], p.post-notice *)):is(:hover, :focus, :active) {
 	background: var(--color-button-hover);
 	color: var(--color-on-button);
 }
 
-:root :is(input.button1, a.button[href*="mode=post&"], a.button[href*="mode=reply&"]):where(:not(p.post-notice *)) {
+:root :is(input.button1, a.button1, a.button[href*="mode=post&"], a.button[href*="mode=reply&"]):where(:not(p.post-notice *)) {
 	background: var(--color-primary);
 	border-color: transparent;
 	color: var(--color-on-primary);
 }
 
-:root :is(input.button1, a.button[href*="mode=post&"], a.button[href*="mode=reply&"]):where(:not(p.post-notice *)):is(:hover, :focus, :active) {
+:root :is(input.button1, a.button1, a.button[href*="mode=post&"], a.button[href*="mode=reply&"]):where(:not(p.post-notice *)):is(:hover, :focus, :active) {
 	background: var(--color-primary-hover);
 	color: var(--color-on-primary);
 }
