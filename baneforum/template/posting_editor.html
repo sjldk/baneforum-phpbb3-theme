@@ -113,8 +113,10 @@
 				<hr class="dashed" />
 				<dl>
 					<dt><label for="delete">{{ lang('DELETE_POST') }}{{ lang('COLON') }}</label></dt>
-					<dd><label for="delete"><input type="checkbox" name="delete" id="delete" {{ S_SOFTDELETE_CHECKED }} /> {{ lang('DELETE_POST_WARN') }}</label></dd>
-					{% if S_DELETE_ALLOWED and S_SOFTDELETE_ALLOWED %}
+					{% if S_SOFTDELETE_ALLOWED %}
+						<dd><label for="delete"><input type="checkbox" name="delete" id="delete" {{ S_SOFTDELETE_CHECKED }} /> {{ lang('DELETE_POST_WARN') }}</label></dd>
+					{% endif %}
+					{% if S_DELETE_ALLOWED %}
 						<dd><label for="delete_permanent"><input type="checkbox" name="delete_permanent" id="delete_permanent" /> {{ lang('DELETE_POST_PERMANENTLY') }}</label></dd>
 					{% endif %}
 				</dl>
