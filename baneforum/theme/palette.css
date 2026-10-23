@@ -10,9 +10,9 @@
 
 	/* The border width of every control: text fields, checkboxes, radio buttons, and the buttons under a post and in the like bar. */
 	--border-control: 0.15rem;
-	/* The brand colour. Never changes between light and dark. A neutral graphite, so pictures of any
-	   colour sit well on the page. Accent text on the light tint is 9.3:1. The earlier blue was #215188. */
-	--accent-base: #3a3f45;
+	/* The brand colour. Never changes between light and dark. A soft neutral grey, so pictures of any
+	   colour sit well on the page. Accent text on the light tint is 7.3:1, the lightest grey that keeps 7:1. Earlier values: blue #215188, graphite #3a3f45. */
+	--accent-base: #4a4f55;
 	/* The accent used for fills, links and focus. Lighter in dark mode. */
 	--accent: var(--accent-base);
 
