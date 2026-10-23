@@ -15,9 +15,9 @@
 
 	/* The border width of every control: text fields, checkboxes, radio buttons, and the buttons under a post and in the like bar. */
 	--border-control: 0.15rem;
-	/* The brand colour. Never changes between light and dark. A dark red, so pictures of any
-	   colour sit well on the page. Accent text on the light tint is 7.2:1 and light text on the accent fill 7.5:1 (WCAG AAA). Earlier values: blue #215188, graphite #3a3f45, greys #4a4f55 and #5f646a, teal-slate #455254, slate blue #465061. */
-	--accent-base: #873636;
+	/* The brand colour. Never changes between light and dark. A neutral dark grey, so pictures of any
+	   colour sit well on the page. Accent text on the light tint is 7.2:1 and light text on the accent fill 7.5:1 (WCAG AAA). Earlier values: dark red #873636, blue #215188, graphite #3a3f45, greys #4a4f55 and #5f646a, teal-slate #455254, slate blue #465061. */
+	--accent-base: #505050;
 	/* The accent used for fills, links and focus. Lighter in dark mode. */
 	--accent: var(--accent-base);
 
@@ -55,7 +55,7 @@
 
 /* Dark mode: dark grey backgrounds, light grey text, and a light version of the accent for links.
    Contrast was calculated for the default accent: text 12 to 15:1, muted 8 to 10:1, accent on
-   the backgrounds 7.7 to 9.2:1, controls 4.2 to 5:1, light text on the accent fill 7.3:1. */
+   the backgrounds 7.9 to 9.5:1, controls 4.2 to 5:1, light text on the accent fill 7.3:1. */
 :root[data-theme="dark"] {
 	color-scheme: dark;
 
