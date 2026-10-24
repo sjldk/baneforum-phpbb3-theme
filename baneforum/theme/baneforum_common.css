@@ -1978,3 +1978,16 @@ a.button2 {
 .post.has-profile {
 	overflow: visible;
 }
+
+/* Pictures in posts show at half the width of the post (but not narrower than 18rem, so a phone still gets a usable size, and
+   never wider than the post). Small pictures stay as they are. A click opens the full picture in a new tab. */
+.postbody img.postimage,
+figure.file img,
+dl.thumbnail img {
+	max-inline-size: max(50%, min(100%, 18rem));
+	block-size: auto;
+}
+
+a:has(> img.postimage) {
+	cursor: zoom-in;
+}
