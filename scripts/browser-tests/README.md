@@ -22,6 +22,7 @@ scripts/browser-tests/run.sh posting.mjs              # one test
 | `darkmode.mjs` | The dark theme switch: click turns `data-theme` on and off, the choice is kept in localStorage and is back at DOMContentLoaded after a reload, and axe-core (contrast, AA and AAA) finds nothing on six pages in the dark theme. Last run: 16 checks pass. |
 | `dialogs.mjs` | Delete and restore of a post ask in a native `<dialog>` on the same page: opens as a modal, Escape cancels, confirming deletes and restores. Makes a throwaway reply. |
 | `snap.mjs <out.json> <selector>...` | Computed styles of the matching elements on 25 pages. Run it before and after a CSS change and compare the two files. Used when a prosilver CSS file is replaced by our own. |
+| `markdown.mjs` | A post written in Markdown is converted to BBCode when opened, still shows the same after an unchanged save, and is plain BBCode when opened again. Makes one throwaway reply. |
 | `posting.mjs` | Reply page: the editor, no option boxes, a picture upload, saving the post. |
 | `pictures.mjs <photo.jpg path>` | A picture in the text: preview, the menu, the description, Preview, delete. Needs `photo.jpg`. |
 | `files.mjs <this folder>` | A PDF and a ZIP (picker and drop) go to the file list, a picture goes in the text, the post shows both. |

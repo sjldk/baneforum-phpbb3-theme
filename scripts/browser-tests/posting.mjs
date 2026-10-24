@@ -28,7 +28,7 @@ await page.click(`bf-editor bf-editable`).catch(() => {});
 await page.evaluate(() => document.querySelector(`bf-editor`).focus());
 await page.keyboard.type(`Hello **bold** world`);
 const text = await page.$eval(`#message`, (t) => t.value);
-check(`typing is written to the textarea as Markdown`, text === `Hello **bold** world`, JSON.stringify(text));
+check(`typing is written to the textarea as BBCode`, text === `Hello [b]bold[/b] world`, JSON.stringify(text));
 
 // The topic review is a details element and opens on click.
 check(`topic review is a closed details element`, await page.evaluate(() => document.querySelector(`details#review`)?.open === false));
@@ -69,7 +69,7 @@ const posted = await page.evaluate(() => {
 
 	return { html: last?.innerHTML.slice(0, 400), images: last?.querySelectorAll(`img`).length, url: location.href };
 });
-check(`post saved with a picture and bold text`, /<strong>bold<\/strong>/.test(posted.html) && posted.images >= 1, JSON.stringify(posted).slice(0, 500));
+check(`post saved with a picture and bold text`, /<strong[^>]*>bold<\/strong>/.test(posted.html) && posted.images >= 1, JSON.stringify(posted).slice(0, 500));
 
 // Quoting puts the cursor on a line after the quote, so the writer can type outside it.
 await page.goto(replyUrl.replace(`mode=reply`, `mode=quote`) + `&p=1`, { waitUntil: `networkidle0` });
@@ -81,6 +81,8 @@ check(`quoting: typing lands after the closing quote tag`, /\[\/quote\]\s*My ans
 await page.goto(replyUrl, { waitUntil: `networkidle0` });
 await page.click(`details#review > summary`);
 await page.click(`#topicreview a[title^="Quote"]`);
+// The editor takes the quote and moves the cursor after it. Typing before that goes nowhere.
+await new Promise((resolve) => setTimeout(resolve, 500));
 await page.keyboard.type(`Mine`);
 const fromReview = await page.$eval(`#message`, (t) => t.value);
 check(`topic review quote button fills the editor and the cursor is after it`, /^\[quote[^\]]*\][\s\S]*\[\/quote\]\s*Mine$/.test(fromReview), JSON.stringify(fromReview.slice(-50)));

@@ -20,9 +20,15 @@ $user->data = array_merge($user->data ?? [], ['user_id' => 1, 'user_options' => 
 
 $parser = $phpbb_container->get('text_formatter.parser');
 $renderer = $phpbb_container->get('text_formatter.renderer');
-// The Markdown extension switches Litedown off for a user that may not use Markdown. Switch it on.
-foreach (['Litedown', 'PipeTables', 'TaskLists'] as $plugin) {
-	$parser->get_parser()->enablePlugin($plugin);
+// The Markdown extension switches Litedown off for a user that may not use Markdown. The original is
+// rendered the way it was saved: with Markdown on if "markdown" is true in the row (the stored XML held Markdown),
+// off otherwise. A post saved before the Markdown extension shows a "- " as a dash, not as a list. The converted text is BBCode and is rendered with it off,
+// the way the board reads it after the editor sent "disable_markdown".
+function markdown(bool $on, $parser): void
+{
+	foreach (['Litedown', 'PipeTables', 'TaskLists'] as $plugin) {
+		$on ? $parser->get_parser()->enablePlugin($plugin) : $parser->get_parser()->disablePlugin($plugin);
+	}
 }
 $parser->enable_bbcode(true);
 $parser->enable_smilies(true);
@@ -56,7 +62,9 @@ while (($line = fgets(STDIN)) !== false) {
 		continue;
 	}
 	$total++;
+	markdown(!empty($row['markdown']), $parser);
 	$before = visible(render($row['original'], $parser, $renderer));
+	markdown(false, $parser);
 	$after = visible(render($row['converted'], $parser, $renderer));
 	if ($before === $after) {
 		$same++;

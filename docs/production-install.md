@@ -21,6 +21,7 @@ The theme needs no change to those two extensions.
 | Contact buttons extension | `extensions/baneforum/contact/` | `ext/baneforum/contact/` |
 | Letter avatars | `extensions/baneforum/avatars/` | `ext/baneforum/avatars/` |
 | Appearance switch (light and dark theme) | `extensions/baneforum/darkmode/` | `ext/baneforum/darkmode/` |
+| Editor extension (required by the editor) | `extensions/baneforum/editor/` | `ext/baneforum/editor/` |
 
 `baneforum/theme/bf-editor.js`, `bf-render.js` and `bf-render.css` are built files. They are committed.
 You do not need Node on the server.
@@ -55,6 +56,7 @@ rsync -av extensions/baneforum/latest/ SERVER:/var/www/baneforum/ext/baneforum/l
 rsync -av extensions/baneforum/forummenu/ SERVER:/var/www/baneforum/ext/baneforum/forummenu/
 rsync -av extensions/baneforum/ytthumb/ SERVER:/var/www/baneforum/ext/baneforum/ytthumb/
 rsync -av extensions/baneforum/contact/ SERVER:/var/www/baneforum/ext/baneforum/contact/
+rsync -av extensions/baneforum/editor/ SERVER:/var/www/baneforum/ext/baneforum/editor/
 ```
 
 - [ ] Both folders are owned by the web user (for example `www-data`), the same as the rest of the board.
@@ -62,6 +64,7 @@ rsync -av extensions/baneforum/contact/ SERVER:/var/www/baneforum/ext/baneforum/
 
 ## 4. Enable in the ACP
 
+- [ ] Customise, Manage extensions: enable **Baneforum editor** first. The editor saves BBCode and needs it: it adds the `[s]` BBCode, and it tells the editor which stored posts were written in Markdown. Without it a Markdown post that is opened and saved would lose its formatting. Then enable **Baneforum image compress** and **Baneforum censor**. The censor keeps the ACP word list but leaves URLs alone. Check `alfredoramos/markdown` and `phpbb/mediaembed` stay enabled.
 - [ ] Customise, Manage extensions: enable **Baneforum image compress** and **Baneforum censor**. The censor keeps the ACP word list but leaves URLs alone. Check `alfredoramos/markdown` and `phpbb/mediaembed` stay enabled.
 - [ ] Featured posts (**Baneforum featured posts**): shows up to 5 posts with pictures in a column beside the forum list on the front page. It needs the style's `index_body.html` (it has the place for it), so install the style first. It ranks by likes if **Baneforum likes** is enabled, and by newest otherwise. Only members who can read and download in a forum see its posts. Nothing to configure.
 - [ ] Contact buttons (**Baneforum contact buttons**): beside the name of the author of a post there are buttons for the ways to contact the author: message (a link to write a private message), website (a globe and the word, opens in a new tab) and any other way (email and so on) as an icon. phpBB's own contact menu is hidden. Nothing to configure. Needs the style, and `bf-render.js` for the hidden "opens in a new window" words.

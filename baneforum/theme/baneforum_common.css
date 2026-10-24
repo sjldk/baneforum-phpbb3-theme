@@ -700,6 +700,7 @@ table.table1 {
 	border-collapse: collapse;
 }
 
+/* The header of a table (the member list): like the header row of the lists, no fill and a hairline under it. */
 table.table1 thead th {
 	background-color: transparent;
 	padding: 0.8em 0.6em;

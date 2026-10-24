@@ -6,7 +6,14 @@ import { useNewWindowLinks } from './render/external-links.js';
 import { useNativeEmoji, useNativeEmojiForText } from './render/native-emoji.js';
 import { useYoutubePlayers, useYoutubeThumbnails } from './render/youtube.js';
 
-export { useAttachmentList, useNativeEmoji, useNativeEmojiForText, useNewWindowLinks, useYoutubePlayers, useYoutubeThumbnails };
+export {
+	useAttachmentList,
+	useNativeEmoji,
+	useNativeEmojiForText,
+	useNewWindowLinks,
+	useYoutubePlayers,
+	useYoutubeThumbnails,
+};
 
 if (typeof document !== `undefined`) {
 	if (!customElements.get(`bf-youtube`)) {

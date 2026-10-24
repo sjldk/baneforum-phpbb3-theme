@@ -10,7 +10,7 @@ import { Slice } from 'prosemirror-model';
 import { EditorState, TextSelection } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { createAttachmentMenu } from '../attachment-menu.js';
-import { createMarkdownBBCodeCodec } from '../codecs/markdown-bbcode.js';
+import { createBBCodeCodec } from '../codecs/bbcode.js';
 import { createBasicCommands } from '../commands.js';
 import { assertImplements } from '../contracts.js';
 import { applyLabels, labelsFor } from '../labels.js';
@@ -29,7 +29,7 @@ export class BfEditor extends HTMLElement {
 	/** @type {EditorView | null} */
 	#view = null;
 	/** @type {import('../contracts.js').Codec} */
-	#codec = createMarkdownBBCodeCodec(schema);
+	#codec = createBBCodeCodec(schema);
 	#value = ``;
 	#toolbar;
 	#linkDialog;

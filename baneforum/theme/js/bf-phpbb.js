@@ -4,7 +4,7 @@
 //     when JavaScript is missing
 //   - pictures are sent by phpBB's own uploader (Plupload), so chunking, the hidden
 //     attachment fields, the limits and the permission checks stay exactly as phpBB makes them
-import { defineBfEditor } from './bf-editor.js';
+import { createBBCodeCodec, defineBfEditor, schema } from './bf-editor.js';
 
 const form = document.getElementById(`postform`);
 const textarea = form?.querySelector(`textarea#message`);
@@ -222,6 +222,10 @@ function turnOn() {
 
 	defineBfEditor();
 	editor = /** @type {HTMLElement & Record<string, any>} */ (document.createElement(`bf-editor`));
+	// The saved format is BBCode. A post that was written in Markdown (the board tells us, see
+	// extensions/baneforum/editor) is read as Markdown, and the editor writes it back as BBCode.
+	const markdown = textarea.dataset.bfMarkdown === `1`;
+	editor.codec = createBBCodeCodec(schema, { markdown });
 
 	if (textarea.placeholder) {
 		editor.setAttribute(`placeholder`, textarea.placeholder);
@@ -235,6 +239,18 @@ function turnOn() {
 	editor.attachmentInfo = attachmentInfo;
 	textarea.before(editor);
 	editor.value = textarea.value;
+
+	// A Markdown post is converted when it is opened. The text that is sent is BBCode even if it is not changed.
+	if (markdown) {
+		textarea.value = editor.value;
+	}
+
+	// The text is BBCode now. The Markdown extension must not read it as Markdown (a "*" is only a star).
+	const noMarkdown = document.createElement(`input`);
+	noMarkdown.type = `hidden`;
+	noMarkdown.name = `disable_markdown`;
+	noMarkdown.value = `1`;
+	form?.append(noMarkdown);
 	editor.uploadHandler = phpbbUploader() ? { upload } : null;
 	editor.accept = acceptedTypes();
 	editor.addEventListener(`bf-change`, () => {

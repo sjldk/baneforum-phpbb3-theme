@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { EditorState, TextSelection } from 'prosemirror-state';
-import { createMarkdownBBCodeCodec } from '../src/codecs/markdown-bbcode.js';
+import { createBBCodeCodec } from '../src/codecs/bbcode.js';
 import { createBasicCommands } from '../src/commands.js';
 import { assertImplements } from '../src/contracts.js';
 import { createPlugins } from '../src/plugins.js';
 import { schema } from '../src/schema.js';
 
-const codec = createMarkdownBBCodeCodec(schema);
+const codec = createBBCodeCodec(schema);
 const commands = createBasicCommands(schema);
 const byId = (id) => commands.find((command) => command.id === id);
 
@@ -40,7 +40,7 @@ test(`every basic command satisfies the Command contract`, () => {
 
 test(`bold wraps the selection and is reported as on`, () => {
 	const state = run(`bold`, stateWith(`hello world`, 1, 6));
-	assert.equal(codec.serialize(state.doc), `**hello** world`);
+	assert.equal(codec.serialize(state.doc), `[b]hello[/b] world`);
 	assert.equal(byId(`bold`).isActive(state), true);
 });
 
@@ -50,13 +50,13 @@ test(`bold again turns it off`, () => {
 	assert.equal(codec.serialize(twice.doc), `hello world`);
 });
 
-test(`italic and strikethrough write their Markdown`, () => {
-	assert.equal(codec.serialize(run(`italic`, stateWith(`a b`, 1, 2)).doc), `*a* b`);
-	assert.equal(codec.serialize(run(`strike`, stateWith(`a b`, 1, 2)).doc), `~~a~~ b`);
+test(`italic and strikethrough write their BBCode`, () => {
+	assert.equal(codec.serialize(run(`italic`, stateWith(`a b`, 1, 2)).doc), `[i]a[/i] b`);
+	assert.equal(codec.serialize(run(`strike`, stateWith(`a b`, 1, 2)).doc), `[s]a[/s] b`);
 });
 
 test(`normal text removes all formatting from the selection`, () => {
-	const state = run(`normal`, stateWith(`**a** *b*`, 1, 4));
+	const state = run(`normal`, stateWith(`[b]a[/b] [i]b[/i]`, 1, 4));
 	assert.equal(codec.serialize(state.doc), `a b`);
 });
 

@@ -28,7 +28,7 @@ Push: if it fails with "publickey", unlock the SSH key (`ssh-add ~/.ssh/id_githu
 
 | Area | State |
 |---|---|
-| Editor (phases 0 to 8) | Done for posts, replies, edits and PMs. Signatures open. Phase 9 (keyboard walkthrough, screen reader, zoom, phones, size budget, Firefox board tests) is next. Phase 10 (packaging for reuse) open. |
+| Editor (phases 0 to 8) | Done for posts, replies, edits and PMs. **Saves BBCode now (2026-10-23).** Signatures open. Phase 9 (keyboard walkthrough, screen reader, zoom, phones, size budget, Firefox board tests) is next. Phase 10 (packaging for reuse) open. |
 | Theme | Under active polish. See "Today". |
 | Extensions | `likes` and `censor` are new and enabled on the test board. Not installed on production. |
 | Replacing prosilver CSS | `buttons.css` and `forms.css` are ours now. Nine prosilver files still load. See "Next". |
@@ -40,6 +40,10 @@ Push: if it fails with "publickey", unlock the SSH key (`ssh-add ~/.ssh/id_githu
 - **Prosilver 3.3.19 check:** our overrides came from prosilver 3.3.0 to 3.3.11. Real gaps, now fixed: `{% apply spaceless %}` in `navbar_footer.html`, and the two delete checkboxes in separate `if` blocks in `posting_editor.html`. Everything else was already ours or in a section we removed.
 - **Background image:** `cover`, and it sits on `html` now. Prosilver gives `html` a background colour, so a body background stopped where the page stopped when zoomed out. `body` has `background: none`, and `body` is out of the surface-colour list in `baneforum_colours.css`.
 - **Quick login:** the text fields have `min-width: 10rem` (your edit, committed).
+- **Saved format is BBCode (decided today).** The editor writes BBCode and reads BBCode and Markdown. A post that was written in Markdown is converted when it is opened. New extension `extensions/baneforum/editor`: the `[s]` BBCode, and `BF_MARKDOWN` for the posting page (read from the stored XML, because production's Markdown extension 1.2.0 has no per-post flag). The editor adds `disable_markdown=1` to the form. **The extension must be enabled on any board that uses the new editor** (`docs/production-install.md`). Details and the corpus result (45 of 30,374 messages look different, none crash): `docs/editor-progress.md` and `docs/markdown-to-bbcode-plan.md`. Plan for converting the stored posts in the database (about 275 messages): the plan file, nothing done yet. Tests: `markdown.mjs` (new), `posting.mjs`, 123 unit tests.
+- **Likes tooltip:** the buttons that cannot be used show the browser's own `title` tooltip. The custom CSS tooltip is gone.
+- **Member list header** (`table.table1 thead th`) has the size and spacing of the topic list header. `scripts/browser-tests/headers.mjs` compares the two.
+- **Tools:** `PORT=9223 run.sh ...` when Firefox holds port 9222. `scripts/export_corpus.php` and `scripts/render_compare.php` know about Markdown mode now.
 - **Not checked:** the background in a browser at different zoom levels and on a phone (iOS ignores `fixed`). `snap.mjs` after the header include and the background move. Popup and print pages in a browser.
 
 ## 2026-10-22, checked in Chrome on the test board unless noted
@@ -76,13 +80,14 @@ Push: if it fails with "publickey", unlock the SSH key (`ssh-add ~/.ssh/id_githu
 
 | Item | Note |
 |---|---|
-| Check today's changes | Background on `html` (zoom out, phone), popup and print pages, `snap.mjs` on the header change. |
+| Check today's changes | `snap.mjs` ran on the header include and the background (only the expected colour changes). Left: member list header and likes tooltip on a phone, Chrome check of the likes tooltip, the BBCode editor in Firefox. |
 | Replace the other prosilver CSS files | `content.css` next, then `colours.css`, `common.css`, `cp.css`, `links.css`, `base.css`, `utilities.css`, `icons.css`, `normalize.css`. Check each with `snap.mjs` before and after, and keep the same position in `overall_header.html`. |
 | Optimise the CSS | After all files are ours: merge our overrides into the replaced files, drop dead rules and `!important`, deduplicate. The user asked for this. |
 | `dl`/`dt` layouts | Form rows are a grid now. Topic rows and other lists still use prosilver's floats and flex. |
 | Pagination "…" dropdown | Prosilver fills it dark when open. Not restyled. |
 | Not looked at | The like bounce while moving, topic lists at narrow widths, dark mode of today's changes, other forms with the new grid (login, user control panel), the dialogs on a phone. |
 | Editor phase 9 | See the table above. |
+| Convert the stored Markdown posts | `docs/markdown-to-bbcode-plan.md`. Needs the owner's go for production. Open: `[hr]` and table BBCodes, horizontal rules and inline code are kept as text. |
 | Likes | Production board and notifications. A who-voted list is deliberately not wanted. |
 | Hidden "Unread" text for screen readers | Needs copies of `viewforum_body.html` and `forumlist_body.html`. |
 | Prosilver `px` values | About 690 left. Replacing the files removes them. |

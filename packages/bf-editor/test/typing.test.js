@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { EditorState, TextSelection } from 'prosemirror-state';
-import { createMarkdownBBCodeCodec } from '../src/codecs/markdown-bbcode.js';
+import { createBBCodeCodec } from '../src/codecs/bbcode.js';
 import { createBasicCommands } from '../src/commands.js';
 import { createPlugins } from '../src/plugins.js';
 import { schema } from '../src/schema.js';
 
-const codec = createMarkdownBBCodeCodec(schema);
+const codec = createBBCodeCodec(schema);
 const plugins = createPlugins(schema, createBasicCommands(schema));
 
 /** Types text one character at a time, the way the browser reports it, and returns the saved text. */
@@ -35,16 +35,16 @@ function type(text, start = ``) {
 }
 
 test(`typing **word** makes bold`, () => {
-	assert.equal(type(`say **hello**`), `say **hello**`);
-	assert.equal(type(`**hello**`).includes(`**hello**`), true);
+	assert.equal(type(`say **hello**`), `say [b]hello[/b]`);
+	assert.equal(type(`**hello**`).includes(`[b]hello[/b]`), true);
 });
 
 test(`typing *word* makes italic`, () => {
-	assert.equal(type(`a *b*`), `a *b*`);
+	assert.equal(type(`a *b*`), `a [i]b[/i]`);
 });
 
 test(`typing ~~word~~ makes strikethrough`, () => {
-	assert.equal(type(`a ~~b~~`), `a ~~b~~`);
+	assert.equal(type(`a ~~b~~`), `a [s]b[/s]`);
 });
 
 test(`a smilie code followed by a space becomes an emoji`, () => {

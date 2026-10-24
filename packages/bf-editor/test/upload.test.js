@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { EditorState, TextSelection } from 'prosemirror-state';
-import { createMarkdownBBCodeCodec } from '../src/codecs/markdown-bbcode.js';
+import { createBBCodeCodec } from '../src/codecs/bbcode.js';
 import { assertImplements } from '../src/contracts.js';
 import { schema } from '../src/schema.js';
 import { createAttachCommand, createUploadPlugin, createUploads } from '../src/upload.js';
 import { fakeUploadHandler } from './fakes/fake-upload.js';
 
-const codec = createMarkdownBBCodeCodec(schema);
+const codec = createBBCodeCodec(schema);
 const png = (name) => new File([`x`], name, { type: `image/png` });
 const settle = () => new Promise((resolve) => setImmediate(resolve));
 
