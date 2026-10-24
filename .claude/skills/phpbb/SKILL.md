@@ -72,6 +72,7 @@ A file here replaces the one in prosilver. Check the prosilver original of the s
 | Task | Command |
 |---|---|
 | Editor build, test, lint | `scripts/bf-editor.sh build` / `test` / `check`. Build before you commit a change in `packages/bf-editor/src` (the built copies in `baneforum/theme/` are committed). |
+| PHP: syntax, code standard, extension tests | `scripts/php-check.sh all` (or `lint` / `check` / `fix` / `test`). Runs in a container (`tools/php`, PHP 8.5 like the board), the host needs no PHP. The standard is phpBB's extension ruleset (release 3.3.19, copied to `tools/php/phpbb-standard/`) plus our rules for comments in `tools/php/ruleset.xml`. Rules and the comment standard for PHP and JS: `docs/code-style-php.md`. |
 | Editor alone in Chrome | `scripts/browser-tests/smoke.sh` |
 | A browser test on the board | `scripts/browser-tests/run.sh <script.mjs>` (Chrome) or `BROWSER=firefox scripts/browser-tests/run.sh <script.mjs>` |
 | Firefox | Puppeteer talks WebDriver BiDi. `states.mjs` uses the Chrome DevTools protocol and is Chrome only. |

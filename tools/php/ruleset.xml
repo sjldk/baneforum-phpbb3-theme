@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<ruleset name="Baneforum PHP">
+
+ <description>The phpBB extension standard (phpBB 3.3.19, in phpbb-standard/) plus our rules for comments.</description>
+
+ <!-- Layout and naming: tabs, Allman braces, lower case keywords, no unused "use", and so on. phpBB's own rules. -->
+ <rule ref="./phpbb-standard/ruleset-php-extensions.xml" />
+
+ <!-- Our rules for comments (see docs/code-style-php.md). phpBB's rules do not cover them for extensions. -->
+
+ <!-- Every file starts with a comment on what the file is for. -->
+ <rule ref="Squiz.Commenting.FileComment">
+  <exclude name="Squiz.Commenting.FileComment.MissingPackageTag" />
+  <exclude name="Squiz.Commenting.FileComment.MissingSubpackageTag" />
+  <exclude name="Squiz.Commenting.FileComment.PackageTagOrder" />
+  <exclude name="Squiz.Commenting.FileComment.MissingAuthorTag" />
+  <exclude name="Squiz.Commenting.FileComment.MissingCopyrightTag" />
+  <exclude name="Squiz.Commenting.FileComment.IncorrectAuthor" />
+  <exclude name="Squiz.Commenting.FileComment.IncorrectCopyright" />
+ </rule>
+
+ <!-- Every class, interface and trait has a comment that says what it is for. -->
+ <rule ref="Squiz.Commenting.ClassComment">
+  <exclude name="Squiz.Commenting.ClassComment.TagNotAllowed" />
+ </rule>
+
+ <!-- Every function and method has a comment, with a @param for each parameter and a @return. -->
+ <rule ref="Squiz.Commenting.FunctionComment">
+  <exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop" />
+  <exclude name="Squiz.Commenting.FunctionComment.ThrowsNoFullStop" />
+  <exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamType" />
+  <exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamName" />
+  <exclude name="Squiz.Commenting.FunctionComment.ParamNameNoMatch" />
+  <exclude name="Squiz.Commenting.FunctionComment.ParamCommentNotCapital" />
+  <!-- Doc types are int and bool, as in phpBB core and in our JS, not "integer" and "boolean". -->
+  <exclude name="Squiz.Commenting.FunctionComment.IncorrectParamVarName" />
+  <exclude name="Squiz.Commenting.FunctionComment.InvalidReturn" />
+  <!-- phpBB leaves the $event of a listener method untyped and documents it with @param \phpbb\event\data $event. -->
+  <exclude name="Squiz.Commenting.FunctionComment.TypeHintMissing" />
+ </rule>
+
+ <!-- The command line scripts keep their untyped parameters (they are not run by the tests here, so a type change is not checked). -->
+ <rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing">
+  <exclude-pattern>docker/*</exclude-pattern>
+  <exclude-pattern>scripts/*</exclude-pattern>
+ </rule>
+
+ <!-- Every class property has a comment. -->
+ <rule ref="Squiz.Commenting.VariableComment" />
+
+ <!-- Every comment block has a description, and is laid out in the same way. A one line block (/** Text. */) is fine. -->
+ <rule ref="Generic.Commenting.DocComment">
+  <exclude name="Generic.Commenting.DocComment.ContentAfterOpen" />
+  <exclude name="Generic.Commenting.DocComment.ContentBeforeClose" />
+  <exclude name="Generic.Commenting.DocComment.SpacingBeforeShort" />
+ </rule>
+
+ <!-- Test files and command line scripts may run code and define a class with no namespace. -->
+ <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+  <exclude-pattern>*/tests/*</exclude-pattern>
+ </rule>
+ <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
+  <exclude-pattern>*/tests/*</exclude-pattern>
+  <exclude-pattern>scripts/*</exclude-pattern>
+  <exclude-pattern>docker/*</exclude-pattern>
+ </rule>
+
+ <!-- No code that is commented out. It stays in git. -->
+ <rule ref="Squiz.PHP.CommentedOutCode">
+  <properties>
+   <property name="maxPercentage" value="40" />
+  </properties>
+ </rule>
+
+ <!-- No TODO or FIXME left behind in comments. Write an issue or a plan. -->
+ <rule ref="Generic.Commenting.Todo" />
+ <rule ref="Generic.Commenting.Fixme" />
+
+</ruleset>

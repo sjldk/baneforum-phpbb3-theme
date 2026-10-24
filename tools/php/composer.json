@@ -1,0 +1,11 @@
+{
+	"name": "baneforum/php-tools",
+	"description": "Code standard tools for the PHP in this repo. Not part of any extension.",
+	"license": "GPL-3.0-or-later",
+	"require-dev": {
+		"squizlabs/php_codesniffer": "^4.0"
+	},
+	"config": {
+		"sort-packages": true
+	}
+}
