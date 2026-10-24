@@ -49,6 +49,12 @@ The install steps for production are in `docs/production-install.md`.
 | Check our overrides against a new phpBB release | `scripts/prosilver-diff.sh <new-version>` shows what prosilver changed since the release in `docs/prosilver-reviewed`, for the files we override, plus a list of changed files we do not override. Read the diffs, copy what you need by hand, then write the new version into `docs/prosilver-reviewed`. |
 | Facebook and Google login buttons | Stay. 14 production users are linked. Styles are in `login_body_oauth.html`. |
 
+## Design rules
+
+| Rule | What it means |
+|---|---|
+| A link that works as a button never has an underline, in any state | Nav bar and menu links, post buttons, contact buttons, page numbers, tabs, the footer of a video card and every `.button`. They are told apart by a surface, and hover and keyboard focus show a soft background (the focus ring stays). Links in running text keep their underline. The list is one rule in `baneforum_common.css` (search for "RULE: a link that works as a button"). A new kind of button-like link is added to that list. |
+
 ## Template overrides in this style
 
 `baneforum/template/` holds: `attachment.html`, `index_body.html`, `login_body.html`, `login_body_oauth.html`, `navbar_header.html`,

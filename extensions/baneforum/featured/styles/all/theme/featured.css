@@ -1,6 +1,6 @@
 /* Featured posts above the forum list on the front page, laid out like the top of a magazine: a lead story with its picture beside the
    headline, and four smaller stories under it, each with the headline under the picture. The headline is the "headline" voice of the
-   theme (--font-headline), the byline is the "small facts" voice (--font-mono). Colours come from the style's variables. */
+   theme (--font-headline), the byline is the "small facts" voice (--font-facts). Colours come from the style's variables. */
 
 .bf-featured {
 	margin: 0 0 2rem;
@@ -67,10 +67,9 @@
 
 body .bf-featured .bf-featured__topic {
 	font-family: var(--font-headline, inherit) !important;
-	font-size: 1.375rem !important;
-	font-weight: 700 !important;
-	line-height: 1.1;
-	letter-spacing: -0.005em;
+	font-size: var(--text-heading) !important;
+	font-weight: 600 !important;
+	line-height: 1.25;
 	overflow-wrap: anywhere;
 	color: var(--color-text, #1f1f1f);
 }
@@ -89,10 +88,8 @@ body .bf-featured .bf-featured__topic {
 }
 
 body .bf-featured .bf-featured__meta {
-	font-family: var(--font-mono, ui-monospace, monospace) !important;
-	font-size: 0.75rem !important;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
+	font-family: var(--font-facts, inherit) !important;
+	font-size: var(--text-meta) !important;
 	color: var(--color-muted, #444);
 }
 
@@ -116,8 +113,8 @@ body .bf-featured .bf-featured__meta {
 	}
 
 	body .bf-featured .bf-featured__item--lead .bf-featured__topic {
-		font-size: clamp(2rem, 3.4vw, 3rem) !important;
-		line-height: 1.02;
+		font-size: var(--text-title) !important;
+		line-height: 1.2;
 	}
 }
 
@@ -133,20 +130,9 @@ body .bf-featured .bf-featured__meta {
 	aspect-ratio: 3 / 2;
 }
 
-@media (min-width: 43.75em) {
-	body .bf-featured .bf-featured__list .bf-featured__topic {
-		font-size: 1.75rem !important;
-		line-height: 1.08;
-	}
-}
-
 @media (max-width: 30em) {
 	.bf-featured__list > .bf-featured__item .bf-featured__picture {
 		flex-basis: 7rem;
-	}
-
-	body .bf-featured .bf-featured__list .bf-featured__topic {
-		font-size: 1.125rem !important;
 	}
 }
 
@@ -156,7 +142,7 @@ body .bf-featured .bf-featured__meta {
 body .bf-featured .bf-featured__snippet {
 	margin: 0.25rem 0 0;
 	font-family: var(--font-serif, Georgia, serif) !important;
-	font-size: 1rem !important;
+	font-size: var(--text-body) !important;
 	line-height: 1.5;
 	color: var(--color-text, #1f1f1f);
 }
