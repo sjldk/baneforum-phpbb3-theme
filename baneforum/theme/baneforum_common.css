@@ -1,6 +1,7 @@
 :root {
 	--base-font: "Inter", system-ui, sans-serif;
 	--font-headline: "Barlow Semi Condensed", var(--base-font);
+	--font-heading: "Barlow", var(--base-font);
 	--font-title: var(--base-font);
 	--font-comic: "Comic Sans", sans-serif;
 	/* One monospace stack for code blocks, inline code and keys. phpBB and the Markdown extension each set their own. */
@@ -1990,4 +1991,11 @@ dl.thumbnail img {
 
 a:has(> img.postimage) {
 	cursor: zoom-in;
+}
+
+/* Headings: Barlow for the titles of lists, forums, topics and posts, and for h2 and h3. The rest stays Inter. This comes after
+   the "one font everywhere" rule and has the same weight as it, so it wins. Icons are not touched. The weight is not set here:
+   h2 and h3 are 600 by the rule above, and a row title is 400 when it is read and bold when it is unread. */
+body :is(h2, h3, h4, .topic-title, .forum-title, .searchresults-title, a.forumtitle, a.topictitle, .postbody h3 a, h2 a, h3 a) {
+	font-family: var(--font-heading) !important;
 }

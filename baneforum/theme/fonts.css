@@ -32,3 +32,19 @@
 	src: url("fonts/barlow-semi-condensed-latin-700.woff2") format("woff2");
 }
 
+/* Heading font: Barlow, the regular width of the family that the site title uses. 400 for titles that are read, 600 for the rest. */
+@font-face {
+	font-family: "Barlow";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url("fonts/barlow-latin-400.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "Barlow";
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url("fonts/barlow-latin-600.woff2") format("woff2");
+}
