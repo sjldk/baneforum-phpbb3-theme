@@ -16,5 +16,5 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
-	'BF_LATEST_TITLE' => 'Seneste indlæg',
+	'BF_LATEST_TITLE' => 'Seneste emner',
 ]);

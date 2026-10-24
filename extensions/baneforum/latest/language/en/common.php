@@ -16,5 +16,5 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
-	'BF_LATEST_TITLE' => 'Latest posts',
+	'BF_LATEST_TITLE' => 'Latest threads',
 ]);

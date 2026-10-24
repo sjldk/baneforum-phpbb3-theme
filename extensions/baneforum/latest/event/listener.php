@@ -54,7 +54,8 @@ class listener implements EventSubscriberInterface
 
 		foreach ($posts as $post)
 		{
-			$topic = ['f' => (int) $post['forum_id'], 't' => (int) $post['topic_id'], 'p' => (int) $post['post_id']];
+			// The link goes to the top of the thread.
+			$topic = ['f' => (int) $post['forum_id'], 't' => (int) $post['topic_id']];
 
 			$this->template->assign_block_vars('bf_latest', [
 				'TITLE'  => $post['topic_title'],
@@ -62,7 +63,7 @@ class listener implements EventSubscriberInterface
 				'AUTHOR' => get_username_string('username', (int) $post['poster_id'], $post['username'], $post['user_colour'], $post['post_username']),
 				'TIME'   => $this->user->format_date((int) $post['post_time']),
 				'S_UNREAD' => $this->is_unread($post, $read),
-				'U_POST' => append_sid($this->root_path . 'viewtopic.' . $this->php_ext, $topic) . '#p' . (int) $post['post_id'],
+				'U_POST' => append_sid($this->root_path . 'viewtopic.' . $this->php_ext, $topic),
 			]);
 		}
 	}
@@ -94,8 +95,9 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	 * A topic is unread when its newest post is newer than the time the member last read it. A visitor that the board does not track
-	 * (a guest, and the board does not keep the read marks of guests) has nothing unread.
+	 * A thread is flagged when the member has not read it at all: the time the member last read it, by phpBB's own tracking (a mark for
+	 * the thread, or else the mark of the forum), is older than the thread itself. New replies in a thread that was read do not flag it.
+	 * A visitor that the board does not track (a guest) has nothing flagged.
 	 */
 	protected function is_unread(array $post, array $read): bool
 	{
@@ -104,7 +106,7 @@ class listener implements EventSubscriberInterface
 			return false;
 		}
 
-		return (int) ($read[(int) $post['topic_id']] ?? 0) < (int) $post['topic_last_post_time'];
+		return (int) ($read[(int) $post['topic_id']] ?? 0) < (int) $post['topic_time'];
 	}
 
 	protected function tracks(): bool
