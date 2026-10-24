@@ -1,0 +1,18 @@
+{% if loops.bf_featured|length %}
+<section class="bf-featured" aria-labelledby="bf-featured-title">
+	<h2 id="bf-featured-title" class="bf-featured__label">{{ lang('BF_FEATURED_TITLE') }}</h2>
+	<ol class="bf-featured__list">
+		{% for post in loops.bf_featured %}
+		<li class="bf-featured__item{% if loop.first %} bf-featured__item--lead{% endif %}">
+			<a class="bf-featured__picture" href="{{ post.U_POST }}" tabindex="-1" aria-hidden="true">
+				<img src="{% if loop.first %}{{ post.U_PICTURE_FULL }}{% else %}{{ post.U_PICTURE }}{% endif %}" alt=""{% if loop.first %} fetchpriority="high"{% else %} loading="lazy"{% endif %}>
+			</a>
+			<div class="bf-featured__body">
+				<a class="bf-featured__topic" href="{{ post.U_POST }}">{{ post.TITLE }}</a>
+				<span class="bf-featured__meta">{{ post.AUTHOR }} &middot; {{ post.TIME }}</span>
+			</div>
+		</li>
+		{% endfor %}
+	</ol>
+</section>
+{% endif %}

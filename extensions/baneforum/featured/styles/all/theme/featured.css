@@ -1,71 +1,135 @@
-/* Featured posts block, shown beside the forum list on the front page (its place is set by .bf-index__side in the theme).
-   Colours come from the style's variables, with plain fallbacks for other styles. */
+/* Featured posts above the forum list on the front page, laid out like the top of a magazine: a lead story with its picture beside the
+   headline, and four smaller stories under it, each with the headline under the picture. The headline is the "headline" voice of the
+   theme (--font-headline), the byline is the "small facts" voice (--font-mono). Colours come from the style's variables. */
+
+.bf-featured {
+	margin: 0 0 2rem;
+}
+
+/* A small label above, like the section line of a magazine. */
+body .bf-featured .bf-featured__label {
+	margin: 0 0 0.75rem;
+	font-family: var(--font-mono, ui-monospace, monospace) !important;
+	font-size: var(--text-meta, 0.8125rem) !important;
+	font-weight: 400 !important;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--color-muted, #444);
+}
 
 .bf-featured__list {
 	display: grid;
-	gap: 0.5rem;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 1.5rem 1rem;
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-/* The picture fills the whole entry. The title sits on a dark, semi-transparent bar at the bottom. */
 .bf-featured__item {
 	position: relative;
-	aspect-ratio: 16 / 9;
-	overflow: hidden;
-	border-radius: 0.5rem;
-	background: var(--color-tint, #eef2f7);
+	display: flex;
+	flex-direction: column;
+	gap: 0.625rem;
+	min-width: 0;
 }
 
 .bf-featured__picture {
+	position: relative;
 	display: block;
-	width: 100%;
-	height: 100%;
+	overflow: hidden;
+	aspect-ratio: 16 / 10;
+	border-radius: var(--radius, 0.5rem);
+	background: var(--color-tint, #f2f2f2);
+}
+
+.bf-featured__picture img {
+	display: block;
+	inline-size: 100%;
+	block-size: 100%;
 	object-fit: cover;
 }
 
-.bf-featured__body {
-	position: absolute;
-	inset: auto 0 0 0;
-	display: flex;
-	flex-direction: column;
-	gap: 0.1rem;
-	padding: 0.5rem 0.75rem;
-	background: rgb(0 0 0 / 0.7);
-	color: #fff;
-}
-
-.bf-featured__topic,
-.bf-featured__topic:hover {
-	color: #fff;
-	font-weight: 600;
-	overflow-wrap: anywhere;
-}
-
-/* The link covers the whole entry, so a click anywhere on the picture opens the post. */
-.bf-featured__topic::after {
-	content: '';
-	position: absolute;
-	inset: 0;
-}
-
-.bf-featured__topic:focus-visible::after {
-	outline: var(--border-control, 0.15rem) solid #fff;
-	outline-offset: calc(-1 * var(--border-control, 0.15rem));
-}
-
-.bf-featured__meta {
-	font-size: 0.85em;
-	color: rgb(255 255 255 / 0.85);
-}
-
-/* A thin line round the card, drawn over the picture, so a white or pale picture still shows its rounded corners on the page. */
-.bf-featured__item::after {
+/* A thin line round the picture, drawn over it, so a white or pale picture still shows its rounded corners. */
+.bf-featured__picture::after {
 	content: "";
 	position: absolute;
 	inset: 0;
 	border: 1px solid var(--color-control, #858585);
 	border-radius: inherit;
 	pointer-events: none;
+}
+
+.bf-featured__body {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	min-width: 0;
+}
+
+body .bf-featured .bf-featured__topic {
+	font-family: var(--font-headline, inherit) !important;
+	font-size: 1.375rem !important;
+	font-weight: 700 !important;
+	line-height: 1.1;
+	letter-spacing: -0.005em;
+	overflow-wrap: anywhere;
+	color: var(--color-text, #1f1f1f);
+}
+
+/* The whole story is the link, not only the headline. */
+.bf-featured__topic::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+}
+
+.bf-featured__topic:focus-visible::after {
+	outline: var(--border-control, 0.15rem) solid var(--color-focus, #505050);
+	outline-offset: 0.1rem;
+	border-radius: var(--radius, 0.5rem);
+}
+
+body .bf-featured .bf-featured__meta {
+	font-family: var(--font-mono, ui-monospace, monospace) !important;
+	font-size: 0.75rem !important;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--color-muted, #444);
+}
+
+/* The lead story takes the whole top row: the picture on the left (a wide crop, 14rem high), the headline large on the right. */
+.bf-featured__item--lead {
+	grid-column: 1 / -1;
+}
+
+@media (min-width: 43.75em) {
+	.bf-featured__item--lead {
+		flex-direction: row;
+		align-items: center;
+		gap: 1.5rem;
+	}
+
+	.bf-featured__item--lead .bf-featured__picture {
+		flex: 0 0 58%;
+		aspect-ratio: auto;
+		block-size: 14rem;
+	}
+
+	.bf-featured__item--lead .bf-featured__body {
+		flex: 1 1 0;
+		gap: 0.75rem;
+	}
+
+	body .bf-featured .bf-featured__item--lead .bf-featured__topic {
+		font-size: clamp(2rem, 3.4vw, 3rem) !important;
+		line-height: 1.02;
+	}
+}
+
+/* Narrower: two small stories in a row, and on a phone the lead picture goes above its headline (the default column layout). */
+@media (max-width: 56em) {
+	.bf-featured__list {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
 }
