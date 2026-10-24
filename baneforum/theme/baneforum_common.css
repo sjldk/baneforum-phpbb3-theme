@@ -2103,7 +2103,8 @@ ul.topiclist li.header dl.row-item dt .list-inner {
    (js/bf-top.js), and so it is not in the tab order while it is not shown. */
 .bf-top {
 	position: fixed;
-	inset-block-end: 1rem;
+	/* 1rem from the corner, above the cookie notice while it shows (--bf-top-lift, set by js/bf-top.js) and above the home bar of a phone. */
+	inset-block-end: calc(1rem + var(--bf-top-lift, 0px) + env(safe-area-inset-bottom, 0px));
 	inset-inline-end: 1rem;
 	z-index: 5;
 	display: inline-flex;
