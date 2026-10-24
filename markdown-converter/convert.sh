@@ -13,8 +13,8 @@ work="$root/markdown-converter/work"
     exit 1
 }
 
-# The converter needs the editor's packages. This installs them once.
-[[ -d "$root/packages/bf-editor/node_modules" ]] || "$root/scripts/bf-editor.sh" install
+# The converter needs the editor's packages. The install is quick when they are up to date, and makes sure that new ones are there.
+"$root/scripts/bf-editor.sh" install
 
 "$root/scripts/bf-editor.sh" exec node tools/convert-corpus.mjs ../../markdown-converter/work/markdown-rows.jsonl ../../markdown-converter/work/converted.jsonl
 echo "Done: $work/converted.jsonl"
