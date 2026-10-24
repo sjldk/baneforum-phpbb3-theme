@@ -20,7 +20,9 @@ class thumbs
 	/** The picture of the video: 480 by 360. A 16:9 video has black bars above and below, that the card crops away. */
 	public const FILE = 'hqdefault.jpg';
 
+	/** A file smaller than this is not a picture. */
 	public const MIN_BYTES = 1000;
+	/** A file larger than this is refused, so a wrong answer cannot fill the disk. */
 	public const MAX_BYTES = 300000;
 
 	/** Seconds before the board tries again with a video that failed. */
@@ -29,16 +31,34 @@ class thumbs
 	/** The most fetches (and checks of the posts) a minute, for the whole board. */
 	public const PER_MINUTE = 20;
 
+	/**
+	 * Remembers the folder of the pictures.
+	 *
+	 * @param string $dir  The folder, with a slash at the end.
+	 */
 	public function __construct(protected string $dir)
 	{
 	}
 
+	/**
+	 * Tells if the text can be the id of a YouTube video. Checked before the id is used in a path or an address.
+	 *
+	 * @param string $id  The text to check.
+	 *
+	 * @return bool  True for an id of the right form.
+	 */
 	public static function valid(string $id): bool
 	{
 		return preg_match(self::ID_PATTERN, $id) === 1;
 	}
 
-	/** A JPEG file of a sensible size. */
+	/**
+	 * A JPEG file of a sensible size.
+	 *
+	 * @param string|null $bytes  The downloaded content, or null when the download failed.
+	 *
+	 * @return bool  True when the content looks like a JPEG picture.
+	 */
 	public static function is_thumbnail(?string $bytes): bool
 	{
 		return $bytes !== null
@@ -47,14 +67,25 @@ class thumbs
 			&& str_starts_with($bytes, "\xFF\xD8\xFF");
 	}
 
+	/**
+	 * Where the picture of a video is kept.
+	 *
+	 * @param string $id  The id of the video. It must be valid.
+	 *
+	 * @return string  The path of the file. The file may not exist.
+	 */
 	public function path(string $id): string
 	{
 		return $this->dir . $id . '.jpg';
 	}
 
 	/**
-	 * @param callable(string): bool $known tells if a post of the board mentions the video
-	 * @return string|null the path of the picture, or null if there is none (the card then has no picture)
+	 * Gives the path of the picture of a video, and fetches it first when the board has none and may fetch.
+	 *
+	 * @param string   $id     The id of the video.
+	 * @param callable $known  Gets the id and tells if a post of the board mentions the video.
+	 *
+	 * @return string|null  The path of the picture, or null if there is none (the card then has no picture).
 	 */
 	public function find(string $id, callable $known): ?string
 	{
@@ -103,13 +134,21 @@ class thumbs
 		return $path;
 	}
 
-	/** Makes the folder, and says if it can be written. */
+	/**
+	 * Makes the folder, and says if it can be written.
+	 *
+	 * @return bool  True when the folder is there.
+	 */
 	protected function ready(): bool
 	{
 		return is_dir($this->dir) || @mkdir($this->dir, 0755, true) || is_dir($this->dir);
 	}
 
-	/** Counts a fetch in the minute. False when the board has had enough for this minute. */
+	/**
+	 * Counts a fetch in the minute. The count is kept in a file with a lock, so parallel requests share it.
+	 *
+	 * @return bool  False when the board has had enough for this minute.
+	 */
 	protected function allow(): bool
 	{
 		if (!$this->ready() || ($handle = @fopen($this->dir . 'rate', 'c+')) === false)
@@ -137,7 +176,13 @@ class thumbs
 		return $allowed;
 	}
 
-	/** The picture from YouTube: https only, a fixed address, no redirects, a few seconds at most. */
+	/**
+	 * The picture from YouTube: https only, a fixed address, no redirects, a few seconds at most.
+	 *
+	 * @param string $id  The id of the video. It must be valid.
+	 *
+	 * @return string|null  The content, or null when curl is missing or the fetch failed.
+	 */
 	protected function download(string $id): ?string
 	{
 		if (!function_exists('curl_init'))

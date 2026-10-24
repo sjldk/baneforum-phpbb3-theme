@@ -1,13 +1,17 @@
 <?php
 /**
- * Tests for the censor. Run it where PHP and phpBB's vendor folder are:
+ * Tests for the censor
+ *
+ * Run it where PHP and phpBB's vendor folder are:
  *   docker compose exec web php ext/baneforum/censor/tests/censor_test.php
+ *
+ * @license GNU General Public License, version 2 (GPL-2.0-only)
  */
+
+use baneforum\censor\censor;
 
 require '/var/www/html/vendor/autoload.php';
 require __DIR__ . '/../censor.php';
-
-use baneforum\censor\censor;
 
 $failed = 0;
 $check = function (string $name, string $got, string $want) use (&$failed): void {

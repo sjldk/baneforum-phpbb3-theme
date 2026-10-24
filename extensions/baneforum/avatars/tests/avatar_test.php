@@ -1,13 +1,17 @@
 <?php
 /**
- * Tests for the letter avatars. Run it where PHP and phpBB's vendor folder are:
+ * Tests for the letter avatars
+ *
+ * Run it where PHP and phpBB's vendor folder are:
  *   docker compose exec web php ext/baneforum/avatars/tests/avatar_test.php
+ *
+ * @license GNU General Public License, version 2 (GPL-2.0-only)
  */
+
+use baneforum\avatars\event\listener;
 
 require '/var/www/html/vendor/autoload.php';
 require __DIR__ . '/../event/listener.php';
-
-use baneforum\avatars\event\listener;
 
 $failed = 0;
 $check = function (string $name, $got, $want) use (&$failed): void {

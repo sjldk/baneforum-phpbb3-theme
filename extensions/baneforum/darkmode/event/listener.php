@@ -14,6 +14,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class listener implements EventSubscriberInterface
 {
+	/**
+	 * Tells phpBB which event this class listens to.
+	 *
+	 * @return array<string, string>  The event name, with the method that handles it.
+	 */
 	public static function getSubscribedEvents(): array
 	{
 		return [
@@ -21,6 +26,13 @@ class listener implements EventSubscriberInterface
 		];
 	}
 
+	/**
+	 * Adds the language file of this extension to the ones phpBB loads.
+	 *
+	 * @param \phpbb\event\data $event  The core.user_setup event
+	 *
+	 * @return void
+	 */
 	public function load_language($event): void
 	{
 		$lang_set_ext = $event['lang_set_ext'];

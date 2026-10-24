@@ -18,15 +18,30 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class listener implements EventSubscriberInterface
 {
+	/**
+	 * Sets the services this listener needs.
+	 *
+	 * @param markdown_detector $detector  Tells whether a stored post holds Markdown.
+	 * @param driver_interface $db  The database.
+	 * @param request_interface $request  The request, to read the action and the message id.
+	 * @param string $posts_table  The full name of the posts table.
+	 * @param string $privmsgs_table  The full name of the private messages table.
+	 */
 	public function __construct(
 		protected markdown_detector $detector,
 		protected driver_interface $db,
 		protected request_interface $request,
 		protected string $posts_table,
 		protected string $privmsgs_table
-	) {
+	)
+	{
 	}
 
+	/**
+	 * Tells phpBB which events this class listens to.
+	 *
+	 * @return array<string, string>  The event names, each with the method that handles it.
+	 */
 	public static function getSubscribedEvents(): array
 	{
 		return [
@@ -43,7 +58,9 @@ class listener implements EventSubscriberInterface
 	 * The BBCodes that phpBB lacks and that the editor and the conversion of Markdown posts write: [s] for strikethrough, and [table], [tr],
 	 * [th], [td] (with align=left|center|right, colspan and rowspan) for tables. A tag that the board does not know is shown as plain text.
 	 *
-	 * @param \phpbb\event\data $event
+	 * @param \phpbb\event\data $event  The core.text_formatter_s9e_configure_after event
+	 *
+	 * @return void
 	 */
 	public function add_bbcodes($event): void
 	{
@@ -64,7 +81,11 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	 * @param \phpbb\event\data $event
+	 * Flags the posting page when the post that is edited or quoted holds Markdown.
+	 *
+	 * @param \phpbb\event\data $event  The core.posting_modify_template_vars event
+	 *
+	 * @return void
 	 */
 	public function flag_post($event): void
 	{
@@ -81,7 +102,9 @@ class listener implements EventSubscriberInterface
 	/**
 	 * A private message that is edited, quoted or forwarded, or a topic post that is quoted in one.
 	 *
-	 * @param \phpbb\event\data $event
+	 * @param \phpbb\event\data $event  The core.ucp_pm_compose_template event
+	 *
+	 * @return void
 	 */
 	public function flag_message($event): void
 	{
@@ -101,6 +124,17 @@ class listener implements EventSubscriberInterface
 		$event['template_ary'] = $template_ary;
 	}
 
+	/**
+	 * Reads the stored text of one post or message and tells whether it holds Markdown.
+	 * The column and table names come from this class, never from the request. Only the id comes from outside, and it is a number.
+	 *
+	 * @param string $table  The full table name
+	 * @param string $id_column  The name of the id column
+	 * @param string $text_column  The name of the text column
+	 * @param int $id  The id of the row. Zero or less gives false.
+	 *
+	 * @return bool  True when the stored text holds Markdown
+	 */
 	private function stored_markdown(string $table, string $id_column, string $text_column, int $id): bool
 	{
 		if ($id <= 0)

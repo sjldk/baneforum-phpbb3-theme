@@ -32,18 +32,31 @@ class finder
 	/** The snippet is cut here, in characters. The style fades it out at the height of the picture, so this only has to be long enough. */
 	public const SNIPPET = 420;
 
+	/**
+	 * Keeps the services that the query needs.
+	 *
+	 * @param driver_interface   $db          The database.
+	 * @param tools_interface    $db_tools    Used to see if the vote table exists.
+	 * @param content_visibility $visibility  Builds the rule for the posts the member may see.
+	 * @param utils              $utils       Strips the formatting from the stored post.
+	 * @param string             $prefix      The prefix of the table names.
+	 */
 	public function __construct(
 		protected driver_interface $db,
 		protected tools_interface $db_tools,
 		protected content_visibility $visibility,
 		protected utils $utils,
 		protected string $prefix
-	) {
+	)
+	{
 	}
 
 	/**
-	 * @param int[] $forum_ids forums the member may read and download from
-	 * @return array<int, array<string, mixed>> one row per post, with the first picture
+	 * Reads the posts with pictures in the order described for the class, and keeps the first picture of each.
+	 *
+	 * @param int[] $forum_ids  The forums the member may read and download from.
+	 *
+	 * @return array<int, array<string, mixed>>  One row per post, by post id, with the first picture. At most LIMIT.
 	 */
 	public function find(array $forum_ids): array
 	{
@@ -93,6 +106,10 @@ class finder
 
 	/**
 	 * Plain text from the stored post: no formatting, no addresses, one line, cut at a word.
+	 *
+	 * @param string $stored  The post text as phpBB stores it.
+	 *
+	 * @return string  The snippet, at most SNIPPET characters.
 	 */
 	public function snippet(string $stored): string
 	{

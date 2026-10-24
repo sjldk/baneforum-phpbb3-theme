@@ -1,11 +1,16 @@
 <?php
 /**
- * Tests for the vote rule. Run it where PHP is:
+ * Baneforum likes, tests
+ *
+ * Checks the vote rule: which vote a member ends with after a click. Run it where PHP is:
  *   docker compose exec web php ext/baneforum/likes/tests/votes_test.php
+ *
+ * @license GNU General Public License, version 2 (GPL-2.0-only)
  */
 
 namespace phpbb\db\driver
 {
+	/** A stand-in for phpBB's database interface, so the vote class loads without phpBB. */
 	interface driver_interface
 	{
 	}
@@ -19,7 +24,8 @@ namespace
 	use baneforum\likes\votes;
 
 	$failed = 0;
-	$check = function (string $name, bool $ok) use (&$failed): void {
+	$check = function (string $name, bool $ok) use (&$failed): void
+	{
 		echo ($ok ? 'PASS ' : 'FAIL ') . $name . "\n";
 		$failed += $ok ? 0 : 1;
 	};

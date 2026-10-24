@@ -16,10 +16,20 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class listener implements EventSubscriberInterface
 {
+	/**
+	 * Sets the censor service.
+	 *
+	 * @param censor $censor  Censors the text of the rendered HTML.
+	 */
 	public function __construct(protected censor $censor)
 	{
 	}
 
+	/**
+	 * Tells phpBB which events this class listens to.
+	 *
+	 * @return array<string, string>  The event names, each with the method that handles it.
+	 */
 	public static function getSubscribedEvents(): array
 	{
 		return [
@@ -31,7 +41,9 @@ class listener implements EventSubscriberInterface
 	/**
 	 * Same two lines as phpBB's factory uses when it takes the plugin out, so it never builds a censor helper.
 	 *
-	 * @param \phpbb\event\data $event
+	 * @param \phpbb\event\data $event  The core.text_formatter_s9e_configure_after event
+	 *
+	 * @return void
 	 */
 	public function remove_core_censor($event): void
 	{
@@ -45,7 +57,11 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
-	 * @param \phpbb\event\data $event
+	 * Censors the rendered HTML, when the viewer has censoring switched on.
+	 *
+	 * @param \phpbb\event\data $event  The core.text_formatter_s9e_render_after event
+	 *
+	 * @return void
 	 */
 	public function censor_html($event): void
 	{

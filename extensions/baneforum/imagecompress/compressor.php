@@ -19,15 +19,22 @@ namespace baneforum\imagecompress;
  */
 class compressor
 {
+	/** The most pixels on the long side. */
 	public const MAX_LONG = 1920;
+	/** The most pixels on the short side. */
 	public const MAX_SHORT = 1200;
+	/** The JPEG quality used when a picture is saved again. */
 	public const JPEG_QUALITY = 85;
 	/** Files smaller than this and not too big in pixels are kept as they are. */
 	public const KEEP_BELOW = 300000;
 
 	/**
-	 * @param string $path File to make smaller
-	 * @return int|null The new file size, or null if the file was not changed
+	 * Makes the picture file smaller in place.
+	 * The new file is written beside the old one and then renamed over it, so a failed save loses nothing.
+	 *
+	 * @param string $path  The file to make smaller
+	 *
+	 * @return int|null  The new file size, or null if the file was not changed
 	 */
 	public function compress(string $path): ?int
 	{
@@ -129,9 +136,10 @@ class compressor
 	/**
 	 * Turns a picture the way its EXIF orientation says (1 = already upright).
 	 *
-	 * @param \GdImage $image
-	 * @param int $orientation 1 to 8
-	 * @return \GdImage
+	 * @param \GdImage $image  The picture to turn
+	 * @param int $orientation  The EXIF orientation, 1 to 8
+	 *
+	 * @return \GdImage  The upright picture. It can be a new image.
 	 */
 	protected static function turn_upright($image, int $orientation)
 	{
@@ -167,6 +175,11 @@ class compressor
 
 	/**
 	 * The EXIF orientation of a JPEG, read without the exif extension. 1 if there is none.
+	 * Only the first 64 KB are read, because the EXIF block sits at the start of the file.
+	 *
+	 * @param string $path  The JPEG file
+	 *
+	 * @return int  The orientation, 1 to 8
 	 */
 	public static function jpeg_orientation(string $path): int
 	{
@@ -201,6 +214,14 @@ class compressor
 		return 1;
 	}
 
+	/**
+	 * Reads the orientation tag (0x0112) from the TIFF data inside an EXIF block.
+	 * Bad or short data gives 1, because a wrong guess would turn a good picture.
+	 *
+	 * @param string $tiff  The TIFF data, starting at its byte order mark
+	 *
+	 * @return int  The orientation, 1 to 8
+	 */
 	protected static function orientation_from_tiff(string $tiff): int
 	{
 		if (strlen($tiff) < 8)
@@ -243,6 +264,11 @@ class compressor
 	/**
 	 * GD holds about 4 bytes for every pixel, and the copy for turning needs the same again.
 	 * Pictures that would not fit are left alone, because running out of memory ends the request.
+	 *
+	 * @param int $width  The width in pixels
+	 * @param int $height  The height in pixels
+	 *
+	 * @return bool  True when the picture can be handled safely
 	 */
 	protected static function fits_in_memory(int $width, int $height): bool
 	{
@@ -256,6 +282,13 @@ class compressor
 		return $width * $height * 9 + 8 * 1024 * 1024 < $limit - memory_get_usage(true);
 	}
 
+	/**
+	 * Turns a php.ini size such as 128M into bytes.
+	 *
+	 * @param string $setting  The setting, with an optional k, m or g at the end
+	 *
+	 * @return int  The size in bytes. A negative number stays negative, which means no limit.
+	 */
 	protected static function bytes(string $setting): int
 	{
 		$number = (int) $setting;

@@ -17,6 +17,16 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class listener implements EventSubscriberInterface
 {
+	/**
+	 * Sets the services this listener needs.
+	 *
+	 * @param driver_interface $db  The database.
+	 * @param auth $auth  The permissions of the visitor.
+	 * @param template $template  The template, which gets the forum list.
+	 * @param string $prefix  The prefix of the table names.
+	 * @param string $root_path  The path to the phpBB root folder.
+	 * @param string $php_ext  The file extension of PHP files.
+	 */
 	public function __construct(
 		protected driver_interface $db,
 		protected auth $auth,
@@ -24,9 +34,15 @@ class listener implements EventSubscriberInterface
 		protected string $prefix,
 		protected string $root_path,
 		protected string $php_ext
-	) {
+	)
+	{
 	}
 
+	/**
+	 * Tells phpBB which events this class listens to.
+	 *
+	 * @return array<string, string>  The event names, each with the method that handles it.
+	 */
 	public static function getSubscribedEvents(): array
 	{
 		return [
@@ -35,6 +51,13 @@ class listener implements EventSubscriberInterface
 		];
 	}
 
+	/**
+	 * Adds the language file of this extension to the ones phpBB loads.
+	 *
+	 * @param \phpbb\event\data $event  The core.user_setup event
+	 *
+	 * @return void
+	 */
 	public function load_language($event): void
 	{
 		$lang_set_ext = $event['lang_set_ext'];
@@ -42,6 +65,12 @@ class listener implements EventSubscriberInterface
 		$event['lang_set_ext'] = $lang_set_ext;
 	}
 
+	/**
+	 * Gives the template one block row for each forum the visitor may list, with the depth of the forum.
+	 * Nothing is added when the visitor may list no forum.
+	 *
+	 * @return void
+	 */
 	public function add_forums(): void
 	{
 		$visible = array_map('intval', array_keys($this->auth->acl_getf('f_list', true)));

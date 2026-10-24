@@ -1,6 +1,13 @@
 <?php
-// Fills the test board with forums, users and topics in every status the theme styles.
-// Run with docker/dummy-data.sh. It stops if the board was already filled.
+/**
+ * Dummy data for the test board
+ *
+ * Fills the board with forums, users and topics in every status the theme styles.
+ * Run it with docker/dummy-data.sh. It stops if the board was already filled.
+ *
+ * @license GNU General Public License, version 2 (GPL-2.0-only)
+ */
+
 define('IN_PHPBB', true);
 $phpbb_root_path = '/var/www/html/';
 $phpEx = 'php';
@@ -15,6 +22,13 @@ $user->session_begin();
 $auth->acl($user->data);
 $user->setup();
 
+/**
+ * Runs a query and returns the first row.
+ *
+ * @param string $sql  The query to run
+ *
+ * @return array|false  The first row, or false when nothing matches
+ */
 function one($sql)
 {
 	global $db;
@@ -24,6 +38,13 @@ function one($sql)
 	return $row;
 }
 
+/**
+ * Makes the given user the current user, so a post is written in that name.
+ *
+ * @param int $id  The user id
+ *
+ * @return void
+ */
 function as_user($id)
 {
 	global $user, $auth;
@@ -59,6 +80,19 @@ $alice = $people['alice'];
 $bob = $people['bob'];
 $carol = $people['carol'];
 
+/**
+ * Adds a forum row and gives it the same group permissions as forum 2.
+ * A link forum gets no permissions, because nobody posts in it.
+ *
+ * @param string $name  The forum name
+ * @param int $parent  The parent forum id, 0 for the top
+ * @param int $type  The forum type constant
+ * @param int $status  The forum status constant, unlocked or locked
+ * @param string $desc  The description
+ * @param string $link  The target address of a link forum
+ *
+ * @return int  The id of the new forum
+ */
 function forum($name, $parent, $type = FORUM_POST, $status = ITEM_UNLOCKED, $desc = '', $link = '')
 {
 	global $db;
@@ -113,6 +147,19 @@ $number = function ($parent) use (&$number, &$counter, $rows, $db)
 };
 $number(0);
 
+/**
+ * Submits a post or a reply through phpBB, as the given user.
+ *
+ * @param string $mode  Either post for a new topic or reply for a reply
+ * @param int $forum  The forum id
+ * @param int $topic  The topic id, 0 for a new topic
+ * @param int $who  The user id of the author
+ * @param string $title  The topic title
+ * @param string $text  The message text
+ * @param int $type  The topic type constant, such as announcement or sticky
+ *
+ * @return int  The topic id
+ */
 function post($mode, $forum, $topic, $who, $title, $text, $type = POST_NORMAL)
 {
 	global $db;
@@ -159,11 +206,32 @@ function post($mode, $forum, $topic, $who, $title, $text, $type = POST_NORMAL)
 	return (int) $data['topic_id'];
 }
 
+/**
+ * Starts a new topic.
+ *
+ * @param int $forum  The forum id
+ * @param int $who  The user id of the author
+ * @param string $title  The topic title
+ * @param string $text  The message text
+ * @param int $type  The topic type constant
+ *
+ * @return int  The id of the new topic
+ */
 function topic($forum, $who, $title, $text, $type = POST_NORMAL)
 {
 	return post('post', $forum, 0, $who, $title, $text, $type);
 }
 
+/**
+ * Adds a reply to a topic.
+ *
+ * @param int $forum  The forum id
+ * @param int $topic  The topic id
+ * @param int $who  The user id of the author
+ * @param string $text  The message text
+ *
+ * @return void
+ */
 function reply($forum, $topic, $who, $text)
 {
 	post('reply', $forum, $topic, $who, 'Re: reply', $text);

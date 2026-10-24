@@ -19,6 +19,17 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class listener implements EventSubscriberInterface
 {
+	/**
+	 * Keeps the services that the front page needs.
+	 *
+	 * @param finder   $finder     Finds the latest threads.
+	 * @param auth     $auth       Tells which forums the member may read.
+	 * @param template $template   The page template that gets the block.
+	 * @param user     $user       The member, for the time format and the tracking.
+	 * @param config   $config     The board settings.
+	 * @param string   $root_path  The phpBB root path, for the links.
+	 * @param string   $php_ext    The php file extension, for the links.
+	 */
 	public function __construct(
 		protected finder $finder,
 		protected auth $auth,
@@ -27,9 +38,15 @@ class listener implements EventSubscriberInterface
 		protected config $config,
 		protected string $root_path,
 		protected string $php_ext
-	) {
+	)
+	{
 	}
 
+	/**
+	 * The events this listener wants.
+	 *
+	 * @return array<string, string>  Event name and method name.
+	 */
 	public static function getSubscribedEvents(): array
 	{
 		return [
@@ -38,6 +55,13 @@ class listener implements EventSubscriberInterface
 		];
 	}
 
+	/**
+	 * Adds the language file of this extension to every page.
+	 *
+	 * @param \phpbb\event\data $event  The core.user_setup event.
+	 *
+	 * @return void
+	 */
 	public function load_language($event): void
 	{
 		$lang_set_ext = $event['lang_set_ext'];
@@ -45,6 +69,13 @@ class listener implements EventSubscriberInterface
 		$event['lang_set_ext'] = $lang_set_ext;
 	}
 
+	/**
+	 * Fills the template block with the latest threads the member may read.
+	 *
+	 * @param \phpbb\event\data $event  The core.index_modify_page_title event.
+	 *
+	 * @return void
+	 */
 	public function add_latest($event): void
 	{
 		$forums = array_map('intval', array_keys($this->auth->acl_getf('f_read', true)));
@@ -70,7 +101,10 @@ class listener implements EventSubscriberInterface
 
 	/**
 	 * When the member last read each topic, from phpBB's own tracking (the same that marks a topic unread in the lists).
-	 * @return array<int, int> topic id => time
+	 *
+	 * @param array<int, array<string, mixed>> $posts  The posts from the finder.
+	 *
+	 * @return array<int, int>  The time of the last read, by topic id. Empty when the board does not track the member.
 	 */
 	protected function read_times(array $posts): array
 	{
@@ -98,6 +132,11 @@ class listener implements EventSubscriberInterface
 	 * A thread is flagged when the member has not read it at all: the time the member last read it, by phpBB's own tracking (a mark for
 	 * the thread, or else the mark of the forum), is older than the thread itself. New replies in a thread that was read do not flag it.
 	 * A visitor that the board does not track (a guest) has nothing flagged.
+	 *
+	 * @param array<string, mixed> $post  One post from the finder.
+	 * @param array<int, int>      $read  The times of the last read, by topic id.
+	 *
+	 * @return bool  True when the thread is new to the member.
 	 */
 	protected function is_unread(array $post, array $read): bool
 	{
@@ -109,6 +148,11 @@ class listener implements EventSubscriberInterface
 		return (int) ($read[(int) $post['topic_id']] ?? 0) < (int) $post['topic_time'];
 	}
 
+	/**
+	 * Tells if the board keeps read marks for this visitor: a registered member, or a guest when the board allows it.
+	 *
+	 * @return bool  True when read marks exist.
+	 */
 	protected function tracks(): bool
 	{
 		return !empty($this->user->data['is_registered']) || !empty($this->config['load_anon_lastread']);

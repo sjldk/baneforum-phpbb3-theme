@@ -18,6 +18,16 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class listener implements EventSubscriberInterface
 {
+	/**
+	 * Keeps the services that the front page needs.
+	 *
+	 * @param finder   $finder     Finds the posts to feature.
+	 * @param auth     $auth       Tells which forums the member may read and download from.
+	 * @param template $template   The page template that gets the block.
+	 * @param user     $user       The member, for the time format.
+	 * @param string   $root_path  The phpBB root path, for the links.
+	 * @param string   $php_ext    The php file extension, for the links.
+	 */
 	public function __construct(
 		protected finder $finder,
 		protected auth $auth,
@@ -25,9 +35,15 @@ class listener implements EventSubscriberInterface
 		protected user $user,
 		protected string $root_path,
 		protected string $php_ext
-	) {
+	)
+	{
 	}
 
+	/**
+	 * The events this listener wants.
+	 *
+	 * @return array<string, string>  Event name and method name.
+	 */
 	public static function getSubscribedEvents(): array
 	{
 		return [
@@ -36,6 +52,13 @@ class listener implements EventSubscriberInterface
 		];
 	}
 
+	/**
+	 * Adds the language file of this extension to every page.
+	 *
+	 * @param \phpbb\event\data $event  The core.user_setup event.
+	 *
+	 * @return void
+	 */
 	public function load_language($event): void
 	{
 		$lang_set_ext = $event['lang_set_ext'];
@@ -43,6 +66,14 @@ class listener implements EventSubscriberInterface
 		$event['lang_set_ext'] = $lang_set_ext;
 	}
 
+	/**
+	 * Fills the template block with the posts to feature. Only forums the member may read and download from count,
+	 * because the picture is a download.
+	 *
+	 * @param \phpbb\event\data $event  The core.index_modify_page_title event.
+	 *
+	 * @return void
+	 */
 	public function add_featured($event): void
 	{
 		$read = array_keys($this->auth->acl_getf('f_read', true));

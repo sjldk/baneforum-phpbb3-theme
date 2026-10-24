@@ -15,13 +15,28 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class controller
 {
+	/**
+	 * Keeps the services that the thumbnail answer needs.
+	 *
+	 * @param thumbs           $thumbs  Finds and fetches the pictures.
+	 * @param driver_interface $db      Used to check that a post mentions the video.
+	 * @param string           $prefix  The prefix of the table names.
+	 */
 	public function __construct(
 		protected thumbs $thumbs,
 		protected driver_interface $db,
 		protected string $prefix
-	) {
+	)
+	{
 	}
 
+	/**
+	 * Sends the picture of the video. The browser may keep it for a week.
+	 *
+	 * @param string $id  The id of the video, from the address.
+	 *
+	 * @return Response  The JPEG picture, or an empty answer with status 404.
+	 */
 	public function handle(string $id): Response
 	{
 		$path = $this->thumbs->find($id, fn (string $video): bool => $this->mentioned($video));
@@ -39,7 +54,13 @@ class controller
 		]);
 	}
 
-	/** A post of the board holds the video, as a saved embed or as a plain link. */
+	/**
+	 * A post of the board holds the video, as a saved embed or as a plain link.
+	 *
+	 * @param string $id  The id of the video.
+	 *
+	 * @return bool  True when one post has the id in its text.
+	 */
 	protected function mentioned(string $id): bool
 	{
 		$like = $this->db->sql_like_expression($this->db->get_any_char() . $id . $this->db->get_any_char());

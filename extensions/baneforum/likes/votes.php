@@ -21,15 +21,28 @@ class votes
 	/** A post with more dislikes than this is collapsed. */
 	public const HIDE_ABOVE = 5;
 
+	/**
+	 * Keeps the database and the key maker.
+	 *
+	 * @param driver_interface $db         The database.
+	 * @param string           $table      The full name of the vote table.
+	 * @param voter_key        $voter_key  Makes the voter value that is stored instead of the user id.
+	 */
 	public function __construct(
 		protected driver_interface $db,
 		protected string $table,
 		protected voter_key $voter_key
-	) {
+	)
+	{
 	}
 
 	/**
 	 * The vote a member ends with after clicking a button. The same button again removes the vote.
+	 *
+	 * @param int $current  The vote the member has now: UP, DOWN or 0.
+	 * @param int $clicked  The button that was clicked. Any other value changes nothing.
+	 *
+	 * @return int  UP, DOWN or 0.
 	 */
 	public static function next_value(int $current, int $clicked): int
 	{
@@ -44,8 +57,11 @@ class votes
 	/**
 	 * Counts and the member's own vote for many posts, in two queries.
 	 *
-	 * @param int[] $post_ids
-	 * @return array<int, array{up: int, down: int, mine: int}>
+	 * @param int[] $post_ids  The posts to count.
+	 * @param int   $user_id   The member whose own vote is wanted. A guest (1 or less) has none.
+	 *
+	 * @return array<int, array{up: int, down: int, mine: int}>  The counts and the own vote, by post id.
+	 *                                                            Every post asked for is present.
 	 */
 	public function for_posts(array $post_ids, int $user_id): array
 	{
@@ -104,7 +120,11 @@ class votes
 	/**
 	 * Applies a click and returns the new counts for the post.
 	 *
-	 * @return array{up: int, down: int, mine: int}
+	 * @param int $post_id  The post that was voted on.
+	 * @param int $user_id  The member who clicked.
+	 * @param int $clicked  The button that was clicked: UP or DOWN.
+	 *
+	 * @return array{up: int, down: int, mine: int}  The counts after the click, and the member's own vote.
 	 */
 	public function cast(int $post_id, int $user_id, int $clicked): array
 	{

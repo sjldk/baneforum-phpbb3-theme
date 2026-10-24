@@ -1,12 +1,16 @@
 <?php
 /**
- * Tests for the compressor. Run it where PHP and GD are:
+ * Tests for the image compressor
+ *
+ * Run it where PHP and GD are:
  *   docker compose exec web php ext/baneforum/imagecompress/tests/compressor_test.php
+ *
+ * @license GNU General Public License, version 2 (GPL-2.0-only)
  */
 
-require __DIR__ . '/../compressor.php';
-
 use baneforum\imagecompress\compressor;
+
+require __DIR__ . '/../compressor.php';
 
 $failed = 0;
 $check = function (string $name, bool $ok, string $extra = '') use (&$failed): void {
@@ -16,7 +20,17 @@ $check = function (string $name, bool $ok, string $extra = '') use (&$failed): v
 $dir = sys_get_temp_dir() . '/imagecompress-' . getmypid();
 mkdir($dir);
 
-/** A picture of noise with a red block in its top left corner, saved as a JPEG with an EXIF orientation. */
+/**
+ * Writes a test picture: noise with a red block in its top left corner, saved as a JPEG with an EXIF orientation.
+ *
+ * @param string $path  The file to write
+ * @param int $width  The width in pixels
+ * @param int $height  The height in pixels
+ * @param int $orientation  The EXIF orientation to store, 1 stores none
+ * @param bool $noise  True to fill the picture with noise, so the file is big
+ *
+ * @return void
+ */
 function make_jpeg(string $path, int $width, int $height, int $orientation = 1, bool $noise = true): void
 {
 	$image = imagecreatetruecolor($width, $height);

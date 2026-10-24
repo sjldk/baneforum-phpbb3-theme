@@ -18,16 +18,27 @@ class finder
 	/** How many posts to show. */
 	public const LIMIT = 8;
 
+	/**
+	 * Keeps the services that the query needs.
+	 *
+	 * @param driver_interface   $db          The database.
+	 * @param content_visibility $visibility  Builds the rule for the threads the member may see.
+	 * @param string             $prefix      The prefix of the table names.
+	 */
 	public function __construct(
 		protected driver_interface $db,
 		protected content_visibility $visibility,
 		protected string $prefix
-	) {
+	)
+	{
 	}
 
 	/**
-	 * @param int[] $forum_ids forums the member may read
-	 * @return array<int, array<string, mixed>> the posts, newest first
+	 * Reads the newest threads, each with its first post.
+	 *
+	 * @param int[] $forum_ids  The forums the member may read.
+	 *
+	 * @return array<int, array<string, mixed>>  The posts, newest thread first. At most LIMIT.
 	 */
 	public function find(array $forum_ids): array
 	{

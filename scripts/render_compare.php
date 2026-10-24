@@ -1,9 +1,15 @@
 <?php
-// Renders the original and the converted text of each message with phpBB's own formatter
-// and compares what a reader would see. Input: JSON lines with "original" and "converted".
-//
-//   docker cp scripts/render_compare.php docker-web-1:/tmp/render_compare.php
-//   docker compose -f docker/docker-compose.yml exec -T web php /tmp/render_compare.php < local-data/corpus/converted.jsonl
+/**
+ * Render compare
+ *
+ * Renders the original and the converted text of each message with phpBB's own formatter
+ * and compares what a reader would see. Input: JSON lines with "original" and "converted".
+ *
+ *   docker cp scripts/render_compare.php docker-web-1:/tmp/render_compare.php
+ *   docker compose -f docker/docker-compose.yml exec -T web php /tmp/render_compare.php < local-data/corpus/converted.jsonl
+ *
+ * @license GNU General Public License, version 2 (GPL-2.0-only)
+ */
 
 error_reporting(E_ALL & ~E_DEPRECATED);
 ini_set('display_errors', '0');
@@ -20,13 +26,23 @@ $user->data = array_merge($user->data ?? [], ['user_id' => 1, 'user_options' => 
 
 $parser = $phpbb_container->get('text_formatter.parser');
 $renderer = $phpbb_container->get('text_formatter.renderer');
-// The Markdown extension switches Litedown off for a user that may not use Markdown. The original is
-// rendered the way it was saved: with Markdown on if "markdown" is true in the row (the stored XML held Markdown),
-// off otherwise. A post saved before the Markdown extension shows a "- " as a dash, not as a list. The converted text is BBCode and is rendered with it off,
-// the way the board reads it after the editor sent "disable_markdown".
+/**
+ * Switches the Markdown plugins of the parser on or off.
+ *
+ * The Markdown extension switches Litedown off for a user that may not use Markdown. The original is
+ * rendered the way it was saved: with Markdown on if "markdown" is true in the row (the stored XML held Markdown),
+ * off otherwise. A post saved before the Markdown extension shows a "- " as a dash, not as a list.
+ * The converted text is BBCode and is rendered with it off, the way the board reads it after the editor sent "disable_markdown".
+ *
+ * @param bool $on  True to enable the plugins, false to disable them
+ * @param object $parser  The phpBB text formatter parser service
+ *
+ * @return void
+ */
 function markdown(bool $on, $parser): void
 {
-	foreach (['Litedown', 'PipeTables', 'TaskLists'] as $plugin) {
+	foreach (['Litedown', 'PipeTables', 'TaskLists'] as $plugin)
+	{
 		$on ? $parser->get_parser()->enablePlugin($plugin) : $parser->get_parser()->disablePlugin($plugin);
 	}
 }
@@ -34,6 +50,13 @@ $parser->enable_bbcode(true);
 $parser->enable_smilies(true);
 $parser->enable_magic_url(true);
 
+/**
+ * Reduces rendered HTML to the words a reader sees.
+ *
+ * @param string $html  The rendered HTML
+ *
+ * @return string  The visible text with no spacing, and one marker for each smilie or emoji
+ */
 function visible(string $html): string
 {
 	// Smilies and emoji both become one marker, so a code and its emoji compare equal.
@@ -49,6 +72,15 @@ function visible(string $html): string
 	return preg_replace('/\s+/u', '', $text);
 }
 
+/**
+ * Parses a text and renders it to HTML.
+ *
+ * @param string $text  The stored or converted text
+ * @param object $parser  The phpBB text formatter parser service
+ * @param object $renderer  The phpBB text formatter renderer service
+ *
+ * @return string  The rendered HTML
+ */
 function render(string $text, $parser, $renderer): string
 {
 	return $renderer->render($parser->parse($text));
@@ -56,9 +88,11 @@ function render(string $text, $parser, $renderer): string
 
 $total = $same = 0;
 $samples = [];
-while (($line = fgets(STDIN)) !== false) {
+while (($line = fgets(STDIN)) !== false)
+{
 	$row = json_decode($line, true);
-	if (!$row) {
+	if (!$row)
+	{
 		continue;
 	}
 	$total++;
@@ -66,18 +100,23 @@ while (($line = fgets(STDIN)) !== false) {
 	$before = visible(render($row['original'], $parser, $renderer));
 	markdown(false, $parser);
 	$after = visible(render($row['converted'], $parser, $renderer));
-	if ($before === $after) {
+	if ($before === $after)
+	{
 		$same++;
-	} elseif (count($samples) < 600) {
+	}
+	else if (count($samples) < 600)
+	{
 		$at = 0;
 		$limit = min(mb_strlen($before), mb_strlen($after));
-		while ($at < $limit && mb_substr($before, $at, 1) === mb_substr($after, $at, 1)) {
+		while ($at < $limit && mb_substr($before, $at, 1) === mb_substr($after, $at, 1))
+		{
 			$at++;
 		}
 		$samples[] = ['id' => $row['id'], 'kind' => $row['kind'], 'before' => mb_substr($before, max(0, $at - 40), 100), 'after' => mb_substr($after, max(0, $at - 40), 100), 'original' => mb_substr($row['original'], 0, 300), 'converted' => mb_substr($row['converted'], 0, 300)];
 	}
 }
-while (ob_get_level() > 0) {
+while (ob_get_level() > 0)
+{
 	ob_end_clean();
 }
 fwrite(STDOUT, json_encode(['total' => $total, 'same' => $same, 'different' => $total - $same, 'samples' => $samples], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n");

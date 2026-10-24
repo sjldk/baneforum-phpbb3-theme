@@ -1,19 +1,42 @@
 <?php
 /**
- * Tests for the YouTube thumbnails. Run it where PHP is:
+ * Baneforum YouTube thumbnails, tests
+ *
+ * Checks the thumbnail store: the form of a video id, the check of a downloaded file, the keeping of a
+ * picture, the wait after a failed fetch and the limit of fetches a minute. Run it where PHP is:
  *   docker compose exec web php ext/baneforum/ytthumb/tests/thumbs_test.php
+ *
+ * @license GNU General Public License, version 2 (GPL-2.0-only)
  */
 
-require __DIR__ . '/../thumbs.php';
-
 use baneforum\ytthumb\thumbs;
+
+require __DIR__ . '/../thumbs.php';
 
 /** The same, with the download replaced, so that nothing leaves the machine. */
 class fake_thumbs extends thumbs
 {
+	/**
+	 * The ids that were asked for, in order.
+	 *
+	 * @var string[]
+	 */
 	public array $downloads = [];
+
+	/**
+	 * The answer to give instead of a download. Null stands for a failed download.
+	 *
+	 * @var string|null
+	 */
 	public ?string $reply = null;
 
+	/**
+	 * Notes the id and gives the prepared answer, so nothing is fetched.
+	 *
+	 * @param string $id  The id of the video.
+	 *
+	 * @return string|null  The prepared answer.
+	 */
 	protected function download(string $id): ?string
 	{
 		$this->downloads[] = $id;
@@ -23,7 +46,8 @@ class fake_thumbs extends thumbs
 }
 
 $failed = 0;
-$check = function (string $name, $got, $want) use (&$failed): void {
+$check = function (string $name, $got, $want) use (&$failed): void
+{
 	$ok = $got === $want;
 	echo ($ok ? 'PASS ' : 'FAIL ') . $name . ($ok ? '' : "\n  got:  " . var_export($got, true) . "\n  want: " . var_export($want, true)) . "\n";
 	$failed += $ok ? 0 : 1;

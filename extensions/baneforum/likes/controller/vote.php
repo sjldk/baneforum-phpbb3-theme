@@ -22,6 +22,18 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class vote
 {
+	/**
+	 * Keeps the services that the vote needs.
+	 *
+	 * @param votes               $votes      The vote store.
+	 * @param auth                $auth       Tells what the member may do.
+	 * @param user                $user       The member who clicked.
+	 * @param language            $language   Turns an error key into text.
+	 * @param request_interface   $request    The request with the clicked value and the link hash.
+	 * @param driver_interface    $db         Used to read the post before a vote is taken.
+	 * @param string              $root_path  The phpBB root path, for the redirect.
+	 * @param string              $php_ext    The php file extension, for the redirect.
+	 */
 	public function __construct(
 		protected votes $votes,
 		protected auth $auth,
@@ -31,9 +43,17 @@ class vote
 		protected driver_interface $db,
 		protected string $root_path,
 		protected string $php_ext
-	) {
+	)
+	{
 	}
 
+	/**
+	 * Checks the click, stores the vote and answers.
+	 *
+	 * @param int      $post_id  The post that was voted on.
+	 *
+	 * @return Response  JSON with the new counts, or the error text with status 403.
+	 */
 	public function handle(int $post_id): Response
 	{
 		$value = $this->request->variable('value', '');
@@ -51,6 +71,12 @@ class vote
 
 	/**
 	 * The language key of the first reason to refuse, or an empty string.
+	 *
+	 * @param int    $post_id  The post that was voted on.
+	 * @param int    $member   The id of the member who clicked.
+	 * @param int    $clicked  The button: votes::UP, votes::DOWN or 0 when the value was not valid.
+	 *
+	 * @return string  A language key, or an empty string when the vote is allowed.
 	 */
 	protected function error(int $post_id, int $member, int $clicked): string
 	{
@@ -82,6 +108,15 @@ class vote
 		return (int) $post['poster_id'] === $member ? 'BF_VOTE_ERROR_OWN' : '';
 	}
 
+	/**
+	 * Sends the data as JSON to the script, or sends a browser without script back to the post.
+	 *
+	 * @param array<string, mixed> $data     The counts and the error text.
+	 * @param int                  $post_id  The post to go back to.
+	 * @param int                  $status   The HTTP status of the JSON answer.
+	 *
+	 * @return Response  A JSON answer for an ajax request, a redirect otherwise.
+	 */
 	protected function answer(array $data, int $post_id, int $status): Response
 	{
 		if ($this->request->is_ajax())

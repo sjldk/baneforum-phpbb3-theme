@@ -1,12 +1,16 @@
 <?php
 /**
- * Tests for the Markdown detector. Run it where PHP is:
+ * Tests for the Markdown detector
+ *
+ * Run it where PHP is:
  *   docker compose exec web php ext/baneforum/editor/tests/markdown_detector_test.php
+ *
+ * @license GNU General Public License, version 2 (GPL-2.0-only)
  */
 
-require __DIR__ . '/../markdown_detector.php';
-
 use baneforum\editor\markdown_detector;
+
+require __DIR__ . '/../markdown_detector.php';
 
 $failed = 0;
 $detector = new markdown_detector();

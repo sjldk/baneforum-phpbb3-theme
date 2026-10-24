@@ -16,18 +16,42 @@ namespace baneforum\likes;
  */
 class voter_key
 {
+	/**
+	 * The key read from the file, kept so the file is read once per request.
+	 *
+	 * @var string|null
+	 */
 	protected ?string $secret = null;
 
-	/** @param string $path The key file. It is made the first time it is needed. */
+	/**
+	 * Remembers where the key file is. The file is not touched until a key is needed.
+	 *
+	 * @param string $path  The key file. It is made the first time it is needed.
+	 */
 	public function __construct(protected string $path)
 	{
 	}
 
+	/**
+	 * The value stored in the vote table for this member on this post.
+	 *
+	 * @param int $user_id  The member.
+	 * @param int $post_id  The post.
+	 *
+	 * @return string  A hash of 64 hex characters.
+	 */
 	public function voter(int $user_id, int $post_id): string
 	{
 		return hash_hmac('sha256', $user_id . ':' . $post_id, $this->secret());
 	}
 
+	/**
+	 * Reads the key file. It makes the file with a random key when it is not there.
+	 * The file is made readable for the web user only.
+	 *
+	 * @return string  The key.
+	 * @throws \RuntimeException  When the file cannot be made, or holds fewer than 32 characters.
+	 */
 	protected function secret(): string
 	{
 		if ($this->secret !== null)

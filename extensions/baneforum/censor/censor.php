@@ -12,7 +12,7 @@ use s9e\TextFormatter\Configurator;
 /**
  * Censors the text of a rendered post, but not the URLs in it.
  *
- * phpBB censors the whole HTML, including `href` and `src`, so a word in an address changes the address
+ * The censor of phpBB works on the whole HTML, including `href` and `src`, so a word in an address changes the address
  * and the link breaks. Here only the text is censored, and a piece of text that is a URL is kept as it is.
  */
 class censor
@@ -20,18 +20,28 @@ class censor
 	/** A web address in text, with or without a link around it. */
 	protected const URL = '#((?:https?|ftp)://[^\s<]+|www\.[^\s<]+|mailto:[^\s<]+)#i';
 
-	/** @var \s9e\TextFormatter\Plugins\Censor\Helper|null|false null until the words are loaded, false if there are none */
+	/**
+	 * The censor helper of the s9e library. Null until the words are loaded, false if there are none.
+	 *
+	 * @var \s9e\TextFormatter\Plugins\Censor\Helper|null|false
+	 */
 	protected $helper = null;
 
 	/**
-	 * @param \phpbb\textformatter\data_access|null $data_access Where the ACP words are read from. Null if the words are given to set_words().
+	 * Sets where the censor words come from.
+	 *
+	 * @param \phpbb\textformatter\data_access|null $data_access  Where the ACP words are read from. Null if the words are given to set_words().
 	 */
 	public function __construct(protected $data_access = null)
 	{
 	}
 
 	/**
-	 * @param array<int, array{word: string, replacement: string}> $words
+	 * Builds the censor helper from a list of words. An empty list switches censoring off.
+	 *
+	 * @param array<int, array{word: string, replacement: string}> $words  The words with their replacements
+	 *
+	 * @return void
 	 */
 	public function set_words(array $words): void
 	{
@@ -53,6 +63,14 @@ class censor
 		$this->helper = $configurator->Censor->getHelper();
 	}
 
+	/**
+	 * Censors the text of rendered HTML. Tags are kept as they are, and so is the text of a link that shows its own address.
+	 * The words are loaded the first time this is called.
+	 *
+	 * @param string $html  The rendered HTML of a post
+	 *
+	 * @return string  The HTML with the text censored
+	 */
 	public function censor_html(string $html): string
 	{
 		if ($this->helper === null)
@@ -99,7 +117,15 @@ class censor
 		return $out;
 	}
 
-	/** The index of the closing `</a>` for the `<a>` at $start, or the token count if there is none. */
+	/**
+	 * Finds the closing `</a>` of a link.
+	 * The tokens alternate: text at the even places and tags at the odd places, so only the even places are searched.
+	 *
+	 * @param array<int, string> $tokens  The HTML split into text and tags
+	 * @param int $start  The place of the `<a>` tag
+	 *
+	 * @return int  The place of the closing `</a>`, or the token count if there is none
+	 */
 	protected function link_end(array $tokens, int $start): int
 	{
 		for ($j = $start + 2; $j < count($tokens); $j += 2)
@@ -113,7 +139,13 @@ class censor
 		return count($tokens);
 	}
 
-	/** Text between tags, without its URLs being touched. */
+	/**
+	 * Censors text that sits between tags, without touching the URLs in it.
+	 *
+	 * @param string $text  The text between two tags
+	 *
+	 * @return string  The censored text
+	 */
 	protected function censor_text(string $text): string
 	{
 		$parts = preg_split(self::URL, $text, -1, PREG_SPLIT_DELIM_CAPTURE);

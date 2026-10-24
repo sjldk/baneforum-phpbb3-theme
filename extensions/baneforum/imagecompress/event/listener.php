@@ -17,20 +17,38 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class listener implements EventSubscriberInterface
 {
+	/**
+	 * Sets the services this listener needs.
+	 *
+	 * @param compressor $compressor  Makes a stored picture smaller.
+	 * @param config $config  The board settings, used for the upload folder.
+	 * @param string $phpbb_root_path  The path to the phpBB root folder.
+	 */
 	public function __construct(
 		protected compressor $compressor,
 		protected config $config,
 		protected string $phpbb_root_path
-	) {
+	)
+	{
 	}
 
+	/**
+	 * Tells phpBB which event this class listens to.
+	 *
+	 * @return array<string, string>  The event name, with the method that handles it.
+	 */
 	public static function getSubscribedEvents(): array
 	{
 		return ['core.modify_uploaded_file' => 'compress'];
 	}
 
 	/**
-	 * @param \phpbb\event\data $event
+	 * Makes the stored picture smaller and passes the new size on, so the quota check sees the real size.
+	 * Files that are not pictures are left alone.
+	 *
+	 * @param \phpbb\event\data $event  The core.modify_uploaded_file event. It holds the file data.
+	 *
+	 * @return void
 	 */
 	public function compress($event): void
 	{
