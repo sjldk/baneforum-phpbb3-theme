@@ -265,6 +265,12 @@ li.header dt {
 	margin: 1em 0 1em 0;
 }
 
+/* The notice box (.rules: the forum rules, the download notice, the board disabled) has room around its text: 1rem on all sides
+   (prosilver has 5px above and below and 10px at the sides). The list inside keeps its own indent. */
+div.rules {
+	padding: 1rem;
+}
+
 /* A post that starts with a quote: the quote sits right under the post header, which has its own space above the content. */
 .postbody .content > blockquote:first-child {
 	margin-top: 0;
