@@ -2,6 +2,11 @@
 //   - On a small screen prosilver hides the words of the menu links ("Private messages", "Quick links") with
 //     display: none. A link with no visible text has no name for a screen reader. The hidden words become its name.
 //   - The "..." button that folds the buttons of a post into a menu is made by script and has no words at all.
+//   - Tooltips of the top bar. prosilver's forum_fn.js gives every link in the breadcrumbs a tooltip with its own words (also the forum
+//     menu and the names in it). A tooltip that repeats the words that are on the screen is noise, so it is removed. It is kept, or
+//     added, where it tells something the screen does not: when the words are hidden and only the icon shows (a narrow top bar), or when
+//     a name is cut off with an ellipsis. A tooltip with other words (the help icon) is never touched. The name for a screen reader
+//     does not come from the tooltip (see above), so none of this changes what a screen reader says.
 //   - A select that no <label> points at (prosilver's search page labels the wrong field, the profile has a group picker
 //     with no label) gets the words of its own row ("Sort results by") as its name.
 (function () {
@@ -58,7 +63,59 @@
 		}
 	}
 
+	const normal = (text) => (text ?? ``).replace(/\s+/g, ` `).trim();
+
+	/** The words of a link show beside its icon only if their element is wider than the 1 pixel of the screen reader only style. */
+	function iconOnly(link) {
+		if (!link.querySelector(`:scope > .icon`)) {
+			return false;
+		}
+
+		const label = [...link.children].find(
+			(child) => child.tagName === `SPAN` && !child.classList.contains(`badge`) && !child.classList.contains(`bf-visually-hidden`) && normal(child.textContent) !== ``,
+		);
+
+		return label !== undefined && label.getBoundingClientRect().width <= 2;
+	}
+
+	function tidyTitles() {
+		for (const link of document.querySelectorAll(`.navbar a`)) {
+			const words = normal(link.getAttribute(`aria-label`) ?? link.textContent);
+			const title = normal(link.getAttribute(`title`));
+
+			// A tooltip with other words than the link has is a help text. It stays.
+			if (!words || (title !== `` && title !== words)) {
+				continue;
+			}
+
+			const cutOff = link.closest(`.breadcrumbs`) !== null && link.scrollWidth > link.clientWidth;
+			const wanted = iconOnly(link) || cutOff;
+
+			if (wanted && title !== words) {
+				link.setAttribute(`title`, words);
+			} else if (!wanted && link.hasAttribute(`title`)) {
+				link.removeAttribute(`title`);
+			}
+		}
+	}
+
+	let tidying = 0;
+	const tidySoon = () => {
+		window.clearTimeout(tidying);
+		tidying = window.setTimeout(tidyTitles, 100);
+	};
+
 	name();
 	// The menu links of a post are made a moment after the page has loaded.
 	window.setTimeout(name, 500);
+	tidyTitles();
+	window.addEventListener(`load`, tidySoon);
+	window.addEventListener(`resize`, tidySoon);
+
+	// forum_fn.js sets the tooltips of the breadcrumbs when it likes. Whenever one of them is set again, it is looked at again.
+	const bar = document.querySelector(`.navbar`);
+
+	if (bar) {
+		new MutationObserver(tidySoon).observe(bar, { attributes: true, attributeFilter: [`title`], subtree: true });
+	}
 })();
