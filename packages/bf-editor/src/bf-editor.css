@@ -2,7 +2,11 @@
    not reach in and these rules do not leak out. Every colour and size is a --bf-* custom
    property with a default. Custom properties pass through the shadow boundary, so the page
    themes the editor by setting --bf-* on bf-editor, and that wins over these defaults.
-   The dark defaults follow the system setting. */
+   The dark defaults follow the system setting.
+
+   Rule: every bar of tool buttons in the editor (the toolbar, the table bar, any new one) is a
+   <menu role="toolbar"> with the look of the toolbar: the "menu" and "menu button" rules below.
+   A new bar does not get its own colours, border, shadow or button size. Only its place may differ. */
 
 :host {
 	--bf-radius: 0.5rem;
@@ -38,18 +42,41 @@
 	font: inherit;
 }
 
+/* The toolbar and the table bar stay in view together while a long text scrolls. */
+.bars {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+
 menu {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.25rem;
-	position: sticky;
-	top: 0;
-	z-index: 1;
 	padding: 0.25rem;
 	margin: 0 0 var(--bf-gap, 0.5rem);
 	list-style: none;
 	background: var(--bf-tint);
 	border-radius: var(--bf-radius);
+}
+
+menu[hidden] {
+	display: none;
+}
+
+/* The table bar floats under the table it belongs to. It takes no room in the layout, so the text
+   does not move when it appears. The script sets its position. It looks exactly like the toolbar
+   (the "menu" rules above and below): only where it sits is different. */
+.surface {
+	position: relative;
+}
+
+menu.table-bar {
+	position: absolute;
+	z-index: 2;
+	inline-size: max-content;
+	max-inline-size: 100%;
+	margin: 0;
 }
 
 menu button {
@@ -136,6 +163,112 @@ bf-editable p:last-child {
 	margin-block-end: 0;
 }
 
+/* Lists. The paragraph of an item has no space of its own, and a list in an item sits tight under its text. */
+bf-editable ul,
+bf-editable ol {
+	margin: 0 0 0.75em;
+	padding-inline-start: 1.75rem;
+}
+
+bf-editable li > p {
+	margin: 0;
+}
+
+bf-editable li > ul,
+bf-editable li > ol {
+	margin: 0;
+}
+
+/* Numbered lists change their marker with the level, as in Word: 1. then a. then i., and round again. Every level counts on its own.
+   A list that has its own marker (the "type" attribute, from [list=a]) keeps it. */
+bf-editable ol:not([type]) ol:not([type]) {
+	list-style-type: lower-alpha;
+}
+
+bf-editable ol:not([type]) ol:not([type]) ol:not([type]) {
+	list-style-type: lower-roman;
+}
+
+bf-editable ol:not([type]) ol:not([type]) ol:not([type]) ol:not([type]) {
+	list-style-type: decimal;
+}
+
+bf-editable ol:not([type]) ol:not([type]) ol:not([type]) ol:not([type]) ol:not([type]) {
+	list-style-type: lower-alpha;
+}
+
+bf-editable ol:not([type]) ol:not([type]) ol:not([type]) ol:not([type]) ol:not([type]) ol:not([type]) {
+	list-style-type: lower-roman;
+}
+
+/* The cursor between two blocks that cannot hold text (prosemirror-gapcursor): a blinking line. */
+bf-editable .ProseMirror-gapcursor {
+	display: none;
+	position: absolute;
+	pointer-events: none;
+}
+
+bf-editable .ProseMirror-gapcursor::after {
+	display: block;
+	position: absolute;
+	inset-block-start: -0.1rem;
+	inline-size: 1.25rem;
+	border-block-start: 0.1rem solid var(--bf-text);
+	animation: bf-caret 1.1s steps(2, start) infinite;
+	content: "";
+}
+
+@keyframes bf-caret {
+	to {
+		visibility: hidden;
+	}
+}
+
+bf-editable.ProseMirror-focused .ProseMirror-gapcursor {
+	display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	bf-editable .ProseMirror-gapcursor::after {
+		animation: none;
+	}
+}
+
+/* Tables. Header cells are the first row. A wide table scrolls inside the editor. */
+bf-editable table {
+	display: block;
+	max-inline-size: 100%;
+	margin: 0 0 0.75em;
+	overflow-x: auto;
+	border-collapse: collapse;
+}
+
+bf-editable th,
+bf-editable td {
+	position: relative;
+	min-inline-size: 5rem;
+	padding: 0.25rem 0.5rem;
+	border: 1px solid var(--bf-border);
+	text-align: start;
+	vertical-align: top;
+	white-space: pre-wrap;
+}
+
+bf-editable th {
+	background: var(--bf-tint);
+	font-weight: 700;
+}
+
+/* The cells that are selected as a block (prosemirror-tables). */
+bf-editable .selectedCell::after {
+	position: absolute;
+	inset: 0;
+	background: var(--bf-focus);
+	content: "";
+	opacity: 0.3;
+	pointer-events: none;
+}
+
 bf-editable blockquote {
 	margin: 0 0 0.75em;
 	padding: 0.25rem 0.75rem;
@@ -164,6 +297,93 @@ bf-editable [data-bf-raw] {
 	bf-editable {
 		transition: none;
 	}
+}
+
+/* The table picker, as in Word: a popover under the Table button with a grid that grows toward the pointer. */
+.table-picker {
+	inline-size: fit-content;
+	max-inline-size: calc(100vw - 1rem);
+	margin: 0;
+	padding: 0.75rem;
+	border: 0.15rem solid var(--bf-border);
+	border-radius: var(--bf-radius);
+	background: var(--bf-surface);
+	color: var(--bf-text);
+}
+
+.table-picker:focus {
+	outline: none;
+}
+
+.table-picker .grid {
+	display: grid;
+	grid-template-columns: repeat(var(--columns, 8), 1fr);
+	gap: 0.15rem;
+	inline-size: calc(var(--columns, 8) * 2rem);
+	max-inline-size: 100%;
+	margin: 0 auto 0.5rem;
+}
+
+.table-picker .grid span {
+	aspect-ratio: 1;
+	border: 1px solid var(--bf-border);
+	background: var(--bf-field);
+}
+
+.table-picker .grid span.on {
+	border-color: var(--bf-accent);
+	background: var(--bf-accent);
+}
+
+.table-picker .size {
+	margin: 0 0 0.5rem;
+	text-align: center;
+}
+
+.table-picker .fields {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: end;
+	gap: 0.5rem;
+}
+
+.table-picker label {
+	display: grid;
+	flex: 1 1 5rem;
+	gap: 0.25rem;
+}
+
+.table-picker input {
+	min-block-size: var(--bf-target);
+	padding: 0 0.5rem;
+	border: 0.15rem solid var(--bf-border);
+	border-radius: var(--bf-radius);
+	background: var(--bf-field);
+	color: inherit;
+	font: inherit;
+	font-size: max(1rem, 16px);
+}
+
+.table-picker input:focus-visible {
+	outline: none;
+	border-color: var(--bf-focus);
+}
+
+.table-picker button {
+	min-inline-size: var(--bf-target);
+	min-block-size: var(--bf-target);
+	padding: 0 1rem;
+	border: 0.15rem solid var(--bf-accent);
+	border-radius: var(--bf-radius);
+	background: var(--bf-accent);
+	color: var(--bf-on-accent);
+	cursor: pointer;
+	font: inherit;
+}
+
+.table-picker button:focus-visible {
+	outline: 0.15rem solid var(--bf-focus);
+	outline-offset: 0.1rem;
 }
 
 /* The link dialog. A native <dialog>, so the browser handles focus and Escape. */

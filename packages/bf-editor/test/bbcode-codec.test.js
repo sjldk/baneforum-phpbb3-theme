@@ -147,10 +147,39 @@ test(`a Markdown list becomes [list], nested and numbered`, () => {
 	assert.equal(convert(`- a\n  - b\n- c`), `[list]\n[*]a\n[list]\n[*]b\n[/list]\n[*]c\n[/list]`);
 });
 
-test(`Markdown code and a table become [code]`, () => {
+test(`Markdown code becomes [code]`, () => {
 	assert.equal(convert(`\`\`\`\nlet a = 1;\n\`\`\``), `[code]\nlet a = 1;\n[/code]`);
 	assert.equal(convert(`    indented\n    code`), `[code]\nindented\ncode\n[/code]`);
-	assert.equal(convert(`| a | b |\n|---|---|\n| 1 | 2 |`), `[code]\n| a | b |\n|---|---|\n| 1 | 2 |\n[/code]`);
+});
+
+test(`a Markdown table becomes [table] with a header row`, () => {
+	assert.equal(
+		convert(`| a | b |\n|---|---|\n| 1 | 2 |`),
+		`[table]\n[tr][th]a[/th][th]b[/th][/tr]\n[tr][td]1[/td][td]2[/td][/tr]\n[/table]`,
+	);
+});
+
+test(`a colon in the delimiter row of a table sets the alignment`, () => {
+	assert.equal(
+		convert(`| L | C | R | N |\n|:--|:-:|--:|---|\n| 1 | 2 | 3 | 4 |`),
+		`[table]\n[tr][th align=left]L[/th][th align=center]C[/th][th align=right]R[/th][th]N[/th][/tr]\n[tr][td align=left]1[/td][td align=center]2[/td][td align=right]3[/td][td]4[/td][/tr]\n[/table]`,
+	);
+});
+
+test(`a table cell holds formatting, an escaped bar and a short row is filled`, () => {
+	assert.equal(
+		convert(`| a | b |\n|---|---|\n| **x** \\| y |\n`),
+		`[table]\n[tr][th]a[/th][th]b[/th][/tr]\n[tr][td][b]x[/b] | y[/td][td][/td][/tr]\n[/table]`,
+	);
+});
+
+test(`bars without a delimiter row are not a table: they stay as [code]`, () => {
+	assert.equal(convert(`| a | b |\n| 1 | 2 |`), `[code]\n| a | b |\n| 1 | 2 |\n[/code]`);
+});
+
+test(`a [table] that was written as BBCode reads and writes unchanged`, () => {
+	const text = `[table]\n[tr][th]a[/th][th align=center]b[/th][/tr]\n[tr][td]1[/td][td]2[/td][/tr]\n[/table]`;
+	assert.equal(roundTrip(text), text);
 });
 
 test(`a Markdown link that names its address elsewhere is written as [url]`, () => {

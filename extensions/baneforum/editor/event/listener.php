@@ -30,22 +30,36 @@ class listener implements EventSubscriberInterface
 	public static function getSubscribedEvents(): array
 	{
 		return [
-			'core.text_formatter_s9e_configure_after' => 'add_strikethrough',
+			'core.text_formatter_s9e_configure_after' => 'add_bbcodes',
 			'core.posting_modify_template_vars'       => 'flag_post',
 			'core.ucp_pm_compose_template'            => 'flag_message',
 		];
 	}
 
+	/** The table BBCodes. The text formatter library of phpBB has the definitions ready (its repository). phpBB does not switch them on. */
+	public const TABLE_BBCODES = ['TABLE', 'THEAD', 'TBODY', 'TR', 'TH', 'TD'];
+
 	/**
+	 * The BBCodes that phpBB lacks and that the editor and the conversion of Markdown posts write: [s] for strikethrough, and [table], [tr],
+	 * [th], [td] (with align=left|center|right, colspan and rowspan) for tables. A tag that the board does not know is shown as plain text.
+	 *
 	 * @param \phpbb\event\data $event
 	 */
-	public function add_strikethrough($event): void
+	public function add_bbcodes($event): void
 	{
 		$bbcodes = $event['configurator']->BBCodes;
 
 		if (!isset($bbcodes['S']))
 		{
 			$bbcodes->addCustom('[s]{TEXT}[/s]', '<del>{TEXT}</del>');
+		}
+
+		foreach (self::TABLE_BBCODES as $name)
+		{
+			if (!isset($bbcodes[$name]))
+			{
+				$bbcodes->addFromRepository($name);
+			}
 		}
 	}
 

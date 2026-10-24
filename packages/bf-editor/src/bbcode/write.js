@@ -41,6 +41,48 @@ export function writeDocument(doc) {
 }
 
 /**
+ * [list] with one [*] on each line. A nested list follows the text of its item.
+ * @param {PMNode} list
+ * @returns {string}
+ */
+function writeList(list) {
+	const marker = list.type.name === `ordered_list` ? `=${list.attrs.marker}` : ``;
+	/** @type {string[]} */
+	const lines = [];
+	list.forEach((item) => {
+		lines.push(`[*]${writeInline(/** @type {PMNode} */ (item.firstChild))}`);
+		item.forEach((child, _offset, index) => {
+			if (index > 0) {
+				lines.push(writeList(child));
+			}
+		});
+	});
+
+	return `[list${marker}]\n${lines.join(`\n`)}\n[/list]`;
+}
+
+/**
+ * [table] with a [tr] on each line. A header cell is [th], any other cell is [td].
+ * @param {PMNode} table
+ * @returns {string}
+ */
+function writeTable(table) {
+	/** @type {string[]} */
+	const rows = [];
+	table.forEach((row) => {
+		let text = ``;
+		row.forEach((cell) => {
+			const tag = cell.type.name === `table_header` ? `th` : `td`;
+			const attrs = `${cell.attrs.align ? ` align=${cell.attrs.align}` : ``}${cell.attrs.colspan > 1 ? ` colspan=${cell.attrs.colspan}` : ``}${cell.attrs.rowspan > 1 ? ` rowspan=${cell.attrs.rowspan}` : ``}`;
+			text += `[${tag}${attrs}]${writeInline(cell)}[/${tag}]`;
+		});
+		rows.push(`[tr]${text}[/tr]`);
+	});
+
+	return `[table]\n${rows.join(`\n`)}\n[/table]`;
+}
+
+/**
  * @param {PMNode} block
  * @returns {string}
  */
@@ -54,6 +96,11 @@ function writeBlock(block) {
 			return block.attrs.source || block.attrs.url;
 		case `raw_block`:
 			return block.attrs.source;
+		case `bullet_list`:
+		case `ordered_list`:
+			return writeList(block);
+		case `table`:
+			return writeTable(block);
 		default:
 			return block.textContent;
 	}

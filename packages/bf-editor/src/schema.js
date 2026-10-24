@@ -1,6 +1,12 @@
 // What a document can contain. One place, no knowledge of how it is stored or shown.
 import { Schema } from 'prosemirror-model';
+import { tableNodes } from 'prosemirror-tables';
 import { defaultLinkPolicy } from './link-policy.js';
+
+/** The most columns a table may have (the picker, the add-column command and a paste all stop here). */
+export const MAX_TABLE_COLUMNS = 8;
+/** The most rows a table may have (the picker, the add-row commands, Tab in the last cell and a paste all stop here). */
+export const MAX_TABLE_ROWS = 5;
 
 export const schema = new Schema({
 	nodes: {
@@ -35,7 +41,55 @@ export const schema = new Schema({
 			toDOM: (node) => [`bf-youtube`, { url: node.attrs.url }],
 		},
 
-		// Block level markup the editor cannot show (headings, lists, code, tables).
+		// A list. The marker is what [list=...] says: 1, a, A, i or I. A bullet list has none.
+		bullet_list: {
+			group: `block`,
+			content: `list_item+`,
+			parseDOM: [{ tag: `ul` }],
+			toDOM: () => [`ul`, 0],
+		},
+
+		ordered_list: {
+			group: `block`,
+			content: `list_item+`,
+			attrs: { marker: { default: `1` } },
+			parseDOM: [
+				{
+					tag: `ol`,
+					getAttrs: (dom) => ({
+						marker: /^[1aAiI]$/.test(dom.getAttribute(`type`) ?? ``) ? dom.getAttribute(`type`) : `1`,
+					}),
+				},
+			],
+			toDOM: (node) => [`ol`, node.attrs.marker === `1` ? {} : { type: node.attrs.marker }, 0],
+		},
+
+		// An item is one paragraph, and then the lists that are nested in it. BBCode has no more than that.
+		list_item: {
+			content: `paragraph (bullet_list | ordered_list)*`,
+			defining: true,
+			parseDOM: [{ tag: `li` }],
+			toDOM: () => [`li`, 0],
+		},
+
+		// Tables. The cells hold inline text only, because [td] and [th] on the server make no paragraphs.
+		...tableNodes({
+			tableGroup: `block`,
+			cellContent: `inline*`,
+			cellAttributes: {
+				align: {
+					default: null,
+					getFromDOM: (dom) => dom.style.textAlign || null,
+					setDOMAttr: (value, attrs) => {
+						if (value) {
+							attrs.style = `${attrs.style ?? ``}text-align: ${value};`;
+						}
+					},
+				},
+			},
+		}),
+
+		// Block level markup the editor cannot show (code, and a list or table it cannot represent).
 		// The source is kept as it is, so nothing is lost on save.
 		raw_block: {
 			group: `block`,

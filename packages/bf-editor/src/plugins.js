@@ -5,12 +5,25 @@ import { gapCursor } from 'prosemirror-gapcursor';
 import { history, redo, undo } from 'prosemirror-history';
 import { InputRule, inputRules, wrappingInputRule } from 'prosemirror-inputrules';
 import { keymap } from 'prosemirror-keymap';
+import { liftListItem, sinkListItem, splitListItem } from 'prosemirror-schema-list';
 import { Plugin } from 'prosemirror-state';
+import { deleteCellSelection, tableEditing } from 'prosemirror-tables';
 import { createAttachmentMenuPlugin } from './attachment-menu.js';
+import { backspaceInList } from './commands.js';
 import { youtubeProvider } from './embeds/youtube.js';
 import { setLink } from './link-command.js';
 import { defaultLinkPolicy } from './link-policy.js';
 import { defaultSmilies } from './smilies.js';
+import {
+	enterTable,
+	keepCursorInCells,
+	leaveTable,
+	limitPastedTables,
+	lineBreakInCell,
+	moveInTable,
+	nextCell,
+	previousCell,
+} from './table-commands.js';
 import { createUploadPlugin } from './upload.js';
 
 /** @param {string} text */
@@ -110,7 +123,7 @@ function pasteLink(schema, policy, embeds) {
 /**
  * @param {import('prosemirror-model').Schema} schema
  * @param {Array<import('./contracts.js').Command & {shortcut?: string}>} commands
- * @param {{smilies?: Record<string, string>, linkPolicy?: import('./contracts.js').LinkPolicy, embeds?: import('./contracts.js').EmbedProvider[], uploads?: ReturnType<typeof import('./upload.js').createUploads>, menu?: ReturnType<typeof import('./attachment-menu.js').createAttachmentMenu>}} [options]
+ * @param {{smilies?: Record<string, string>, linkPolicy?: import('./contracts.js').LinkPolicy, embeds?: import('./contracts.js').EmbedProvider[], uploads?: ReturnType<typeof import('./upload.js').createUploads>, menu?: ReturnType<typeof import('./attachment-menu.js').createAttachmentMenu>, onTableCut?: () => void}} [options]
  */
 export function createPlugins(schema, commands, options = {}) {
 	/** @type {Record<string, import('prosemirror-state').Command>} */
@@ -127,6 +140,9 @@ export function createPlugins(schema, commands, options = {}) {
 		markRule(/(^|[\s])(\*)([^*\s](?:[^*]*[^*\s])?)\*$/, schema.marks.em),
 		markRule(/(^|[\s])(~~)([^~\s](?:[^~]*[^~\s])?)~~$/, schema.marks.strike),
 		wrappingInputRule(/^\s*>\s$/, schema.nodes.blockquote),
+		// "- ", "* " or "+ " at the start of a line starts a bullet list. "1. " starts a numbered one.
+		wrappingInputRule(/^\s*([-+*])\s$/, schema.nodes.bullet_list),
+		wrappingInputRule(/^\s*(\d{1,3})\.\s$/, schema.nodes.ordered_list, () => ({ marker: `1` })),
 		smilieRule(options.smilies ?? defaultSmilies),
 	];
 
@@ -148,11 +164,45 @@ export function createPlugins(schema, commands, options = {}) {
 				return true;
 			}),
 		}),
+		// In a table: Tab and Shift+Tab move between cells (Tab in the last cell adds a row), Enter is a line break in the cell,
+		// and an arrow key moves from cell to cell, and at the edge of the table to a line above or below it (made if there is none).
+		// These come before the gap cursor, which would otherwise take the arrow keys and hide the cursor between two cells.
+		// A pasted table keeps at most MAX_TABLE_COLUMNS columns and MAX_TABLE_ROWS rows. Delete clears the selected cells.
+		new Plugin({
+			props: {
+				transformPasted: (slice) => limitPastedTables(schema, slice, options.onTableCut ?? (() => {})),
+			},
+		}),
+		keymap({
+			Tab: nextCell,
+			'Shift-Tab': previousCell,
+			Enter: lineBreakInCell(schema),
+			ArrowDown: chainCommands(leaveTable(`down`, schema), moveInTable(`down`), enterTable(`down`, schema)),
+			ArrowUp: chainCommands(leaveTable(`up`, schema), moveInTable(`up`), enterTable(`up`, schema)),
+			ArrowRight: chainCommands(leaveTable(`right`, schema), moveInTable(`right`), enterTable(`right`, schema)),
+			ArrowLeft: chainCommands(leaveTable(`left`, schema), moveInTable(`left`), enterTable(`left`, schema)),
+			Backspace: deleteCellSelection,
+			Delete: deleteCellSelection,
+		}),
+		// In a list: Enter makes a new item (in an empty one it leaves the list), Tab and Shift+Tab move an item in and out,
+		// Backspace at the start of an item clears its bullet (first item) or joins the line above.
+		// Where they do nothing, the key goes on to the browser, so the keyboard is never trapped in the editor.
+		keymap({
+			Enter: splitListItem(schema.nodes.list_item),
+			Backspace: backspaceInList(schema),
+			Tab: sinkListItem(schema.nodes.list_item),
+			'Shift-Tab': liftListItem(schema.nodes.list_item),
+			'Mod-]': sinkListItem(schema.nodes.list_item),
+			'Mod-[': liftListItem(schema.nodes.list_item),
+		}),
 		keymap(baseKeymap),
 		history(),
 		dropCursor(),
 		gapCursor(),
 		pasteLink(schema, options.linkPolicy ?? defaultLinkPolicy, options.embeds ?? [youtubeProvider]),
+		// After the paste plugin above, so a pasted web address is still made a link.
+		tableEditing(),
+		keepCursorInCells(schema),
 		emptyMarker(),
 	];
 }

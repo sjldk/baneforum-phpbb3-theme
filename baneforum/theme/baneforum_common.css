@@ -265,6 +265,55 @@ li.header dt {
 	margin: 1em 0 1em 0;
 }
 
+/* Numbered lists in a post change their marker with the level, as in Word: 1. then a. then i., and round again. Every level counts on its own.
+   phpBB writes the marker inline (style="list-style-type:decimal") on every [list=1], so the rule has to be !important. A list that was
+   written with its own marker ([list=a]) has another value in the style and is left alone. */
+.content ol[style*="decimal"] ol[style*="decimal"] {
+	list-style-type: lower-alpha !important;
+}
+
+.content ol[style*="decimal"] ol[style*="decimal"] ol[style*="decimal"] {
+	list-style-type: lower-roman !important;
+}
+
+.content ol[style*="decimal"] ol[style*="decimal"] ol[style*="decimal"] ol[style*="decimal"] {
+	list-style-type: decimal !important;
+}
+
+.content ol[style*="decimal"] ol[style*="decimal"] ol[style*="decimal"] ol[style*="decimal"] ol[style*="decimal"] {
+	list-style-type: lower-alpha !important;
+}
+
+.content ol[style*="decimal"] ol[style*="decimal"] ol[style*="decimal"] ol[style*="decimal"] ol[style*="decimal"] ol[style*="decimal"] {
+	list-style-type: lower-roman !important;
+}
+
+/* A table in a post ([table] from the editor or a converted Markdown post). Up to 20 columns, so on a phone it scrolls sideways
+   inside the post and does not widen the page. The first row is made of header cells. */
+.content table {
+	display: block;
+	max-width: 100%;
+	margin: 1em 0;
+	overflow-x: auto;
+	border-collapse: collapse;
+}
+
+.content th,
+.content td {
+	min-width: 4rem;
+	/* An empty cell keeps the height of a line (as a height, a table cell takes it as a least height). */
+	height: 1.75rem;
+	padding: 0.25rem 0.6rem;
+	border: 1px solid var(--color-line);
+	vertical-align: top;
+}
+
+.content th {
+	background: var(--color-tint);
+	font-weight: 700;
+	text-align: start;
+}
+
 /* The notice box (.rules: the forum rules, the download notice, the board disabled) has room around its text: 1rem on all sides
    (prosilver has 5px above and below and 10px at the sides). The list inside keeps its own indent. */
 div.rules {

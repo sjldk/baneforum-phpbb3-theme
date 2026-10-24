@@ -34,7 +34,7 @@ test(`every basic command satisfies the Command contract`, () => {
 
 	assert.deepEqual(
 		commands.map((command) => command.id),
-		[`bold`, `italic`, `strike`, `normal`, `quote`],
+		[`bold`, `italic`, `strike`, `normal`, `quote`, `bullet-list`, `numbered-list`],
 	);
 });
 
@@ -71,6 +71,6 @@ test(`quote wraps the paragraph and lifts it again`, () => {
 test(`every command has a keyboard shortcut except where none is set`, () => {
 	assert.deepEqual(
 		commands.map((command) => command.shortcut),
-		[`Mod-b`, `Mod-i`, `Mod-Shift-x`, `Mod-Shift-0`, `Mod-Shift-q`],
+		[`Mod-b`, `Mod-i`, `Mod-Shift-x`, `Mod-Shift-0`, `Mod-Shift-q`, `Mod-Shift-8`, `Mod-Shift-7`],
 	);
 });

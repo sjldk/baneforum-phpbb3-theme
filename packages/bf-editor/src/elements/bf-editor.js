@@ -13,11 +13,13 @@ import { createAttachmentMenu } from '../attachment-menu.js';
 import { createBBCodeCodec } from '../codecs/bbcode.js';
 import { createBasicCommands } from '../commands.js';
 import { assertImplements } from '../contracts.js';
-import { applyLabels, labelsFor } from '../labels.js';
+import { applyLabels, format, labelsFor } from '../labels.js';
 import { createLinkCommand } from '../link-command.js';
 import { createLinkDialog } from '../link-dialog.js';
 import { createPlugins } from '../plugins.js';
-import { schema } from '../schema.js';
+import { MAX_TABLE_COLUMNS, MAX_TABLE_ROWS, schema } from '../schema.js';
+import { createTableCommands } from '../table-commands.js';
+import { createTablePicker } from '../table-picker.js';
 import { template } from '../template.js';
 import { Toolbar } from '../toolbar.js';
 import { createAttachCommand, createUploads } from '../upload.js';
@@ -32,6 +34,8 @@ export class BfEditor extends HTMLElement {
 	#codec = createBBCodeCodec(schema);
 	#value = ``;
 	#toolbar;
+	#tableBar;
+	#tablePicker;
 	#linkDialog;
 	#editable;
 	#root;
@@ -65,8 +69,15 @@ export class BfEditor extends HTMLElement {
 				this.#run(command.slice(2));
 			}
 		});
-		this.#toolbar = new Toolbar(/** @type {HTMLMenuElement} */ (root.querySelector(`menu`)));
+		this.#toolbar = new Toolbar(/** @type {HTMLMenuElement} */ (root.querySelector(`menu[data-label="formatting"]`)));
 		this.#toolbar.controls(`editable`);
+		this.#tableBar = new Toolbar(/** @type {HTMLMenuElement} */ (root.querySelector(`menu.table-bar`)));
+		this.#tableBar.controls(`editable`);
+		this.#tablePicker = createTablePicker(
+			/** @type {HTMLFormElement} */ (root.querySelector(`form.table-picker`)),
+			() => this.#words,
+			() => root.querySelector(`button[command="--table"]`),
+		);
 		this.#linkDialog = createLinkDialog(/** @type {HTMLDialogElement} */ (root.querySelector(`dialog`)));
 		this.#picker = /** @type {HTMLInputElement} */ (root.querySelector(`input[type="file"]`));
 		this.#status = /** @type {HTMLElement} */ (root.querySelector(`output.visually-hidden`));
@@ -153,6 +164,7 @@ export class BfEditor extends HTMLElement {
 		return [
 			...commands,
 			...(have.has(`link`) ? [] : [createLinkCommand(schema, { ask: (current) => this.#linkDialog.ask(current) })]),
+			...(have.has(`table`) ? [] : createTableCommands(schema, { ask: () => this.#tablePicker.ask() })),
 			...(have.has(`attach`) ? [] : [createAttachCommand(this.#uploads, () => this.#picker.click())]),
 		];
 	}
@@ -327,7 +339,16 @@ export class BfEditor extends HTMLElement {
 	#createState(text) {
 		return EditorState.create({
 			doc: this.#codec.parse(text),
-			plugins: createPlugins(schema, this.#commands, { uploads: this.#uploads, menu: this.#menu }),
+			plugins: createPlugins(schema, this.#commands, {
+				uploads: this.#uploads,
+				menu: this.#menu,
+				onTableCut: () => {
+					this.#status.textContent = format(this.#words.tableCut, {
+						columns: String(MAX_TABLE_COLUMNS),
+						rows: String(MAX_TABLE_ROWS),
+					});
+				},
+			}),
 		});
 	}
 
@@ -346,9 +367,50 @@ export class BfEditor extends HTMLElement {
 
 	/** @param {import('prosemirror-state').EditorState} state */
 	#syncToolbar(state) {
-		this.#toolbar?.setState({
+		const buttons = {
 			active: this.#commands.filter((command) => command.isActive?.(state)).map((command) => command.id),
 			disabled: this.#commands.filter((command) => !command.run(state)).map((command) => command.id),
-		});
+		};
+		this.#toolbar?.setState(buttons);
+		this.#tableBar?.setState(buttons);
+
+		// The table bar shows while the cursor is in a table, and its buttons are all on or all off with it.
+		const bar = this.#root.querySelector(`menu.table-bar`);
+
+		if (bar instanceof HTMLElement) {
+			bar.hidden = !this.#commands.some((command) => command.id === `table` && command.isActive?.(state));
+			this.#placeTableBar(bar, state);
+		}
+	}
+
+	/**
+	 * Puts the table bar just under the table that the cursor is in, at the left edge of the table.
+	 * The bar floats, so nothing else moves.
+	 * @param {HTMLElement} bar
+	 * @param {import('prosemirror-state').EditorState} state
+	 */
+	#placeTableBar(bar, state) {
+		const view = this.#view;
+
+		if (bar.hidden || !view) {
+			return;
+		}
+
+		const { $from } = state.selection;
+
+		for (let depth = $from.depth; depth > 0; depth -= 1) {
+			if ($from.node(depth).type === schema.nodes.table) {
+				const table = view.nodeDOM($from.before(depth));
+
+				if (table instanceof HTMLElement && bar.parentElement) {
+					const surface = bar.parentElement.getBoundingClientRect();
+					const box = table.getBoundingClientRect();
+					bar.style.insetBlockStart = `${box.bottom - surface.top + 4}px`;
+					bar.style.insetInlineStart = `${Math.max(0, box.left - surface.left)}px`;
+				}
+
+				return;
+			}
+		}
 	}
 }
