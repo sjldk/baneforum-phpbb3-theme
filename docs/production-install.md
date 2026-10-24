@@ -15,6 +15,7 @@ The theme needs no change to those two extensions.
 | Censor extension | `extensions/baneforum/censor/` | `ext/baneforum/censor/` |
 | Likes extension | `extensions/baneforum/likes/` | `ext/baneforum/likes/` |
 | Featured posts extension | `extensions/baneforum/featured/` | `ext/baneforum/featured/` |
+| Latest posts extension | `extensions/baneforum/latest/` | `ext/baneforum/latest/` |
 | Letter avatars | `extensions/baneforum/avatars/` | `ext/baneforum/avatars/` |
 | Appearance switch (light and dark theme) | `extensions/baneforum/darkmode/` | `ext/baneforum/darkmode/` |
 
@@ -47,6 +48,7 @@ rsync -av extensions/baneforum/likes/ SERVER:/var/www/baneforum/ext/baneforum/li
 rsync -av extensions/baneforum/featured/ SERVER:/var/www/baneforum/ext/baneforum/featured/
 rsync -av extensions/baneforum/darkmode/ SERVER:/var/www/baneforum/ext/baneforum/darkmode/
 rsync -av extensions/baneforum/avatars/ SERVER:/var/www/baneforum/ext/baneforum/avatars/
+rsync -av extensions/baneforum/latest/ SERVER:/var/www/baneforum/ext/baneforum/latest/
 ```
 
 - [ ] Both folders are owned by the web user (for example `www-data`), the same as the rest of the board.
@@ -56,6 +58,7 @@ rsync -av extensions/baneforum/avatars/ SERVER:/var/www/baneforum/ext/baneforum/
 
 - [ ] Customise, Manage extensions: enable **Baneforum image compress** and **Baneforum censor**. The censor keeps the ACP word list but leaves URLs alone. Check `alfredoramos/markdown` and `phpbb/mediaembed` stay enabled.
 - [ ] Featured posts (**Baneforum featured posts**): shows up to 5 posts with pictures in a column beside the forum list on the front page. It needs the style's `index_body.html` (it has the place for it), so install the style first. It ranks by likes if **Baneforum likes** is enabled, and by newest otherwise. Only members who can read and download in a forum see its posts. Nothing to configure.
+- [ ] Latest posts (**Baneforum latest posts**): an aside on the front page with the 8 topics that had the newest post, as a text list (title, author, forum, time), only from forums the visitor can read. It sits beside the featured posts and needs the style's `index_body.html`, so install the style first. Nothing to configure.
 - [ ] Letter avatars (**Baneforum letter avatars**): a member with no avatar gets a round letter, the first letter of the name, in the colour that belongs to that letter (12 colours, the same every time). It is a span with CSS, not an image, in posts and private messages. Nothing to configure.
 - [ ] Appearance switch (**Baneforum appearance switch**): adds an "Appearance" link to the top bar. The choice is kept in the visitor's browser (`localStorage`, key `bf-theme`), so there is nothing on the server and no setting.
 - [ ] Likes: the votes hold a keyed hash, never a user id, so nobody can see who voted. The key is the file `store/baneforum_votes.key`, made on the first vote. Include it in backups. Without it, old votes still count but nobody's own vote is recognised, so they can vote again.

@@ -1,0 +1,35 @@
+/* The latest posts: a list of headlines with a small line under each (author, forum, time), no pictures. It sits in the aside of the
+   front page (the grid is in the theme, .bf-index). The headline is the "headline" voice of the theme, the line under it the "small facts"
+   voice. A thin line separates the posts. Colours come from the style's variables. */
+
+.bf-latest__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border-top: 1px solid var(--color-line, #d6d6d6);
+}
+
+.bf-latest__item {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	padding: 0.75rem 0;
+	border-bottom: 1px solid var(--color-line, #d6d6d6);
+}
+
+body .bf-latest .bf-latest__topic {
+	font-family: var(--font-headline, inherit) !important;
+	font-size: 1.25rem !important;
+	font-weight: 700 !important;
+	line-height: 1.15;
+	overflow-wrap: anywhere;
+	color: var(--color-text, #1f1f1f);
+}
+
+body .bf-latest .bf-latest__meta {
+	font-family: var(--font-mono, ui-monospace, monospace) !important;
+	font-size: 0.75rem !important;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--color-muted, #444);
+}

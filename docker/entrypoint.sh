@@ -84,6 +84,11 @@ if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='banefor
 	php bin/phpbbcli.php extension:enable baneforum/featured
 fi
 
+# Our own list of the latest posts for the front page.
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/latest' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable baneforum/latest
+fi
+
 # Our own letter avatars for members without an avatar.
 if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/avatars' AND ext_active=1")" = 0 ]; then
 	php bin/phpbbcli.php extension:enable baneforum/avatars

@@ -1,0 +1,19 @@
+services:
+    baneforum.latest.finder:
+        class: baneforum\latest\finder
+        arguments:
+            - '@dbal.conn'
+            - '@content.visibility'
+            - '%core.table_prefix%'
+
+    baneforum.latest.listener:
+        class: baneforum\latest\event\listener
+        arguments:
+            - '@baneforum.latest.finder'
+            - '@auth'
+            - '@template'
+            - '@user'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+        tags:
+            - { name: event.listener }

@@ -1,0 +1,13 @@
+{% if loops.bf_latest|length %}
+<aside class="bf-latest" aria-labelledby="bf-latest-title">
+	<h2 id="bf-latest-title" class="bf-index__title">{{ lang('BF_LATEST_TITLE') }}</h2>
+	<ol class="bf-latest__list">
+		{% for post in loops.bf_latest %}
+		<li class="bf-latest__item">
+			<a class="bf-latest__topic" href="{{ post.U_POST }}">{{ post.TITLE }}</a>
+			<span class="bf-latest__meta">{{ post.AUTHOR }} &middot; {{ post.FORUM }} &middot; {{ post.TIME }}</span>
+		</li>
+		{% endfor %}
+	</ol>
+</aside>
+{% endif %}
