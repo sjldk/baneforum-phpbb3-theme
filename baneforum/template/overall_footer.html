@@ -76,10 +76,14 @@
 					}
 				},
 				"theme": "classic",
+				"onPopupOpen": function () {
+					// The library gives the button and the link a fixed English aria-label that is not their words. The words name them.
+					document.querySelectorAll('.cc-window .cc-btn, .cc-window .cc-link').forEach(function (e) { e.removeAttribute('aria-label'); });
+				},
 				"content": {
-					"message": "{{ LA_COOKIE_CONSENT_MSG }}",
-					"dismiss": "{{ LA_COOKIE_CONSENT_OK }}",
-					"link": "{{ LA_COOKIE_CONSENT_INFO }}"
+					"message": "{{ lang('COOKIE_CONSENT_MSG')|e('js') }}",
+					"dismiss": "{{ lang('COOKIE_CONSENT_OK')|e('js') }}",
+					"link": "{{ lang('COOKIE_CONSENT_INFO')|e('js') }}"
 				}
 			})});
 	</script>

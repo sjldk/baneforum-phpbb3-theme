@@ -2042,3 +2042,55 @@ body :is(h2, h3, h4, .topic-title, .forum-title, .searchresults-title, a.forumti
 		color: var(--color-muted);
 	}
 }
+
+/* The cookie notice (phpBB's cookieconsent): a bar at the bottom in the colours of the palette, text and button like the rest of the
+   theme. The library gives it a blue background and a light button with inline colour rules, so these rules need !important. */
+body .cc-window.cc-banner {
+	transition: none !important;
+	align-items: center;
+	gap: 1rem;
+	padding: 0.75rem 1.25rem;
+	border-top: 1px solid var(--color-line);
+	background: var(--color-surface) !important;
+	color: var(--color-text) !important;
+	font-family: var(--base-font);
+	font-size: var(--text-body);
+	box-shadow: 0 -0.25rem 1rem rgb(0 0 0 / 0.12);
+}
+
+body .cc-window .cc-message {
+	flex: 1 1 20rem;
+	margin: 0;
+	color: var(--color-text);
+}
+
+body .cc-window .cc-link {
+	margin-inline-start: 0.5rem;
+	color: var(--accent) !important;
+	opacity: 1 !important;
+	text-decoration: underline;
+}
+
+body .cc-window .cc-compliance {
+	flex: none;
+}
+
+body .cc-window .cc-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-block-size: 2.75rem;
+	min-inline-size: 2.75rem;
+	padding: 0 1.1em;
+	border: 0 !important;
+	border-radius: var(--radius);
+	background: var(--color-primary) !important;
+	color: var(--color-on-primary) !important;
+	font-size: var(--text-body);
+	font-weight: 400;
+	text-transform: none;
+}
+
+body .cc-window .cc-btn:is(:hover, :focus-visible) {
+	background: var(--color-primary-hover) !important;
+}
