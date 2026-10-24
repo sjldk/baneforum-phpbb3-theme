@@ -45,6 +45,7 @@ for (const theme of [`light`, `dark`]) {
 			}
 		}, theme);
 		await page.evaluate(`document.querySelector('#review')?.setAttribute('open', '')`);
+		await new Promise((r) => setTimeout(r, 1200)); // the cookie notice appears a moment after the page has loaded
 		await page.evaluate(src);
 		const found = await page.evaluate(async () => (await window.axe.run(document, { runOnly: { type: `tag`, values: [`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa`, `wcag2aaa`] } })).violations
 			.map((v) => `[${v.impact}] ${v.id} x${v.nodes.length} :: ${v.nodes.slice(0, 2).map((n) => n.target.join(` `).slice(0, 60) + ` ` + (n.any[0]?.message ?? n.all[0]?.message ?? n.none[0]?.message ?? ``).slice(0, 90)).join(` | `)}`));
