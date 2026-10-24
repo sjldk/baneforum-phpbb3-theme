@@ -31,15 +31,17 @@
 		"prosemirror-inputrules": "^1.5.0",
 		"prosemirror-keymap": "^1.2.3",
 		"prosemirror-model": "^1.25.1",
+		"prosemirror-schema-list": "^1.5.1",
 		"prosemirror-state": "^1.4.3",
+		"prosemirror-tables": "^1.8.5",
 		"prosemirror-transform": "^1.10.4",
 		"prosemirror-view": "^1.40.0"
 	},
 	"devDependencies": {
-		"esbuild": "^0.25.0",
-		"jsdom": "^26.1.0",
 		"@biomejs/biome": "^2.6.2",
-		"typescript": "^5.9.0",
-		"eslint": "^10.13.0"
+		"esbuild": "^0.25.0",
+		"eslint": "^10.13.0",
+		"jsdom": "^26.1.0",
+		"typescript": "^5.9.0"
 	}
 }

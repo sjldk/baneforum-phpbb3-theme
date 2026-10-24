@@ -16,6 +16,8 @@ The third-party code in `bf-editor.js`, all MIT licensed, built into the one fil
 | prosemirror-view, -model, -transform, -state | 1.42, 1.25, 1.12, 1.4 | The editor core |
 | prosemirror-commands, -history, -keymap, -inputrules | 1.7, 1.5, 1.2, 1.5 | Editing commands, undo, keys, typing shortcuts |
 | prosemirror-dropcursor, -gapcursor | 1.8, 1.4 | Drop marker and cursor next to blocks |
+| prosemirror-schema-list | 1.5 | Bullet and numbered lists: wrap, split an item on Enter, indent and outdent. Approved by the owner 2026-10-24. |
+| prosemirror-tables | 1.8 | Tables: cell selection, moving between cells with Tab, add and delete rows and columns. Approved by the owner 2026-10-24. |
 | orderedmap, rope-sequence, w3c-keyname | 2.1, 1.3, 2.2 | Small helpers that ProseMirror itself needs |
 
 ## What does not ship

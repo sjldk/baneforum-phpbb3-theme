@@ -2,6 +2,7 @@
 // Reading BBCode is exact: a character is only markup if BBCode says so. A post that was written in Markdown
 // (option `markdown`) is read as Markdown mixed with BBCode, and saved as BBCode: that is how it is converted.
 import { Mark } from 'prosemirror-model';
+import { TableMap } from 'prosemirror-tables';
 import { scanBBCode } from '../bbcode/scan.js';
 import { writeDocument } from '../bbcode/write.js';
 import { paragraphToEmbed } from '../embeds/paragraph.js';
@@ -9,7 +10,7 @@ import { youtubeProvider } from '../embeds/youtube.js';
 import { PLACEHOLDER_CLOSE, PLACEHOLDER_OPEN, readMarkdown } from '../markdown/read.js';
 import { createSmilieReplacer } from '../smilies.js';
 
-const blockTags = new Set([`quote`, `youtube`, `media`, `list`, `code`, `flash`, `spoiler`, `center`]);
+const blockTags = new Set([`quote`, `youtube`, `media`, `list`, `table`, `code`, `flash`, `spoiler`, `center`]);
 /** @type {Record<string, string>} */
 const emphasis = { b: `**`, i: `*`, s: `~~` };
 
@@ -37,7 +38,7 @@ export function createBBCodeCodec(schema, options = {}) {
 
 	/** @param {string} text */
 	function parse(text) {
-		const blocks = buildBlocks(scanBBCode(text.replace(/\r\n?/g, `\n`)));
+		const blocks = buildBlocks(scanBBCode(text.replace(/\r\n?/g, `\n`))).map(structure);
 
 		return schema.nodes.doc.create(null, blocks.length > 0 ? blocks : [schema.nodes.paragraph.create()]);
 	}
@@ -97,9 +98,281 @@ export function createBBCodeCodec(schema, options = {}) {
 					source: tag.source,
 				});
 			}
+			case `list`:
+				return listFromTag(tag) ?? schema.nodes.raw_block.create({ source: tag.source });
+			case `table`:
+				return tableFromTag(tag) ?? schema.nodes.raw_block.create({ source: tag.source });
 			default:
 				return schema.nodes.raw_block.create({ source: tag.source });
 		}
+	}
+
+	/**
+	 * A block that came from Markdown is a raw block with BBCode in it. If that BBCode is one list or one table, it becomes the real thing.
+	 * @param {PMNode} block
+	 * @returns {PMNode}
+	 */
+	function structure(block) {
+		if (block.type !== schema.nodes.raw_block || !/^\s*\[(?:list|table)\b/i.test(block.attrs.source)) {
+			return block;
+		}
+
+		const nodes = scanBBCode(block.attrs.source);
+		const tags = nodes.filter((node) => node.type === `tag`);
+		const only = tags.length === 1 && nodes.every((node) => node.type === `tag` || node.value.trim() === ``);
+
+		return only ? (blockFromTag(/** @type {TagNode} */ (tags[0])) ?? block) : block;
+	}
+
+	/** Tags that make a block. An item of a list or a cell of a table cannot hold one. */
+	const holdsBlock = (/** @type {BBNode} */ node) => node.type === `tag` && blockTags.has(node.name);
+
+	/**
+	 * Inline BBCode as the content of one paragraph or cell: a line break in the text is a hard break.
+	 * @param {BBNode[]} run
+	 * @returns {PMNode[]}
+	 */
+	function inlineContent(run) {
+		/** @type {Array<{text: string, marks: readonly Mark[]} | {node: PMNode}>} */
+		const items = [];
+		collect(run, [], items);
+		const first = items[0];
+		const last = items[items.length - 1];
+
+		if (first && `text` in first) {
+			first.text = first.text.replace(/^\s+/, ``);
+		}
+
+		if (last && `text` in last) {
+			last.text = last.text.replace(/\s+$/, ``);
+		}
+
+		/** @type {PMNode[]} */
+		const out = [];
+
+		for (const item of items) {
+			if (`node` in item) {
+				out.push(item.node);
+				continue;
+			}
+
+			item.text
+				.replace(/[ \t]+(?=\n)/g, ``)
+				.split(`\n`)
+				.forEach((line, index) => {
+					if (index > 0) {
+						out.push(schema.nodes.hard_break.create());
+					}
+
+					if (line !== ``) {
+						const linked = item.marks.some((mark) => mark.type === schema.marks.link);
+						out.push(schema.text(linked ? line : replaceSmilies(line), item.marks));
+					}
+				});
+		}
+
+		return out;
+	}
+
+	/**
+	 * [list] with [*] items. null when the editor cannot show it exactly (an item with a quote in it, an odd marker): then it stays a raw block.
+	 * @param {TagNode} tag
+	 * @returns {PMNode | null}
+	 */
+	function listFromTag(tag) {
+		const marker = tag.attrs === `` ? null : (tag.attrs.match(/^=(1|a|A|i|I)$/)?.[1] ?? undefined);
+
+		if (marker === undefined) {
+			return null;
+		}
+
+		/** @type {BBNode[][]} */
+		const items = [];
+		/** @type {BBNode[] | null} */
+		let current = null;
+
+		for (const node of tag.children) {
+			if (node.type !== `text`) {
+				if (current === null) {
+					return null;
+				}
+
+				current.push(node);
+				continue;
+			}
+
+			const parts = node.value.split(`[*]`);
+
+			if (current === null && parts[0].trim() !== ``) {
+				return null;
+			}
+
+			current?.push({ type: `text`, value: parts[0] });
+
+			for (const part of parts.slice(1)) {
+				current = [{ type: `text`, value: part }];
+				items.push(current);
+			}
+		}
+
+		/** @type {PMNode[]} */
+		const nodes = [];
+
+		for (const item of items) {
+			const node = itemFromNodes(item);
+
+			if (!node) {
+				return null;
+			}
+
+			nodes.push(node);
+		}
+
+		if (nodes.length === 0) {
+			return null;
+		}
+
+		return marker ? schema.nodes.ordered_list.create({ marker }, nodes) : schema.nodes.bullet_list.create(null, nodes);
+	}
+
+	/**
+	 * @param {BBNode[]} nodes the content of one [*]
+	 * @returns {PMNode | null}
+	 */
+	function itemFromNodes(nodes) {
+		const at = nodes.findIndex((node) => node.type === `tag` && node.name === `list`);
+		const inline = at === -1 ? nodes : nodes.slice(0, at);
+		/** @type {PMNode[]} */
+		const nested = [];
+
+		if (inline.some(holdsBlock)) {
+			return null;
+		}
+
+		for (const node of at === -1 ? [] : nodes.slice(at)) {
+			if (node.type === `text`) {
+				if (node.value.trim() !== ``) {
+					return null;
+				}
+			} else if (node.name === `list`) {
+				const list = listFromTag(node);
+
+				if (!list) {
+					return null;
+				}
+
+				nested.push(list);
+			} else {
+				return null;
+			}
+		}
+
+		return schema.nodes.list_item.create(null, [schema.nodes.paragraph.create(null, inlineContent(inline)), ...nested]);
+	}
+
+	/**
+	 * [table] with [tr] rows of [th] and [td] cells ([thead] and [tbody] are only wrappers). null when the editor cannot show it exactly.
+	 * @param {TagNode} tag
+	 * @returns {PMNode | null}
+	 */
+	function tableFromTag(tag) {
+		/** @type {PMNode[]} */
+		const rows = [];
+
+		/** @param {BBNode[]} nodes @returns {boolean} */
+		const readRows = (nodes) => {
+			for (const node of nodes) {
+				if (node.type === `text`) {
+					if (node.value.trim() !== ``) {
+						return false;
+					}
+				} else if (node.name === `thead` || node.name === `tbody`) {
+					if (!readRows(node.children)) {
+						return false;
+					}
+				} else if (node.name === `tr`) {
+					const row = rowFromTag(node);
+
+					if (!row) {
+						return false;
+					}
+
+					rows.push(row);
+				} else {
+					return false;
+				}
+			}
+
+			return true;
+		};
+
+		if (!readRows(tag.children) || rows.length === 0) {
+			return null;
+		}
+
+		const table = schema.nodes.table.create(null, rows);
+
+		// Rows of different widths (a cell that spans, but not as many cells as it claims) are not a table the editor can keep as it is.
+		return TableMap.get(table).problems ? null : table;
+	}
+
+	/** @param {TagNode} tr @returns {PMNode | null} */
+	function rowFromTag(tr) {
+		/** @type {PMNode[]} */
+		const cells = [];
+
+		for (const node of tr.children) {
+			if (node.type === `text`) {
+				if (node.value.trim() !== ``) {
+					return null;
+				}
+			} else if (node.name === `td` || node.name === `th`) {
+				if (node.children.some(holdsBlock)) {
+					return null;
+				}
+
+				const attrs = cellAttributes(node.attrs);
+
+				if (!attrs) {
+					return null;
+				}
+
+				cells.push(
+					(node.name === `th` ? schema.nodes.table_header : schema.nodes.table_cell).create(
+						attrs,
+						inlineContent(node.children),
+					),
+				);
+			} else {
+				return null;
+			}
+		}
+
+		return cells.length > 0 ? schema.nodes.table_row.create(null, cells) : null;
+	}
+
+	/**
+	 * `align=center colspan=2` as the attributes of a cell. null for anything else.
+	 * @param {string} text
+	 * @returns {{align: string | null, colspan: number, rowspan: number} | null}
+	 */
+	function cellAttributes(text) {
+		const attrs = { align: /** @type {string | null} */ (null), colspan: 1, rowspan: 1 };
+		const rest = text.trim().replace(/(\w+)=(\w+)/g, (_all, name, value) => {
+			if (name === `align` && /^(left|center|right|justify)$/.test(value)) {
+				attrs.align = value;
+			} else if (name === `colspan` && /^[1-9]\d?$/.test(value)) {
+				attrs.colspan = Number(value);
+			} else if (name === `rowspan` && /^[1-9]\d?$/.test(value)) {
+				attrs.rowspan = Number(value);
+			} else {
+				return `?`;
+			}
+
+			return ``;
+		});
+
+		return rest.trim() === `` ? attrs : null;
 	}
 
 	/**

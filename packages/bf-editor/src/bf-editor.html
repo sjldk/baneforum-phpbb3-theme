@@ -1,3 +1,4 @@
+<div class="bars">
 <menu role="toolbar" data-label="formatting">
 	<li role="none"><button type="button" command="--bold" data-label="bold" aria-keyshortcuts="Control+B" aria-pressed="false">
 		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z"/></svg>
@@ -14,6 +15,15 @@
 	<li role="none"><button type="button" command="--quote" data-label="quote" aria-keyshortcuts="Control+Shift+Q" aria-pressed="false">
 		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 17c0-4 1-7 4-9M13 17c0-4 1-7 4-9M5 17h4v-4M13 17h4v-4"/></svg>
 	</button></li>
+	<li role="none"><button type="button" command="--bullet-list" data-label="bulletList" aria-keyshortcuts="Control+Shift+8" aria-pressed="false">
+		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg>
+	</button></li>
+	<li role="none"><button type="button" command="--numbered-list" data-label="numberedList" aria-keyshortcuts="Control+Shift+7" aria-pressed="false">
+		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 6h10M10 12h10M10 18h10M4 5l1.500-1v4M3.500 13.500c0-1 2.500-1 2.500 0s-2.500 2-2.500 3.500h2.500M3.500 19.500h2l-1 1.500c1 0 1.500.5 1.500 1.200 0 1-1.500 1.300-2.500.8"/></svg>
+	</button></li>
+	<li role="none"><button type="button" command="--table" data-label="table" aria-pressed="false">
+		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5h16v14H4zM4 10h16M4 15h16M9.500 5v14M14.500 5v14"/></svg>
+	</button></li>
 	<li role="none"><button type="button" command="--link" data-label="link" aria-keyshortcuts="Control+K" aria-pressed="false">
 		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3A4 4 0 0 0 11 18.700l1-1"/></svg>
 	</button></li>
@@ -21,7 +31,33 @@
 		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.500 11.500l-8.500 8.500a5 5 0 0 1-7-7l9-9a3.300 3.300 0 0 1 4.700 4.700l-9 9a1.700 1.700 0 0 1-2.400-2.400l8-8"/></svg>
 	</button></li>
 </menu>
+</div>
+<div class="surface">
 <bf-editable></bf-editable>
+<menu role="toolbar" class="table-bar" data-label="tableBar" hidden>
+	<li role="none"><button type="button" command="--row-above" data-label="rowAbove">
+		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h16v8H4zM12 3v6M9 6h6"/></svg>
+	</button></li>
+	<li role="none"><button type="button" command="--row-below" data-label="rowBelow">
+		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4h16v8H4zM12 15v6M9 18h6"/></svg>
+	</button></li>
+	<li role="none"><button type="button" command="--column-left" data-label="columnLeft">
+		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 4h8v16h-8zM3 12h6M6 9v6"/></svg>
+	</button></li>
+	<li role="none"><button type="button" command="--column-right" data-label="columnRight">
+		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4h8v16H4zM15 12h6M18 9v6"/></svg>
+	</button></li>
+	<li role="none"><button type="button" command="--delete-row" data-label="deleteRow">
+		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4h16v16H4zM4 9h16M4 15h16M10 10.500l4 3M14 10.500l-4 3"/></svg>
+	</button></li>
+	<li role="none"><button type="button" command="--delete-column" data-label="deleteColumn">
+		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4h16v16H4zM9 4v16M15 4v16M10.500 10l3 4M13.500 10l-3 4"/></svg>
+	</button></li>
+	<li role="none"><button type="button" command="--delete-table" data-label="deleteTable">
+		<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4h16v16H4zM4 10h16M4 15h16M10 4v16M15 4v16M3 3l18 18"/></svg>
+	</button></li>
+</menu>
+</div>
 <input type="file" multiple hidden>
 <output class="visually-hidden"></output>
 <template id="upload">
@@ -46,6 +82,15 @@
 		</p>
 	</form>
 </dialog>
+<form popover class="table-picker" data-label="table">
+	<div class="grid" aria-hidden="true"></div>
+	<p class="size" aria-hidden="true"></p>
+	<div class="fields">
+		<label><span data-text="tableColumns">Columns</span> <input type="number" name="columns" min="1" max="8" value="3" inputmode="numeric" required></label>
+		<label><span data-text="tableRows">Rows</span> <input type="number" name="rows" min="1" max="5" value="3" inputmode="numeric" required></label>
+		<button type="submit" value="ok" data-text="tableInsert">Insert</button>
+	</div>
+</form>
 <form popover class="attachment-menu" data-label="attachmentMenu">
 	<label><span data-text="attachmentDescription">Description</span> <input type="text" name="description" autocomplete="off"></label>
 	<p>

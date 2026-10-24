@@ -12,7 +12,9 @@ const approved = [
 	`prosemirror-inputrules`,
 	`prosemirror-keymap`,
 	`prosemirror-model`,
+	`prosemirror-schema-list`,
 	`prosemirror-state`,
+	`prosemirror-tables`,
 	`prosemirror-transform`,
 	`prosemirror-view`,
 ];
