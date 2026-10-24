@@ -13,6 +13,7 @@ services:
             - '@auth'
             - '@template'
             - '@user'
+            - '@config'
             - '%core.root_path%'
             - '%core.php_ext%'
         tags:

@@ -38,7 +38,7 @@ class finder
 
 		// One line for each topic, with the newest post of the topic.
 		$sql = 'SELECT p.post_id, p.topic_id, p.forum_id, p.post_time, p.poster_id, p.post_username,
-				t.topic_title, f.forum_name, u.username, u.user_colour
+				t.topic_title, t.topic_last_post_time, f.forum_name, u.username, u.user_colour
 			FROM ' . $this->prefix . 'topics t
 			JOIN ' . $this->prefix . 'posts p ON p.post_id = t.topic_last_post_id
 			JOIN ' . $this->prefix . 'forums f ON f.forum_id = t.forum_id
