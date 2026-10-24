@@ -11,9 +11,17 @@
 {% endif %}
 {% EVENT index_body_markforums_after %}
 
-{% include 'forumlist_body.html' %}
-
-{% EVENT index_body_forumlist_body_after %}
+{# The front page. Row 1: the lead story. Row 2: the other stories (featured posts, an extension, from the first event) and an aside with the
+   latest posts (another extension, from the second event). Row 3: the forum list over the whole width. Without the extensions the forum
+   list is all there is. #}
+<div class="bf-index">
+	{% EVENT index_body_forumlist_body_after %}
+	{% EVENT bf_index_aside %}
+	<div class="bf-index__forums">
+		<h2 class="bf-index__title">{{ lang('FORUMS') }}</h2>
+		{% include 'forumlist_body.html' %}
+	</div>
+</div>
 
 {% if not S_USER_LOGGED_IN and not S_IS_BOT %}
 	<form method="post" action="{{ S_LOGIN_ACTION }}" class="headerspace">

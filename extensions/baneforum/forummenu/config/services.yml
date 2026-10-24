@@ -1,0 +1,12 @@
+services:
+    baneforum.forummenu.listener:
+        class: baneforum\forummenu\event\listener
+        arguments:
+            - '@dbal.conn'
+            - '@auth'
+            - '@template'
+            - '%core.table_prefix%'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+        tags:
+            - { name: event.listener }

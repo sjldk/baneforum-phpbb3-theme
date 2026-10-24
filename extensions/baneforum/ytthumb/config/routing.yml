@@ -1,0 +1,6 @@
+baneforum_ytthumb:
+    path: /ytthumb/{id}
+    defaults:
+        _controller: baneforum.ytthumb.controller:handle
+    requirements:
+        id: '[A-Za-z0-9_-]{11}'

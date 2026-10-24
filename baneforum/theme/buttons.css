@@ -5,7 +5,7 @@
 .button {
 	display: inline-block;
 	padding: 0.125rem 0.5rem;
-	font-size: 0.8125rem;
+	font-size: var(--text-meta);
 	font-weight: 600;
 	font-family: "Open Sans", "Droid Sans", Verdana, Arial, Helvetica;
 	line-height: 1.4;
@@ -16,7 +16,7 @@
 	cursor: pointer;
 	user-select: none;
 	border: 1px solid transparent;
-	border-radius: 0.25rem;
+	border-radius: var(--radius);
 }
 
 .button:focus,
@@ -99,11 +99,21 @@
 	clear: left;
 }
 
-/* The buttons of a post (edit, quote, report...) */
+/* The buttons of a post (edit, quote, report...): a bar of flat icon buttons, like the toolbar of the editor
+   (same padding, gap and radius). A bar without buttons is not shown. */
 .post-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem;
+	padding: 0.25rem;
+	border-radius: var(--radius);
 	float: right;
 	list-style: none;
 	margin-top: 0.125rem;
+}
+
+.post-buttons:not(:has(li)) {
+	display: none;
 }
 
 .has-profile .post-buttons {
@@ -116,13 +126,19 @@
 
 .post-buttons > li {
 	float: left;
-	margin-right: 0.1875rem;
+	margin-right: 0;
 }
 
 .post-buttons .button,
 .format-buttons .button {
 	padding-left: 0.1875rem;
 	padding-right: 0.1875rem;
+}
+
+/* Flat like the toolbar of the editor: no surface or border of its own until it is hovered or focused. */
+.post-buttons .button {
+	margin-right: 0;
+	border-radius: var(--radius);
 }
 
 .hastouch .post-buttons {

@@ -1,0 +1,13 @@
+{% if loops.bf_latest|length %}
+<aside class="bf-latest" aria-labelledby="bf-latest-title">
+	<h2 id="bf-latest-title" class="bf-latest__heading">{{ lang('BF_LATEST_TITLE') }}</h2>
+	<ol class="bf-latest__list">
+		{% for post in loops.bf_latest %}
+		<li class="bf-latest__item{% if post.S_UNREAD %} bf-latest__item--unread{% endif %}">
+			<a class="bf-latest__topic" href="{{ post.U_POST }}">{{ post.TITLE }}{% if post.S_UNREAD %}<span class="sr-only"> ({{ lang('UNREAD_POSTS') }})</span>{% endif %}</a>
+			<span class="bf-latest__meta">{{ lang('POST_BY_AUTHOR') }} <strong>{{ post.AUTHOR }}</strong> &raquo; {{ post.TIME }} &middot; {{ post.FORUM }}</span>
+		</li>
+		{% endfor %}
+	</ol>
+</aside>
+{% endif %}

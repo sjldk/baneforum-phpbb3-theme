@@ -1,0 +1,33 @@
+/* The forum menu in the navigation bar: the forums as a list in a dropdown, categories in bold, subforums indented. A long list scrolls. */
+
+/* phpBB floats the crumbs of the trail to the left. The menu floats with them, so that it stays in its place after the home link. */
+#bf-forum-menu {
+	float: left;
+	display: inline-flex;
+	margin-inline: 0.5rem 1rem;
+}
+
+.bf-forummenu {
+	max-height: 70vh;
+	overflow-y: auto;
+}
+
+.bf-forummenu__item a {
+	display: block;
+}
+
+.bf-forummenu__item--cat a {
+	font-weight: 600;
+}
+
+.dropdown-contents .bf-forummenu__item--depth1 a {
+	padding-inline-start: 1.25rem;
+}
+
+.dropdown-contents .bf-forummenu__item--depth2 a {
+	padding-inline-start: 2.5rem;
+}
+
+.dropdown-contents .bf-forummenu__item--depth3 a {
+	padding-inline-start: 3.75rem;
+}

@@ -4,9 +4,16 @@ import { BfYoutube } from './elements/bf-youtube.js';
 import { useAttachmentList } from './render/attachments.js';
 import { useNewWindowLinks } from './render/external-links.js';
 import { useNativeEmoji, useNativeEmojiForText } from './render/native-emoji.js';
-import { useYoutubePlayers } from './render/youtube.js';
+import { useYoutubePlayers, useYoutubeThumbnails } from './render/youtube.js';
 
-export { useAttachmentList, useNativeEmoji, useNativeEmojiForText, useNewWindowLinks, useYoutubePlayers };
+export {
+	useAttachmentList,
+	useNativeEmoji,
+	useNativeEmojiForText,
+	useNewWindowLinks,
+	useYoutubePlayers,
+	useYoutubeThumbnails,
+};
 
 if (typeof document !== `undefined`) {
 	if (!customElements.get(`bf-youtube`)) {
@@ -28,4 +35,10 @@ if (typeof document !== `undefined`) {
 	for (const list of document.querySelectorAll(`.postbody dl.attachbox`)) {
 		useNewWindowLinks(list);
 	}
+
+	for (const contact of document.querySelectorAll(`.postprofile .bf-contact`)) {
+		useNewWindowLinks(contact);
+	}
+
+	useYoutubeThumbnails(document);
 }

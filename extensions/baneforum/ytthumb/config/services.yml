@@ -1,0 +1,20 @@
+services:
+    baneforum.ytthumb.thumbs:
+        class: baneforum\ytthumb\thumbs
+        arguments:
+            - '%core.cache_dir%baneforum_ytthumb/'
+
+    baneforum.ytthumb.controller:
+        class: baneforum\ytthumb\controller
+        arguments:
+            - '@baneforum.ytthumb.thumbs'
+            - '@dbal.conn'
+            - '%core.table_prefix%'
+
+    baneforum.ytthumb.listener:
+        class: baneforum\ytthumb\event\listener
+        arguments:
+            - '@controller.helper'
+            - '@template'
+        tags:
+            - { name: event.listener }

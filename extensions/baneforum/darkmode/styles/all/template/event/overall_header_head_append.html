@@ -1,0 +1,8 @@
+{# Runs before the page is drawn, so a dark choice never flashes light first. #}
+<script>
+	try {
+		if (localStorage.getItem('bf-theme') === 'dark') {
+			document.documentElement.setAttribute('data-theme', 'dark');
+		}
+	} catch (e) {}
+</script>

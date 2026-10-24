@@ -1,0 +1,5 @@
+services:
+    baneforum.darkmode.listener:
+        class: baneforum\darkmode\event\listener
+        tags:
+            - { name: event.listener }

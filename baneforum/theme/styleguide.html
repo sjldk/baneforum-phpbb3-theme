@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baneforum style sheet</title>
+<!-- The style sheet of the theme: every part in its real markup, in the light and the dark theme. It is a static page, not part of
+     phpBB. Open it on a board that has the style: /styles/baneforum/theme/styleguide.html. Each section says which rule it shows. -->
+<link rel="stylesheet" href="/styles/prosilver/theme/normalize.css">
+<link rel="stylesheet" href="/styles/prosilver/theme/base.css">
+<link rel="stylesheet" href="/styles/prosilver/theme/utilities.css">
+<link rel="stylesheet" href="/styles/prosilver/theme/links.css">
+<link rel="stylesheet" href="/styles/prosilver/theme/content.css">
+<link rel="stylesheet" href="/styles/baneforum/theme/buttons.css">
+<link rel="stylesheet" href="/styles/prosilver/theme/cp.css">
+<link rel="stylesheet" href="/styles/baneforum/theme/forms.css">
+<link rel="stylesheet" href="/styles/prosilver/theme/icons.css">
+<link rel="stylesheet" href="/styles/prosilver/theme/common.css">
+<link rel="stylesheet" href="/styles/prosilver/theme/colours.css">
+<link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+<link rel="stylesheet" href="/styles/baneforum/theme/stylesheet.css">
+<link rel="stylesheet" href="/ext/baneforum/likes/styles/all/theme/votes.css">
+<script>
+	try { if (localStorage.getItem('bf-theme') === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); } } catch (e) {}
+</script>
+</head>
+<body>
+<div id="wrap" class="wrap">
+<div id="page-body" class="page-body" role="main">
+
+<h1 style="color: var(--color-text)">Style sheet</h1>
+<p>Every part of the theme in its real markup. Use it to see that a change keeps the parts alike, in both themes.
+	<button type="button" class="button" id="flip"><i class="icon fa-moon-o fa-fw" aria-hidden="true"></i><span>Switch theme</span></button></p>
+
+<h2>Type scale</h2>
+<div class="panel"><div class="inner">
+	<p style="font-size: var(--text-banner); font-family: var(--font-headline); font-weight: 700; line-height: 1.2">Banner 2.5rem, Inter 700</p>
+	<h2 style="margin: 0.5rem 0">Title 1.5rem, h2</h2>
+	<h3>Heading 1.125rem, h3, and forum and topic titles</h3>
+	<p>Body 0.95rem, 400. <strong>Strong is 600.</strong> There are only two weights.</p>
+	<p style="font-size: var(--text-meta)">Meta 0.8125rem: dates, counts, column labels.</p>
+</div></div>
+
+<h2>Surfaces</h2>
+<div class="panel"><div class="inner">
+	<p>Three surfaces: the page (white), the panel (this box) and the inset (tint), and nothing else.</p>
+	<div style="display: flex; gap: 0.5rem; flex-wrap: wrap">
+		<div style="background: var(--color-paper); border: 1px solid var(--color-line); padding: 0.75rem 1rem; border-radius: var(--radius)">paper</div>
+		<div style="background: var(--color-surface); border: 1px solid var(--color-line); padding: 0.75rem 1rem; border-radius: var(--radius)">surface</div>
+		<div style="background: var(--color-tint); border: 1px solid var(--color-line); padding: 0.75rem 1rem; border-radius: var(--radius)">tint</div>
+	</div>
+</div></div>
+
+<h2>Buttons</h2>
+<div class="panel"><div class="inner">
+	<p>Three levels. Primary is the one main action of a page.</p>
+	<p>
+		<input type="submit" class="button1" value="Primary, input.button1">
+		<a href="#" class="button1">Primary, a.button1</a>
+		<a href="./posting.php?mode=post&amp;f=1" class="button" onclick="return false">New Topic <i class="icon fa-pencil fa-fw" aria-hidden="true"></i></a>
+	</p>
+	<p>
+		<input type="submit" class="button2" value="Secondary, input.button2">
+		<a href="#" class="button2">Secondary, a.button2</a>
+		<span class="button button-secondary dropdown-trigger"><i class="icon fa-wrench fa-fw" aria-hidden="true"></i><span>Tools</span></span>
+	</p>
+	<p>Quiet: flat icon buttons in a bar, like the toolbar of the editor and the buttons of a post.</p>
+	<ul class="post-buttons" style="float: none; display: inline-flex">
+		<li><a href="#" class="button button-icon-only" title="Edit"><i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">Edit</span></a></li>
+		<li><a href="#" class="button button-icon-only" title="Report"><i class="icon fa-exclamation fa-fw" aria-hidden="true"></i><span class="sr-only">Report</span></a></li>
+		<li><a href="#" class="button button-icon-only" title="Quote"><i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span></a></li>
+	</ul>
+	<div class="pagination" style="float: none"><ul><li class="active"><span>1</span></li><li><a class="button" href="#">2</a></li><li><a class="button" href="#">3</a></li></ul></div>
+</div></div>
+
+<h2>List</h2>
+<div class="forabg"><div class="inner">
+	<ul class="topiclist">
+		<li class="header"><dl class="row-item"><dt><div class="list-inner">Topics</div></dt><dd class="posts">Replies</dd><dd class="views">Views</dd><dd class="lastpost"><span>Last post</span></dd></dl></li>
+	</ul>
+	<ul class="topiclist topics">
+		<li class="row bg1"><dl class="row-item topic_read"><dt><div class="list-inner"><a href="#" class="topictitle">A plain topic</a><br><div class="topic-poster responsive-hide left-box">by <strong>alice</strong> &raquo; Thu Oct 22, 2026</div></div></dt>
+			<dd class="posts">12 <dfn>Replies</dfn></dd><dd class="views">340 <dfn>Views</dfn></dd><dd class="lastpost"><span>by <strong>bob</strong><br><time>Fri Oct 23, 2026</time></span></dd></dl></li>
+		<li class="row bg2"><dl class="row-item topic_read_hot"><dt><div class="list-inner"><a href="#" class="topictitle">A hot topic (icon in front)</a><br><div class="topic-poster responsive-hide left-box">by <strong>carol</strong> &raquo; Thu Oct 22, 2026</div></div></dt>
+			<dd class="posts">58 <dfn>Replies</dfn></dd><dd class="views">1200 <dfn>Views</dfn></dd><dd class="lastpost"><span>by <strong>alice</strong><br><time>Fri Oct 23, 2026</time></span></dd></dl></li>
+		<li class="row bg1"><dl class="row-item topic_unread"><dt><div class="list-inner"><a href="#" class="topictitle">An unread topic (bar and bold)</a><br><div class="topic-poster responsive-hide left-box">by <strong>bob</strong> &raquo; Thu Oct 22, 2026</div></div></dt>
+			<dd class="posts">2 <dfn>Replies</dfn></dd><dd class="views">19 <dfn>Views</dfn></dd><dd class="lastpost"><span>by <strong>carol</strong><br><time>Fri Oct 23, 2026</time></span></dd></dl></li>
+	</ul>
+</div></div>
+
+<h2>Post card</h2>
+<div class="post has-profile bg2"><div class="inner">
+	<dl class="postprofile"><dt class="no-profile-rank no-avatar"><div class="avatar-container"></div><a href="#" class="username">carol</a></dt><dd class="profile-rank">Member</dd></dl>
+	<div class="postbody">
+		<h3 class="first"><a href="#">A post title</a></h3>
+		<ul class="post-buttons">
+			<li><a href="#" class="button button-icon-only" title="Edit"><i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">Edit</span></a></li>
+			<li><a href="#" class="button button-icon-only" title="Quote"><i class="icon fa-quote-left fa-fw" aria-hidden="true"></i><span class="sr-only">Quote</span></a></li>
+		</ul>
+		<p class="author"><time>Thu Oct 22, 2026 4:30 pm</time></p>
+		<div class="content"><p>The text of a post, with a <a href="#" class="postlink">link</a>.</p><blockquote><cite>alice wrote:</cite>A quote.</blockquote></div>
+		<div class="bf-votes" role="group" aria-label="Like or dislike"><button type="button" class="bf-vote"><i class="icon fa-thumbs-o-up fa-fw" aria-hidden="true"></i><span class="bf-vote-label">Like</span> <span class="bf-vote-count">3</span></button></div>
+	</div>
+</div></div>
+
+<h2>Form</h2>
+<div class="panel"><div class="inner">
+	<fieldset class="fields1">
+		<dl><dt><label for="sg-text">Text field:</label></dt><dd><input type="text" id="sg-text" class="inputbox" value="Some text"></dd></dl>
+		<dl><dt><label for="sg-select">Select:</label></dt><dd><select id="sg-select"><option>One</option><option>Two</option></select></dd></dl>
+		<dl><dt><label for="sg-area">Text area:</label></dt><dd><textarea id="sg-area" class="inputbox" rows="3">A longer text</textarea></dd></dl>
+		<dl><dt>Choices:</dt><dd><label><input type="checkbox" checked> A checkbox</label> <label><input type="radio" name="sg-r" checked> A radio button</label></dd></dl>
+	</fieldset>
+</div></div>
+
+<h2>Messages</h2>
+<div class="panel"><div class="inner">
+	<p class="error">An error message.</p>
+	<div class="rules"><div class="inner">A notice.</div></div>
+	<details class="bf-options" open><summary>A collapsible section (Options, Add poll)</summary><p>The content of the section.</p></details>
+</div></div>
+
+</div>
+</div>
+<script>
+	document.getElementById('flip').addEventListener('click', function () {
+		var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+		if (dark) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }
+		try { localStorage.setItem('bf-theme', dark ? 'light' : 'dark'); } catch (e) {}
+	});
+</script>
+</body>
+</html>

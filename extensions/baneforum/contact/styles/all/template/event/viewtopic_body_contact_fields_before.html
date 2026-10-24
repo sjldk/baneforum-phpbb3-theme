@@ -1,0 +1,15 @@
+{% if not S_IS_BOT and postrow.contact|length %}
+<dd class="bf-contact">
+	<ul class="bf-contact__bar">
+		{% for contact in postrow.contact %}
+		{% set icon = {'pm': 'fa-commenting-o', 'email': 'fa-envelope-o', 'phpbb_website': 'fa-globe'}[contact.ID] ?? 'fa-address-card-o' %}
+		{% set external = contact.ID == 'phpbb_website' %}
+		<li class="bf-contact__item bf-contact__item--{{ contact.ID|replace({'phpbb_': ''}) }}">
+			<a class="bf-contact__button{% if external %} bf-contact__button--text{% endif %}" href="{{ contact.U_CONTACT|default(postrow.U_POST_AUTHOR) }}"{% if external %} target="_blank" rel="noopener noreferrer" title="{{ contact.U_CONTACT }}"{% else %} title="{{ contact.NAME }}"{% endif %}>
+				<i class="icon {{ icon }} fa-fw" aria-hidden="true"></i>{% if external %}<span class="bf-contact__label">{{ contact.U_CONTACT|replace({'https://www.': '', 'http://www.': '', 'https://': '', 'http://': ''})|trim('/', 'right') }}</span>{% else %}<span class="sr-only">{{ contact.NAME }}</span>{% endif %}
+			</a>
+		</li>
+		{% endfor %}
+	</ul>
+</dd>
+{% endif %}

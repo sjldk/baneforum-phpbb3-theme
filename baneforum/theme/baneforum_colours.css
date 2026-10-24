@@ -25,18 +25,8 @@ dl.file dd {
 }
 
 input.button2,
-input.button1,
-input.button1:hover,
-input.button2:hover,
-.button:hover,
-.button:focus,
-.button:hover .icon,
-.button .icon,
-.button,
 .pagination li.active span,
 .error,
-.pagination li a:hover,
-.pagination li a:hover .icon,
 .pagination .dropdown-visible a.dropdown-trigger,
 .nojs .pagination .dropdown-container:hover a.dropdown-trigger {
 	color: var(--color-on-accent);
@@ -47,6 +37,14 @@ p.author,
 a,
 .postbody h3.first a,
 .postbody h3 a,
+.bf-index__title,
+label,
+li.row strong,
+h2,
+h4,
+.panel h2,
+.content h2,
+.panel,
 h3,
 .postbody .content,
 .content blockquote,
@@ -57,32 +55,38 @@ dl.attachbox dt {
 	color: var(--color-text);
 }
 
-input.button2,
-input.button1,
-input.button1:hover,
-input.button2:hover,
-.button:hover,
-.button:focus,
 .pagination li.active span,
-.post-buttons .button:hover,
-.format-buttons .button:hover,
-.pagination li a:hover,
-.pagination li a:hover .icon,
 .pagination .dropdown-visible a.dropdown-trigger,
 .nojs .pagination .dropdown-container:hover a.dropdown-trigger {
 	background: var(--accent);
 }
 
-.headerbar,
+.headerbar {
+	background-color: var(--color-banner);
+}
+
 table.markdown thead {
-	background-color: var(--accent);
+	background-color: var(--color-fill);
 }
 
 /* The header row of a list has the accent itself. A blue background behind the whole block showed as a dark fringe
    on the rounded bottom corners. */
 .forabg,
 .forumbg {
+	background-color: var(--color-surface);
+}
+
+/* The rows of a list lie on the panel of their section: no shading of every other row, no lines between the columns,
+   and a tint when the pointer is on a row. */
+ul.topiclist li.row.bg1,
+ul.topiclist li.row.bg2,
+ul.topiclist.forums,
+ul.topiclist.topics {
 	background-color: transparent;
+}
+
+ul.topiclist li.row:hover {
+	background-color: var(--color-tint);
 }
 
 .bg1,
@@ -105,19 +109,12 @@ li.row:hover,
 	border-color: var(--accent);
 }
 
-.button-secondary,
 .inputbox::placeholder,
 .content blockquote cite,
 .content blockquote cite a,
 .signature,
 .icon.icon-gray {
 	color: var(--color-muted);
-}
-
-.button,
-.post-buttons .button,
-.format-buttons .button {
-	background: var(--color-muted);
 }
 
 .signature {
@@ -151,6 +148,13 @@ select:focus,
 	border-color: var(--color-focus);
 }
 
+/* One field colour, the page colour. prosilver gives the quick login fields a grey of their own. */
+.inputbox,
+fieldset.quick-login input.inputbox {
+	background-color: var(--color-paper);
+	color: var(--color-text);
+}
+
 /* Prosilver fades everything for 0.5s. A short fade on the border colour only. */
 .inputbox,
 select {
@@ -170,7 +174,7 @@ li.row {
 }
 
 ul.topiclist dd {
-	border-left-color: var(--color-surface);
+	border-left-color: transparent;
 }
 
 dl.thumbnail dt a:hover {
@@ -444,62 +448,46 @@ input[type="radio"]:disabled:checked {
 	background-image: none;
 }
 
-/* The buttons under a post (edit, quote, report...) were solid dark blue. Now a light tint with dark text.
-   On hover and focus they get the border and a deeper tint, like the like buttons. */
+/* The buttons of a post (edit, quote, report...) look like the toolbar of the editor: a bar in the tint colour with
+   flat buttons. A button has no surface until it is hovered, then it gets the colour of a field. Keyboard focus draws
+   the same ring as in the editor. */
+.post-buttons {
+	background: var(--color-tint);
+}
+
+/* All posts have the same surface (the cards are told apart by space, not by shading). */
+.post.has-profile.bg1,
+.post.has-profile.bg2 {
+	background-color: var(--color-surface);
+}
+
 .post-buttons .button,
 .post-buttons .button .icon,
 .post-buttons .button span {
-	color: var(--color-muted);
+	color: var(--color-text);
 }
 
 .post-buttons .button {
-	background: var(--color-tint);
-	border: var(--border-control) solid var(--color-line);
+	background: transparent;
+	border: var(--border-control) solid transparent;
 }
 
-.post-buttons .button:hover,
+.post-buttons .button:hover {
+	background: var(--color-paper);
+	border-color: transparent;
+}
+
 .post-buttons .button:focus-visible {
-	background: color-mix(in srgb, var(--color-tint) 60%, var(--color-line));
-	border-color: var(--color-control);
-}
-
-/* The page numbers next to a topic title and in the page bars look like the buttons under a post: the same
-   radius and border width in every state, a light tint, dark blue text, and on hover a deeper tint with the
-   control border. The current page stays filled. Prosilver gives the page numbers in a topic row a 2px
-   radius and removes the border on hover, so these rules name the .button class to win over its row rules. */
-.pagination li a.button,
-.pagination li a.button:hover,
-.pagination li a.button:focus-visible,
-.pagination li.active span,
-.pagination li.ellipsis span {
-	border-width: var(--border-control);
-	border-style: solid;
-	border-radius: var(--radius);
-}
-
-.pagination li a.button {
-	background: var(--color-tint);
-	border-color: var(--color-line);
-	color: var(--color-muted);
-}
-
-.pagination li a.button:hover,
-.pagination li a.button:focus-visible {
-	background: color-mix(in srgb, var(--color-tint) 60%, var(--color-line));
-	border-color: var(--color-control);
-	color: var(--color-muted);
-}
-
-.pagination li a.button:hover .icon,
-.pagination li a.button:focus-visible .icon {
-	background: none;
-	color: var(--color-muted);
+	background: var(--color-paper);
+	border-color: transparent;
+	outline: var(--border-control) solid var(--color-focus);
+	outline-offset: 0.1rem;
 }
 
 /* Selects get the same field colours as the text fields (prosilver gives them a grey that the fields do not have). */
 select {
-	background-color: #fff;
-	color: #333;
+	background-color: var(--color-paper);
+	color: var(--color-text);
 }
 
 /* The notices in a post (deleted, waiting for approval): a soft red box with round corners, and buttons in the same
@@ -569,5 +557,171 @@ form.mcp_approve > p.post-notice > strong {
 /* The text beside a post (rank, post count, join date, the name when it has no link) was #666, 5.4:1. It is now the muted
    text colour of the palette, above 7:1 (WCAG AAA). */
 .postprofile {
+	color: var(--color-muted);
+}
+
+/* Buttons: three levels, the same in both themes. The colours come from the palette.
+   Primary: the one main action of a page: Submit, Login, New Topic, Post Reply (and the current page number above).
+   Secondary: every other button with a label: Preview, Save draft, Register, the topic tools.
+   Quiet: flat icon buttons that sit in a bar like the editor toolbar: the buttons of a post (above) and the page numbers.
+   The rules name :root, so they win over prosilver and over older rules. :where() keeps the exceptions from adding weight.
+   The red notice buttons in a post (p.post-notice) have their own look and are left out. */
+:root :is(input.button2, a.button2, input.button3, .button):where(:not(.button-icon-only, .pagination li a.button, [href*="mode=post&"], [href*="mode=reply&"], p.post-notice *)) {
+	background: var(--color-button);
+	border-color: var(--color-button-border);
+	color: var(--color-on-button);
+}
+
+:root :is(input.button2, a.button2, input.button3, .button):where(:not(.button-icon-only, .pagination li a.button, [href*="mode=post&"], [href*="mode=reply&"], p.post-notice *)):is(:hover, :focus, :active) {
+	background: var(--color-button-hover);
+	color: var(--color-on-button);
+}
+
+:root :is(input.button1, a.button1, a.button[href*="mode=post&"], a.button[href*="mode=reply&"]):where(:not(p.post-notice *)) {
+	background: var(--color-primary);
+	border-color: transparent;
+	color: var(--color-on-primary);
+}
+
+:root :is(input.button1, a.button1, a.button[href*="mode=post&"], a.button[href*="mode=reply&"]):where(:not(p.post-notice *)):is(:hover, :focus, :active) {
+	background: var(--color-primary-hover);
+	color: var(--color-on-primary);
+}
+
+/* Page numbers are quiet buttons: flat, a deeper tint on hover. The current page is the filled one (see above). */
+:root .pagination li a.button,
+:root .pagination li.active span,
+:root .pagination li.ellipsis span {
+	border: var(--border-control) solid transparent;
+	border-radius: var(--radius);
+}
+
+:root .pagination li a.button {
+	background: transparent;
+	color: var(--color-text);
+}
+
+:root .pagination li a.button:is(:hover, :focus, :active) {
+	background: color-mix(in srgb, var(--color-tint) 60%, var(--color-line));
+	color: var(--color-text);
+}
+
+/* The icon of a button has the colour of its text in every state. prosilver gives it a light blue on focus. */
+:root .button .icon,
+:root .button:is(:hover, :focus, :active) .icon {
+	background: none;
+	color: inherit;
+}
+
+/* Code blocks use the palette: prosilver has a fixed green on white (4.2:1) in the light theme. */
+.codebox {
+	background-color: var(--color-paper);
+	border-color: var(--color-line);
+}
+
+.codebox code {
+	color: var(--color-text);
+}
+
+/* The detail lines of the control panel and of a profile were prosilver's grey-blue (5.6:1). They use the palette text. */
+dl.details :is(dt, dd) {
+	color: var(--color-text);
+}
+
+/* Links in signatures and other places outside .content: prosilver's light blue (3.5:1) becomes the palette accent. */
+a.postlink {
+	color: var(--accent);
+}
+
+/* The notice box (.rules: download notice, board disabled) has the same soft red as the notices in a post, with the palette text.
+   prosilver has red text on pink, which fails the contrast. */
+div.rules {
+	border-color: color-mix(in srgb, var(--color-danger) 35%, var(--color-paper));
+	background-color: color-mix(in srgb, var(--color-danger) 11%, var(--color-paper));
+	color: var(--color-text);
+}
+
+div.rules :is(a, strong, h3, h4) {
+	color: var(--color-text);
+}
+
+/* Menus (quick links, user menu, topic tools, notifications, contact): one look. A soft panel with a hairline border, items
+   at least 44px high with room around the icon, no pointer triangle, and the icons and dates in the muted palette colour. */
+.dropdown-contents {
+	padding: 0.25rem;
+	border: 1px solid var(--color-line);
+	border-radius: var(--radius);
+	background-color: var(--color-paper);
+	box-shadow: 0 0.25rem 1rem rgb(0 0 0 / 0.18);
+	color: var(--color-text);
+}
+
+.dropdown .pointer {
+	display: none;
+}
+
+.dropdown-contents > li {
+	padding: 0;
+	border: 0;
+}
+
+.dropdown-contents > li > a,
+.dropdown-contents > li > span {
+	display: flex;
+	align-items: center;
+	gap: 0.625rem;
+	min-block-size: 2.75rem;
+	padding: 0 0.75rem;
+	border-radius: var(--radius);
+}
+
+.dropdown-contents > li > a:is(:hover, :focus-visible) {
+	background: var(--color-tint);
+}
+
+.dropdown-contents > li.separator {
+	min-block-size: 0;
+	margin: 0.25rem 0.5rem;
+	border-top: 1px solid var(--color-line);
+}
+
+.dropdown-contents .icon {
+	flex: none;
+	color: var(--color-muted);
+}
+
+/* Notifications: a plain header and footer on the tint, dates in the muted colour. */
+.dropdown-extended .dropdown-contents {
+	padding: 0;
+	overflow: hidden;
+}
+
+.dropdown-extended :is(.header, .footer) {
+	background: var(--color-tint);
+	color: var(--color-text);
+	font-size: var(--text-meta);
+	font-weight: 600;
+	text-transform: none;
+}
+
+.dropdown-extended .header a,
+.dropdown-extended .footer a {
+	color: var(--color-text);
+}
+
+.dropdown-extended .notification_text .notification-time,
+.dropdown-extended time {
+	color: var(--color-muted);
+}
+
+/* A disabled page arrow (the first and the last page have no previous or next page): it is there so the numbers do not move,
+   but it is faded and does nothing. */
+.pagination li.is-disabled .button {
+	opacity: 0.35;
+	cursor: default;
+	background: transparent;
+}
+
+.pagination li.is-disabled .button .icon {
 	color: var(--color-muted);
 }

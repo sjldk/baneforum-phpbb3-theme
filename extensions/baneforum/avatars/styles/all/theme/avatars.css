@@ -1,0 +1,31 @@
+/* Letter avatars: a round letter in a colour, for members without an avatar. The colour belongs to the letter (listener.php).
+   Every colour has white text at 7:1 or better (WCAG AAA). The double class makes the size and the font win over the theme's rule
+   that gives every span the size and the font of the text around it. */
+body .bf-avatar.bf-avatar {
+	--bf-avatar-bg: #5f646a;
+	display: inline-grid;
+	place-items: center;
+	inline-size: var(--bf-avatar-size, 2.5rem);
+	block-size: var(--bf-avatar-size, 2.5rem);
+	border-radius: 50%;
+	background: var(--bf-avatar-bg);
+	color: #fff;
+	font-size: calc(var(--bf-avatar-size, 2.5rem) * 0.45) !important;
+	font-weight: 600;
+	line-height: 1;
+	text-transform: uppercase;
+	user-select: none;
+}
+
+body .bf-avatar.bf-avatar--0 { --bf-avatar-bg: #8d3a3a; }
+body .bf-avatar.bf-avatar--1 { --bf-avatar-bg: #704f2e; }
+body .bf-avatar.bf-avatar--2 { --bf-avatar-bg: #575723; }
+body .bf-avatar.bf-avatar--3 { --bf-avatar-bg: #425e26; }
+body .bf-avatar.bf-avatar--4 { --bf-avatar-bg: #286228; }
+body .bf-avatar.bf-avatar--5 { --bf-avatar-bg: #265e42; }
+body .bf-avatar.bf-avatar--6 { --bf-avatar-bg: #265e5e; }
+body .bf-avatar.bf-avatar--7 { --bf-avatar-bg: #32577b; }
+body .bf-avatar.bf-avatar--8 { --bf-avatar-bg: #4848b1; }
+body .bf-avatar.bf-avatar--9 { --bf-avatar-bg: #6e409c; }
+body .bf-avatar.bf-avatar--10 { --bf-avatar-bg: #823582; }
+body .bf-avatar.bf-avatar--11 { --bf-avatar-bg: #8a3861; }

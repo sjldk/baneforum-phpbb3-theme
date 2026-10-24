@@ -1,0 +1,21 @@
+{
+	"name": "baneforum/forummenu",
+	"type": "phpbb-extension",
+	"description": "The forums of the board as a menu in the navigation bar, so that every page has a short way to them.",
+	"license": "GPL-2.0-only",
+	"version": "0.1.0",
+	"require": {
+		"php": ">=8.1"
+	},
+	"extra": {
+		"display-name": "Baneforum forum menu",
+		"soft-require": {
+			"phpbb/phpbb": ">=3.3.0"
+		}
+	},
+	"authors": [
+		{
+			"name": "Baneforum"
+		}
+	]
+}

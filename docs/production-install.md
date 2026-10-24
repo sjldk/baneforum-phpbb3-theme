@@ -13,6 +13,14 @@ The theme needs no change to those two extensions.
 | Theme and editor | `baneforum/` | `styles/baneforum/` |
 | Image extension | `extensions/baneforum/imagecompress/` | `ext/baneforum/imagecompress/` |
 | Censor extension | `extensions/baneforum/censor/` | `ext/baneforum/censor/` |
+| Likes extension | `extensions/baneforum/likes/` | `ext/baneforum/likes/` |
+| Featured posts extension | `extensions/baneforum/featured/` | `ext/baneforum/featured/` |
+| Latest posts extension | `extensions/baneforum/latest/` | `ext/baneforum/latest/` |
+| Forum menu extension | `extensions/baneforum/forummenu/` | `ext/baneforum/forummenu/` |
+| YouTube thumbnails extension | `extensions/baneforum/ytthumb/` | `ext/baneforum/ytthumb/` |
+| Contact buttons extension | `extensions/baneforum/contact/` | `ext/baneforum/contact/` |
+| Letter avatars | `extensions/baneforum/avatars/` | `ext/baneforum/avatars/` |
+| Appearance switch (light and dark theme) | `extensions/baneforum/darkmode/` | `ext/baneforum/darkmode/` |
 | Editor extension (required by the editor) | `extensions/baneforum/editor/` | `ext/baneforum/editor/` |
 
 `baneforum/theme/bf-editor.js`, `bf-render.js` and `bf-render.css` are built files. They are committed.
@@ -40,6 +48,14 @@ From the repo root, with the server as `SERVER` and the board in `/var/www/banef
 rsync -av --delete baneforum/ SERVER:/var/www/baneforum/styles/baneforum/
 rsync -av extensions/baneforum/imagecompress/ SERVER:/var/www/baneforum/ext/baneforum/imagecompress/
 rsync -av extensions/baneforum/censor/ SERVER:/var/www/baneforum/ext/baneforum/censor/
+rsync -av extensions/baneforum/likes/ SERVER:/var/www/baneforum/ext/baneforum/likes/
+rsync -av extensions/baneforum/featured/ SERVER:/var/www/baneforum/ext/baneforum/featured/
+rsync -av extensions/baneforum/darkmode/ SERVER:/var/www/baneforum/ext/baneforum/darkmode/
+rsync -av extensions/baneforum/avatars/ SERVER:/var/www/baneforum/ext/baneforum/avatars/
+rsync -av extensions/baneforum/latest/ SERVER:/var/www/baneforum/ext/baneforum/latest/
+rsync -av extensions/baneforum/forummenu/ SERVER:/var/www/baneforum/ext/baneforum/forummenu/
+rsync -av extensions/baneforum/ytthumb/ SERVER:/var/www/baneforum/ext/baneforum/ytthumb/
+rsync -av extensions/baneforum/contact/ SERVER:/var/www/baneforum/ext/baneforum/contact/
 rsync -av extensions/baneforum/editor/ SERVER:/var/www/baneforum/ext/baneforum/editor/
 ```
 
@@ -49,6 +65,14 @@ rsync -av extensions/baneforum/editor/ SERVER:/var/www/baneforum/ext/baneforum/e
 ## 4. Enable in the ACP
 
 - [ ] Customise, Manage extensions: enable **Baneforum editor** first. The editor saves BBCode and needs it: it adds the `[s]` BBCode, and it tells the editor which stored posts were written in Markdown. Without it a Markdown post that is opened and saved would lose its formatting. Then enable **Baneforum image compress** and **Baneforum censor**. The censor keeps the ACP word list but leaves URLs alone. Check `alfredoramos/markdown` and `phpbb/mediaembed` stay enabled.
+- [ ] Customise, Manage extensions: enable **Baneforum image compress** and **Baneforum censor**. The censor keeps the ACP word list but leaves URLs alone. Check `alfredoramos/markdown` and `phpbb/mediaembed` stay enabled.
+- [ ] Featured posts (**Baneforum featured posts**): shows up to 5 posts with pictures in a column beside the forum list on the front page. It needs the style's `index_body.html` (it has the place for it), so install the style first. It ranks by likes if **Baneforum likes** is enabled, and by newest otherwise. Only members who can read and download in a forum see its posts. Nothing to configure.
+- [ ] Contact buttons (**Baneforum contact buttons**): beside the name of the author of a post there are buttons for the ways to contact the author: message (a link to write a private message), website (a globe and the word, opens in a new tab) and any other way (email and so on) as an icon. phpBB's own contact menu is hidden. Nothing to configure. Needs the style, and `bf-render.js` for the hidden "opens in a new window" words.
+- [ ] YouTube thumbnails (**Baneforum YouTube thumbnails**): the video cards in posts show the thumbnail of the video. The board fetches each picture once from `i.ytimg.com` (PHP `curl` and outgoing https needed) and keeps it in `cache/<environment>/baneforum_ytthumb/`, so a visitor never contacts Google before pressing play. It only fetches for videos that a post mentions, at most 20 a minute. If a picture is not there, the card looks as before (a plain card with a play button). Needs the style's `bf-render.js`. Nothing to configure. Purge the cache after enabling (the route is new).
+- [ ] Forum menu (**Baneforum forum menu**): a "Forums" menu in the navigation bar on every page, with the categories and forums the visitor may see. It needs the style's `navbar_header.html`, so install the style first. Nothing to configure.
+- [ ] Latest posts (**Baneforum latest posts**): an aside on the front page with the 8 topics that had the newest post, as a text list (title, author, forum, time), only from forums the visitor can read. It sits beside the featured posts and needs the style's `index_body.html`, so install the style first. Nothing to configure.
+- [ ] Letter avatars (**Baneforum letter avatars**): a member with no avatar gets a round letter, the first letter of the name, in the colour that belongs to that letter (12 colours, the same every time). It is a span with CSS, not an image, in posts and private messages. Nothing to configure.
+- [ ] Appearance switch (**Baneforum appearance switch**): adds an "Appearance" link to the top bar. The choice is kept in the visitor's browser (`localStorage`, key `bf-theme`), so there is nothing on the server and no setting.
 - [ ] Likes: the votes hold a keyed hash, never a user id, so nobody can see who voted. The key is the file `store/baneforum_votes.key`, made on the first vote. Include it in backups. Without it, old votes still count but nobody's own vote is recognised, so they can vote again.
 - [ ] Customise, Styles, Install styles: install **baneforumblue** if it is not installed. If it is already installed, open Customise, Styles, and click Refresh on it so phpBB reads the new templates.
 - [ ] Make it the default style, or keep the old one default until you have tested.

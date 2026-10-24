@@ -1,17 +1,28 @@
 :root {
 	--base-font: "Inter", system-ui, sans-serif;
-	--font-headline: "Oswald", "Arial Narrow", sans-serif;
+	--font-headline: var(--base-font);
 	--font-title: var(--base-font);
+	/* The three voices of the front page and, later, of the posts: headlines (--font-headline), reading text (--font-serif) and small facts
+	   (--font-facts). All three are Inter now. Barlow Semi Condensed, Source Serif 4 and a monospace face were tried (see fonts.css). */
+	--font-serif: var(--base-font);
+	--font-facts: var(--base-font);
 	--font-comic: "Comic Sans", sans-serif;
-	/* One monospace stack for code blocks, inline code and keys. phpBB and the Markdown extension each set their own. */
+	/* One monospace stack for code blocks, inline code and keys only. phpBB and the Markdown extension each set their own. */
 	--font-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
 
-	--base-font-size: 0.95em;
+	/* The type scale: five sizes, in rem so they never add up through nested elements. Two weights, 400 and 600
+	   (700 only in the banner title). */
+	--text-meta: 0.8125rem;
+	--text-body: 0.95rem;
+	--text-heading: 1.125rem;
+	--text-title: 1.5rem;
+	--text-banner: 2.5rem;
 
-	--font-size-small: 0.85em;
-	--font-size-h3: 1.2em;
-	--font-size-h2: 1.6em;
-	--font-size-h1: 2.6em;
+	--base-font-size: var(--text-body);
+	--font-size-small: var(--text-meta);
+	--font-size-h3: var(--text-heading);
+	--font-size-h2: var(--text-title);
+	--font-size-h1: var(--text-banner);
 
 	--radius: 0.5rem;
 }
@@ -20,6 +31,13 @@
    would stop where the page content stops (zoomed out, or on a short page). */
 html {
 	background: url("images/background.jpg") no-repeat fixed center / cover;
+}
+
+/* Dark theme: the same photo under a wash of the page colour, so it stays a quiet background. */
+:root[data-theme="dark"] {
+	background:
+		linear-gradient(color-mix(in srgb, var(--color-paper) 85%, transparent), color-mix(in srgb, var(--color-paper) 85%, transparent)) fixed,
+		url("images/background.jpg") no-repeat fixed center / cover;
 }
 
 body {
@@ -100,7 +118,7 @@ li.header dl.row-item dd,
 
 .postbody .content {
 	font-style: normal;
-	margin: 1.5rem 0 1.5rem 0;
+	margin: 1rem 0 1.5rem 0;
 }
 
 a.forumtitle,
@@ -128,7 +146,7 @@ a.lastsubject {
 
 .postbody h3,
 .postbody h3.first {
-	font-weight: bold;
+	font-weight: 600;
 }
 
 .bfYoutube {
@@ -179,7 +197,7 @@ input.button1 {
 	text-decoration: none;
 	display: inline-block;
 	font-weight: normal;
-	border-radius: 0.2em;
+	border-radius: var(--radius);
 }
 
 .attach-panel-multi input.button2 {
@@ -242,9 +260,20 @@ li.header dt {
 
 .content blockquote {
 	background-image: none;
-	border-radius: 0.5em;
+	border-radius: var(--radius);
 	padding: 1em;
 	margin: 1em 0 1em 0;
+}
+
+/* The notice box (.rules: the forum rules, the download notice, the board disabled) has room around its text: 1rem on all sides
+   (prosilver has 5px above and below and 10px at the sides). The list inside keeps its own indent. */
+div.rules {
+	padding: 1rem;
+}
+
+/* A post that starts with a quote: the quote sits right under the post header, which has its own space above the content. */
+.postbody .content > blockquote:first-child {
+	margin-top: 0;
 }
 
 .content blockquote cite {
@@ -270,7 +299,7 @@ th a:hover,
 }
 
 li.header dl.row-item dt .list-inner {
-	padding-left: 0.5em;
+	padding-inline-start: 0.5625rem;
 }
 
 .action-bar {
@@ -297,9 +326,6 @@ blockquote cite > div {
 	border-radius: 0;
 }
 
-#options-panel {
-	padding: 1rem 1.5rem;
-}
 
 .panel p {
 	margin: 0.5rem 0 0.5rem 0;
@@ -310,14 +336,14 @@ fieldset dt {
 }
 
 input.inputbox {
-	border-radius: 0.2rem;
+	border-radius: var(--radius);
 	padding: 0.3rem 0.5rem;
 }
 
 .forum-title,
 .topic-title,
 .searchresults-title {
-	font-weight: bold;
+	font-weight: 600;
 }
 
 .section-search .page-body .panel div.inner {
@@ -350,7 +376,7 @@ input.inputbox {
 }
 
 .pagination li.active span {
-	font-weight: bold;
+	font-weight: 600;
 }
 
 .format-buttons {
@@ -390,11 +416,11 @@ li.pagejump {
 
 select.bbcode-size {
 	margin-right: 0.5rem;
-	border-radius: 0.2rem;
+	border-radius: var(--radius);
 }
 
 textarea {
-	border-radius: 0.2rem;
+	border-radius: var(--radius);
 	margin-top: 0.5rem;
 }
 
@@ -404,7 +430,7 @@ textarea {
 
 dl.attachbox dt {
 	border: 0;
-	font-weight: bold;
+	font-weight: 600;
 }
 
 .attachbox dl.thumbnail dt {
@@ -427,7 +453,7 @@ dl.attachbox dt {
 
 .button {
 	border: none;
-	border-radius: 0.2rem;
+	border-radius: var(--radius);
 	-webkit-box-shadow: none;
 	box-shadow: none;
 	padding: 0.5rem;
@@ -444,8 +470,11 @@ input.button2:hover,
 
 .post-buttons .button,
 .format-buttons .button {
-	margin-right: 0.2rem;
 	min-width: 2rem;
+}
+
+.format-buttons .button {
+	margin-right: 0.2rem;
 }
 
 .pagination li.active span {
@@ -459,6 +488,71 @@ input.button2:hover,
 @media (max-width: 43.75em) {
 	.wrap {
 		max-width: 100vw;
+	}
+
+	/* Room at the sides on a phone, so that pictures and boxes do not sit at the edge of the screen. */
+	body .wrap {
+		padding-inline: 1rem;
+	}
+
+	/* phpBB pulls the banner and the navbars 5px out of the wrapper on a phone. The banner and the navbar run to the edge of the
+	   screen: they take back the padding of the wrapper. */
+	body .headerbar,
+	body .navbar {
+		margin-inline: -1rem;
+	}
+
+	/* The navbar is one row on a phone: the forum menu and the home icon on the left, the rest as icons on the right. The words are
+	   still there for screen readers. The trail after the home icon is left out: the page has its own title. */
+	body .navbar > .inner {
+		flex-wrap: nowrap;
+		gap: 0.25rem;
+	}
+
+	body .navbar #nav-breadcrumbs,
+	body .navbar #nav-main {
+		display: contents;
+	}
+
+	/* The clearfix of phpBB (an empty block before and after each list) would be two empty items in the row, with a gap each. */
+	body .navbar :is(#nav-breadcrumbs, #nav-main)::before,
+	body .navbar :is(#nav-breadcrumbs, #nav-main)::after {
+		display: none;
+	}
+
+	body .navbar #nav-main > li {
+		order: 2;
+		margin: 0;
+	}
+
+	body .navbar #nav-breadcrumbs > li.responsive-search {
+		order: 1;
+		margin: 0 0 0 auto;
+	}
+
+	body .navbar #nav-breadcrumbs > li.breadcrumbs {
+		flex: 0 0 auto;
+	}
+
+	/* The icon-only buttons are 44 pixels wide without side padding. The "Fora" button keeps its padding around the word. */
+	body .navbar #nav-main > li > a,
+	body .navbar li.responsive-search > a,
+	body .navbar .breadcrumbs .crumb a {
+		padding-inline: 0;
+	}
+
+	body .navbar .breadcrumbs .crumb:not(:first-child) {
+		display: none;
+	}
+
+	body .navbar #nav-main > li:not(#username_logged_in) > a > span:not(.badge),
+	body .navbar .breadcrumbs .crumb:first-child > a > span {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
 	}
 }
 
@@ -487,7 +581,7 @@ table.markdown th {
 
 .posting-title {
 	margin-bottom: 2rem;
-	font-weight: bold;
+	font-weight: 600;
 }
 
 .posting-title a,
@@ -497,7 +591,7 @@ posting-title a:hover {
 
 .inputbox,
 select {
-	border-radius: 0.5rem;
+	border-radius: var(--radius);
 	padding: 0.3rem 0.5rem;
 }
 
@@ -536,8 +630,8 @@ body
 	font-size: 1em !important;
 }
 
-/* Form fields: at least 16px, otherwise iOS zooms in when a field gets focus */
-body :is(input, select, textarea, option, button) {
+/* Text fields: at least 16px, otherwise iOS zooms in when a field gets focus. Buttons do not need it. */
+body :is(input, select, textarea, option) {
 	font-size: max(1em, 16px) !important;
 }
 
@@ -576,24 +670,34 @@ samp {
 	font-size: 0.9em;
 }
 
-body :is(h2, h3, h4) {
+body :is(h2, h3, h4, strong, b, th, .username, .username-coloured) {
 	font-weight: 600 !important;
 }
 
-/* One look for every table and list header (table.table1 and ul.topiclist) */
+/* One look for every table and list header (table.table1 and ul.topiclist): not a dark bar, but a plain row on the
+   panel. The first column is the title of the section, the other columns are small muted labels, and a hairline
+   separates the header from the rows. */
 :is(ul.topiclist li.header, table.table1 thead) :is(dt, dd, th, a, span, .list-inner) {
-	color: var(--color-on-accent);
-	font-weight: 600;
+	color: var(--color-muted);
+	font-size: var(--text-meta) !important;
+	font-weight: 400;
 	text-transform: none;
 }
 
 ul.topiclist li.header {
-	background-color: var(--accent);
+	background-color: transparent;
+	border-bottom: 1px solid var(--color-line);
 }
 
 ul.topiclist li.header :is(dt, dd) {
-	padding-top: 0.8em;
-	padding-bottom: 0.8em;
+	padding-top: 0.75rem;
+	padding-bottom: 0.5rem;
+}
+
+ul.topiclist li.header dt :is(.list-inner, a) {
+	color: var(--color-text);
+	font-size: var(--text-heading) !important;
+	font-weight: 600;
 }
 
 table.table1 {
@@ -602,15 +706,15 @@ table.table1 {
 	border-collapse: collapse;
 }
 
-/* The same size and the same space around the title as a topic list header (measured with
-   scripts/browser-tests/headers.mjs): 1.6 line height, 0.5em at the sides, 4px more above than below. */
+/* The header of a table (the member list): like the header row of the lists, no fill and a hairline under it. */
 table.table1 thead th {
-	background-color: var(--accent);
-	padding: calc(0.8em + 4px) 0.5em calc(0.8em + 2px);
+	background-color: transparent;
+	padding: 0.8em 0.6em;
 	text-align: left;
 	vertical-align: middle;
-	line-height: 1.6;
+	line-height: 1.3;
 	border: 0;
+	border-bottom: 1px solid var(--color-line);
 }
 
 table.table1 tbody td {
@@ -664,11 +768,18 @@ table.table1 tbody tr:hover td {
 	.navbar {
 		border-radius: var(--radius);
 	}
-}
 
-/* The list header sits on top of the rows, so only its top corners are round. */
-ul.topiclist li.header {
-	border-radius: var(--radius) var(--radius) 0 0;
+	/* The banner and the navbar under it are one block: no gap, the corners are round on the outside only. */
+	.headerbar {
+		margin-bottom: 0;
+		border-end-start-radius: 0;
+		border-end-end-radius: 0;
+	}
+
+	.headerbar + .navbar {
+		border-start-start-radius: 0;
+		border-start-end-radius: 0;
+	}
 }
 
 :is(.forabg, .forumbg, .panel, .post, .navigation) {
@@ -736,7 +847,7 @@ form:has(bf-editor) #attach-panel :is(.inner > p, #attach-panel-basic, #attach-p
 	gap: 0.75rem;
 	padding: 0.6rem 1rem;
 	border: var(--border-control) solid var(--color-line);
-	border-radius: 0.5rem;
+	border-radius: var(--radius);
 	background: var(--color-tint);
 	color: var(--color-muted);
 	font-weight: 600;
@@ -790,18 +901,50 @@ form:has(bf-editor) #attach-panel :is(.inner > p, #attach-panel-basic, #attach-p
 	overflow: visible;
 }
 
-#poll-panel {
-	padding: 1rem 1.5rem;
+/* The two extra sections of the posting page, "Options" and "Add poll", are the same: a panel on the page surface with a
+   one-line title and a chevron. They are closed until they are needed. */
+:is(#options-panel, #poll-panel) {
+	padding: 0.25rem 1.25rem;
+	background-color: var(--color-surface);
 }
 
-#poll-panel > summary {
-	cursor: pointer;
+:is(.bf-options, #poll-panel) > summary {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	color: var(--color-text);
 	font-weight: 600;
-	padding: 0.5em 0;
+	cursor: pointer;
+	list-style: none;
 }
 
-#poll-panel[open] > summary {
-	margin-bottom: 0.5em;
+:is(.bf-options, #poll-panel) > summary::-webkit-details-marker {
+	display: none;
+}
+
+:is(.bf-options, #poll-panel) > summary::before {
+	content: "";
+	flex: none;
+	inline-size: 0.6rem;
+	block-size: 0.6rem;
+	border-inline-end: 0.15rem solid currentcolor;
+	border-block-end: 0.15rem solid currentcolor;
+	transform: translateY(-0.15rem) rotate(-45deg);
+	transition: transform 0.15s;
+}
+
+:is(.bf-options, #poll-panel)[open] > summary::before {
+	transform: translateY(0.1rem) rotate(45deg);
+}
+
+:is(.bf-options, #poll-panel)[open] > summary {
+	margin-bottom: 0.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:is(.bf-options, #poll-panel) > summary::before {
+		transition: none;
+	}
 }
 
 /* The message box takes the whole width. prosilver leaves 20% for the smiley box, which is gone. */
@@ -1110,9 +1253,40 @@ input.button3 {
 	align-items: center;
 }
 
-/* Text on a muted button is never the same colour as the button. */
-.button.button-secondary {
-	color: var(--color-on-accent);
+/* RULE: a link that works as a button never has an underline, in any state (it cuts through the icons). It is told apart from the
+   text around it by its surface, and hover and focus show a soft background in the style's radius instead. The focus line of the
+   keyboard stays (see below). Links in running text keep their underline. A new kind of button-like link is added to this list.
+   The same rule is written in .claude/skills/phpbb/SKILL.md. */
+body :is(a.button, .button a, .dropdown-trigger, .pagination a, .post-buttons a, .navbar a, .dropdown-contents a, .tabs a, .bf-contact__button, .bf-top, bf-youtube > a),
+body :is(a.button, .button a, .dropdown-trigger, .pagination a, .post-buttons a, .navbar a, .dropdown-contents a, .tabs a, .bf-contact__button, .bf-top, bf-youtube > a):is(:link, :visited, :hover, :focus, :active) {
+	text-decoration: none;
+}
+
+:is(.navbar a, .dropdown-contents a) {
+	border-radius: var(--radius);
+}
+
+/* The hover is a little darker than the tint: 12% of the text colour over the surface. The text takes the full text colour with it,
+   so the contrast stays above 7:1 (WCAG AAA) in light and dark. */
+:is(.navbar a, .dropdown-contents a):hover,
+:is(.navbar a, .dropdown-contents a):focus-visible {
+	background-color: color-mix(in srgb, var(--color-text) 12%, var(--color-surface));
+	color: var(--color-text);
+}
+
+/* A link with an icon and no visible words has its icon in the middle of the 44 pixel box. */
+.navbar a {
+	justify-content: center;
+	padding-inline: 0.75rem;
+}
+
+.navbar a > .icon {
+	margin: 0;
+}
+
+/* The links inside the dropdown menus start at the left, as before. */
+.navbar .dropdown-contents a {
+	justify-content: flex-start;
 }
 
 /* prosilver switches the outline off and gives focused links and buttons colours of its own (5.9:1, and
@@ -1120,33 +1294,6 @@ input.button3 {
 a:focus,
 a:active {
 	color: var(--accent);
-}
-
-/* The icon of a button has the colour of its text in every state. prosilver gave it a light blue on focus. */
-.button:focus .icon,
-.button:active .icon,
-.button-secondary:focus,
-.button-secondary:active {
-	color: var(--color-on-accent);
-}
-
-/* The Next and Previous page buttons are light, so their arrows are dark. */
-.pagination li a.button .icon {
-	color: var(--accent);
-}
-
-.pagination li a.button:hover .icon,
-.pagination li a.button:focus .icon,
-.pagination li a.button:active .icon {
-	color: var(--color-on-accent);
-}
-
-input.button1:focus,
-input.button2:focus,
-input.button3:focus {
-	border-color: transparent;
-	background: var(--accent);
-	color: var(--color-on-accent);
 }
 
 :is(
@@ -1200,22 +1347,18 @@ dl.row-item {
 }
 
 dl.row-item:is([class*="forum_"], [class*="topic_"], [class*="sticky_"], [class*="announce_"], [class*="global_"]) {
-	--bf-shape: "\f0e5";
+	--bf-mark: "";
 	--bf-color: var(--color-muted);
-	--bf-lock: "";
-	--bf-hot: "";
 }
 
-dl.row-item[class*="forum_"] { --bf-shape: "\f114"; }
-dl.row-item[class*="forum_"][class*="_subforum"] { --bf-shape: "\f115"; }
-dl.row-item[class*="forum_link"] { --bf-shape: "\f08e"; }
-dl.row-item:is([class*="announce_"], [class*="global_"]) { --bf-shape: "\f0a1"; }
-dl.row-item[class*="sticky_"] { --bf-shape: "\f08d"; }
-dl.row-item[class*="topic_moved"] { --bf-shape: "\f064"; }
-
-
-dl.row-item[class*="_locked"] { --bf-lock: "\f023"; }
-dl.row-item[class*="_hot"] { --bf-hot: "\f0e7"; }
+/* A row has an icon only when it is out of the ordinary: a hot topic, an announcement, a sticky topic, a moved topic,
+   a link, a locked topic (the last one wins). A plain forum or topic has none, and an unread one has its bar. */
+dl.row-item[class*="_hot"] { --bf-mark: "\f0e7"; }
+dl.row-item[class*="forum_link"] { --bf-mark: "\f08e"; }
+dl.row-item[class*="topic_moved"] { --bf-mark: "\f064"; }
+dl.row-item[class*="sticky_"] { --bf-mark: "\f08d"; }
+dl.row-item:is([class*="announce_"], [class*="global_"]) { --bf-mark: "\f0a1"; }
+dl.row-item[class*="_locked"] { --bf-mark: "\f023"; }
 
 dl.row-item:is([class*="forum_"], [class*="topic_"], [class*="sticky_"], [class*="announce_"], [class*="global_"])::before,
 dl.row-item:is([class*="forum_"], [class*="topic_"], [class*="sticky_"], [class*="announce_"], [class*="global_"])::after {
@@ -1230,20 +1373,25 @@ dl.row-item:is([class*="forum_"], [class*="topic_"], [class*="sticky_"], [class*
 }
 
 dl.row-item:is([class*="forum_"], [class*="topic_"], [class*="sticky_"], [class*="announce_"], [class*="global_"])::before {
-	content: var(--bf-shape);
+	content: var(--bf-mark);
 	inset-inline-start: 0.625rem;
 	inline-size: 2rem;
 	translate: 0 -50%;
-	font-size: 1.375rem;
+	font-size: 1.125rem;
 	text-align: center;
 }
 
 dl.row-item:is([class*="forum_"], [class*="topic_"], [class*="sticky_"], [class*="announce_"], [class*="global_"])::after {
-	content: var(--bf-lock) var(--bf-hot);
-	inset-inline-start: 2.125rem;
-	translate: 0 0.125rem;
-	font-size: 1.125rem;
-	letter-spacing: 0.1em;
+	content: none;
+}
+
+/* The title lines up with the title of its section. Only a row with an icon keeps room for it (prosilver leaves 52px). */
+ul.topiclist li.row dl.row-item dt .list-inner {
+	padding-inline-start: 0.5625rem;
+}
+
+ul.topiclist li.row dl.row-item:is([class*="_hot"], [class*="forum_link"], [class*="topic_moved"], [class*="sticky_"], [class*="announce_"], [class*="global_"], [class*="_locked"]) dt .list-inner {
+	padding-inline-start: 2.75rem;
 }
 
 /* No arrow after the user name in the last post column. The arrow was the link to the latest post. The whole
@@ -1420,8 +1568,8 @@ input#subject {
    colour. The line under it ("by ... on ... in ..."), the counts and the last post are small and soft. The !important
    is needed because the rule near the top gives every div, dt, dd and link 1em with !important. */
 body ul.topiclist li.row :is(a.topictitle, a.forumtitle) {
-	font-size: 1.1875rem !important;
-	line-height: 1.3;
+	font-size: var(--text-heading) !important;
+	line-height: 1.4;
 }
 
 ul.topiclist li.row dl {
@@ -1429,7 +1577,7 @@ ul.topiclist li.row dl {
 }
 
 body ul.topiclist li.row dt .list-inner {
-	font-size: 0.8125rem !important;
+	font-size: var(--text-meta) !important;
 	line-height: 1.5;
 	color: var(--color-muted);
 }
@@ -1445,13 +1593,13 @@ ul.topiclist li.row dt .list-inner :is(a.topictitle, a.forumtitle) {
 }
 
 body ul.topiclist li.row dd {
-	font-size: 0.8125rem !important;
+	font-size: var(--text-meta) !important;
 	line-height: 1.45;
 	color: var(--color-muted);
 }
 
 body ul.topiclist li.row :is(dd.posts, dd.views, dd.topics) {
-	font-size: 0.9375rem !important;
+	font-size: var(--text-body) !important;
 	font-variant-numeric: tabular-nums;
 }
 
@@ -1461,7 +1609,7 @@ ul.topiclist li.row dd.lastpost > span {
 
 /* The page numbers next to a title are buttons, not small print. */
 body ul.topiclist li.row .pagination {
-	font-size: 0.9375rem !important;
+	font-size: var(--text-body) !important;
 }
 
 /* Messages and questions: native <dialog> elements (see js/bf-dialogs.js). The browser centres them in the top
@@ -1551,4 +1699,740 @@ dialog.phpbb_alert .alert_text fieldset.submit-buttons {
 	gap: 0.75rem;
 	margin: 1rem 0 0;
 	padding: 0;
+}
+
+/* Front page: the forum list under the featured posts (extension). The page has three voices, as the posts will have:
+   headlines in the condensed face, text that is read in the serif, small facts (counts, dates) in the mono. The interface stays Inter.
+   The rules name .bf-index and use !important because the type scale rule gives every element the same font. */
+/* The grid: the lead story top left (row 1), the other stories under it (row 2), the latest posts in the aside on the right from the top
+   down over both rows, and the forum list at the bottom over the whole width (row 3). Below 62em it is one column. Without the latest posts the
+   stories have the whole width. Without featured posts the forum list is alone. */
+.bf-index {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 2rem 2rem;
+	align-items: start;
+}
+
+.bf-index__forums {
+	grid-column: 1 / -1;
+	min-width: 0;
+}
+
+@media (min-width: 62em) {
+	.bf-index:has(.bf-latest) {
+		grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+	}
+
+	.bf-index .bf-featured__rest {
+		grid-column: 1;
+	}
+
+	/* The latest posts start at the top of the page, next to the lead story, and run down along the other stories. */
+	.bf-index:has(.bf-featured) .bf-latest {
+		grid-column: 2;
+		grid-row: 1 / span 2;
+	}
+
+	.bf-index:has(.bf-latest) .bf-featured__lead {
+		grid-column: 1;
+		grid-row: 1;
+	}
+
+	.bf-index:has(.bf-featured) .bf-featured__rest {
+		grid-row: 2;
+	}
+
+	/* Without the featured posts the latest posts are the first thing on the page. */
+	.bf-index:not(:has(.bf-featured)) .bf-latest {
+		grid-column: 1 / -1;
+	}
+}
+
+.bf-index__title {
+	margin: 0 0 0.75rem;
+}
+
+body .bf-index__title {
+	font-family: var(--font-headline) !important;
+	font-size: var(--text-title) !important;
+	font-weight: 600 !important;
+}
+
+/* The name of a section (category): a headline, one size under the title. */
+body .bf-index ul.topiclist li.header dt .list-inner,
+body .bf-index ul.topiclist li.header dt a {
+	font-family: var(--font-headline) !important;
+	font-size: var(--text-heading) !important;
+	font-weight: 600 !important;
+}
+
+/* The name of a forum: a headline. */
+body .bf-index ul.topiclist li.row a.forumtitle {
+	font-family: var(--font-headline) !important;
+	font-size: var(--text-heading) !important;
+	font-weight: 600 !important;
+	line-height: 1.25;
+	color: var(--color-text) !important;
+}
+
+/* Its description: the reading text, in the serif. */
+body .bf-index ul.topiclist li.row dt .list-inner {
+	font-family: var(--font-serif) !important;
+	font-size: var(--text-body) !important;
+	line-height: 1.5;
+	color: var(--color-text);
+}
+
+body .bf-index ul.topiclist li.row dt .list-inner a:not(.forumtitle),
+body .bf-index ul.topiclist li.row dt .list-inner strong {
+	font-family: var(--font-serif) !important;
+	font-size: inherit !important;
+}
+
+/* The counts and the last post are small facts: mono, small. */
+body .bf-index ul.topiclist li.row dd,
+body .bf-index ul.topiclist li.row dd * {
+	font-family: var(--font-facts) !important;
+	font-size: var(--text-meta) !important;
+}
+
+/* The last post: its title is read, so it keeps the serif. */
+body .bf-index ul.topiclist li.row dd.lastpost a.lastsubject {
+	display: block;
+	font-family: var(--font-serif) !important;
+	font-size: var(--text-body) !important;
+	line-height: 1.3;
+	overflow-wrap: anywhere;
+	white-space: normal;
+}
+
+/* Lists, wide screens: three columns, the title, the counts and the last post. The two counts (topics and posts, or
+   replies and views) lie under each other as a small table, the label on the left and the number on the right, so the
+   header needs no label for them. The labels are the <dfn> that prosilver hides. Below 700px prosilver stacks the
+   columns and nothing here applies. */
+@media (min-width: 43.75em) {
+	ul.topiclist :is(li.row, li.header) dl.row-item {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 8.5rem 13.5rem;
+		align-items: center;
+	}
+
+	ul.topiclist :is(li.row, li.header) dl.row-item dt {
+		grid-column: 1;
+		grid-row: 1 / span 2;
+	}
+
+	ul.topiclist :is(li.row, li.header) dl.row-item dd.lastpost {
+		grid-column: 3;
+		grid-row: 1 / span 2;
+	}
+
+	ul.topiclist li.row dl.row-item :is(dd.topics, dd.posts, dd.views) {
+		grid-column: 2;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		gap: 0.75rem;
+		padding-block: 0;
+		padding-inline: 1rem;
+		font-variant-numeric: tabular-nums;
+	}
+
+	/* prosilver hides the label with a 1px clipped box. Here it is a normal label, before the number. */
+	ul.topiclist li.row dl.row-item :is(dd.topics, dd.posts, dd.views) dfn {
+		position: static;
+		display: inline;
+		order: -1;
+		width: auto;
+		height: auto;
+		overflow: visible;
+		clip: auto;
+		clip-path: none;
+		font-style: normal;
+	}
+
+	/* The two counts are a pair in the middle of the row: the first sits at the bottom of the upper half, the second at
+	   the top of the lower half, and the row has no height to spare between them. */
+	ul.topiclist li.row dl.row-item :is(dd.topics, dd.posts, dd.views) {
+		align-self: stretch;
+		align-items: center;
+		min-block-size: 0;
+		margin: 0;
+	}
+
+	ul.topiclist li.row dl.row-item :is(dd.topics, dd.posts, dd.views):first-of-type {
+		align-items: flex-end;
+	}
+
+	ul.topiclist li.row dl.row-item :is(dd.topics, dd.posts, dd.views):not(:first-of-type) {
+		align-items: flex-start;
+	}
+
+	/* The first of the two counts is the one that counts most: the number is a little stronger. */
+	body ul.topiclist li.row :is(dd.posts, dd.views, dd.topics) {
+		font-size: var(--text-meta) !important;
+	}
+
+	ul.topiclist li.header dl.row-item :is(dd.topics, dd.posts, dd.views) {
+		display: none;
+	}
+}
+
+/* Section titles of lists are left-aligned on every screen (prosilver centres them on a phone). */
+ul.topiclist li.header dl.row-item dt,
+ul.topiclist li.header dl.row-item dt .list-inner {
+	text-align: start;
+}
+
+/* Posts: one card per post, the same on every screen. The author is a compact line above the post (avatar, name, rank,
+   and the contact icon) instead of a column beside it, so the text gets the full width and nothing is separated by a
+   vertical line. The buttons of the post sit at the right end of that line. All posts have the same surface, the cards
+   are separated by space, and there is no arrow after every post (one button at the corner of the page does that). */
+.post.has-profile {
+	padding: 1rem 1.25rem 1.25rem;
+	margin: 0 0 1rem;
+	overflow: hidden;
+}
+
+.post.has-profile .inner {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+/* The author of a post: the avatar on the left, the name with the rank pill under it, and the contact buttons on the right. A grid of
+   three columns and two rows, placed by hand (the name and the avatar are inside one dt, which is not a box here). */
+.post.has-profile .postprofile {
+	display: grid;
+	grid-template-columns: auto auto auto;
+	justify-content: start;
+	align-items: center;
+	column-gap: 0;
+	float: none;
+	width: auto;
+	min-height: 2.75rem;
+	margin: 0 0 0.75rem;
+	padding: 0;
+	border: 0;
+	overflow: visible;
+}
+
+.post.has-profile .postprofile dt {
+	display: contents;
+	font-size: var(--text-body);
+}
+
+.post.has-profile .postprofile dt > a.username {
+	grid-column: 2;
+	grid-row: 1;
+	align-self: end;
+}
+
+.post.has-profile .postprofile dt:not(.has-profile-rank) > a.username {
+	grid-row: 1 / span 2;
+	align-self: center;
+}
+
+.post.has-profile .postprofile .avatar-container {
+	grid-column: 1;
+	grid-row: 1 / span 2;
+	margin: 0 0.5rem 0 0;
+	overflow: visible;
+}
+
+.post.has-profile .postprofile .avatar-container::after {
+	content: none;
+}
+
+.post.has-profile .postprofile .avatar {
+	display: block;
+	margin: 0;
+}
+
+.post.has-profile .postprofile .avatar img {
+	display: block;
+	inline-size: 2.5rem !important;
+	block-size: 2.5rem !important;
+	max-height: none;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+/* Only the rank and the contact icon stay beside the name. The post count, the join date and the other profile lines
+   are on the profile page. */
+.post.has-profile .postprofile dd {
+	display: none;
+}
+
+/* The rank is a quiet line under the name: 13px, in the muted colour (still AAA on the post surface), no box. The size is forced: the
+   type scale rule above gives every element the body size. */
+.post.has-profile .postprofile dd.profile-rank {
+	display: block;
+	grid-column: 2;
+	grid-row: 2;
+	justify-self: start;
+	align-self: start;
+	margin: 0;
+	color: var(--color-muted);
+	font-size: var(--text-meta) !important;
+	line-height: 1.4;
+}
+
+/* The contact menu of phpBB is not shown: the extension baneforum/contact draws the ways to contact as buttons (dd.bf-contact) beside the
+   name instead. Without that extension the menu would be gone, so it is only hidden when the buttons are there. */
+.post.has-profile .postprofile dd.bf-contact {
+	display: block;
+	grid-column: 3;
+	grid-row: 1 / span 2;
+	margin: 0 0 0 0.75rem;
+}
+
+/* On a very narrow screen the contact buttons go under the name. */
+@media (max-width: 30em) {
+	.post.has-profile .postprofile dd.bf-contact {
+		grid-column: 1 / -1;
+		grid-row: 3;
+		margin: 0.5rem 0 0;
+	}
+}
+
+.post.has-profile .postprofile dd.bf-contact ~ dd.profile-contact {
+	display: none;
+}
+
+.post.has-profile .postprofile dd.profile-contact {
+	display: block;
+	margin: 0;
+}
+
+.post.has-profile .postprofile dd.profile-contact > strong {
+	display: none;
+}
+
+.post.has-profile .postbody {
+	position: static;
+	float: none;
+	width: auto;
+	margin: 0;
+	padding: 0;
+}
+
+.post.has-profile .postbody h3,
+.post.has-profile .postbody h3.first {
+	margin: 0 0 0.125rem;
+	padding-inline-end: 12rem;
+}
+
+.post.has-profile .post-buttons {
+	position: absolute;
+	inset-block-start: 0;
+	inset-inline-end: 0;
+	margin: 0;
+}
+
+/* The line "by name » date" is only the date, the name is above. A flex line drops the space before the date. */
+.post.has-profile .postbody p.author {
+	display: flex;
+	align-items: center;
+}
+
+.post.has-profile .postbody p.author .responsive-hide {
+	display: none;
+}
+
+/* No avatar: no empty box (and no gap) before the name. */
+.post.has-profile .postprofile .avatar-container:not(:has(.avatar)) {
+	display: none;
+}
+
+.post.has-profile .back2top {
+	display: none;
+}
+
+/* One back-to-top button for the page, at the corner of the window. It is hidden until the page has scrolled
+   (js/bf-top.js), and so it is not in the tab order while it is not shown. */
+.bf-top {
+	position: fixed;
+	inset-block-end: 1rem;
+	inset-inline-end: 1rem;
+	z-index: 5;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	inline-size: 2.75rem;
+	block-size: 2.75rem;
+	border: var(--border-control) solid var(--color-line);
+	border-radius: var(--radius);
+	background: var(--color-surface);
+	color: var(--color-text);
+	box-shadow: 0 0.125rem 0.5rem rgb(0 0 0 / 0.2);
+}
+
+.bf-top[hidden] {
+	display: none;
+}
+
+.bf-top:is(:hover, :focus-visible) {
+	background: var(--color-tint);
+}
+
+/* Page top: a lower banner, and one row under it. The breadcrumbs are at the left of that row, the links and the account
+   at the right. The links beside the menu (FAQ, appearance, ACP, MCP, messages, notifications) are icons with a tooltip and
+   a hidden text for screen readers. The row wraps to two lines when it is too narrow for both. */
+.site_logo {
+	width: 9rem;
+	height: 4.5rem;
+	background-size: contain;
+	background-repeat: no-repeat;
+}
+
+.headerbar {
+	padding-block: 0.5rem;
+}
+
+.navbar > .inner {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0 0.5rem;
+}
+
+/* The same room on all four sides of the navbar, around the 44 pixel buttons. */
+body .navbar {
+	padding: 0.5rem;
+}
+
+.navbar #nav-breadcrumbs {
+	order: -1;
+	flex: 1 1 0;
+	min-width: 14rem;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+/* The trail takes the room that the links on the right leave. It is one line of flex items: when it is too long, the crumbs get
+   shorter with an ellipsis, all alike. phpBB's own script caps each crumb at 40 to 120 pixels (the classes wrapped-*) when it
+   thinks the trail does not fit. That cap is switched off here. */
+.navbar li.breadcrumbs {
+	display: flex;
+	align-items: center;
+	min-width: 0;
+	max-width: none;
+}
+
+.navbar li.breadcrumbs > .crumb,
+.navbar li.breadcrumbs > #bf-forum-menu {
+	float: none;
+	flex: 0 1 auto;
+	min-width: 0;
+}
+
+/* The home link and the forum menu keep their size: a 44 pixel target at the least, and the words of the home link are never cut. */
+.navbar li.breadcrumbs > #bf-forum-menu,
+.navbar li.breadcrumbs > .crumb:first-child {
+	flex-shrink: 0;
+}
+
+body .navbar .breadcrumbs .crumb:first-child a {
+	min-width: 2.75rem;
+	overflow: visible;
+}
+
+/* The links on the right give room to the trail as the navbar gets narrower: first "Quick links" is only an icon, then all of them.
+   The words stay in the page for screen readers. The width is the width of the navbar, not of the screen. */
+.navbar {
+	container-type: inline-size;
+}
+
+@container (max-width: 75rem) {
+	.navbar #nav-main > #quick-links > a > span:not(.badge) {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	.navbar #nav-main > #quick-links > a {
+		padding-inline: 0;
+	}
+}
+
+@container (max-width: 56rem) {
+	.navbar #nav-main > li:not(#username_logged_in) > a > span:not(.badge) {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	.navbar #nav-main > li > a {
+		padding-inline: 0;
+	}
+}
+
+body .navbar .breadcrumbs .crumb a {
+	max-width: 100%;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	letter-spacing: normal;
+}
+
+.navbar #nav-main {
+	order: 1;
+	flex: 0 1 auto;
+	margin: 0 0 0 auto;
+	padding: 0;
+	border: 0;
+}
+
+.navbar #nav-main > li:not(#quick-links, #bf-forum-menu, #username_logged_in, :has(.fa-power-off, .fa-pencil-square-o)) > a > span:not(.badge) {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/* The header row is a grid too (see the list rules above), so prosilver's float trick (a wide negative margin on the title
+   and the same positive margin inside it) is switched off for it on wide screens. */
+@media (min-width: 43.75em) {
+	ul.topiclist li.header dl.row-item dt,
+	ul.topiclist li.header dl.row-item dt .list-inner {
+		float: none;
+		width: auto;
+		margin-inline: 0;
+	}
+}
+
+/* The heading of the posting page ("Post a new topic") is above the editor box, like the heading of a list above its panel. */
+.posting-heading {
+	margin: 1.5rem 0 0.5rem;
+	padding: 0;
+	border: 0;
+}
+
+/* One space, 1rem, everywhere in the editor box: from the border to the fields, and between the subject, the toolbar and the
+   text area. The space under the toolbar is inside the editor, and is set by its --bf-gap. */
+#postingbox {
+	--bf-gap: 1rem;
+	padding: 1rem;
+}
+
+#postingbox dl:has(#subject) {
+	margin: 0 0 1rem;
+	padding: 0;
+}
+
+#postingbox dl:has(#subject) :is(dt, dd) {
+	margin-block: 0;
+}
+
+#postingbox :is(bf-editor, .message-box) {
+	margin: 0;
+}
+
+/* The title of the last post in a list row is a link, so it is at least 24px high (WCAG 2.5.8). */
+a.lastsubject {
+	display: inline-block;
+	min-block-size: 1.5rem;
+	line-height: 1.5rem;
+}
+
+/* Link buttons (a.button1, a.button2, such as "Register" on the login page) have the shape of the other buttons. */
+a.button1,
+a.button2 {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	min-block-size: 2.75rem;
+	min-inline-size: 2.75rem;
+	padding-block: 0;
+	padding-inline: 1.1em;
+	border: 0;
+	border-radius: var(--radius);
+	text-decoration: none;
+	vertical-align: middle;
+}
+
+/* The contact menu of a post: a list of the ways to reach the member, each with its icon and its name. prosilver makes a grid of
+   bare icons and hides the words with a tiny font size, which the type scale (1em for every span) switches off. */
+.contact-icons {
+	display: flex;
+	flex-direction: column;
+	min-inline-size: 12rem;
+	padding: 0.25rem;
+}
+
+.contact-icons > div {
+	display: contents;
+}
+
+.contact-icons a {
+	float: none;
+	display: flex;
+	align-items: center;
+	inline-size: auto;
+	block-size: auto;
+	min-block-size: 2.75rem;
+	padding: 0 0.75rem;
+	border-radius: var(--radius);
+	white-space: nowrap;
+}
+
+.contact-icons a:is(:hover, :focus-visible) {
+	background: var(--color-tint);
+}
+
+/* The icon keeps prosilver's 16px box and its sprite position. Its own words stay hidden, the name comes from the title of the link. */
+.contact-icons .contact-icon {
+	flex: none;
+	overflow: hidden;
+	white-space: nowrap;
+	text-indent: 100%;
+}
+
+.contact-icons a::after {
+	content: attr(title);
+	margin-inline-start: 0.75rem;
+}
+
+/* The menu of a post may reach past the card. */
+.post.has-profile {
+	overflow: visible;
+}
+
+/* Pictures in posts show at half the width of the post (but not narrower than 18rem, so a phone still gets a usable size, and
+   never wider than the post). Small pictures stay as they are. A click opens the full picture in a new tab. */
+.postbody img.postimage,
+figure.file img,
+dl.thumbnail img {
+	max-inline-size: max(50%, min(100%, 18rem));
+	block-size: auto;
+}
+
+a:has(> img.postimage) {
+	cursor: zoom-in;
+}
+
+/* A YouTube video in a post has the same width as a picture: half the width of the post, not narrower than 18rem, never wider than the
+   post. The player inside fills the box and keeps its 16:9 shape. */
+.postbody bf-youtube {
+	max-inline-size: max(50%, min(100%, 18rem));
+}
+
+/* On a phone (the breakpoint of the small layout) pictures, videos and the other media of a post use the whole width of the post. */
+@media (max-width: 43.75em) {
+	.postbody img.postimage,
+	figure.file img,
+	dl.thumbnail img,
+	.postbody bf-youtube,
+	.postbody video,
+	.postbody [data-s9e-mediaembed] {
+		max-inline-size: 100%;
+	}
+}
+
+/* The page numbers of a topic in a list (wide screens): only the first and the last page, "1 … 40". A topic with many pages used
+   to show "1 … 36 37 38 39 40" in a box of a fixed width, which wrapped, made the row twice as high and squeezed the title.
+   The topic itself has all the page links. The page icon is not shown. The size of every number stays 44px (WCAG 2.5.5). */
+@media (min-width: 43.75em) {
+	ul.topiclist li.row dl.row-item dt .list-inner:has(.pagination) {
+		grid-template-columns: minmax(0, 1fr) auto;
+	}
+
+	ul.topiclist li.row dl.row-item dt .list-inner:has(.pagination) > .pagination {
+		display: flex;
+		align-items: center;
+		max-inline-size: none;
+		white-space: nowrap;
+	}
+
+	ul.topiclist li.row .pagination > span {
+		display: none;
+	}
+
+	ul.topiclist li.row .pagination > ul {
+		display: flex;
+		flex-wrap: nowrap;
+		gap: 0;
+	}
+
+	/* prosilver forces list items to inline-block with !important, and one rule hides the item after the dots on a small
+	   screen, which would hide the last page. */
+	ul.topiclist li.row .pagination > ul > li:not(:first-child, :last-child, .ellipsis) {
+		display: none !important;
+	}
+
+	ul.topiclist li.row .pagination > ul > li:last-child {
+		display: inline-block !important;
+	}
+
+	/* A list with no dots (up to six pages) gets them where the pages in between are hidden. */
+	ul.topiclist li.row .pagination > ul:has(li:nth-child(3)):not(:has(.ellipsis)) > li:last-child::before {
+		content: "…";
+		margin-inline-end: 0.5rem;
+		color: var(--color-muted);
+	}
+}
+
+/* The cookie notice (phpBB's cookieconsent): a bar at the bottom in the colours of the palette, text and button like the rest of the
+   theme. The library gives it a blue background and a light button with inline colour rules, so these rules need !important. */
+body .cc-window.cc-banner {
+	transition: none !important;
+	align-items: center;
+	gap: 1rem;
+	padding: 0.75rem 1.25rem;
+	border-top: 1px solid var(--color-line);
+	background: var(--color-surface) !important;
+	color: var(--color-text) !important;
+	font-family: var(--base-font);
+	font-size: var(--text-body);
+	box-shadow: 0 -0.25rem 1rem rgb(0 0 0 / 0.12);
+}
+
+body .cc-window .cc-message {
+	flex: 1 1 20rem;
+	margin: 0;
+	color: var(--color-text);
+}
+
+body .cc-window .cc-link {
+	margin-inline-start: 0.5rem;
+	color: var(--accent) !important;
+	opacity: 1 !important;
+	text-decoration: underline;
+}
+
+body .cc-window .cc-compliance {
+	flex: none;
+}
+
+body .cc-window .cc-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-block-size: 2.75rem;
+	min-inline-size: 2.75rem;
+	padding: 0 1.1em;
+	border: 0 !important;
+	border-radius: var(--radius);
+	background: var(--color-primary) !important;
+	color: var(--color-on-primary) !important;
+	font-size: var(--text-body);
+	font-weight: 400;
+	text-transform: none;
+}
+
+body .cc-window .cc-btn:is(:hover, :focus-visible) {
+	background: var(--color-primary-hover) !important;
 }

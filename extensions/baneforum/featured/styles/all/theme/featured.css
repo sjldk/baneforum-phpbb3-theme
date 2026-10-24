@@ -1,0 +1,175 @@
+/* Featured posts above the forum list on the front page, laid out like the top of a magazine: a lead story with its picture beside the
+   headline, and four smaller stories under it, each with the headline under the picture. The headline is the "headline" voice of the
+   theme (--font-headline), the byline is the "small facts" voice (--font-facts). Colours come from the style's variables. */
+
+.bf-featured {
+	margin: 0 0 2rem;
+}
+
+/* The section is laid out by the grid of .bf-index in the theme: .bf-featured does not make a box of its own. */
+.bf-featured {
+	display: contents;
+}
+
+.bf-featured__lead {
+	grid-column: 1 / -1;
+}
+
+.bf-featured__list {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.bf-featured__item {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 0.625rem;
+	min-width: 0;
+}
+
+.bf-featured__picture {
+	position: relative;
+	display: block;
+	overflow: hidden;
+	aspect-ratio: 16 / 10;
+	border-radius: var(--radius, 0.5rem);
+	background: var(--color-tint, #f2f2f2);
+}
+
+.bf-featured__picture img {
+	display: block;
+	inline-size: 100%;
+	block-size: 100%;
+	object-fit: cover;
+}
+
+/* A thin line round the picture, drawn over it, so a white or pale picture still shows its rounded corners. */
+.bf-featured__picture::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border: 1px solid var(--color-control, #858585);
+	border-radius: inherit;
+	pointer-events: none;
+}
+
+.bf-featured__body {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	min-width: 0;
+}
+
+body .bf-featured .bf-featured__topic {
+	font-family: var(--font-headline, inherit) !important;
+	font-size: var(--text-heading) !important;
+	font-weight: 600 !important;
+	line-height: 1.25;
+	overflow-wrap: anywhere;
+	color: var(--color-text, #1f1f1f);
+}
+
+/* The whole story is the link, not only the headline. */
+.bf-featured__topic::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+}
+
+.bf-featured__topic:focus-visible::after {
+	outline: var(--border-control, 0.15rem) solid var(--color-focus, #505050);
+	outline-offset: 0.1rem;
+	border-radius: var(--radius, 0.5rem);
+}
+
+body .bf-featured .bf-featured__meta {
+	font-family: var(--font-facts, inherit) !important;
+	font-size: var(--text-meta) !important;
+	color: var(--color-muted, #444);
+}
+
+/* The lead story: the picture on the left (a wide crop, 14rem high), the headline large on the right. */
+@media (min-width: 43.75em) {
+	.bf-featured__item--lead {
+		flex-direction: row;
+		align-items: center;
+		gap: 1.5rem;
+	}
+
+	.bf-featured__item--lead .bf-featured__picture {
+		flex: 0 0 58%;
+		aspect-ratio: auto;
+		block-size: 14rem;
+	}
+
+	.bf-featured__item--lead .bf-featured__body {
+		flex: 1 1 0;
+		gap: 0.75rem;
+	}
+
+	body .bf-featured .bf-featured__item--lead .bf-featured__topic {
+		font-size: var(--text-title) !important;
+		line-height: 1.2;
+	}
+}
+
+/* The other stories: a list, the picture on the left and the headline on the right. */
+.bf-featured__list > .bf-featured__item {
+	flex-direction: row;
+	align-items: center;
+	gap: 1rem;
+}
+
+.bf-featured__list > .bf-featured__item .bf-featured__picture {
+	flex: 0 0 min(18rem, 45%);
+	aspect-ratio: 3 / 2;
+}
+
+@media (max-width: 30em) {
+	.bf-featured__list > .bf-featured__item .bf-featured__picture {
+		flex-basis: 7rem;
+	}
+}
+
+/* The appetizer: the first words of the post in the reading serif, under the byline. It fades out at the bottom, so the text never makes
+   a story taller than its picture. Beside a picture the text block does not count for the height of the row (contain: size), it takes
+   the height of the picture, and everything that does not fit fades away. */
+body .bf-featured .bf-featured__snippet {
+	margin: 0.25rem 0 0;
+	font-family: var(--font-serif, Georgia, serif) !important;
+	font-size: var(--text-body) !important;
+	line-height: 1.5;
+	color: var(--color-text, #1f1f1f);
+}
+
+@media (min-width: 43.75em) {
+	.bf-featured__item .bf-featured__body {
+		flex: 1 1 0;
+		min-width: 0;
+		align-self: stretch;
+		justify-content: safe center;
+		overflow: hidden;
+		contain: size;
+		-webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 3rem), transparent);
+		mask-image: linear-gradient(to bottom, #000 calc(100% - 3rem), transparent);
+	}
+}
+
+/* Narrow: the lead has its picture above the text, so the text is cut at four lines and fades out. A small story shows no text. */
+@media (max-width: 43.6875em) {
+	.bf-featured__item--lead .bf-featured__snippet {
+		max-block-size: 6em;
+		overflow: hidden;
+		-webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+		mask-image: linear-gradient(to bottom, #000 60%, transparent);
+	}
+
+	.bf-featured__list .bf-featured__snippet {
+		display: none;
+	}
+}

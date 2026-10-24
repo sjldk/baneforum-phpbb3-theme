@@ -27,6 +27,43 @@ function createPlayer(document, url, link) {
 }
 
 /**
+ * Puts the thumbnail behind the play button of every player in root. The address comes from the page (a meta tag
+ * "bf-youtube-thumb", with a stand-in for the video id). The picture is used only when it has loaded: if the board has none, or the
+ * meta tag is not there, the player stays as it is.
+ * @param {ParentNode} root
+ * @returns {number} how many pictures were asked for
+ */
+export function useYoutubeThumbnails(root) {
+	const document = root.ownerDocument ?? /** @type {Document} */ (root);
+	const template = document.querySelector(`meta[name="bf-youtube-thumb"]`)?.getAttribute(`content`);
+	let asked = 0;
+
+	if (!template) {
+		return asked;
+	}
+
+	for (const player of root.querySelectorAll(`bf-youtube:not([thumb])`)) {
+		const found = youtubeProvider.match(player.getAttribute(`url`) ?? player.querySelector(`a`)?.href ?? ``);
+
+		if (!found) {
+			continue;
+		}
+
+		const address = template.replace(`AAAAAAAAAAA`, found.attrs.id);
+		const picture = new Image();
+
+		picture.addEventListener(`load`, () => {
+			/** @type {HTMLElement} */ (player).style.setProperty(`--bf-youtube-thumb`, `url("${address}")`);
+			player.setAttribute(`thumb`, ``);
+		});
+		picture.src = address;
+		asked += 1;
+	}
+
+	return asked;
+}
+
+/**
  * @param {ParentNode} root  the part of the page to look in
  * @returns {number} how many players were made
  */

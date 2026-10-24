@@ -53,6 +53,12 @@ The install steps for production are in `docs/production-install.md`.
 | Firefox holds port 9222, so `run.sh` cannot start Chrome | `PORT=9223 scripts/browser-tests/run.sh <script.mjs>` |
 | Facebook and Google login buttons | Stay. 14 production users are linked. Styles are in `login_body_oauth.html`. |
 
+## Design rules
+
+| Rule | What it means |
+|---|---|
+| A link that works as a button never has an underline, in any state | Nav bar and menu links, post buttons, contact buttons, page numbers, tabs, the footer of a video card and every `.button`. They are told apart by a surface, and hover and keyboard focus show a soft background (the focus ring stays). Links in running text keep their underline. The list is one rule in `baneforum_common.css` (search for "RULE: a link that works as a button"). A new kind of button-like link is added to that list. |
+
 ## Template overrides in this style
 
 `baneforum/template/` holds: `attachment.html`, `index_body.html`, `login_body.html`, `login_body_oauth.html`, `navbar_header.html`,
@@ -67,6 +73,7 @@ A file here replaces the one in prosilver. Check the prosilver original of the s
 | Editor alone in Chrome | `scripts/browser-tests/smoke.sh` |
 | A browser test on the board | `scripts/browser-tests/run.sh <script.mjs>` (Chrome) or `BROWSER=firefox scripts/browser-tests/run.sh <script.mjs>` |
 | Firefox | Puppeteer talks WebDriver BiDi. `states.mjs` uses the Chrome DevTools protocol and is Chrome only. |
+| Style sheet page | `baneforum/theme/styleguide.html` shows every button level, surface, heading, list row, post card and form field in both themes. Open `/styles/baneforum/theme/styleguide.html` on the test board after a style change, and run `styleguide.mjs`. Add a new part of the theme to it. |
 | Another board | The tests use `http://localhost:8080`. Change the host in `login.mjs` and the scripts for 8081. |
 
 Details: `scripts/browser-tests/README.md`.

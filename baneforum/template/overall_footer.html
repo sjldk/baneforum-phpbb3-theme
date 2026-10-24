@@ -33,6 +33,12 @@
 	{% if not S_IS_BOT %}{{ RUN_CRON_TASK }}{% endif %}
 </div>
 
+{% if not S_IS_BOT %}
+<a href="#top" class="bf-top" title="{{ lang('BACK_TO_TOP') }}" hidden>
+	<i class="icon fa-chevron-up fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('BACK_TO_TOP') }}</span>
+</a>
+{% endif %}
+
 <script type="text/javascript" src="{{ T_JQUERY_LINK }}"></script>
 {% if S_ALLOW_CDN %}<script type="text/javascript">window.jQuery || document.write('\x3Cscript src="{{ T_ASSETS_PATH }}/javascript/jquery-3.7.1.min.js?assets_version={{ T_ASSETS_VERSION }}">\x3C/script>');</script>{% endif %}
 <script type="text/javascript" src="{{ T_ASSETS_PATH }}/javascript/core.js?assets_version={{ T_ASSETS_VERSION }}"></script>
@@ -41,6 +47,7 @@
 {% INCLUDEJS 'ajax.js' %}
 <!-- INCLUDEJS {T_THEME_PATH}/js/bf-dialogs.js -->
 <!-- INCLUDEJS {T_THEME_PATH}/js/bf-a11y.js -->
+<!-- INCLUDEJS {T_THEME_PATH}/js/bf-top.js -->
 {% if S_ALLOW_CDN %}
 	<script type="text/javascript">
 		(function($){
@@ -69,10 +76,14 @@
 					}
 				},
 				"theme": "classic",
+				"onPopupOpen": function () {
+					// The library gives the button and the link a fixed English aria-label that is not their words. The words name them.
+					document.querySelectorAll('.cc-window .cc-btn, .cc-window .cc-link').forEach(function (e) { e.removeAttribute('aria-label'); });
+				},
 				"content": {
-					"message": "{{ LA_COOKIE_CONSENT_MSG }}",
-					"dismiss": "{{ LA_COOKIE_CONSENT_OK }}",
-					"link": "{{ LA_COOKIE_CONSENT_INFO }}"
+					"message": "{{ lang('COOKIE_CONSENT_MSG')|e('js') }}",
+					"dismiss": "{{ lang('COOKIE_CONSENT_OK')|e('js') }}",
+					"link": "{{ lang('COOKIE_CONSENT_INFO')|e('js') }}"
 				}
 			})});
 	</script>
