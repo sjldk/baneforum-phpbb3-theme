@@ -59,3 +59,13 @@
 	font-size: 0.85em;
 	color: rgb(255 255 255 / 0.85);
 }
+
+/* A thin line round the card, drawn over the picture, so a white or pale picture still shows its rounded corners on the page. */
+.bf-featured__item::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border: 1px solid var(--color-control, #858585);
+	border-radius: inherit;
+	pointer-events: none;
+}
