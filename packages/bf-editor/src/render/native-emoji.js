@@ -4,6 +4,7 @@
 import { createSmilieReplacer, defaultSmilies, smilieImages } from '../smilies.js';
 
 /**
+ * Swaps smilie pictures and emoji pictures for the emoji character. A picture we do not know stays.
  * @param {ParentNode} root
  * @param {{smilies?: Record<string, string>, images?: Record<string, string>}} [options]
  * @returns {number} how many pictures were replaced
@@ -29,6 +30,7 @@ export function useNativeEmoji(root, options = {}) {
 }
 
 /**
+ * Finds the emoji for one picture: its alt text for an emoji picture, else the smilie code, else the file name.
  * @param {Element} img
  * @param {Record<string, string>} smilies code to emoji
  * @param {Record<string, string>} images picture file name to emoji

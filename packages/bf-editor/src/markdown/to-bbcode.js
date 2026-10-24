@@ -20,7 +20,11 @@ const html = /^ {0,3}<[a-zA-Z/!?]/;
 const setext = /^ {0,3}(=+|-+)\s*$/;
 const marker = new RegExp(`${PLACEHOLDER_OPEN}(\\d+)${PLACEHOLDER_CLOSE}`, `g`);
 
-/** @param {string} line @returns {number} */
+/**
+ * How far a line is indented. A tab counts as four spaces.
+ * @param {string} line
+ * @returns {number}
+ */
 const indentOf = (line) => (line.match(/^[ \t]*/)?.[0] ?? ``).replace(/\t/g, `    `).length;
 
 /**
@@ -80,6 +84,8 @@ function tableToBBCode(rows, inline) {
 }
 
 /**
+ * Writes one Markdown block as BBCode: a heading, list, quote, code, table or rule.
+ * Inline Markdown in the text is read first, so bold and links keep working.
  * @param {import('prosemirror-model').Schema} schema
  * @param {string} source  a block of Markdown, as the block splitter found it
  * @param {import('prosemirror-model').Node[]} placeholders  nodes that BBCode tags in the text stand for
@@ -228,6 +234,7 @@ export function blockToBBCode(schema, source, placeholders, replaceSmilies) {
 }
 
 /**
+ * Writes list items as nested `[list]` tags. A change of indent opens or closes a list.
  * @param {Array<{indent: number, ordered: boolean, text: string}>} items
  * @param {(text: string) => string} inline
  */

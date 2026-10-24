@@ -4,7 +4,10 @@
 
 let counter = 0;
 
-/** @param {HTMLDialogElement} dialog the dialog from the page */
+/**
+ * Hooks up the dialog from the page. Each id is unique, because the Cancel button finds the dialog by id.
+ * @param {HTMLDialogElement} dialog the dialog from the page
+ */
 export function createLinkDialog(dialog) {
 	const form = /** @type {HTMLFormElement} */ (dialog.querySelector(`form`));
 	const input = /** @type {HTMLInputElement} */ (dialog.querySelector(`input[name="href"]`));

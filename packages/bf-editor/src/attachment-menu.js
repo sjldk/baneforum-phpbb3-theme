@@ -8,6 +8,8 @@
 import { Plugin } from 'prosemirror-state';
 
 /**
+ * Builds the menu from the markup in the page. It keeps the picture it was opened for, so a save or a delete
+ * acts on that picture, also if the text has moved on.
  * @param {object} options
  * @param {ShadowRoot} options.root  the editor's shadow root
  * @param {(name: string, detail: Record<string, unknown>) => void} options.emit  tells the host

@@ -26,7 +26,10 @@ import {
 } from './table-commands.js';
 import { createUploadPlugin } from './upload.js';
 
-/** @param {string} text */
+/**
+ * Makes text safe to put inside a regular expression, so a smilie such as ":)" matches only itself.
+ * @param {string} text
+ */
 const escapePattern = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, `\\$&`);
 
 /**
@@ -121,6 +124,8 @@ function pasteLink(schema, policy, embeds) {
 }
 
 /**
+ * All plugins of the editing surface, in the order they must run. The order matters: the first plugin that
+ * handles a key wins, so table and list keys come before the base keys, and the paste plugin before the table plugin.
  * @param {import('prosemirror-model').Schema} schema
  * @param {Array<import('./contracts.js').Command & {shortcut?: string}>} commands
  * @param {{smilies?: Record<string, string>, linkPolicy?: import('./contracts.js').LinkPolicy, embeds?: import('./contracts.js').EmbedProvider[], uploads?: ReturnType<typeof import('./upload.js').createUploads>, menu?: ReturnType<typeof import('./attachment-menu.js').createAttachmentMenu>, onTableCut?: () => void}} [options]

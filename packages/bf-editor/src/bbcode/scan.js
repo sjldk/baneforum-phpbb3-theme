@@ -46,7 +46,11 @@ const verbatimTags = new Set([`code`]);
 
 const tokenPattern = /\[(\/?)([a-zA-Z*]+)((?:[=\s][^\]]*)?)\]/g;
 
-/** @param {string} text @returns {BBNode[]} */
+/**
+ * Reads BBCode into a tree of text and tag nodes. A tag with no partner stays as text, so no word is lost.
+ * @param {string} text
+ * @returns {BBNode[]}
+ */
 export function scanBBCode(text) {
 	/** @type {{children: BBNode[]}} */
 	const root = { children: [] };
@@ -148,8 +152,11 @@ export function scanBBCode(text) {
 	return mergeText(root.children);
 }
 
-/** Joins neighbouring text nodes that unwinding broken tags may have left. */
-/** @param {BBNode[]} nodes @returns {BBNode[]} */
+/**
+ * Joins neighbouring text nodes that unwinding broken tags may have left.
+ * @param {BBNode[]} nodes
+ * @returns {BBNode[]}
+ */
 function mergeText(nodes) {
 	/** @type {BBNode[]} */
 	const merged = [];

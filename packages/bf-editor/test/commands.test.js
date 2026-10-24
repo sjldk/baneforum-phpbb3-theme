@@ -1,3 +1,4 @@
+// The basic commands (bold, italic, strikethrough, clear formatting, quote): their effect, state and shortcuts.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { EditorState, TextSelection } from 'prosemirror-state';

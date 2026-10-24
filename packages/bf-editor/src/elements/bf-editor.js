@@ -27,30 +27,61 @@ import { createNodeViews } from '../views.js';
 
 /** @typedef {import('../contracts.js').Command & {shortcut?: string, toggle?: boolean}} EditorCommand */
 
+/** The custom element. It builds the shadow root, the toolbars and the ProseMirror view, and keeps them in step. */
 export class BfEditor extends HTMLElement {
-	/** @type {EditorView | null} */
+	/**
+	 * The ProseMirror view. It is null until the element is in a page, and again after it leaves.
+	 * @type {EditorView | null}
+	 */
 	#view = null;
-	/** @type {import('../contracts.js').Codec} */
+	/**
+	 * Turns text into a document and back.
+	 * @type {import('../contracts.js').Codec}
+	 */
 	#codec = createBBCodeCodec(schema);
+	/** The text set before the view exists. The view takes over the text once it is made. */
 	#value = ``;
+	/** The formatting toolbar. */
 	#toolbar;
+	/** The floating toolbar that shows while the cursor is in a table. */
 	#tableBar;
+	/** The small form that asks how many rows and columns a new table gets. */
 	#tablePicker;
+	/** The dialog that asks for the address of a link. */
 	#linkDialog;
+	/** The element that holds the editing surface. */
 	#editable;
+	/** The shadow root. Ids and styles in it are private to this editor. */
 	#root;
-	/** @type {Record<string, string>} */
+	/**
+	 * The words for buttons and messages, in the page language.
+	 * @type {Record<string, string>}
+	 */
 	#words = labelsFor();
-	/** @type {import('../contracts.js').UploadHandler | null} */
+	/**
+	 * Sends files to the host. Null means no uploads.
+	 * @type {import('../contracts.js').UploadHandler | null}
+	 */
 	#uploadHandler = null;
+	/** Does the work of adding files: placeholders, the upload and the count of files still on their way. */
 	#uploads;
-	/** @type {((index: number) => {src?: string, description?: string} | null) | null} */
+	/**
+	 * Asks the host where to show an attachment from. Null means the host knows nothing, so the name shows.
+	 * @type {((index: number) => {src?: string, description?: string} | null) | null}
+	 */
 	#attachmentInfo = null;
+	/** The small menu on an image or file in the text. */
 	#menu;
+	/** The hidden file field. A toolbar button opens it. */
 	#picker;
+	/** A hidden output element. Screen readers read what is written to it. */
 	#status;
+	/** How images, files and videos are drawn in the editing surface. */
 	#nodeViews;
-	/** @type {EditorCommand[]} */
+	/**
+	 * The toolbar actions, with the built in ones added.
+	 * @type {EditorCommand[]}
+	 */
 	#commands;
 
 	constructor() {
@@ -193,7 +224,10 @@ export class BfEditor extends HTMLElement {
 		}
 	}
 
-	/** @param {string} key  a word the editor uses, see labels.js */
+	/**
+	 * The word the editor uses for a key, in the page language. A host can use it to match the editor's wording.
+	 * @param {string} key  a word the editor uses, see labels.js
+	 */
 	labelFor(key) {
 		return this.#words[key] ?? ``;
 	}
@@ -264,7 +298,10 @@ export class BfEditor extends HTMLElement {
 		return this.#view ? this.#codec.serialize(this.#view.state.doc) : this.#value;
 	}
 
-	/** @param {string} text  Replaces the whole content. */
+	/**
+	 * Replaces the whole content. Before the element is in a page, the text is kept until the view exists.
+	 * @param {string} text
+	 */
 	set value(text) {
 		this.#value = text;
 
@@ -335,7 +372,10 @@ export class BfEditor extends HTMLElement {
 		return this.#view;
 	}
 
-	/** @param {string} text */
+	/**
+	 * A fresh editor state for the text. A new state also drops the undo history, which suits a new content.
+	 * @param {string} text
+	 */
 	#createState(text) {
 		return EditorState.create({
 			doc: this.#codec.parse(text),
@@ -352,7 +392,10 @@ export class BfEditor extends HTMLElement {
 		});
 	}
 
-	/** @param {string} id */
+	/**
+	 * Runs the toolbar command with this id on the text, then gives the focus back to the text.
+	 * @param {string} id
+	 */
 	#run(id) {
 		const view = this.#view;
 		const command = this.#commands.find((candidate) => candidate.id === id);
@@ -365,7 +408,10 @@ export class BfEditor extends HTMLElement {
 		view.focus();
 	}
 
-	/** @param {import('prosemirror-state').EditorState} state */
+	/**
+	 * Shows which buttons are on or unavailable for the state, and shows the table bar only inside a table.
+	 * @param {import('prosemirror-state').EditorState} state
+	 */
 	#syncToolbar(state) {
 		const buttons = {
 			active: this.#commands.filter((command) => command.isActive?.(state)).map((command) => command.id),

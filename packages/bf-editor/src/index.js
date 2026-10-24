@@ -1,3 +1,5 @@
+// The public entry of the package: everything a host page may import, in one place.
+
 export { scanBBCode } from './bbcode/scan.js';
 export { createBBCodeCodec } from './codecs/bbcode.js';
 export { createBasicCommands } from './commands.js';

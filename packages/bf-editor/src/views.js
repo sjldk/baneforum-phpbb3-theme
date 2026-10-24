@@ -3,6 +3,8 @@
 import { format } from './labels.js';
 
 /**
+ * The node views for the upload and attachment nodes. A node view draws the node with the template, not with
+ * the schema's default markup, so it can show progress, errors and the menu.
  * @param {ShadowRoot} root  the editor's shadow root, which holds the templates
  * @param {ReturnType<import('./upload.js').createUploads>} uploads
  * @param {() => Record<string, string>} labels  the words to use, see labels.js

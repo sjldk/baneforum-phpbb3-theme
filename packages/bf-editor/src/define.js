@@ -1,3 +1,5 @@
+// Registers the custom elements of the package with the browser.
+
 import { BfEditor } from './elements/bf-editor.js';
 import { BfYoutube } from './elements/bf-youtube.js';
 

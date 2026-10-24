@@ -1,6 +1,8 @@
 // A paragraph that holds only a video address becomes a player. The address is saved as typed.
 
 /**
+ * Turns a paragraph that holds only a video address into an embed.
+ * Any other paragraph is returned as it is, so an address in a sentence stays a link.
  * @param {import('prosemirror-model').Node} paragraph
  * @param {import('prosemirror-model').Schema} schema
  * @param {import('../contracts.js').EmbedProvider[]} providers

@@ -1,3 +1,4 @@
+// The contract checker, and that every fake in test/fakes/ satisfies its contract.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { assertImplements, contractNames } from '../src/contracts.js';

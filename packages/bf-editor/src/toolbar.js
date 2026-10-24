@@ -5,8 +5,12 @@
 //   - buttons with aria-pressed show which commands are on, and any button can be disabled
 //   - Keyboard (WAI-ARIA toolbar): one Tab stop for the whole row, arrow keys move between buttons.
 
+/** Adds the toolbar behaviour (keys, pressed and disabled states) to a menu that is already in the page. */
 export class Toolbar {
-	/** @type {HTMLMenuElement} */
+	/**
+	 * The menu element of the page.
+	 * @type {HTMLMenuElement}
+	 */
 	#menu;
 
 	/** @param {HTMLMenuElement} menu the toolbar from the page */
@@ -25,7 +29,10 @@ export class Toolbar {
 		});
 	}
 
-	/** @param {string} id the element the toolbar controls */
+	/**
+	 * Points the toolbar and its buttons at the element they act on. The browser then sends each button's command there.
+	 * @param {string} id the element the toolbar controls
+	 */
 	controls(id) {
 		this.#menu.setAttribute(`aria-controls`, id);
 
@@ -40,6 +47,8 @@ export class Toolbar {
 	}
 
 	/**
+	 * Marks the buttons that are on and the ones that are unavailable.
+	 * A button is disabled with aria-disabled, so it stays in the tab order and screen readers can still find it.
 	 * @param {{active?: Iterable<string>, disabled?: Iterable<string>}} state ids of buttons that are on or unavailable
 	 */
 	setState({ active = [], disabled = [] }) {
@@ -61,14 +70,20 @@ export class Toolbar {
 		}
 	}
 
-	/** @returns {HTMLButtonElement[]} */
+	/**
+	 * The buttons that send a command. It is read each time, because the page can add or remove buttons.
+	 * @returns {HTMLButtonElement[]}
+	 */
 	#buttons() {
 		return [...this.#menu.querySelectorAll(`button[command^="--"]`)].filter(
 			(element) => element instanceof HTMLButtonElement,
 		);
 	}
 
-	/** @param {KeyboardEvent} event */
+	/**
+	 * Moves between the buttons with the arrow keys, Home and End. Only one button is in the tab order at a time.
+	 * @param {KeyboardEvent} event
+	 */
 	#onKeydown = (event) => {
 		const buttons = this.#buttons();
 		const root = /** @type {Document | ShadowRoot} */ (this.#menu.getRootNode());

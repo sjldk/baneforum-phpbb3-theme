@@ -21,12 +21,19 @@ import { PLACEHOLDER_CLOSE, PLACEHOLDER_OPEN } from './placeholders.js';
 const placeholderPattern = new RegExp(`^${PLACEHOLDER_OPEN}(\\d+)${PLACEHOLDER_CLOSE}`);
 const linkPattern = /^\[((?:[^\][\n]|\[[^\][\n]*\])*)\]\(((?:[^\s()]|\([^\s()]*\))*)\)/;
 
-/** @param {string} character */
+/**
+ * True for white space, and for the edge of the text, which counts as white space for emphasis.
+ * @param {string} character
+ */
 const isSpace = (character) => character === `` || /\s/u.test(character);
-/** @param {string} character */
+/**
+ * True for punctuation and symbols. The CommonMark emphasis rules need it to tell if a marker may open or close.
+ * @param {string} character
+ */
 const isPunctuation = (character) => character !== `` && /[\p{P}\p{S}]/u.test(character);
 
 /**
+ * Reads one paragraph of inline Markdown into text, marks and line breaks.
  * @param {import('prosemirror-model').Schema} schema
  * @param {string} text
  * @param {import('prosemirror-model').Node[]} placeholders
@@ -38,6 +45,8 @@ export function parseInline(schema, text, placeholders, replaceSmilies) {
 }
 
 /**
+ * Cuts the text into pieces: plain text, emphasis markers, line breaks and ready nodes (code, links, BBCode).
+ * It does not pair the markers. `flatten` does that.
  * @param {import('prosemirror-model').Schema} schema
  * @param {string} text
  * @param {import('prosemirror-model').Node[]} placeholders
@@ -256,6 +265,8 @@ function matchEmphasis(schema, items) {
 }
 
 /**
+ * Pairs the emphasis markers and turns the pieces into nodes.
+ * Text gets its smilies, except inside a link, where a code like ":)" may be part of the address.
  * @param {import('prosemirror-model').Schema} schema
  * @param {Item[]} items
  * @param {(text: string) => string} replaceSmilies

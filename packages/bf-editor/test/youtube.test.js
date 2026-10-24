@@ -1,3 +1,4 @@
+// YouTube: reading addresses and start times, turning a lone address into a player, and the page player.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { JSDOM } from 'jsdom';

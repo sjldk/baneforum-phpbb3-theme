@@ -25,6 +25,8 @@ export function parseStart(text) {
 }
 
 /**
+ * Reads a YouTube address in any common form (watch, youtu.be, shorts, live, embed) and finds the video id and start time.
+ * Anything else, including a non-web address, gives null.
  * @param {string} text
  * @returns {import('../contracts.js').EmbedMatch | null}
  */

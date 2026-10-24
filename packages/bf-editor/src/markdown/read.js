@@ -35,6 +35,7 @@ function resolveReferences(source) {
 }
 
 /**
+ * Reads Markdown into block nodes. A paragraph becomes a paragraph, and every other block becomes a raw block with BBCode.
  * @param {import('prosemirror-model').Schema} schema
  * @param {string} source  Markdown, with placeholders where BBCode nodes were
  * @param {import('prosemirror-model').Node[]} placeholders  Nodes to put back, by index

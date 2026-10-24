@@ -22,7 +22,10 @@ const tableRow = /^\s*\|.*\|\s*$/;
 const html = /^ {0,3}<[a-zA-Z/!?]/;
 const setext = /^ {0,3}(?:=+|-+)\s*$/;
 
-/** @param {string} line */
+/**
+ * True when a line starts a block that is not a plain paragraph.
+ * @param {string} line
+ */
 const startsBlock = (line) =>
 	heading.test(line) ||
 	bullet.test(line) ||
@@ -34,8 +37,11 @@ const startsBlock = (line) =>
 	tableRow.test(line) ||
 	html.test(line);
 
-// A line like this can end a paragraph without a blank line before it.
-/** @param {string} line */
+/**
+ * True when a line can end a paragraph without a blank line before it.
+ * A list must start with 1 here, so "2019. A year" in a sentence is not a list.
+ * @param {string} line
+ */
 const interrupts = (line) =>
 	heading.test(line) ||
 	bullet.test(line) ||
@@ -44,10 +50,15 @@ const interrupts = (line) =>
 	fence.test(line) ||
 	thematic.test(line);
 
-/** @param {string} line */
+/**
+ * True when a line belongs to the list above it: another item, or an indented line.
+ * @param {string} line
+ */
 const continuesList = (line) => bullet.test(line) || ordered.test(line) || /^ {2,}\S/.test(line) || /^\t/.test(line);
 
 /**
+ * Splits Markdown into paragraphs and raw blocks, and remembers the blank lines in front of each.
+ * A fenced block, list, table or quote runs on across blank lines while the next lines belong to it.
  * @param {string} source
  * @returns {Block[]}
  */
@@ -147,6 +158,7 @@ export function splitBlocks(source) {
 }
 
 /**
+ * Makes a raw block from a range of lines. It keeps the exact source, without the blank lines at the end.
  * @param {string[]} lines
  * @param {number} from  first line, counted from 0
  * @param {number} to  one past the last line

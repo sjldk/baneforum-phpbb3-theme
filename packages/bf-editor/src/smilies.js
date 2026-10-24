@@ -77,12 +77,17 @@ export const smilieImages = Object.freeze({
 	icon_surprised: `😮`,
 });
 
-/** @param {string} text */
+/**
+ * Escapes a text so a regular expression reads it as plain characters.
+ * @param {string} text
+ */
 function escapeRegExp(text) {
 	return text.replace(/[.*+?^${}()|[\]\\]/g, `\\$&`);
 }
 
 /**
+ * Makes a function that replaces smilie codes with emoji.
+ * Long codes go first, so a short code does not hide a longer one that starts with it.
  * @param {Record<string, string>} [map] code to emoji
  * @returns {(text: string) => string} replaces the codes in a piece of text
  */

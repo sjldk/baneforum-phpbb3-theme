@@ -9,6 +9,8 @@ import { format } from './labels.js';
 import { MAX_TABLE_COLUMNS, MAX_TABLE_ROWS } from './schema.js';
 
 /**
+ * Hooks up the picker from the page and draws its grid. The answer comes from ask(), which resolves with the
+ * chosen size, or null when the writer closes the picker.
  * @param {HTMLFormElement} form the popover from the page
  * @param {() => Record<string, string>} words the words, see labels.js
  * @param {() => HTMLElement | null} anchor the Table button, which the popover opens under

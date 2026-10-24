@@ -1,3 +1,4 @@
+// Uploads: a file shows at once, then becomes an attachment or an image, with progress, errors and removal.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { EditorState, TextSelection } from 'prosemirror-state';

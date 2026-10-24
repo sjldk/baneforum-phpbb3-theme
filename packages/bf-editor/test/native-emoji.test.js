@@ -1,3 +1,4 @@
+// Native emoji: smilie pictures and text smilies become plain emoji characters, and nothing else changes.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { JSDOM } from 'jsdom';

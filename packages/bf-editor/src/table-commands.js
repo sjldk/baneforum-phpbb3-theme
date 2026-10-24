@@ -21,6 +21,7 @@ import {
 import { MAX_TABLE_COLUMNS, MAX_TABLE_ROWS } from './schema.js';
 
 /**
+ * A whole number from 1 up to the most. Anything that is not a number gives 1.
  * @param {number} value
  * @param {number} most
  */
@@ -85,6 +86,7 @@ export function insertTable(schema, rows, columns) {
 const columnCount = (state) => (isInTable(state) ? selectedRect(state).map.width : 0);
 
 /**
+ * Lets a command run only while the table has fewer than MAX_TABLE_COLUMNS columns, so it cannot grow past the limit.
  * @param {import('prosemirror-state').Command} command
  * @returns {import('prosemirror-state').Command}
  */
@@ -98,6 +100,7 @@ const widthLimited = (command) => (state, dispatch, view) =>
 const rowCount = (state) => (isInTable(state) ? selectedRect(state).map.height : 0);
 
 /**
+ * Lets a command run only while the table has fewer than MAX_TABLE_ROWS rows, so it cannot grow past the limit.
  * @param {import('prosemirror-state').Command} command
  * @returns {import('prosemirror-state').Command}
  */
@@ -398,6 +401,8 @@ function cutColumns(fragment, schema, report) {
 }
 
 /**
+ * Cuts a pasted table down to MAX_TABLE_COLUMNS columns and MAX_TABLE_ROWS rows, and calls report when it cut,
+ * so the writer is told why cells are missing.
  * @param {import('prosemirror-model').Schema} schema
  * @param {Slice} slice
  * @param {() => void} report

@@ -4,6 +4,8 @@
 import { labelsFor } from '../labels.js';
 
 /**
+ * Makes links to other sites open in a new window, and says so with an icon and a hidden text.
+ * Links to the same site, and links that were already changed, are left alone.
  * @param {ParentNode} root  the part of the page to look in
  * @param {{origin?: string, text?: string}} [options]
  * @returns {number} how many links were changed

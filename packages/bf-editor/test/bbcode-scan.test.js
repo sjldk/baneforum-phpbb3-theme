@@ -1,3 +1,4 @@
+// The BBCode scanner: how tags nest, and how broken or unknown tags stay as text.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { scanBBCode } from '../src/bbcode/scan.js';

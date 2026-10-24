@@ -7,12 +7,17 @@
 import { Plugin } from 'prosemirror-state';
 import { format, labelsFor } from './labels.js';
 
-/** @param {DataTransfer | null | undefined} data */
+/**
+ * The files of a drop or a paste as a plain list. It is empty when there are none.
+ * @param {DataTransfer | null | undefined} data
+ */
 function droppedFiles(data) {
 	return [...(data?.files ?? [])];
 }
 
 /**
+ * Starts and follows uploads. It keeps the running ones, so a file can be stopped and the host can wait for all of
+ * them before the form is sent.
  * @param {object} options
  * @param {import('prosemirror-model').Schema} options.schema
  * @param {() => import('./contracts.js').UploadHandler | null} options.handler  the handler now in use, or null

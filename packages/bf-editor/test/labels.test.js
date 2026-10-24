@@ -1,3 +1,4 @@
+// The words of the interface: language choice, host overrides, format and applyLabels.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { JSDOM } from 'jsdom';

@@ -1,3 +1,4 @@
+// The BBCode codec: reading and writing text, quotes, attachments, videos and smilies, and that unknown markup survives.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createBBCodeCodec } from '../src/codecs/bbcode.js';

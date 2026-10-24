@@ -6,7 +6,12 @@ import { Fragment } from 'prosemirror-model';
 import { liftListItem, wrapInList } from 'prosemirror-schema-list';
 import { Selection } from 'prosemirror-state';
 
-/** @param {import('prosemirror-state').EditorState} state @param {import('prosemirror-model').MarkType} type */
+/**
+ * Whether a mark is on at the cursor, or on any part of the selection. With a bare cursor the marks that the
+ * writer chose but has not typed yet count too, so the button shows the right state.
+ * @param {import('prosemirror-state').EditorState} state
+ * @param {import('prosemirror-model').MarkType} type
+ */
 function markIsOn(state, type) {
 	const { from, $from, to, empty } = state.selection;
 
@@ -17,7 +22,11 @@ function markIsOn(state, type) {
 	return state.doc.rangeHasMark(from, to, type);
 }
 
-/** @param {import('prosemirror-state').EditorState} state @param {import('prosemirror-model').NodeType} type */
+/**
+ * Whether the cursor is inside a node of this type, at any depth.
+ * @param {import('prosemirror-state').EditorState} state
+ * @param {import('prosemirror-model').NodeType} type
+ */
 function insideNode(state, type) {
 	const { $from } = state.selection;
 
@@ -155,6 +164,7 @@ function liftOutOfLists(schema) {
 }
 
 /**
+ * The built in toolbar actions: marks, quote, lists and the like. Each has a shortcut where the writer expects one.
  * @param {import('prosemirror-model').Schema} schema
  * @returns {Array<import('./contracts.js').Command & {shortcut?: string, toggle: boolean}>}
  */

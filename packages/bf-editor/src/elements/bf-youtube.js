@@ -8,6 +8,7 @@ import { playerUrl, youtubeProvider } from '../embeds/youtube.js';
 import { applyLabels, labelsFor } from '../labels.js';
 import { template } from '../youtube-template.js';
 
+/** The video card element. It holds only a play button until the visitor presses it. */
 export class BfYoutube extends HTMLElement {
 	constructor() {
 		super();
@@ -19,6 +20,7 @@ export class BfYoutube extends HTMLElement {
 	}
 
 	/**
+	 * Swaps the button for the player frame. The frame is made only now, so nothing is loaded before the press.
 	 * @param {ShadowRoot} root
 	 * @param {HTMLButtonElement} button
 	 */

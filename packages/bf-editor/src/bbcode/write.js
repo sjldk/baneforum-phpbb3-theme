@@ -16,7 +16,10 @@ function isTagBlock(block) {
 	return block.type.name === `blockquote` || (block.type.name === `embed` && block.attrs.source !== ``);
 }
 
-/** @param {PMNode} doc */
+/**
+ * Writes a document as BBCode. Blocks are split by blank lines, except around a tag block.
+ * @param {PMNode} doc
+ */
 export function writeDocument(doc) {
 	/** @type {Array<{block: PMNode, text: string}>} */
 	const parts = [];
@@ -83,6 +86,7 @@ function writeTable(table) {
 }
 
 /**
+ * Writes one block as BBCode. An embed or raw block comes out as the source it was saved with.
  * @param {PMNode} block
  * @returns {string}
  */
@@ -151,6 +155,7 @@ export function writeInline(paragraph) {
 }
 
 /**
+ * The tag that opens a mark. A link whose text is its own address needs no `=address` part.
  * @param {PMMark} mark
  * @param {PMNode[]} nodes  every inline node of the paragraph
  * @param {number} index  where the mark opens
@@ -170,12 +175,18 @@ function opening(mark, nodes, index) {
 	return label === mark.attrs.href ? `[url]` : `[url=${mark.attrs.href}]`;
 }
 
-/** @param {PMMark} mark */
+/**
+ * The tag that closes a mark.
+ * @param {PMMark} mark
+ */
 function closing(mark) {
 	return mark.type.name === `link` ? `[/url]` : `[/${tags[mark.type.name]}]`;
 }
 
-/** @param {PMNode} node */
+/**
+ * Writes one inline node that is not text with marks: a line break, a file, a picture or raw source.
+ * @param {PMNode} node
+ */
 function writeInlineNode(node) {
 	switch (node.type.name) {
 		case `text`:

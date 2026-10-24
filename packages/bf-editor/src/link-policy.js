@@ -4,6 +4,8 @@
 const allowedSchemes = new Set([`http:`, `https:`, `mailto:`]);
 
 /**
+ * Trims the address and adds https:// to one that has no scheme. Spaces and other schemes (javascript:, data:) are
+ * refused, because a link with them could run code or leak data when it is clicked.
  * @param {string} url what the user typed or pasted
  * @returns {string | null} a clean address, or null if it is not allowed
  */

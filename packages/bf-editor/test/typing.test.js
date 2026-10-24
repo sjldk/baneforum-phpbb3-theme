@@ -1,3 +1,4 @@
+// Typing rules: **bold**, *italic*, ~~strike~~, smilie codes and "> " change the text as you type.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { EditorState, TextSelection } from 'prosemirror-state';

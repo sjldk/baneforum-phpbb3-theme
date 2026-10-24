@@ -6,6 +6,7 @@
 import { youtubeProvider } from '../embeds/youtube.js';
 
 /**
+ * Makes a `<bf-youtube>` player. It keeps the link inside, so the video can still be opened without scripts.
  * @param {Document} document
  * @param {string} url the address of the video
  * @param {Element | null} link a link to keep inside the player, or null to make one
@@ -64,6 +65,7 @@ export function useYoutubeThumbnails(root) {
 }
 
 /**
+ * Swaps video embeds in saved posts for `<bf-youtube>` players, so nothing loads from Google before play.
  * @param {ParentNode} root  the part of the page to look in
  * @returns {number} how many players were made
  */

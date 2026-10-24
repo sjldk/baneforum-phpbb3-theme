@@ -6,6 +6,7 @@
 import { labelsFor } from '../labels.js';
 
 /**
+ * Makes pictures open in a new tab, and moves files placed in the text to the list under the post.
  * @param {ParentNode} root  the part of the page to look in, one post
  * @returns {number} how many things were changed
  */

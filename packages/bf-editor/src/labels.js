@@ -99,6 +99,7 @@ const languages = {
 };
 
 /**
+ * Gives the words for a language. English fills every gap, and the host can replace single words.
  * @param {string} [language]  for example "da" or "en-gb"
  * @param {Record<string, string>} [overrides]  words that replace the built in ones
  * @returns {Record<string, string>}

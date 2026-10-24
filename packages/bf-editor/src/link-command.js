@@ -77,6 +77,7 @@ export function setLink(schema, href) {
 }
 
 /**
+ * Takes the link off the selection, or off the whole link the cursor is in. The text stays.
  * @param {import('prosemirror-model').Schema} schema
  * @returns {import('prosemirror-state').Command}
  */
