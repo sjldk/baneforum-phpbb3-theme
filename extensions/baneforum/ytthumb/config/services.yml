@@ -16,5 +16,6 @@ services:
         arguments:
             - '@controller.helper'
             - '@template'
+            - '@request'
         tags:
             - { name: event.listener }
