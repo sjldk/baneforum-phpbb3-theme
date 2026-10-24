@@ -6,21 +6,19 @@
 	margin: 0 0 2rem;
 }
 
-/* A small label above, like the section line of a magazine. */
-body .bf-featured .bf-featured__label {
-	margin: 0 0 0.75rem;
-	font-family: var(--font-mono, ui-monospace, monospace) !important;
-	font-size: var(--text-meta, 0.8125rem) !important;
-	font-weight: 400 !important;
-	letter-spacing: 0.12em;
-	text-transform: uppercase;
-	color: var(--color-muted, #444);
+/* The section is laid out by the grid of .bf-index in the theme: .bf-featured does not make a box of its own. */
+.bf-featured {
+	display: contents;
+}
+
+.bf-featured__lead {
+	grid-column: 1 / -1;
 }
 
 .bf-featured__list {
-	display: grid;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 1.5rem 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -98,11 +96,7 @@ body .bf-featured .bf-featured__meta {
 	color: var(--color-muted, #444);
 }
 
-/* The lead story takes the whole top row: the picture on the left (a wide crop, 14rem high), the headline large on the right. */
-.bf-featured__item--lead {
-	grid-column: 1 / -1;
-}
-
+/* The lead story: the picture on the left (a wide crop, 14rem high), the headline large on the right. */
 @media (min-width: 43.75em) {
 	.bf-featured__item--lead {
 		flex-direction: row;
@@ -127,9 +121,31 @@ body .bf-featured .bf-featured__meta {
 	}
 }
 
-/* Narrower: two small stories in a row, and on a phone the lead picture goes above its headline (the default column layout). */
-@media (max-width: 56em) {
-	.bf-featured__list {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+/* The other stories: a list, the picture on the left and the headline on the right. */
+.bf-featured__list > .bf-featured__item {
+	flex-direction: row;
+	align-items: center;
+	gap: 1rem;
+}
+
+.bf-featured__list > .bf-featured__item .bf-featured__picture {
+	flex: 0 0 min(18rem, 45%);
+	aspect-ratio: 3 / 2;
+}
+
+@media (min-width: 43.75em) {
+	body .bf-featured .bf-featured__list .bf-featured__topic {
+		font-size: 1.75rem !important;
+		line-height: 1.08;
+	}
+}
+
+@media (max-width: 30em) {
+	.bf-featured__list > .bf-featured__item .bf-featured__picture {
+		flex-basis: 7rem;
+	}
+
+	body .bf-featured .bf-featured__list .bf-featured__topic {
+		font-size: 1.125rem !important;
 	}
 }

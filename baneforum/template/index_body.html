@@ -11,11 +11,13 @@
 {% endif %}
 {% EVENT index_body_markforums_after %}
 
-{# The forum list. The featured posts (extension) come above it, from the event after the mark forums bar. #}
+{# The front page: the featured posts (extension, from the event) are the main part, with a lead story on top, and the forum list is the aside. Without the extension the forum list has the whole width. #}
 <div class="bf-index">
-	<h2 class="bf-index__title">{{ lang('FORUMS') }}</h2>
-	{% include 'forumlist_body.html' %}
 	{% EVENT index_body_forumlist_body_after %}
+	<div class="bf-index__aside">
+		<h2 class="bf-index__title">{{ lang('FORUMS') }}</h2>
+		{% include 'forumlist_body.html' %}
+	</div>
 </div>
 
 {% if not S_USER_LOGGED_IN and not S_IS_BOT %}
