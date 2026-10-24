@@ -1999,3 +1999,46 @@ a:has(> img.postimage) {
 body :is(h2, h3, h4, .topic-title, .forum-title, .searchresults-title, a.forumtitle, a.topictitle, .postbody h3 a, h2 a, h3 a) {
 	font-family: var(--font-heading) !important;
 }
+
+/* The page numbers of a topic in a list (wide screens): only the first and the last page, "1 … 40". A topic with many pages used
+   to show "1 … 36 37 38 39 40" in a box of a fixed width, which wrapped, made the row twice as high and squeezed the title.
+   The topic itself has all the page links. The page icon is not shown. The size of every number stays 44px (WCAG 2.5.5). */
+@media (min-width: 43.75em) {
+	ul.topiclist li.row dl.row-item dt .list-inner:has(.pagination) {
+		grid-template-columns: minmax(0, 1fr) auto;
+	}
+
+	ul.topiclist li.row dl.row-item dt .list-inner:has(.pagination) > .pagination {
+		display: flex;
+		align-items: center;
+		max-inline-size: none;
+		white-space: nowrap;
+	}
+
+	ul.topiclist li.row .pagination > span {
+		display: none;
+	}
+
+	ul.topiclist li.row .pagination > ul {
+		display: flex;
+		flex-wrap: nowrap;
+		gap: 0;
+	}
+
+	/* prosilver forces list items to inline-block with !important, and one rule hides the item after the dots on a small
+	   screen, which would hide the last page. */
+	ul.topiclist li.row .pagination > ul > li:not(:first-child, :last-child, .ellipsis) {
+		display: none !important;
+	}
+
+	ul.topiclist li.row .pagination > ul > li:last-child {
+		display: inline-block !important;
+	}
+
+	/* A list with no dots (up to six pages) gets them where the pages in between are hidden. */
+	ul.topiclist li.row .pagination > ul:has(li:nth-child(3)):not(:has(.ellipsis)) > li:last-child::before {
+		content: "…";
+		margin-inline-end: 0.5rem;
+		color: var(--color-muted);
+	}
+}
