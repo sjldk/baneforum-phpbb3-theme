@@ -713,3 +713,15 @@ div.rules :is(a, strong, h3, h4) {
 .dropdown-extended time {
 	color: var(--color-muted);
 }
+
+/* A disabled page arrow (the first and the last page have no previous or next page): it is there so the numbers do not move,
+   but it is faded and does nothing. */
+.pagination li.is-disabled .button {
+	opacity: 0.35;
+	cursor: default;
+	background: transparent;
+}
+
+.pagination li.is-disabled .button .icon {
+	color: var(--color-muted);
+}
