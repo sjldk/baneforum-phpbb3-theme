@@ -10,8 +10,8 @@ namespace baneforum\likes;
 use phpbb\db\driver\driver_interface;
 
 /**
- * Stores one vote per member per post: +1 for a like, -1 for a dislike. The table does not say who voted
- * and when. See voter_key.
+ * Stores one vote per member per post: +1 for a like, -1 for a dislike. The table logs who voted (the member) and when, for the
+ * board's own records. Nothing in the page shows it: the answers hold only the counts and the member's own vote.
  */
 class votes
 {
@@ -22,16 +22,14 @@ class votes
 	public const HIDE_ABOVE = 5;
 
 	/**
-	 * Keeps the database and the key maker.
+	 * Keeps the database and the name of the vote table.
 	 *
-	 * @param driver_interface $db         The database.
-	 * @param string           $table      The full name of the vote table.
-	 * @param voter_key        $voter_key  Makes the voter value that is stored instead of the user id.
+	 * @param driver_interface $db     The database.
+	 * @param string           $table  The full name of the vote table.
 	 */
 	public function __construct(
 		protected driver_interface $db,
-		protected string $table,
-		protected voter_key $voter_key
+		protected string $table
 	)
 	{
 	}
@@ -94,16 +92,8 @@ class votes
 
 		if ($user_id > 1)
 		{
-			// The table holds a hash per member and post, not the member. Work out the member's hashes and look for those.
-			$voters = [];
-
-			foreach (array_keys($result) as $id)
-			{
-				$voters[$this->voter_key->voter($user_id, $id)] = $id;
-			}
-
 			$sql = "SELECT post_id, vote_value FROM {$this->table}
-				WHERE " . $this->db->sql_in_set('voter', array_keys($voters)) . " AND $in";
+				WHERE user_id = $user_id AND $in";
 			$rows = $this->db->sql_query($sql);
 
 			while ($row = $this->db->sql_fetchrow($rows))
@@ -133,8 +123,7 @@ class votes
 
 		if ($next !== $current)
 		{
-			$voter = $this->voter_key->voter($user_id, $post_id);
-			$where = 'post_id = ' . $post_id . " AND voter = '" . $this->db->sql_escape($voter) . "'";
+			$where = 'post_id = ' . $post_id . ' AND user_id = ' . $user_id;
 
 			if ($next === 0)
 			{
@@ -144,13 +133,14 @@ class votes
 			{
 				$this->db->sql_query('INSERT INTO ' . $this->table . ' ' . $this->db->sql_build_array('INSERT', [
 					'post_id'    => $post_id,
-					'voter'      => $voter,
+					'user_id'    => $user_id,
 					'vote_value' => $next,
+					'vote_time'  => time(),
 				]));
 			}
 			else
 			{
-				$this->db->sql_query('UPDATE ' . $this->table . ' SET vote_value = ' . $next . " WHERE $where");
+				$this->db->sql_query('UPDATE ' . $this->table . ' SET vote_value = ' . $next . ', vote_time = ' . time() . " WHERE $where");
 			}
 		}
 

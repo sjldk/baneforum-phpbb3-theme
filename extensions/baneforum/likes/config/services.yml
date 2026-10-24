@@ -2,17 +2,11 @@ parameters:
     baneforum.likes.table: '%core.table_prefix%baneforum_votes'
 
 services:
-    baneforum.likes.voter_key:
-        class: baneforum\likes\voter_key
-        arguments:
-            - '%core.root_path%store/baneforum_votes.key'
-
     baneforum.likes.votes:
         class: baneforum\likes\votes
         arguments:
             - '@dbal.conn'
             - '%baneforum.likes.table%'
-            - '@baneforum.likes.voter_key'
 
     baneforum.likes.listener:
         class: baneforum\likes\event\listener

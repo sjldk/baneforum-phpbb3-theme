@@ -46,6 +46,11 @@ namespace
 	$check('another member gives another value', $one !== $key->voter(6, 100));
 	$check('the value is a 64 character hash', preg_match('/^[0-9a-f]{64}$/', $one) === 1);
 	$check('the key file is private', (fileperms($file) & 0077) === 0);
+
+	// The migration turns old hashed votes back into members.
+	$check('the member behind a value is found', $key->find_member($key->voter(7, 100), 100, [3, 5, 7, 9]) === 7);
+	$check('a value of another post does not match', $key->find_member($key->voter(7, 100), 101, [3, 5, 7, 9]) === 0);
+	$check('a member who is not in the list gives 0', $key->find_member($key->voter(8, 100), 100, [3, 5, 7, 9]) === 0);
 	unlink($file);
 
 	exit($failed > 0 ? 1 : 0);

@@ -8,11 +8,10 @@
 namespace baneforum\likes;
 
 /**
- * Makes the value that stands for a member in the vote table, so the table never holds a user id.
+ * The keyed hash that the vote table held for a member between 2026-10-22 and the migration m2_log_voters. New votes no longer use it:
+ * the table logs the member again. The migration uses this class once, to turn the old values back into members.
  *
- * The value is a keyed hash of the member and the post. The key is a file outside the database, so a copy
- * of the database alone (a backup, a leaked dump, a database administrator) cannot say who voted, and the
- * values of one member on two posts cannot be matched.
+ * The value is a keyed hash of the member and the post. The key is a file outside the database (store/baneforum_votes.key).
  */
 class voter_key
 {
@@ -43,6 +42,28 @@ class voter_key
 	public function voter(int $user_id, int $post_id): string
 	{
 		return hash_hmac('sha256', $user_id . ':' . $post_id, $this->secret());
+	}
+
+	/**
+	 * Finds the member behind a stored value, by trying the members one after the other.
+	 *
+	 * @param string $voter    The stored value.
+	 * @param int    $post_id  The post the value was stored for.
+	 * @param int[]  $user_ids The members to try.
+	 *
+	 * @return int  The member, or 0 when none of them gives this value (for example a member who has been deleted).
+	 */
+	public function find_member(string $voter, int $post_id, array $user_ids): int
+	{
+		foreach ($user_ids as $user_id)
+		{
+			if (hash_equals($voter, $this->voter((int) $user_id, $post_id)))
+			{
+				return (int) $user_id;
+			}
+		}
+
+		return 0;
 	}
 
 	/**

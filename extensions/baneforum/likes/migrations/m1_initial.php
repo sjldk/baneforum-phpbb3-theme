@@ -33,7 +33,7 @@ class m1_initial extends \phpbb\db\migration\migration
 	}
 
 	/**
-	 * The vote table. One row per voter key and post.
+	 * The vote table. One row per member and post. It logs who voted and when, and the page never shows it.
 	 *
 	 * @return array<string, mixed>  The schema change for phpBB.
 	 */
@@ -44,10 +44,14 @@ class m1_initial extends \phpbb\db\migration\migration
 				$this->table_prefix . 'baneforum_votes' => [
 					'COLUMNS' => [
 						'post_id'    => ['UINT', 0],
-						'voter'      => ['VCHAR:64', ''],
+						'user_id'    => ['UINT', 0],
 						'vote_value' => ['TINT:4', 0],
+						'vote_time'  => ['TIMESTAMP', 0],
 					],
-					'PRIMARY_KEY' => ['post_id', 'voter'],
+					'PRIMARY_KEY' => ['post_id', 'user_id'],
+					'KEYS' => [
+						'user_id' => ['INDEX', 'user_id'],
+					],
 				],
 			],
 		];
