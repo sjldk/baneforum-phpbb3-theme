@@ -1577,50 +1577,42 @@ dialog.phpbb_alert .alert_text fieldset.submit-buttons {
 /* Front page: the forum list under the featured posts (extension). The page has three voices, as the posts will have:
    headlines in the condensed face, text that is read in the serif, small facts (counts, dates) in the mono. The interface stays Inter.
    The rules name .bf-index and use !important because the type scale rule gives every element the same font. */
-/* The grid: the lead story on top over the whole width, then the other stories on the left (the wide column) and the forum list on
-   the right (the aside). Below 62em it is one column. Without featured posts the forum list has the whole width. */
+/* The grid: the lead story on top over the whole width (row 1), the other stories on the left and the latest posts in the aside on the
+   right (row 2), and the forum list at the bottom over the whole width (row 3). Below 62em it is one column. Without the latest posts the
+   stories have the whole width. Without featured posts the forum list is alone. */
 .bf-index {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr);
-	gap: 1.5rem 2rem;
+	gap: 2rem 2rem;
 	align-items: start;
 }
 
-.bf-index__aside {
+.bf-index__forums {
+	grid-column: 1 / -1;
 	min-width: 0;
 }
 
 @media (min-width: 62em) {
-	.bf-index:has(.bf-featured) {
+	.bf-index:has(.bf-latest) {
 		grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
 	}
 
-	.bf-index:has(.bf-featured) .bf-featured__rest {
+	.bf-index .bf-featured__rest {
 		grid-column: 1;
-		grid-row: 2;
 	}
 
-	.bf-index:has(.bf-featured) .bf-index__aside {
+	.bf-index:has(.bf-featured) .bf-latest {
 		grid-column: 2;
 		grid-row: 2;
 	}
 
-	/* In the narrow aside a forum shows its name, its description and the last post. The counts and the column labels are left out. */
-	.bf-index:has(.bf-featured) .bf-index__aside ul.topiclist :is(dd.topics, dd.posts) {
-		display: none;
+	.bf-index:has(.bf-featured) .bf-featured__rest {
+		grid-row: 2;
 	}
 
-	.bf-index:has(.bf-featured) .bf-index__aside ul.topiclist li.header dd {
-		display: none;
-	}
-
-	.bf-index:has(.bf-featured) .bf-index__aside ul.topiclist :is(li.row, li.header) dl.row-item {
-		display: block;
-	}
-
-	.bf-index:has(.bf-featured) .bf-index__aside ul.topiclist li.row dd.lastpost {
-		display: block;
-		padding: 0 0.5625rem 0.75rem;
+	/* Without the featured posts the latest posts are the first thing on the page. */
+	.bf-index:not(:has(.bf-featured)) .bf-latest {
+		grid-column: 1 / -1;
 	}
 }
 
