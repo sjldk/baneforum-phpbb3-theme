@@ -22,7 +22,7 @@ The theme needs no change to those two extensions.
 | Topic sort at the top extension | `extensions/baneforum/topicsort/` | `ext/baneforum/topicsort/` |
 | Letter avatars | `extensions/baneforum/avatars/` | `ext/baneforum/avatars/` |
 | Appearance switch (light and dark theme) | `extensions/baneforum/darkmode/` | `ext/baneforum/darkmode/` |
-| Editor extension (required by the editor, and it adds the `[s]` and table BBCodes) | `extensions/baneforum/editor/` | `ext/baneforum/editor/` |
+| Helper extension for the editor, `baneforum/editor` (needed by the editor: it adds the `[s]` and table BBCodes and finds Markdown posts) | `extensions/baneforum/editor/` | `ext/baneforum/editor/` |
 
 `baneforum/theme/bf-editor.js`, `bf-render.js` and `bf-render.css` are built files. They are committed.
 You do not need Node on the server.

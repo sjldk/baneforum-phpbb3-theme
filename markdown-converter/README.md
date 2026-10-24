@@ -48,15 +48,15 @@ What the dry run showed on the production copy (275 Markdown rows: 249 look the 
 | Numbered lines that were an automatic list become plain numbered lines | 23133, 28063, 28862, 29681 | Accept |
 | The `[code]` box header "Code: Select all" | 28512 | Accept |
 | A relative address shows as the full address | 24761 | Accept |
-| Tables: right only if the editor extension is enabled | 21053, 21104 | Leave out, then open and save in the editor |
+| Tables: right only if the helper extension `baneforum/editor` is enabled | 21053, 21104 | Leave out, then open and save in the editor |
 | A `[size]` tag around Markdown bold: `**` stays | 29475 | Leave out, then open and save in the editor |
 | A private message with no visible structure | pm 1441 | Leave out, read by hand |
 
 ## After it
 
-- Open each row you left out in the editor and press Save. The editor converts a Markdown post when it opens it. Read the result first.
+- Open each row you left out in the editor and press Save. The editor converts a Markdown post when it opens it. Read the result first. This needs the editor itself (the style `baneforum`) and the helper extension `baneforum/editor`, which tells the page that the post is Markdown.
 - Disable the Markdown extension last. If a row is still Markdown, it may show raw `**` and `#`.
-- Posts with a table need the editor extension enabled on the board (it registers the `[table]` BBCode).
+- Posts with a table need the helper extension `baneforum/editor` enabled on the board. It is the small PHP extension, not the editor itself: it registers the `[table]` BBCode.
 
 ## If something is wrong
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests for the upload folder of the Markdown converter: the detector copy in it must be the same file as the one in the editor extension,
+ * Tests for the upload folder of the Markdown converter: the detector copy in it must be the same file as the one in the helper extension baneforum/editor,
  * and both library files must load. Run it with scripts/php-check.sh test.
  *
  * @license GNU General Public License, version 2 (GPL-2.0-only)
@@ -15,7 +15,7 @@ $check = function (string $name, bool $ok) use (&$failed): void {
 $lib = __DIR__ . '/../upload/bf-markdown-import';
 $extension = __DIR__ . '/../../extensions/baneforum/editor/markdown_detector.php';
 
-$check('the detector in the upload folder is the same file as in the editor extension', is_file($extension) && md5_file($extension) === md5_file($lib . '/markdown_detector.php'));
+$check('the detector in the upload folder is the same file as in the helper extension', is_file($extension) && md5_file($extension) === md5_file($lib . '/markdown_detector.php'));
 
 require $lib . '/markdown_detector.php';
 require $lib . '/markdown_import.php';

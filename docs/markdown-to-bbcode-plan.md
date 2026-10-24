@@ -96,7 +96,7 @@ So 270 posts and 2 private messages are converted on the copy, 272 rows in all, 
 phpBB has no table BBCode, but the text formatter library inside it has the definitions ready (`TABLE`, `THEAD`, `TBODY`, `TR`, `TH`, `TD`, in its repository file). The extension `baneforum/editor` switches them on next to `[s]` (`add_bbcodes()` in `event/listener.php`).
 The converter writes a Markdown table with a delimiter row as `[table][tr][th]...[/th][/tr]...[/table]`, with `align=left|center|right` from the `:-:` marks. Bars with no delimiter row stay a `[code]` box.
 The editor shows a `[table]` as BBCode text (it has no table editor) and writes it back unchanged (tested).
-**The editor extension must be enabled on the board before the import**, or phpBB would drop the table tags.
+**The helper extension `baneforum/editor` must be enabled on the board before the import**, or phpBB would drop the table tags.
 
 ### Run it (the copy now, production later)
 

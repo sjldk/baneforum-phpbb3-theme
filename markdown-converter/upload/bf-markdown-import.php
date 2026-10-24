@@ -313,10 +313,10 @@ foreach ($settings as $label => $on)
 {
 	echo '<tr><th scope="row">' . h($label) . '</th><td>' . ($on ? 'Yes' : 'No') . '</td></tr>';
 }
-echo '<tr><th scope="row">Editor extension (needed for tables)</th><td>' . ($editor_on ? '<span class="ok">Enabled</span>' : '<span class="bad">Not enabled</span>') . '</td></tr>';
+echo '<tr><th scope="row">Helper extension baneforum/editor (needed for tables)</th><td>' . ($editor_on ? '<span class="ok">Enabled</span>' : '<span class="bad">Not enabled</span>') . '</td></tr>';
 echo '<tr><th scope="row">Rows converted so far</th><td>' . (int) $converted . '</td></tr></tbody></table>';
 echo '<p class="muted">Keep "Allow Markdown (global)" on, so old posts still show correctly. Set "in posts" and "in private messages" to No in the ACP (General, Board configuration) '
-	. 'so no new Markdown posts appear while you work. Posts with tables stay as Markdown until the editor extension is enabled.</p></section>';
+	. 'so no new Markdown posts appear while you work. Posts with tables stay as Markdown until the helper extension baneforum/editor is enabled.</p></section>';
 
 // Step 2
 echo '<section class="card"><h2><span class="step">2</span>Download the Markdown rows</h2>';
