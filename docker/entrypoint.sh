@@ -89,6 +89,21 @@ if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='banefor
 	php bin/phpbbcli.php extension:enable baneforum/latest
 fi
 
+# Our own contact buttons (message, website) beside the author of a post.
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/contact' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable baneforum/contact
+fi
+
+# Our own YouTube thumbnails for the video cards in posts.
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/ytthumb' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable baneforum/ytthumb
+fi
+
+# Our own forum menu in the navigation bar.
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/forummenu' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable baneforum/forummenu
+fi
+
 # Our own letter avatars for members without an avatar.
 if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/avatars' AND ext_active=1")" = 0 ]; then
 	php bin/phpbbcli.php extension:enable baneforum/avatars

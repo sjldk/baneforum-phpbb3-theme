@@ -16,6 +16,9 @@ The theme needs no change to those two extensions.
 | Likes extension | `extensions/baneforum/likes/` | `ext/baneforum/likes/` |
 | Featured posts extension | `extensions/baneforum/featured/` | `ext/baneforum/featured/` |
 | Latest posts extension | `extensions/baneforum/latest/` | `ext/baneforum/latest/` |
+| Forum menu extension | `extensions/baneforum/forummenu/` | `ext/baneforum/forummenu/` |
+| YouTube thumbnails extension | `extensions/baneforum/ytthumb/` | `ext/baneforum/ytthumb/` |
+| Contact buttons extension | `extensions/baneforum/contact/` | `ext/baneforum/contact/` |
 | Letter avatars | `extensions/baneforum/avatars/` | `ext/baneforum/avatars/` |
 | Appearance switch (light and dark theme) | `extensions/baneforum/darkmode/` | `ext/baneforum/darkmode/` |
 
@@ -49,6 +52,9 @@ rsync -av extensions/baneforum/featured/ SERVER:/var/www/baneforum/ext/baneforum
 rsync -av extensions/baneforum/darkmode/ SERVER:/var/www/baneforum/ext/baneforum/darkmode/
 rsync -av extensions/baneforum/avatars/ SERVER:/var/www/baneforum/ext/baneforum/avatars/
 rsync -av extensions/baneforum/latest/ SERVER:/var/www/baneforum/ext/baneforum/latest/
+rsync -av extensions/baneforum/forummenu/ SERVER:/var/www/baneforum/ext/baneforum/forummenu/
+rsync -av extensions/baneforum/ytthumb/ SERVER:/var/www/baneforum/ext/baneforum/ytthumb/
+rsync -av extensions/baneforum/contact/ SERVER:/var/www/baneforum/ext/baneforum/contact/
 ```
 
 - [ ] Both folders are owned by the web user (for example `www-data`), the same as the rest of the board.
@@ -58,6 +64,9 @@ rsync -av extensions/baneforum/latest/ SERVER:/var/www/baneforum/ext/baneforum/l
 
 - [ ] Customise, Manage extensions: enable **Baneforum image compress** and **Baneforum censor**. The censor keeps the ACP word list but leaves URLs alone. Check `alfredoramos/markdown` and `phpbb/mediaembed` stay enabled.
 - [ ] Featured posts (**Baneforum featured posts**): shows up to 5 posts with pictures in a column beside the forum list on the front page. It needs the style's `index_body.html` (it has the place for it), so install the style first. It ranks by likes if **Baneforum likes** is enabled, and by newest otherwise. Only members who can read and download in a forum see its posts. Nothing to configure.
+- [ ] Contact buttons (**Baneforum contact buttons**): beside the name of the author of a post there are buttons for the ways to contact the author: message (a link to write a private message), website (a globe and the word, opens in a new tab) and any other way (email and so on) as an icon. phpBB's own contact menu is hidden. Nothing to configure. Needs the style, and `bf-render.js` for the hidden "opens in a new window" words.
+- [ ] YouTube thumbnails (**Baneforum YouTube thumbnails**): the video cards in posts show the thumbnail of the video. The board fetches each picture once from `i.ytimg.com` (PHP `curl` and outgoing https needed) and keeps it in `cache/<environment>/baneforum_ytthumb/`, so a visitor never contacts Google before pressing play. It only fetches for videos that a post mentions, at most 20 a minute. If a picture is not there, the card looks as before (a plain card with a play button). Needs the style's `bf-render.js`. Nothing to configure. Purge the cache after enabling (the route is new).
+- [ ] Forum menu (**Baneforum forum menu**): a "Forums" menu in the navigation bar on every page, with the categories and forums the visitor may see. It needs the style's `navbar_header.html`, so install the style first. Nothing to configure.
 - [ ] Latest posts (**Baneforum latest posts**): an aside on the front page with the 8 topics that had the newest post, as a text list (title, author, forum, time), only from forums the visitor can read. It sits beside the featured posts and needs the style's `index_body.html`, so install the style first. Nothing to configure.
 - [ ] Letter avatars (**Baneforum letter avatars**): a member with no avatar gets a round letter, the first letter of the name, in the colour that belongs to that letter (12 colours, the same every time). It is a span with CSS, not an image, in posts and private messages. Nothing to configure.
 - [ ] Appearance switch (**Baneforum appearance switch**): adds an "Appearance" link to the top bar. The choice is kept in the visitor's browser (`localStorage`, key `bf-theme`), so there is nothing on the server and no setting.
