@@ -16,16 +16,16 @@ async function run(name, width = 1100) {
 	for (const v of r) console.log(`  [${v.impact}] ${v.id} x${v.n}\n     ${v.s.join(`\n     `)}`);
 }
 for (const [n, u] of [[`topic list`, `viewforum.php?f=4`], [`forum list`, `viewforum.php?f=3`], [`topic`, `viewtopic.php?t=21`], [`new topic + poll`, `posting.php?mode=post&f=2`], [`reply with review`, `posting.php?mode=reply&t=21`], [`search results`, `search.php?search_id=active_topics`]]) {
-	await page.goto(`http://localhost:8080/${u}`, { waitUntil: `networkidle0` });
+	await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/${u}`, { waitUntil: `networkidle0` });
 	if (n.includes(`poll`)) await page.evaluate(() => document.querySelector(`#poll-panel`)?.setAttribute(`open`, ``));
 	if (n.includes(`review`)) await page.evaluate(() => document.querySelector(`#review`)?.setAttribute(`open`, ``));
 	await run(n);
 }
-await page.goto(`http://localhost:8080/viewtopic.php?t=21`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/viewtopic.php?t=21`, { waitUntil: `networkidle0` });
 await page.click(`.post-buttons a[href*="mode=delete"], .post-buttons a[href*="mode=soft_delete"]`);
 await wait(800);
 await run(`delete dialog open`);
 await page.keyboard.press(`Escape`);
-await page.goto(`http://localhost:8080/viewforum.php?f=4`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/viewforum.php?f=4`, { waitUntil: `networkidle0` });
 await run(`topic list`, 402);
 await browser.close();
