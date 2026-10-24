@@ -477,6 +477,8 @@ bf-editable[data-dropping] {
 :host {
 	display: block;
 	margin: 0 0 0.75em;
+	border-radius: var(--bf-radius);
+	background: var(--bf-youtube-bg);
 	--bf-youtube-bg: #132e4e;
 	--bf-youtube-text: #f6f8fa;
 	--bf-focus: #4e76a5;
@@ -493,7 +495,7 @@ button {
 	inline-size: 100%;
 	aspect-ratio: 16 / 9;
 	border: 0.15rem solid transparent;
-	border-radius: var(--bf-radius);
+	border-radius: var(--bf-radius) var(--bf-radius) 0 0;
 	background: var(--bf-youtube-bg);
 	color: var(--bf-youtube-text);
 	cursor: pointer;
@@ -516,14 +518,52 @@ iframe {
 	inline-size: 100%;
 	aspect-ratio: 16 / 9;
 	border: 0;
-	border-radius: var(--bf-radius);
+	border-radius: var(--bf-radius) var(--bf-radius) 0 0;
 }
 
-/* The link in the post, kept so the video can be opened on YouTube. */
+/* The link in the post, kept so the video can be opened on YouTube. It is the footer of the card: a strip under the player,
+   in the colour of the card, at least 44 pixels high. */
 slot {
 	display: block;
-	margin-block-start: 0.25rem;
+}
+
+slot::slotted(a) {
+	display: flex;
+	align-items: center;
+	min-block-size: var(--bf-target);
+	box-sizing: border-box;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0 0 var(--bf-radius) var(--bf-radius);
+	/* A little darker than the card (6% of the text colour), so that the strip reads as a footer. */
+	background: color-mix(in srgb, var(--bf-youtube-text) 6%, var(--bf-youtube-bg));
+	color: var(--bf-youtube-text);
+	font-size: 0.8125rem;
 	overflow-wrap: anywhere;
+	text-decoration: underline;
+}
+
+/* With a thumbnail (the page sets the attribute "thumb" when the picture has loaded): the picture is behind the play button, cropped to
+   16:9 (the bars of the 4:3 picture fall away). The button and the words keep the colour of the card, so they can be read on any picture.
+   Without it the card is as plain as before. */
+:host([thumb]) button {
+	background-image: var(--bf-youtube-thumb);
+	background-origin: border-box;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+:host([thumb]) button svg {
+	box-sizing: content-box;
+	padding: 0.75rem;
+	border-radius: 50%;
+	background: var(--bf-youtube-bg);
+}
+
+:host([thumb]) button span {
+	padding: 0.25rem 0.75rem;
+	border-radius: 999px;
+	background: var(--bf-youtube-bg);
 }
 `;var sl=`<button type="button" part="play">
 	<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"/></svg>

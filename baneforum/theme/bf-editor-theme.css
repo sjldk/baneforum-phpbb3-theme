@@ -20,3 +20,10 @@ bf-youtube {
 	--bf-youtube-bg: var(--color-tint);
 	--bf-youtube-text: var(--color-text);
 }
+
+/* The footer of the video card (the link) is a little darker than the card. The link is part of the page, and the styles of the page win
+   over the styles that the player sets on it from inside (::slotted), so the colour is set here too. */
+body bf-youtube > a {
+	display: flex;
+	background: color-mix(in srgb, var(--bf-youtube-text) 6%, var(--bf-youtube-bg));
+}

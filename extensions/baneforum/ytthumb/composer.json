@@ -1,0 +1,21 @@
+{
+	"name": "baneforum/ytthumb",
+	"type": "phpbb-extension",
+	"description": "Thumbnails of YouTube videos for the video cards in posts. The board fetches each picture once and serves its own copy, so a visitor never contacts Google before pressing play.",
+	"license": "GPL-2.0-only",
+	"version": "0.1.0",
+	"require": {
+		"php": ">=8.1"
+	},
+	"extra": {
+		"display-name": "Baneforum YouTube thumbnails",
+		"soft-require": {
+			"phpbb/phpbb": ">=3.3.0"
+		}
+	},
+	"authors": [
+		{
+			"name": "Baneforum"
+		}
+	]
+}
