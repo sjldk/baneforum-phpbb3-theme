@@ -22,4 +22,4 @@ chrome=$!
 trap 'kill "$chrome" 2>/dev/null || true; sleep 1; rm -rf "$profile" 2>/dev/null || true' EXIT
 sleep 4
 
-docker run --rm --network host --user "$(id -u):$(id -g)" -e HOME=/tmp -e HOST_DIR="$dir" -e BROWSER="${BROWSER:-chrome}" -e PORT="${PORT:-9222}" -e BASE -e BF_USER -e BF_PASS -e TOPIC -e GUEST -e PAGES -v "$dir:/w" -w /w node:22-slim node "$@"
+docker run --rm --network host --user "$(id -u):$(id -g)" -e HOME=/tmp -e HOST_DIR="$dir" -e BROWSER="${BROWSER:-chrome}" -e PORT="${PORT:-9222}" -e BASE -e BF_USER -e BF_PASS -e TOPIC -e GUEST -e PAGES -e CONVERTED -v "$dir:/w" -w /w node:22-slim node "$@"

@@ -4,3 +4,4 @@ package-lock.json
 photo.jpg
 manual.pdf
 pack.zip
+tmp-*.jsonl
