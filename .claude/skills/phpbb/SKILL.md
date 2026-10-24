@@ -22,7 +22,7 @@ The install steps for production are in `docs/production-install.md`.
 | Files | empty | `local-data/production/files` |
 | Start | `docker compose -f docker/docker-compose.yml up -d --build` | `docker/prod-try.sh`, then `UID GID=$(id -g) docker compose -f docker/docker-compose.yml -f docker/docker-compose.prod.yml up -d --build prod` |
 
-- `local-data/` is git-ignored. Never commit it. `phpbb_prod` is the untouched import. Do not change it. Reset `phpbb_try` with `docker/prod-try.sh`.
+- `local-data/` is git-ignored. Never commit it. `phpbb_prod` is the untouched import. Do not change it. Reset `phpbb_try` with `docker/prod-try.sh`. A newer production backup goes in `local-data/db/`; `docker/prod-import.sh` replaces `phpbb_prod` with the newest one (the older files stay), then run `docker/prod-try.sh`.
 - The production copy board runs as your user and writes into `local-data/phpbb` (cache, store) and `local-data/production/files`.
 - Do not run `docker compose down -v`. Do not drop `phpbb_prod`.
 - Purge the cache after a template change: `sh docker/purge-cache.sh` (test board), or `docker exec -u 1000 docker-prod-1 php bin/phpbbcli.php cache:purge` (copy).
