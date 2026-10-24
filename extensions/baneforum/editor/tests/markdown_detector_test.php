@@ -28,6 +28,7 @@ $check('heading', '<r><H1><s># </s>Title</H1></r>', true);
 $check('rule', '<r><HR>---</HR></r>', true);
 $check('inline code', '<r><C><s>`</s>x<e>`</e></C></r>', true);
 $check('table', '<r><TABLE><THEAD><TR><TH>a</TH></TR></THEAD></TABLE></r>', true);
+$check('table with a header row and bars', '<r><TABLE><THEAD><TR><i>| </i><TH align="left">a</TH><i> |</i></TR></THEAD></TABLE></r>', true);
 $check('Markdown list item', '<r><LIST><LI><s>- </s>one</LI></LIST></r>', true);
 $check('numbered list item', '<r><LIST type="decimal"><LI><s>1. </s>one</LI></LIST></r>', true);
 $check('Markdown link', '<r><URL url="http://a"><s>[</s>text<e>](http://a)</e></URL></r>', true);
@@ -42,6 +43,7 @@ $check('BBCode link', '<r><URL url="http://a"><s>[url=http://a]</s>x<e>[/url]</e
 $check('BBCode url', '<r><URL url="http://a"><s>[url]</s>http://a<e>[/url]</e></URL></r>', false);
 $check('BBCode code', '<r><CODE><s>[code]</s>x<e>[/code]</e></CODE></r>', false);
 $check('quote and attachment', '<r><QUOTE author="a"><s>[quote]</s>x<e>[/quote]</e></QUOTE><ATTACHMENT index="0"><s>[attachment=0]</s>f<e>[/attachment]</e></ATTACHMENT></r>', false);
+$check('BBCode table', '<r><TABLE><s>[table]</s>\n<TR><s>[tr]</s><TH><s>[th]</s>a<e>[/th]</e></TH><e>[/tr]</e></TR><e>[/table]</e></TABLE></r>', false);
 $check('emoji', '<r><E>:)</E></r>', false);
 
 echo $failed === 0 ? "All passed\n" : "$failed failed\n";
