@@ -8,17 +8,17 @@
  * On a server, from the folder that holds the board (the folder with config.php and ext/), as the web user or any user that can read
  * config.php:
  *
- *   PHPBB_ROOT=/path/to/phpbb php export_corpus.php > posts.jsonl
+ *   PHPBB_ROOT=/path/to/phpbb php bf-markdown-export-cli.php > posts.jsonl
  *
  * On the local test setup it reads the untouched production import "phpbb_prod" through the web container:
  *
- *   docker compose -f docker/docker-compose.yml exec --user www-data -T -e BF_EXPORT_DB=phpbb_prod web php < scripts/export_corpus.php \
+ *   docker compose -f docker/docker-compose.yml exec --user www-data -T -e BF_EXPORT_DB=phpbb_prod web php < markdown-converter/cli/bf-markdown-export-cli.php \
  *       > local-data/corpus/posts.jsonl
  *
  * PHPBB_ROOT is the folder of the board (default /var/www/html). BF_EXPORT_DB reads another database than the one in config.php, with the same
  * user and password.
  *
- * The field "markdown" tells whether the stored XML holds Markdown (see extensions/baneforum/editor).
+ * The field "markdown" tells whether the stored XML holds Markdown (the same test as extensions/baneforum/editor/markdown_detector.php).
  * It decides how the editor reads the text.
  *
  * The output holds real user content. It stays in local-data/ (git-ignored).
@@ -33,7 +33,8 @@ ini_set('display_errors', '0');
 $phpbb_root_path = rtrim(getenv('PHPBB_ROOT') ?: '/var/www/html', '/') . '/';
 
 require $phpbb_root_path . 'vendor/autoload.php';
-require $phpbb_root_path . 'ext/baneforum/editor/markdown_detector.php';
+$lib = getenv('BF_MARKDOWN_LIB') ?: (is_dir($phpbb_root_path . 'bf-markdown-import') ? $phpbb_root_path . 'bf-markdown-import' : __DIR__ . '/../upload/bf-markdown-import');
+require $lib . '/markdown_detector.php';
 // The database settings of the board itself: $dbhost, $dbport, $dbname, $dbuser, $dbpasswd and $table_prefix.
 require $phpbb_root_path . 'config.php';
 

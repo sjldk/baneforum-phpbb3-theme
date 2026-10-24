@@ -56,7 +56,7 @@ No custom BBCodes are added unless the owner asks for `[h2]` and `[table]`.
 
 ## Rehearsal on the production copy (2026-10-24)
 
-The import is `scripts/markdown_import.php`. It is a one-off, not a cron job: it is safe to run again, but the work is 275 messages and a person must read the differences.
+The import is in `markdown-converter/` (see its README for how to run it): `cli/bf-markdown-import-cli.php` for a server with a command line, and a page `upload/bf-markdown-import.php` for one without. It is a one-off, not a cron job: it is safe to run again, but the work is 275 messages and a person must read the differences.
 It runs inside the board's container and reads the JSON lines of `packages/bf-editor/tools/convert-corpus.mjs`.
 
 Result on `phpbb_try` (a copy of the 2026-10 production backup):
@@ -101,13 +101,13 @@ The editor shows a `[table]` as BBCode text (it has no table editor) and writes 
 ### Run it (the copy now, production later)
 
 1. Export the original text. On the copy this reads `phpbb_prod`:
-   `docker exec -i -u www-data docker-web-1 php < scripts/export_corpus.php > corpus/posts.jsonl`
-   For production, take a fresh export from the live data (the credentials in the script are for the local databases only). Posts that change after the export are skipped by the import.
+   `docker exec -i -u www-data docker-web-1 php < markdown-converter/cli/bf-markdown-export-cli.php > corpus/posts.jsonl`
+   For production, take a fresh export from the live data: on a server the script reads the board's own `config.php` (set `PHPBB_ROOT`), and `BF_EXPORT_DB` picks another database on the local test setup. Posts that change after the export are skipped by the import.
 2. Convert (needs Node): `docker run --rm --user 1000:1000 -e HOME=/tmp -v REPO:/repo -v CORPUS:/corpus -w /repo/packages/bf-editor node:22-slim node tools/convert-corpus.mjs /corpus/posts.jsonl /corpus/converted.jsonl`
    then keep only the Markdown lines: `grep '"markdown":true' converted.jsonl > md_only.jsonl`
-3. Dry run (writes nothing), then read the report: `php /tmp/markdown_import.php < md_only.jsonl > report.json`
-4. Apply, with the rows that you have read: `php /tmp/markdown_import.php --apply --accept=post:6806,post:9287,... < md_only.jsonl`
-5. Put back: `php /tmp/markdown_import.php --rollback` (all) or `--rollback --only=post:21053` (some).
+3. Dry run (writes nothing), then read the report: `php /tmp/bf-markdown-import-cli.php < md_only.jsonl > report.json`
+4. Apply, with the rows that you have read: `php /tmp/bf-markdown-import-cli.php --apply --accept=post:6806,post:9287,... < md_only.jsonl`
+5. Put back: `php /tmp/bf-markdown-import-cli.php --rollback` (all) or `--rollback --only=post:21053` (some).
 
 ### What is still open for stage 4 (production)
 
