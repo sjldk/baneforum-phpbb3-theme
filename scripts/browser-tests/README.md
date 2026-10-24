@@ -23,6 +23,7 @@ scripts/browser-tests/run.sh posting.mjs              # one test
 | `dialogs.mjs` | Delete and restore of a post ask in a native `<dialog>` on the same page: opens as a modal, Escape cancels, confirming deletes and restores. Makes a throwaway reply. |
 | `snap.mjs <out.json> <selector>...` | Computed styles of the matching elements on 25 pages. Run it before and after a CSS change and compare the two files. Used when a prosilver CSS file is replaced by our own. |
 | `markdown.mjs` | A post written in Markdown is converted to BBCode when opened, still shows the same after an unchanged save, and is plain BBCode when opened again. Makes one throwaway reply. |
+| `tables-lists.mjs` | Lists and tables in the editor with the real keyboard and pointer: `- ` makes a list, Enter and Tab, the table picker (grid and number fields, 21 refused), Tab through cells and adds a row, add column stops at 20, delete table, axe (A, AA, AAA) in both themes with the table bar and the picker open. |
 | `posting.mjs` | Reply page: the editor, no option boxes, a picture upload, saving the post. |
 | `pictures.mjs <photo.jpg path>` | A picture in the text: preview, the menu, the description, Preview, delete. Needs `photo.jpg`. |
 | `files.mjs <this folder>` | A PDF and a ZIP (picker and drop) go to the file list, a picture goes in the text, the post shows both. |
