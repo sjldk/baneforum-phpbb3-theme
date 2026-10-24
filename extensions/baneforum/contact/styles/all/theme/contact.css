@@ -1,0 +1,80 @@
+/* The ways to contact the author of a post, as buttons beside the name. They are built like the buttons of a post (edit, quote, report):
+   a bar in the tint colour with flat 44 pixel buttons in it, a soft surface on hover and the same ring for keyboard focus. The message
+   button is the link to write a private message to the author. The website button has the address of the site beside its globe (without
+   "http://" and "www.", cut with an ellipsis when it is long; the whole address is the tooltip). */
+
+.bf-contact__bar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem;
+	margin: 0;
+	padding: 0.25rem;
+	border-radius: var(--radius);
+	background: var(--color-tint);
+	list-style: none;
+}
+
+/* Message first, then the website, then any other way (email and so on). */
+.bf-contact__item {
+	min-inline-size: 0;
+	order: 2;
+	margin: 0;
+	padding: 0;
+}
+
+.bf-contact__item--pm {
+	order: 0;
+}
+
+.bf-contact__item--website {
+	order: 1;
+}
+
+.bf-contact__button {
+	box-sizing: border-box;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	min-block-size: 2.75rem;
+	min-inline-size: 2.75rem;
+	padding-inline: 0.1875rem;
+	border: var(--border-control) solid transparent;
+	border-radius: var(--radius);
+	background: transparent;
+	color: var(--color-text);
+	text-decoration: none;
+}
+
+.bf-contact__button--text {
+	max-inline-size: 100%;
+	padding-inline: 0.75rem;
+}
+
+.bf-contact__button .icon {
+	font-size: 1.25em;
+	color: var(--color-text);
+}
+
+.bf-contact__label {
+	min-inline-size: 0;
+	max-inline-size: 16rem;
+	overflow: hidden;
+	font-size: var(--text-meta);
+	font-weight: 400;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.bf-contact__button:hover,
+.bf-contact__button:focus-visible {
+	background: var(--color-paper);
+	border-color: transparent;
+	color: var(--color-text);
+	text-decoration: none;
+}
+
+.bf-contact__button:focus-visible {
+	outline: var(--border-control) solid var(--color-focus);
+	outline-offset: 0.1rem;
+}
