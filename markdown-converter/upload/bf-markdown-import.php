@@ -16,6 +16,38 @@
 error_reporting(E_ALL & ~E_DEPRECATED);
 ini_set('display_errors', '0');
 
+// A blank "HTTP 500" says nothing. Before phpBB starts, the page checks what it needs, and says what is wrong in words.
+$missing = [];
+foreach (['common.php', 'config.php', 'bf-markdown-import/markdown_detector.php', 'bf-markdown-import/markdown_import.php'] as $needed)
+{
+	if (!is_file(__DIR__ . '/' . $needed))
+	{
+		$missing[] = $needed;
+	}
+}
+if (PHP_VERSION_ID < 80100 || $missing)
+{
+	header('Content-Type: text/plain; charset=utf-8');
+	echo "The Markdown import page cannot start.\n\n";
+	echo PHP_VERSION_ID < 80100 ? 'This server runs PHP ' . PHP_VERSION . ". The page needs PHP 8.1 or later.\n" : '';
+	echo $missing ? 'These files are missing next to the page: ' . implode(', ', $missing) . ".\nUpload the contents of markdown-converter/upload/ to the board folder, with the folder bf-markdown-import/.\n" : '';
+	exit;
+}
+
+// If PHP stops with a fatal error later, the page prints it in words (without the server path), and does not leave a blank 500.
+register_shutdown_function(static function (): void
+{
+	$error = error_get_last();
+	if ($error && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true))
+	{
+		if (!headers_sent())
+		{
+			header('Content-Type: text/plain; charset=utf-8');
+		}
+		echo "\n\nThe Markdown import page stopped with a PHP error:\n" . $error['message'] . "\nin " . basename($error['file']) . ' line ' . $error['line'] . "\n";
+	}
+});
+
 define('IN_PHPBB', true);
 $phpbb_root_path = __DIR__ . '/';
 $phpEx = 'php';
