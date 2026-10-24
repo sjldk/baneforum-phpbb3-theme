@@ -1,0 +1,5 @@
+services:
+    baneforum.avatars.listener:
+        class: baneforum\avatars\event\listener
+        tags:
+            - { name: event.listener }

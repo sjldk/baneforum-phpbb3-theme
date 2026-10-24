@@ -84,6 +84,11 @@ if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='banefor
 	php bin/phpbbcli.php extension:enable baneforum/featured
 fi
 
+# Our own letter avatars for members without an avatar.
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/avatars' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable baneforum/avatars
+fi
+
 # Our own switch for the dark theme.
 if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/darkmode' AND ext_active=1")" = 0 ]; then
 	php bin/phpbbcli.php extension:enable baneforum/darkmode
