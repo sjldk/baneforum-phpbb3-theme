@@ -21,7 +21,7 @@ The theme needs no change to those two extensions.
 | Contact buttons extension | `extensions/baneforum/contact/` | `ext/baneforum/contact/` |
 | Letter avatars | `extensions/baneforum/avatars/` | `ext/baneforum/avatars/` |
 | Appearance switch (light and dark theme) | `extensions/baneforum/darkmode/` | `ext/baneforum/darkmode/` |
-| Editor extension (required by the editor) | `extensions/baneforum/editor/` | `ext/baneforum/editor/` |
+| Editor extension (required by the editor, and it adds the `[s]` and table BBCodes) | `extensions/baneforum/editor/` | `ext/baneforum/editor/` |
 
 `baneforum/theme/bf-editor.js`, `bf-render.js` and `bf-render.css` are built files. They are committed.
 You do not need Node on the server.

@@ -1,4 +1,5 @@
 // Markdown blocks the editor cannot show (headings, lists, quotes, code, tables), written as BBCode.
+// A table becomes [table][tr][th]..., which needs the table BBCodes on the board (extension baneforum/editor).
 // A post that was written in Markdown goes through this when it is opened, so it is saved as BBCode.
 import { writeInline } from '../bbcode/write.js';
 import { parseInline } from './inline.js';
@@ -14,12 +15,69 @@ const fence = /^ {0,3}(`{3,}|~{3,})/;
 const thematic = /^ {0,3}([-*_])(?:\s*\1){2,}\s*$/;
 const indentedCode = /^(?: {4}|\t)(.*)$/;
 const tableRow = /^\s*\|.*\|\s*$/;
+const tableDelimiter = /^\s*:?-+:?\s*$/;
 const html = /^ {0,3}<[a-zA-Z/!?]/;
 const setext = /^ {0,3}(=+|-+)\s*$/;
 const marker = new RegExp(`${PLACEHOLDER_OPEN}(\\d+)${PLACEHOLDER_CLOSE}`, `g`);
 
 /** @param {string} line @returns {number} */
 const indentOf = (line) => (line.match(/^[ \t]*/)?.[0] ?? ``).replace(/\t/g, `    `).length;
+
+/**
+ * The cells of one table row: the outer bars are not cells, and "\\|" is a bar inside a cell.
+ * @param {string} row
+ * @returns {string[]}
+ */
+const tableCells = (row) =>
+	row
+		.trim()
+		.replace(/^\||\|$/g, ``)
+		.split(/(?<!\\)\|/)
+		.map((cell) => cell.replace(/\\\|/g, `|`).trim());
+
+/**
+ * A Markdown table as BBCode, or null if it has no delimiter row (then it is not a table to Markdown either).
+ * The first row is the header. A colon in the delimiter row sets the alignment of the column.
+ * @param {string[]} rows
+ * @param {(text: string) => string} inline
+ * @returns {string | null}
+ */
+function tableToBBCode(rows, inline) {
+	const delimiter = rows.length > 1 ? tableCells(rows[1]) : [];
+
+	if (delimiter.length === 0 || !delimiter.every((cell) => tableDelimiter.test(cell))) {
+		return null;
+	}
+
+	const align = delimiter.map((cell) => {
+		const left = cell.startsWith(`:`);
+		const right = cell.endsWith(`:`);
+
+		return left && right ? ` align=center` : right ? ` align=right` : left ? ` align=left` : ``;
+	});
+	const lines = [`[table]`];
+
+	for (const [at, row] of rows.entries()) {
+		if (at === 1) {
+			continue;
+		}
+
+		const tag = at === 0 ? `th` : `td`;
+		const cells = tableCells(row);
+
+		while (cells.length < delimiter.length) {
+			cells.push(``);
+		}
+
+		lines.push(
+			`[tr]${cells.map((cell, column) => `[${tag}${align[column] ?? ``}]${inline(cell)}[/${tag}]`).join(``)}[/tr]`,
+		);
+	}
+
+	lines.push(`[/table]`);
+
+	return lines.join(`\n`);
+}
 
 /**
  * @param {import('prosemirror-model').Schema} schema
@@ -144,7 +202,7 @@ export function blockToBBCode(schema, source, placeholders, replaceSmilies) {
 				index += 1;
 			}
 
-			out.push(`[code]\n${verbatim(rows.join(`\n`))}\n[/code]`);
+			out.push(tableToBBCode(rows, inline) ?? `[code]\n${verbatim(rows.join(`\n`))}\n[/code]`);
 			continue;
 		}
 
