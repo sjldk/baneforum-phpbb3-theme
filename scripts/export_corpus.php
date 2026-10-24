@@ -2,12 +2,21 @@
 /**
  * Corpus export
  *
- * Exports the original text (what a user would see in the editor) of every post and
- * private message from the production backup that was imported into the database
- * "phpbb_prod". Run it inside the web container:
+ * Exports the original text (what a user would see in the editor) of every post and private message of a board.
+ * It reads the board's own database, with the settings in the board's config.php. Nothing is written to the database.
  *
- *   docker compose -f docker/docker-compose.yml exec --user www-data -T web php < scripts/export_corpus.php \
+ * On a server, from the folder that holds the board (the folder with config.php and ext/), as the web user or any user that can read
+ * config.php:
+ *
+ *   PHPBB_ROOT=/path/to/phpbb php export_corpus.php > posts.jsonl
+ *
+ * On the local test setup it reads the untouched production import "phpbb_prod" through the web container:
+ *
+ *   docker compose -f docker/docker-compose.yml exec --user www-data -T -e BF_EXPORT_DB=phpbb_prod web php < scripts/export_corpus.php \
  *       > local-data/corpus/posts.jsonl
+ *
+ * PHPBB_ROOT is the folder of the board (default /var/www/html). BF_EXPORT_DB reads another database than the one in config.php, with the same
+ * user and password.
  *
  * The field "markdown" tells whether the stored XML holds Markdown (see extensions/baneforum/editor).
  * It decides how the editor reads the text.
@@ -21,19 +30,23 @@
 error_reporting(E_ALL & ~E_DEPRECATED);
 ini_set('display_errors', '0');
 
-require '/var/www/html/vendor/autoload.php';
-require '/var/www/html/ext/baneforum/editor/markdown_detector.php';
+$phpbb_root_path = rtrim(getenv('PHPBB_ROOT') ?: '/var/www/html', '/') . '/';
+
+require $phpbb_root_path . 'vendor/autoload.php';
+require $phpbb_root_path . 'ext/baneforum/editor/markdown_detector.php';
+// The database settings of the board itself: $dbhost, $dbport, $dbname, $dbuser, $dbpasswd and $table_prefix.
+require $phpbb_root_path . 'config.php';
 
 use baneforum\editor\markdown_detector;
 use s9e\TextFormatter\Unparser;
 
-$db = new mysqli('db', 'phpbb', 'phpbb', 'phpbb_prod');
+$db = new mysqli($dbhost ?: 'localhost', $dbuser, $dbpasswd, getenv('BF_EXPORT_DB') ?: $dbname, (int) ($dbport ?: 3306));
 $db->set_charset('utf8mb4');
 
 $detector = new markdown_detector();
 $sources = [
-	['post', 'SELECT post_id AS id, post_text AS text, enable_bbcode, enable_smilies, enable_magic_url FROM phpbb_posts'],
-	['pm', 'SELECT msg_id AS id, message_text AS text, enable_bbcode, enable_smilies, enable_magic_url FROM phpbb_privmsgs'],
+	['post', 'SELECT post_id AS id, post_text AS text, enable_bbcode, enable_smilies, enable_magic_url FROM ' . $table_prefix . 'posts'],
+	['pm', 'SELECT msg_id AS id, message_text AS text, enable_bbcode, enable_smilies, enable_magic_url FROM ' . $table_prefix . 'privmsgs'],
 ];
 
 foreach ($sources as [$kind, $sql])

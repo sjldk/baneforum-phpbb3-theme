@@ -5,10 +5,14 @@
  * One-off: converts stored Markdown posts and private messages to BBCode, as phpBB itself would save them.
  *
  * Input (STDIN): JSON lines from packages/bf-editor/tools/convert-corpus.mjs ("kind", "id", "markdown", "original", "converted").
- * Run it inside the container of the board whose database is to be changed (here docker-prod-1, database phpbb_try):
+ * Run it where the board whose database is to be changed runs. On the production copy (docker-prod-1, database phpbb_try):
  *
  *   docker cp scripts/markdown_import.php docker-prod-1:/tmp/markdown_import.php
  *   docker exec -i --user 1000 docker-prod-1 php /tmp/markdown_import.php [mode] < converted.jsonl > report.json
+ *
+ * On a server, as the user that runs the board (it needs to read config.php, and write the cache):
+ *
+ *   PHPBB_ROOT=/path/to/phpbb php /path/to/markdown_import.php [mode] < converted.jsonl > report.json
  *
  * Modes:
  *   (none)             a dry run: nothing is written. The report says what would happen.
@@ -29,7 +33,8 @@ ini_set('display_errors', '0');
 ob_start(); // phpBB prints warnings when it runs outside a web request. Only our report goes to STDOUT.
 
 define('IN_PHPBB', true);
-$phpbb_root_path = '/var/www/html/';
+// The folder of the board. On a server: PHPBB_ROOT=/path/to/phpbb php markdown_import.php ... (default is the Docker test boards).
+$phpbb_root_path = rtrim(getenv('PHPBB_ROOT') ?: '/var/www/html', '/') . '/';
 $phpEx = 'php';
 require $phpbb_root_path . 'common.' . $phpEx;
 require $phpbb_root_path . 'ext/baneforum/editor/markdown_detector.php';
