@@ -474,7 +474,7 @@ textarea {
 }
 
 .content {
-	line-height: normal;
+	line-height: 1.4;
 }
 
 dl.attachbox dt {
