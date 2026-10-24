@@ -14,7 +14,7 @@ set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 image="bf-php-tools"
-sources=(extensions scripts docker)
+sources=(extensions scripts docker markdown-converter)
 
 usage() {
     echo "Usage: ${0##*/} build|install|lint|check [phpcs args]|fix|test|all" >&2
@@ -95,7 +95,7 @@ tests() {
         elif ! run php "$file"; then
             failed=1
         fi
-    done < <(cd "$root" && find extensions -path '*/tests/*.php' | sort)
+    done < <(cd "$root" && find extensions markdown-converter -path '*/tests/*.php' | sort)
     return "$failed"
 }
 

@@ -43,6 +43,7 @@
  <rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing">
   <exclude-pattern>docker/*</exclude-pattern>
   <exclude-pattern>scripts/*</exclude-pattern>
+  <exclude-pattern>markdown-converter/*</exclude-pattern>
  </rule>
 
  <!-- Every class property has a comment. -->
@@ -63,6 +64,7 @@
   <exclude-pattern>*/tests/*</exclude-pattern>
   <exclude-pattern>scripts/*</exclude-pattern>
   <exclude-pattern>docker/*</exclude-pattern>
+  <exclude-pattern>markdown-converter/*</exclude-pattern>
  </rule>
 
  <!-- No code that is commented out. It stays in git. -->
