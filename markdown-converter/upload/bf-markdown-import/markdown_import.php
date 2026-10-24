@@ -79,7 +79,7 @@ class markdown_import
 			$last = 0;
 			do
 			{
-				$result = $this->db->sql_query("SELECT {$t['id']} AS id, {$t['text']} AS stored FROM {$t['table']} WHERE {$t['id']} > " . $last
+				$result = $this->db->sql_query("SELECT {$t['id']} AS id, {$t['text']} AS xml_text FROM {$t['table']} WHERE {$t['id']} > " . $last
 					. " ORDER BY {$t['id']} LIMIT " . self::CHUNK);
 				$rows = $this->db->sql_fetchrowset($result);
 				$this->db->sql_freeresult($result);
@@ -87,7 +87,7 @@ class markdown_import
 				foreach ($rows as $row)
 				{
 					$last = (int) $row['id'];
-					$xml = $row['stored'];
+					$xml = $row['xml_text'];
 					$is_xml = $xml !== '' && $xml[0] === '<' && (str_starts_with($xml, '<r') || str_starts_with($xml, '<t'));
 
 					if ($is_xml && $this->detector->contains_markdown($xml))
@@ -134,7 +134,7 @@ class markdown_import
 			$t = $this->tables[$row['kind']];
 			$key = $row['kind'] . ':' . (int) $row['id'];
 
-			$result = $this->db->sql_query("SELECT {$t['text']} AS stored, bbcode_uid, bbcode_bitfield, enable_bbcode, enable_smilies, enable_magic_url FROM {$t['table']} WHERE {$t['id']} = " . (int) $row['id']);
+			$result = $this->db->sql_query("SELECT {$t['text']} AS xml_text, bbcode_uid, bbcode_bitfield, enable_bbcode, enable_smilies, enable_magic_url FROM {$t['table']} WHERE {$t['id']} = " . (int) $row['id']);
 			$stored = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
 
@@ -143,12 +143,12 @@ class markdown_import
 				$counts['skipped_missing']++;
 				continue;
 			}
-			if (!$this->detector->contains_markdown($stored['stored']))
+			if (!$this->detector->contains_markdown($stored['xml_text']))
 			{
 				$counts['skipped_not_markdown']++;
 				continue;
 			}
-			if (Unparser::unparse($stored['stored']) !== $row['original'])
+			if (Unparser::unparse($stored['xml_text']) !== $row['original'])
 			{
 				$counts['skipped_edited_since_export']++;
 				continue;
@@ -159,7 +159,7 @@ class markdown_import
 			$flags = 0;
 			generate_text_for_storage($text, $uid, $bitfield, $flags, (bool) $stored['enable_bbcode'], (bool) $stored['enable_magic_url'], (bool) $stored['enable_smilies']);
 
-			$before = self::visible($this->renderer->render($stored['stored']));
+			$before = self::visible($this->renderer->render($stored['xml_text']));
 			$after = self::visible($this->renderer->render($text));
 			$same = $before === $after;
 
@@ -191,7 +191,7 @@ class markdown_import
 				{
 					$this->db->sql_transaction('begin');
 					$this->db->sql_query('INSERT IGNORE INTO ' . $this->backup . ' (kind, msg_id, old_text, old_uid, old_bitfield, saved_at) VALUES (\'' . $this->db->sql_escape($row['kind']) . '\', ' . (int) $row['id']
-						. ", '" . $this->db->sql_escape($stored['stored']) . "', '" . $this->db->sql_escape($stored['bbcode_uid']) . "', '" . $this->db->sql_escape($stored['bbcode_bitfield']) . "', " . time() . ')');
+						. ", '" . $this->db->sql_escape($stored['xml_text']) . "', '" . $this->db->sql_escape($stored['bbcode_uid']) . "', '" . $this->db->sql_escape($stored['bbcode_bitfield']) . "', " . time() . ')');
 					$this->db->sql_query("UPDATE {$t['table']} SET {$t['text']} = '" . $this->db->sql_escape($text) . "', bbcode_uid = '" . $this->db->sql_escape($uid) . "', bbcode_bitfield = '" . $this->db->sql_escape($bitfield)
 						. "' WHERE {$t['id']} = " . (int) $row['id']);
 					$this->db->sql_transaction('commit');

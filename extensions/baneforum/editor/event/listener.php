@@ -142,8 +142,8 @@ class listener implements EventSubscriberInterface
 			return false;
 		}
 
-		$result = $this->db->sql_query("SELECT $text_column AS stored FROM $table WHERE $id_column = $id");
-		$stored = $this->db->sql_fetchfield('stored');
+		$result = $this->db->sql_query("SELECT $text_column AS xml_text FROM $table WHERE $id_column = $id");
+		$stored = $this->db->sql_fetchfield('xml_text');
 		$this->db->sql_freeresult($result);
 
 		return is_string($stored) && $this->detector->contains_markdown($stored);
