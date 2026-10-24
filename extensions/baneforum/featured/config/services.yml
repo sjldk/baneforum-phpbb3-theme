@@ -5,6 +5,7 @@ services:
             - '@dbal.conn'
             - '@dbal.tools'
             - '@content.visibility'
+            - '@text_formatter.utils'
             - '%core.table_prefix%'
 
     baneforum.featured.listener:

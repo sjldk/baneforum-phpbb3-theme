@@ -10,6 +10,7 @@
 			<div class="bf-featured__body">
 				<a class="bf-featured__topic" href="{{ post.U_POST }}">{{ post.TITLE }}</a>
 				<span class="bf-featured__meta">{{ post.AUTHOR }} &middot; {{ post.TIME }}</span>
+				{% if post.SNIPPET %}<p class="bf-featured__snippet">{{ post.SNIPPET }}</p>{% endif %}
 			</div>
 		</article>
 	</div>
@@ -24,6 +25,7 @@
 				<div class="bf-featured__body">
 					<a class="bf-featured__topic" href="{{ post.U_POST }}">{{ post.TITLE }}</a>
 					<span class="bf-featured__meta">{{ post.AUTHOR }} &middot; {{ post.TIME }}</span>
+					{% if post.SNIPPET %}<p class="bf-featured__snippet">{{ post.SNIPPET }}</p>{% endif %}
 				</div>
 			</li>
 	{% endif %}

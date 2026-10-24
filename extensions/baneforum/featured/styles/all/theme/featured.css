@@ -149,3 +149,41 @@ body .bf-featured .bf-featured__meta {
 		font-size: 1.125rem !important;
 	}
 }
+
+/* The appetizer: the first words of the post in the reading serif, under the byline. It fades out at the bottom, so the text never makes
+   a story taller than its picture. Beside a picture the text block does not count for the height of the row (contain: size), it takes
+   the height of the picture, and everything that does not fit fades away. */
+body .bf-featured .bf-featured__snippet {
+	margin: 0.25rem 0 0;
+	font-family: var(--font-serif, Georgia, serif) !important;
+	font-size: 1rem !important;
+	line-height: 1.5;
+	color: var(--color-text, #1f1f1f);
+}
+
+@media (min-width: 43.75em) {
+	.bf-featured__item .bf-featured__body {
+		flex: 1 1 0;
+		min-width: 0;
+		align-self: stretch;
+		justify-content: safe center;
+		overflow: hidden;
+		contain: size;
+		-webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 3rem), transparent);
+		mask-image: linear-gradient(to bottom, #000 calc(100% - 3rem), transparent);
+	}
+}
+
+/* Narrow: the lead has its picture above the text, so the text is cut at four lines and fades out. A small story shows no text. */
+@media (max-width: 43.6875em) {
+	.bf-featured__item--lead .bf-featured__snippet {
+		max-block-size: 6em;
+		overflow: hidden;
+		-webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+		mask-image: linear-gradient(to bottom, #000 60%, transparent);
+	}
+
+	.bf-featured__list .bf-featured__snippet {
+		display: none;
+	}
+}
