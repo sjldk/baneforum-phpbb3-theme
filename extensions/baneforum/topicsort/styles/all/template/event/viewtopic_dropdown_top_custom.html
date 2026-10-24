@@ -1,0 +1,15 @@
+{# The sort and display button of a topic, at the top as well as at the bottom (phpBB has it only at the bottom). Same markup and condition
+   as the bottom bar of viewtopic_body.html. The page then holds the form twice, and phpBB gives the selects fixed ids (sk, sd, st). The
+   script under the form gives the top copy other ids, so no id is used twice. The labels wrap the selects, so nothing points at the ids. #}
+{% if (S_NUM_POSTS > 1 or loops.pagination|length) and not S_IS_BOT %}
+	<form method="post" action="{{ S_TOPIC_ACTION }}" class="bf-sort-top">
+		{% include 'display_options.html' %}
+	</form>
+	<script>
+		document.querySelectorAll('form.bf-sort-top [id]').forEach(function (field) {
+			if (!field.id.endsWith('-top')) {
+				field.id += '-top';
+			}
+		});
+	</script>
+{% endif %}

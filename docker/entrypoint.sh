@@ -89,6 +89,11 @@ if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='banefor
 	php bin/phpbbcli.php extension:enable baneforum/latest
 fi
 
+# Our own sort and display button at the top of a topic.
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/topicsort' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable baneforum/topicsort
+fi
+
 # Our own contact buttons (message, website) beside the author of a post.
 if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/contact' AND ext_active=1")" = 0 ]; then
 	php bin/phpbbcli.php extension:enable baneforum/contact
