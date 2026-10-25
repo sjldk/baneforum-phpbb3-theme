@@ -1,6 +1,5 @@
-// Open posts in the editor and press Save with no change, then compare the saved text with the text before. For a post that is already
-// BBCode the text must stay the same. For a post that is still Markdown the editor converts it, so the text changes once, to BBCode,
-// and a second round trip leaves it alone. Prints one line per post, never the text.
+// Open posts in the editor and press Save with no change, then compare the saved text with the text before. The text must stay the
+// same, and a second round trip must leave it alone. Prints one line per post, never the text.
 //
 //   BASE=http://localhost:8081 BF_USER=Baneforum.dk BF_PASS=adminadmin scripts/browser-tests/run.sh edit-roundtrip.mjs 29681 22732 21104
 //

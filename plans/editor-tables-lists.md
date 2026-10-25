@@ -1,5 +1,7 @@
 # Plan: tables, bullet lists and numbered lists in the Baneforum editor
 
+> Note, 2026-10-25: the Markdown reader (`src/markdown/`), the converter and `markdown.mjs` were removed. Mentions of them below are history.
+
 ## Context
 
 The editor (`packages/bf-editor`, built on ProseMirror) can do bold, italic, strikethrough, quote, link, attachments and video. It cannot show

@@ -1,7 +1,7 @@
 {
 	"name": "baneforum/editor",
 	"type": "phpbb-extension",
-	"description": "What the Baneforum editor needs from phpBB: the [s] BBCode, and a flag that tells the editor a post was written in Markdown.",
+	"description": "What the Baneforum editor needs from phpBB: the [s] BBCode and the table BBCodes.",
 	"license": "GPL-2.0-only",
 	"version": "1.0.2",
 	"require": {

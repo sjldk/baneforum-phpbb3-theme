@@ -21,7 +21,7 @@ Includes dark mode, video cards and the full editor. Where compatibility cannot 
 | 2 | forummenu | Missing | Draws at `bf_navbar_forums`, an event only in our `navbar_header.html` |
 | 3 | darkmode | Button does nothing | The dark colours are in our theme (`dark_colours.css`, `palette.css`) |
 | 4 | ytthumb | Nothing to show | The video card and `bf-render.js` come from our style |
-| 5 | editor | Only `[s]` BBCode and the Markdown flag | The editor bundle and its adapter are our style's files |
+| 5 | editor | Only the `[s]` and table BBCodes | The editor bundle and its adapter are our style's files |
 | 6 | contact, featured, latest, likes, avatars | Look unfinished | CSS variables with no fallback (contact 11 of 11, featured 4 of 16, latest 3 of 12, likes 3 of 23, avatars 1 of 4) |
 | 7 | censor, imagecompress | Work | |
 
@@ -65,8 +65,8 @@ Includes dark mode, video cards and the full editor. Where compatibility cannot 
 - On foreign styles wire into the core posting form with its events: load the module `bf-phpbb.js` (it binds to `#postform` and `textarea#message`),
   and hide the BBCode row, smilies box and side box with CSS scoped to `T_THEME_NAME != 'baneforum'`.
 - Adapter hardening: bail out quietly if `#postform` / `textarea#message` is not found; no uploads button if Plupload is missing.
-- Test on prosilver: typing, formatting, picture upload (chunking, hidden attachment fields), the topic review quote button, preview, editing an old Markdown
-  post (`BF_MARKDOWN`), private messages, signature.
+- Test on prosilver: typing, formatting, picture upload (chunking, hidden attachment fields), the topic review quote button, preview, editing a post,
+  private messages, signature.
 - First, check how to give a `type="module"` script an extension path (`INCLUDEJS` makes classic scripts only). Stop and report if phpBB's form fights the adapter.
 
 ### Phase 5: guard rails (~0.5 day)
@@ -88,7 +88,6 @@ Includes dark mode, video cards and the full editor. Where compatibility cannot 
 | 8 | phpBB and PHP versions | `composer.json` says phpBB >= 3.3.0 and PHP >= 8.1; the events are used in 3.3.x only | Test on the installed 3.3.x; flag newer phpBB (4.x) as untested. |
 | 9 | Prosilver updates | Core events or markup can change in a release | `scripts/prosilver-diff.sh` and the new check script show it. |
 | 10 | Production-critical change | Phase 4 moves the assets our own posting page loads | Separate commit, tested alone, revertable alone. |
-| 11 | `markdown.mjs` already fails on the test board | Cause is in the board's setup (not our code); the editor tests depend on it | Find and fix the cause in phase 4. |
 | 12 | The thumbnail fetch (ytthumb) | Needs PHP `curl` and outgoing https; without them the card is a plain play button | Already the fallback; flag in the docs. |
 
 ## Critical files
@@ -96,7 +95,7 @@ Includes dark mode, video cards and the full editor. Where compatibility cannot 
 - Extensions: `extensions/baneforum/{latest,forummenu,darkmode,ytthumb,editor,contact,featured,likes,avatars}/styles/all/...`
 - Our style: `baneforum/template/index_body.html`, `navbar_header.html`, `posting_editor.html`, `overall_footer.html`
 - Build: `packages/bf-editor/build.mjs`, `scripts/bf-editor.sh`, `scripts/dark-colours.py`
-- Reuse: `scripts/browser-tests/{edit,posting,markdown,axe-more,darkmode}.mjs`
+- Reuse: `scripts/browser-tests/{edit,posting,axe-more,darkmode}.mjs`
 
 ## Verification (after every phase)
 

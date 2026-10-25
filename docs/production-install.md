@@ -22,7 +22,7 @@ The theme needs no change to those two extensions.
 | Topic sort at the top extension | `extensions/baneforum/topicsort/` | `ext/baneforum/topicsort/` |
 | Letter avatars | `extensions/baneforum/avatars/` | `ext/baneforum/avatars/` |
 | Appearance switch (light and dark theme) | `extensions/baneforum/darkmode/` | `ext/baneforum/darkmode/` |
-| Helper extension for the editor, `baneforum/editor` (needed by the editor: it adds the `[s]` and table BBCodes and finds Markdown posts) | `extensions/baneforum/editor/` | `ext/baneforum/editor/` |
+| Helper extension for the editor, `baneforum/editor` (needed by the editor: it adds the `[s]` and table BBCodes) | `extensions/baneforum/editor/` | `ext/baneforum/editor/` |
 
 `baneforum/theme/bf-editor.js`, `bf-render.js` and `bf-render.css` are built files. They are committed.
 You do not need Node on the server.
@@ -66,7 +66,7 @@ rsync -av extensions/baneforum/editor/ SERVER:/var/www/baneforum/ext/baneforum/e
 
 ## 4. Enable in the ACP
 
-- [ ] Customise, Manage extensions: enable **Baneforum editor** first. The editor saves BBCode and needs it: it adds the `[s]` BBCode, and it tells the editor which stored posts were written in Markdown. Without it a Markdown post that is opened and saved would lose its formatting. Then enable **Baneforum image compress** and **Baneforum censor**. The censor keeps the ACP word list but leaves URLs alone. Check `alfredoramos/markdown` and `phpbb/mediaembed` stay enabled.
+- [ ] Customise, Manage extensions: enable **Baneforum editor** first. The editor saves BBCode and needs it: it adds the `[s]` and table BBCodes. Without it they show as plain text. Then enable **Baneforum image compress** and **Baneforum censor**. The censor keeps the ACP word list but leaves URLs alone. Check `alfredoramos/markdown` and `phpbb/mediaembed` stay enabled.
 - [ ] Customise, Manage extensions: enable **Baneforum image compress** and **Baneforum censor**. The censor keeps the ACP word list but leaves URLs alone. Check `alfredoramos/markdown` and `phpbb/mediaembed` stay enabled.
 - [ ] Featured posts (**Baneforum featured posts**): shows up to 5 posts with pictures in a column beside the forum list on the front page. It needs the style's `index_body.html` (it has the place for it), so install the style first. It ranks by likes if **Baneforum likes** is enabled, and by newest otherwise. Only members who can read and download in a forum see its posts. Nothing to configure.
 - [ ] Topic sort at the top (**Baneforum topic sort at the top**): the sort and display button of a topic shows at the top of the page as well as at the bottom (phpBB has it only at the bottom). It uses the core event `viewtopic_dropdown_top_custom` and needs no style files. Nothing to configure.

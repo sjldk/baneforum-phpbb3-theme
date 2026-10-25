@@ -1,11 +1,10 @@
-// Lists and tables: read from BBCode (and from Markdown) into real nodes, written back as BBCode.
+// Lists and tables: read from BBCode into real nodes, written back as BBCode.
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { createBBCodeCodec } from '../src/codecs/bbcode.js';
 import { schema } from '../src/schema.js';
 
 const codec = createBBCodeCodec(schema);
-const markdown = createBBCodeCodec(schema, { markdown: true });
 const roundTrip = (text) => codec.serialize(codec.parse(text));
 const kinds = (text, using = codec) => using.parse(text).children.map((node) => node.type.name);
 
@@ -115,17 +114,4 @@ test(`a table in a quote is a table`, () => {
 		[`table`],
 	);
 	assert.equal(roundTrip(text), text);
-});
-
-test(`a Markdown list and table are real nodes, and they are saved as the import writes them`, () => {
-	for (const [source, kind] of [
-		[`- one\n- two`, `bullet_list`],
-		[`1. one\n2. two`, `ordered_list`],
-		[`| a | b |\n|---|:-:|\n| 1 | 2 |`, `table`],
-	]) {
-		assert.deepEqual(kinds(source, markdown), [kind], source);
-		const saved = markdown.serialize(markdown.parse(source));
-		// What the editor writes is what the converter writes, and what the converter writes reads back the same.
-		assert.equal(saved, roundTrip(saved), source);
-	}
 });

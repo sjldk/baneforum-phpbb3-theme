@@ -3,7 +3,7 @@
 //   <bf-editor label="Message" placeholder="Write here"></bf-editor>
 //
 // Everything it needs is passed in (dependency inversion):
-//   editor.codec     a Codec, turns text into a document and back (default: Markdown with BBCode)
+//   editor.codec     a Codec, turns text into a document and back (default: BBCode)
 //   editor.commands  extra toolbar actions
 // It tells the host about changes with a "bf-change" event. Read the text from `editor.value`.
 import { Slice } from 'prosemirror-model';

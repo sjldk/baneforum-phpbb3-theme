@@ -1,18 +1,14 @@
 // The codec for message text. The saved format is BBCode.
-// Reading BBCode is exact: a character is only markup if BBCode says so. A post that was written in Markdown
-// (option `markdown`) is read as Markdown mixed with BBCode, and saved as BBCode: that is how it is converted.
+// Reading BBCode is exact: a character is only markup if BBCode says so.
 import { Mark } from 'prosemirror-model';
 import { TableMap } from 'prosemirror-tables';
 import { scanBBCode } from '../bbcode/scan.js';
 import { writeDocument } from '../bbcode/write.js';
 import { paragraphToEmbed } from '../embeds/paragraph.js';
 import { youtubeProvider } from '../embeds/youtube.js';
-import { PLACEHOLDER_CLOSE, PLACEHOLDER_OPEN, readMarkdown } from '../markdown/read.js';
 import { createSmilieReplacer } from '../smilies.js';
 
 const blockTags = new Set([`quote`, `youtube`, `media`, `list`, `table`, `code`, `flash`, `spoiler`, `center`]);
-/** @type {Record<string, string>} */
-const emphasis = { b: `**`, i: `*`, s: `~~` };
 
 /** @typedef {import('../bbcode/scan.js').BBNode} BBNode */
 /** @typedef {import('../bbcode/scan.js').TagNode} TagNode */
@@ -27,9 +23,9 @@ function textOf(nodes) {
 }
 
 /**
+ * Makes the codec that reads BBCode into an editor document and writes it back.
  * @param {import('prosemirror-model').Schema} schema
- * @param {{markdown?: boolean, smilies?: Record<string, string>, embeds?: import('../contracts.js').EmbedProvider[]}} [options]
- *   markdown: the text was written in Markdown (and BBCode), so read it that way
+ * @param {{smilies?: Record<string, string>, embeds?: import('../contracts.js').EmbedProvider[]}} [options]
  * @returns {import('../contracts.js').Codec}
  */
 export function createBBCodeCodec(schema, options = {}) {
@@ -38,7 +34,7 @@ export function createBBCodeCodec(schema, options = {}) {
 
 	/** @param {string} text */
 	function parse(text) {
-		const blocks = buildBlocks(scanBBCode(text.replace(/\r\n?/g, `\n`))).map(structure);
+		const blocks = buildBlocks(scanBBCode(text.replace(/\r\n?/g, `\n`)));
 
 		return schema.nodes.doc.create(null, blocks.length > 0 ? blocks : [schema.nodes.paragraph.create()]);
 	}
@@ -105,23 +101,6 @@ export function createBBCodeCodec(schema, options = {}) {
 			default:
 				return schema.nodes.raw_block.create({ source: tag.source });
 		}
-	}
-
-	/**
-	 * A block that came from Markdown is a raw block with BBCode in it. If that BBCode is one list or one table, it becomes the real thing.
-	 * @param {PMNode} block
-	 * @returns {PMNode}
-	 */
-	function structure(block) {
-		if (block.type !== schema.nodes.raw_block || !/^\s*\[(?:list|table)\b/i.test(block.attrs.source)) {
-			return block;
-		}
-
-		const nodes = scanBBCode(block.attrs.source);
-		const tags = nodes.filter((node) => node.type === `tag`);
-		const only = tags.length === 1 && nodes.every((node) => node.type === `tag` || node.value.trim() === ``);
-
-		return only ? (blockFromTag(/** @type {TagNode} */ (tags[0])) ?? block) : block;
 	}
 
 	/** Tags that make a block. An item of a list or a cell of a table cannot hold one. */
@@ -376,20 +355,11 @@ export function createBBCodeCodec(schema, options = {}) {
 	}
 
 	/**
-	 * Turns a run of text and inline tags into paragraphs.
+	 * Turns a run of text and inline tags into paragraphs. A blank line starts a paragraph, a single line break is a line break.
 	 * @param {BBNode[]} run
 	 * @returns {PMNode[]}
 	 */
 	function flowToBlocks(run) {
-		return options.markdown ? markdownFlowToBlocks(run) : bbcodeFlowToBlocks(run);
-	}
-
-	/**
-	 * BBCode only. A blank line starts a paragraph, a single line break is a line break.
-	 * @param {BBNode[]} run
-	 * @returns {PMNode[]}
-	 */
-	function bbcodeFlowToBlocks(run) {
 		/** @type {Array<{text: string, marks: readonly Mark[]} | {node: PMNode}>} */
 		const items = [];
 		collect(run, [], items);
@@ -498,104 +468,6 @@ export function createBBCodeCodec(schema, options = {}) {
 				default:
 					items.push({ node: schema.nodes.raw_inline.create({ source: node.source }) });
 			}
-		}
-	}
-
-	/**
-	 * Markdown mixed with BBCode: the BBCode becomes Markdown first, then the whole is read as Markdown.
-	 * @param {BBNode[]} run
-	 * @returns {PMNode[]}
-	 */
-	function markdownFlowToBlocks(run) {
-		/** @type {PMNode[]} */
-		const placeholders = [];
-		/** @param {PMNode} node */
-		const stand = (node) => {
-			placeholders.push(node);
-
-			return `${PLACEHOLDER_OPEN}${placeholders.length - 1}${PLACEHOLDER_CLOSE}`;
-		};
-		let source = ``;
-
-		for (const node of run) {
-			source += inlineToMarkdown(node, stand, source);
-		}
-
-		source = source.replace(/^\n+|\n+$/g, ``);
-
-		if (source.trim() === ``) {
-			return [];
-		}
-
-		return readMarkdown(schema, source, placeholders, replaceSmilies);
-	}
-
-	/**
-	 * @param {BBNode} node
-	 * @param {(node: PMNode) => string} stand  Leaves a stand-in for a node and returns its marker text.
-	 * @param {string} [before]  The Markdown written so far in this run.
-	 * @returns {string}
-	 */
-	function inlineToMarkdown(node, stand, before = ``) {
-		if (node.type === `text`) {
-			return node.value;
-		}
-
-		const content = () => node.children.map((child) => inlineToMarkdown(child, stand)).join(``);
-
-		switch (node.name) {
-			case `b`:
-			case `i`:
-			case `s`: {
-				// Markdown emphasis cannot span a blank line, BBCode can. Mark each paragraph on its own.
-				return content()
-					.split(/(\n\s*\n)/)
-					.map((part) => {
-						if (/^\n\s*\n$/.test(part)) {
-							return part;
-						}
-
-						const lead = part.match(/^\s*/)?.[0] ?? ``;
-						const tail = part.match(/\s*$/)?.[0] ?? ``;
-						const core = part.slice(lead.length, part.length - tail.length);
-
-						return core === `` ? part : `${lead}${emphasis[node.name]}${core}${emphasis[node.name]}${tail}`;
-					})
-					.join(``);
-			}
-			case `url`: {
-				const label = content();
-
-				// [url]address[/url] is just the address. The server turns it into a link and shortens a long one.
-				// Glued to the word before it, an address would not be found, so it gets link syntax.
-				if (!node.attrs.startsWith(`=`) && /^[\w+.-]+:\/\/[^\s()<>]+$/.test(label.trim())) {
-					const address = label.trim();
-
-					return before === `` || /\s$/.test(before) ? address : `[${address}](${address})`;
-				}
-
-				const href = node.attrs.startsWith(`=`) ? node.attrs.slice(1).trim().replace(/^"|"$/g, ``) : label.trim();
-
-				return /^[\w+.-]+:\/\//.test(href) && !/[\s()<>]/.test(href)
-					? `[${label}](${href})`
-					: stand(schema.nodes.raw_inline.create({ source: node.source }));
-			}
-			case `img`:
-				return stand(
-					schema.nodes.image.create({
-						src: textOf(node.children).trim(),
-					}),
-				);
-			case `attachment`: {
-				const index = Number(node.attrs.replace(/^=/, ``));
-				const name = textOf(node.children);
-
-				return Number.isInteger(index)
-					? stand(schema.nodes.attachment.create({ index, name }))
-					: stand(schema.nodes.raw_inline.create({ source: node.source }));
-			}
-			default:
-				return stand(schema.nodes.raw_inline.create({ source: node.source }));
 		}
 	}
 
