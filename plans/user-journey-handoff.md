@@ -1,6 +1,6 @@
 # Handoff: user-journey browser test
 
-> The steps below were turned into scripts: see the skill `.claude/skills/cloud-test-board/SKILL.md`. Use that first.
+> The steps below were turned into scripts: see the skill `.claude/skills/phpbbtest/SKILL.md`. Use that first.
 
 For whoever (or whichever session) picks up PR #3 (`claude/ui-test-plan-451cpx`). Start by reading
 `plans/user-journey-tests.md` (the plan) and `scripts/browser-tests/user-journey.mjs` (the test).

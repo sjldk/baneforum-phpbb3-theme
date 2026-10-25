@@ -1,17 +1,17 @@
 ---
-name: cloud-test-board
-description: Raise the Docker test board and run the browser tests (user-journey.mjs) inside a Claude cloud session (claude.ai/code, the Android or web app), where Docker needs workarounds. Use when asked to run, start or test the board or the browser tests in a cloud session. On a normal computer use docker/test-env.sh and scripts/browser-tests/run.sh instead.
+name: phpbbtest
+description: Raise the Docker phpBB test board and run the browser tests (user-journey.mjs) inside a Claude cloud session (claude.ai/code, the Android or web app), where Docker needs workarounds. Use when asked to run, start or test the board, the theme or the browser tests in a cloud session. On a normal computer use docker/test-env.sh and scripts/browser-tests/run.sh instead. Companion to the phpbb skill, which holds the phpBB traps.
 ---
 
-# Test board and browser tests in a Claude cloud session
+# phpBB test board and browser tests in a Claude cloud session
 
 A cloud session has Docker, but its containers have no direct internet. Everything goes through a proxy that
 re-signs TLS. `docker/test-env.sh` and `scripts/browser-tests/run.sh` therefore fail here. Two scripts in this
 folder do the same job with the workarounds built in. The repo is never changed by them.
 
 ```bash
-.claude/skills/cloud-test-board/build-image.sh        # once per session, 1 to 3 minutes
-.claude/skills/cloud-test-board/run-user-journey.sh   # about 2 minutes, prints PASS/FAIL, exit 1 if any fail
+.claude/skills/phpbbtest/build-image.sh        # once per session, 1 to 3 minutes
+.claude/skills/phpbbtest/run-user-journey.sh   # about 2 minutes, prints PASS/FAIL, exit 1 if any fail
 ```
 
 Last result: 48 of 48 checks pass (`scripts/browser-tests/user-journey.mjs`, as `alice`, Chrome 153).

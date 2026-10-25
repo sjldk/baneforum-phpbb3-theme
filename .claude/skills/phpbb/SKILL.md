@@ -80,7 +80,6 @@ A file here replaces the one in prosilver. Check the prosilver original of the s
 | A browser test on the board | `scripts/browser-tests/run.sh <script.mjs>` (Chrome) or `BROWSER=firefox scripts/browser-tests/run.sh <script.mjs>` |
 | Firefox | Puppeteer talks WebDriver BiDi. `states.mjs` uses the Chrome DevTools protocol and is Chrome only. |
 | Style sheet page | `baneforum/theme/styleguide.html` shows every button level, surface, heading, list row, post card and form field in both themes. Open `/styles/baneforum/theme/styleguide.html` on the test board after a style change, and run `styleguide.mjs`. Add a new part of the theme to it. |
-| In a Claude cloud session (claude.ai/code, the app) | Docker and `run.sh` need workarounds there. Use the skill `cloud-test-board`: `.claude/skills/cloud-test-board/build-image.sh`, then `run-user-journey.sh`. |
 | Another board | The tests use `http://localhost:8080`. Change the host in `login.mjs` and the scripts for 8081. |
 
 Details: `scripts/browser-tests/README.md`.
