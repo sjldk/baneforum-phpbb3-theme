@@ -57,13 +57,17 @@
 			{% if S_HAS_DRAFTS %}<input type="submit" accesskey="d" name="load" value="{{ lang('LOAD_DRAFT') }}" class="button2" onclick="load_draft = true;" />&nbsp; {% endif %}
 			{% if S_SAVE_ALLOWED %}<input type="submit" accesskey="k" name="save" value="{{ lang('SAVE_DRAFT') }}" class="button2" />&nbsp; {% endif %}
 			<input type="submit" name="preview" value="{{ lang('PREVIEW') }}" class="button2"{% if not S_PRIVMSGS %} onclick="document.getElementById('postform').action += '#preview';"{% endif %} />&nbsp;
-			<input type="submit" accesskey="s" name="post" value="{{ lang('SUBMIT') }}" class="button1 default-submit-action" />&nbsp;
+			{# A new post says "Post", an existing one says "Save changes". Other forms (messages, signature) keep "Submit". #}
+			<input type="submit" accesskey="s" name="post" value="{% if S_EDIT_POST %}{% if S_USER_LANG starts with 'da' %}Gem ændringer{% else %}Save changes{% endif %}{% elseif definition.EXTRA_POSTING_OPTIONS == 1 %}{% if S_USER_LANG starts with 'da' %}Send indlæg{% else %}Post{% endif %}{% else %}{{ lang('SUBMIT') }}{% endif %}" class="button1 default-submit-action" />&nbsp;
 
 		</fieldset>
 
 		</div>
 	</div>
 	{% endif %}
+
+	{# The list of files comes right under the buttons, before the options. phpBB puts it after the whole box (posting_layout.html). #}
+	{% if definition.EXTRA_POSTING_OPTIONS == 1 and S_SHOW_ATTACH_BOX and FILTERS %}{% INCLUDE 'posting_attach_body.html' %}{% endif %}
 
 	{# The tabs (Options, Attachments, Add poll) are gone. The options show, the pictures are in the editor and the poll is a closed section. #}
 

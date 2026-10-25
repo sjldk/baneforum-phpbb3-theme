@@ -873,12 +873,6 @@ table.table1 tbody tr:hover td {
 	outline-offset: 0.1rem;
 }
 
-/* The posting page has no tabs. The pictures are in the editor, so the attachment panel (which
-   still holds the fields that are sent with the form) stays out of sight. */
-form:has(bf-editor) #attach-panel:not([data-bf-files]) {
-	display: none;
-}
-
 /* The editor adds files itself, so the add-file controls of the panel go. The list stays. */
 form:has(bf-editor) #attach-panel :is(.inner > p, #attach-panel-basic, #attach-panel-multi) {
 	display: none !important;
@@ -950,14 +944,14 @@ form:has(bf-editor) #attach-panel :is(.inner > p, #attach-panel-basic, #attach-p
 	overflow: visible;
 }
 
-/* The two extra sections of the posting page, "Options" and "Add poll", are the same: a panel on the page surface with a
+/* The extra sections of the posting page, "Options", "Attachments" and "Add poll", are the same: a panel on the page surface with a
    one-line title and a chevron. They are closed until they are needed. */
-:is(#options-panel, #poll-panel) {
+:is(#options-panel, #poll-panel, #attach-panel) {
 	padding: 0.25rem 1.25rem;
 	background-color: var(--color-surface);
 }
 
-:is(.bf-options, #poll-panel) > summary {
+:is(.bf-options, #poll-panel, #attach-panel) > summary {
 	display: flex;
 	align-items: center;
 	gap: 0.75rem;
@@ -967,11 +961,11 @@ form:has(bf-editor) #attach-panel :is(.inner > p, #attach-panel-basic, #attach-p
 	list-style: none;
 }
 
-:is(.bf-options, #poll-panel) > summary::-webkit-details-marker {
+:is(.bf-options, #poll-panel, #attach-panel) > summary::-webkit-details-marker {
 	display: none;
 }
 
-:is(.bf-options, #poll-panel) > summary::before {
+:is(.bf-options, #poll-panel, #attach-panel) > summary::before {
 	content: "";
 	flex: none;
 	inline-size: 0.6rem;
@@ -982,16 +976,16 @@ form:has(bf-editor) #attach-panel :is(.inner > p, #attach-panel-basic, #attach-p
 	transition: transform 0.15s;
 }
 
-:is(.bf-options, #poll-panel)[open] > summary::before {
+:is(.bf-options, #poll-panel, #attach-panel)[open] > summary::before {
 	transform: translateY(0.1rem) rotate(45deg);
 }
 
-:is(.bf-options, #poll-panel)[open] > summary {
+:is(.bf-options, #poll-panel, #attach-panel)[open] > summary {
 	margin-bottom: 0.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
-	:is(.bf-options, #poll-panel) > summary::before {
+	:is(.bf-options, #poll-panel, #attach-panel) > summary::before {
 		transition: none;
 	}
 }
@@ -1139,14 +1133,10 @@ figure.file a:focus-visible {
 	border-radius: var(--radius);
 }
 
-/* The editor places pictures itself and keeps files in the list, so the old Place inline button goes. */
-form:has(bf-editor) .file-inline-bbcode {
-	display: none !important;
-}
-
-/* The list of files under the editor: the same cards as under a post, with the description field and Delete. */
-#attach-panel {
-	background: none;
+/* The list of files under the editor sits in a details panel on the page surface, like "Options" and "Add poll" (see above). Each file is one card on one line:
+   the small picture, the name, the description field, the size, the status and the buttons. A file that is in the text has its row hidden
+   (bf-phpbb.js). The Place inline button is phpBB's own, run by attachInline in bf-phpbb.js, and puts the file back in the text. */
+#attach-panel .inner {
 	padding: 0;
 }
 
@@ -1170,10 +1160,10 @@ form:has(bf-editor) .file-inline-bbcode {
 
 #attach-panel tr.attach-row {
 	display: grid;
-	grid-template-columns: 1fr auto auto;
+	grid-template-columns: auto minmax(9rem, 1.2fr) minmax(8rem, 1fr) auto auto auto;
 	align-items: center;
 	gap: 0.5rem 1rem;
-	margin: 0 0 0.5rem;
+	margin: 0 0 0.75rem;
 	padding: 0.65rem 0.9rem;
 	border: 1px solid var(--color-line);
 	border-radius: var(--radius);
@@ -1188,46 +1178,121 @@ form:has(bf-editor) .file-inline-bbcode {
 	background: none;
 }
 
+/* The cell with the name is not a box. Its picture, name and buttons are grid items of the row. */
 #attach-panel tr.attach-row > td.attach-name {
+	display: contents;
+}
+
+/* What the panel says in its title line when it has nothing to list (bf-phpbb.js). */
+#attach-panel .attach-note {
+	margin-inline-start: 0.75rem;
+	color: var(--color-muted);
+	font-weight: normal;
+}
+
+#attach-panel .attach-note:empty {
+	display: none;
+}
+
+/* The names of the cells (Filename, Size, Status) that prosilver shows on a narrow screen are not needed: each card says it itself. */
+#attach-panel td.attach-name .clear,
+#attach-panel tr.attach-row > td > dfn {
+	display: none !important;
+}
+
+#attach-panel .attach-thumb {
 	grid-column: 1;
 	grid-row: 1;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 0.25rem 0.75rem;
+	inline-size: 3.5rem;
+	block-size: 3.5rem;
+	object-fit: cover;
+	border: 1px solid var(--color-line);
+	border-radius: var(--radius);
+	background: var(--color-surface);
+}
+
+#attach-panel td.attach-name .file-name {
+	grid-column: 2;
+	grid-row: 1;
+	min-inline-size: 0;
+	max-inline-size: none;
 	font-weight: 600;
 }
 
-#attach-panel tr.attach-row > td.attach-name .attach-controls {
-	margin-inline-start: auto;
+#attach-panel td.attach-comment {
+	grid-column: 3;
+	grid-row: 1;
+	min-inline-size: 0;
+}
+
+#attach-panel td.attach-comment input {
+	box-sizing: border-box;
+	text-align: start;
+	width: 100%;
+	max-width: none;
+	min-height: 2.75rem;
+	margin: 0;
+}
+
+#attach-panel td.attach-filesize {
+	grid-column: 4;
+	grid-row: 1;
+	color: var(--color-muted);
+	font-size: var(--font-size-small);
+	white-space: nowrap;
+}
+
+#attach-panel td.attach-status {
+	grid-column: 5;
+	grid-row: 1;
+}
+
+#attach-panel td.attach-name .attach-controls {
+	grid-column: 6;
+	grid-row: 1;
+	display: flex;
+	gap: 0.5rem;
 }
 
 #attach-panel td.attach-name .attach-controls input {
 	padding: 0.2em 0.8em;
 }
 
-#attach-panel td.attach-comment {
-	grid-column: 1 / -1;
-	grid-row: 2;
-}
+/* Narrow: the picture beside the name, and under the name the size and status. The description is under that, the buttons last. */
+@media (max-width: 48em) {
+	#attach-panel tr.attach-row {
+		grid-template-columns: auto minmax(0, 1fr) auto;
+	}
 
-#attach-panel td.attach-comment textarea {
-	box-sizing: border-box;
-	text-align: start;
-	width: 100%;
-	min-height: 2.75rem;
-}
+	#attach-panel .attach-thumb {
+		grid-row: 1 / span 2;
+	}
 
-#attach-panel td.attach-filesize {
-	grid-column: 2;
-	grid-row: 1;
-	color: var(--color-muted);
-	font-size: var(--font-size-small);
-}
+	#attach-panel td.attach-name .file-name {
+		grid-column: 2 / -1;
+		grid-row: 1;
+	}
 
-#attach-panel td.attach-status {
-	grid-column: 3;
-	grid-row: 1;
+	#attach-panel td.attach-filesize {
+		grid-column: 2;
+		grid-row: 2;
+	}
+
+	#attach-panel td.attach-status {
+		grid-column: 3;
+		grid-row: 2;
+	}
+
+	#attach-panel td.attach-comment {
+		grid-column: 1 / -1;
+		grid-row: 3;
+	}
+
+	#attach-panel td.attach-name .attach-controls {
+		grid-column: 1 / -1;
+		grid-row: 4;
+		justify-content: flex-end;
+	}
 }
 
 /* Buttons (WCAG AAA). Every button and every link that works like one is at least 44 by 44 pixels (2.5.5),

@@ -54,7 +54,7 @@ await wait(300);
 state = await editorState();
 check(`description is stored as the attachment comment`, state.data[0]?.[1] === `A red square in the corner`, JSON.stringify(state.data));
 check(`and is the alt text`, state.alt === `A red square in the corner`);
-check(`and is in the field phpBB sends`, await page.evaluate(() => [document.querySelector(`[data-attach-id] textarea`)?.value, document.querySelector(`input[name="attachment_data[0][attach_comment]"]`)?.value].join(`|`)) === `A red square in the corner|A red square in the corner`);
+check(`and is in the field phpBB sends`, await page.evaluate(() => [document.querySelector(`[data-attach-id] .attach-comment-field`)?.value, document.querySelector(`input[name="attachment_data[0][attach_comment]"]`)?.value].join(`|`)) === `A red square in the corner|A red square in the corner`);
 check(`menu closed after saving`, await page.evaluate(() => !document.querySelector(`bf-editor`).shadowRoot.querySelector(`form[popover]`).matches(`:popover-open`)));
 
 // Preview reloads the page. The picture must still be there.

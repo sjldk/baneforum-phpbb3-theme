@@ -48,6 +48,9 @@ function acceptedTypes() {
 		.join(`,`);
 }
 
+/** Set when the section has opened by itself once. */
+let panelOpened = false;
+
 /**
  * The attachment panel of phpBB lists the files of the post. A file that is in the text is shown in
  * the editor, so its row is hidden, and the panel only shows when a file is left that is not in the text
@@ -59,23 +62,49 @@ function syncAttachmentRows() {
 	const data = window.phpbb?.plupload?.data ?? [];
 	let left = 0;
 
-	for (const row of /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll(`#file-list > .attach-row`))) {
+	for (const row of /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll(`#file-list > .attach-row:not(.attach-row-tpl)`))) {
 		const index = data.findIndex((/** @type {{attach_id: string}} */ attachment) => String(attachment.attach_id) === row.dataset.attachId);
 		const placed = index !== -1 && new RegExp(`\\[attachment=${index}\\]`).test(text);
 		row.style.display = placed ? `none` : ``;
 		left += placed ? 0 : 1;
+
+		// A picture that is not in the text gets a small thumbnail, so it is easy to tell from the others.
+		const name = row.querySelector(`td.attach-name`);
+
+		if (!placed && name && !name.querySelector(`.attach-thumb`) && attachmentInfo(index)?.image) {
+			const thumb = document.createElement(`img`);
+			thumb.className = `attach-thumb`;
+			thumb.alt = ``;
+			thumb.loading = `lazy`;
+			thumb.src = attachmentInfo(index)?.src ?? ``;
+			name.prepend(thumb);
+		}
 	}
 
 	// The description field of a row has no label in phpBB's markup. The column title is its name.
 	const title = document.querySelector(`th.attach-comment`)?.textContent?.trim() ?? ``;
 
-	for (const field of document.querySelectorAll(`#file-list textarea`)) {
+	for (const field of document.querySelectorAll(`#file-list .attach-comment-field`)) {
 		field.setAttribute(`aria-label`, title);
 		field.setAttribute(`placeholder`, title);
 	}
 
 	if (panel) {
 		panel.toggleAttribute(`data-bf-files`, left > 0);
+
+		// With no file left to show, the panel says why: there are none, or all of them are in the text.
+		const empty = left > 0 ? `` : (data.length === 0 ? panel.dataset.bfEmptyNone : panel.dataset.bfEmptyAll) ?? ``;
+		const note = panel.querySelector(`.attach-note`);
+
+		if (note) {
+			note.textContent = empty;
+		}
+
+		// The section opens by itself the first time a file is left that is not in the text. After that the writer decides.
+		if (left > 0 && !panelOpened && panel instanceof HTMLDetailsElement) {
+			panel.open = true;
+			panelOpened = true;
+		}
 	}
 }
 
@@ -186,7 +215,10 @@ let running = 0;
 const alertBox = window.phpbb?.alert;
 
 if (typeof alertBox === `function`) {
-	window.phpbb.alert = (/** @type {unknown[]} */ ...args) => (running > 0 ? undefined : alertBox.apply(window.phpbb, args));
+	const quietAlert = (/** @type {unknown[]} */ ...args) => (running > 0 ? undefined : alertBox.apply(window.phpbb, args));
+
+	// open() and close() hang on phpbb.alert. phpbb.confirm() and phpBB's own alert code call them, so they move over.
+	window.phpbb.alert = Object.assign(quietAlert, alertBox);
 }
 
 // phpBB shows the attachment tab when a file is added. The writer is in the editor, so it stays.
@@ -214,6 +246,81 @@ window.insert_text = (/** @type {string} */ text, /** @type {boolean} */ spaces,
 window.attachInline = (/** @type {number} */ index, /** @type {string} */ name) => {
 	editor?.insertAttachment({ index, name, src: attachmentInfo(index)?.src });
 };
+
+// phpBB names the description field of a row with row.find('textarea'). Ours is a text input, so the name is set here.
+const plupload = window.phpbb?.plupload;
+
+if (typeof plupload?.updateRow === `function`) {
+	const updateRow = plupload.updateRow;
+
+	plupload.updateRow = function (/** @type {number} */ index, /** @type {string[] | undefined} */ downloadUrl) {
+		updateRow.call(this, index, downloadUrl);
+		const id = plupload.data?.[index]?.attach_id;
+
+		document.querySelector(`[data-attach-id="${id}"] .attach-comment-field`)?.setAttribute(`name`, `comment_list[${index}]`);
+	};
+}
+
+// "Delete file" in the list asks first, in the board's own dialog (bf-dialogs.js). phpBB's handler for the button is bound
+// on #file-list (jQuery, bubbling). This listener sits on the same element in the capture phase, so it runs first and holds
+// the click back. When the writer says yes, the same button is clicked again and that click goes through.
+const fileList = document.getElementById(`file-list`);
+/** @type {Element | null} */
+let confirmedDelete = null;
+
+fileList?.addEventListener(
+	`click`,
+	(event) => {
+		const button = event.target instanceof Element ? event.target.closest(`.file-delete`) : null;
+
+		if (!button) {
+			return;
+		}
+
+		if (button === confirmedDelete) {
+			confirmedDelete = null;
+
+			return;
+		}
+
+		event.preventDefault();
+		event.stopImmediatePropagation();
+
+		const { bfDeleteText: text = ``, bfYes: yes = `Yes`, bfNo: no = `No` } = fileList.dataset;
+		const name = button.closest(`.attach-row`)?.querySelector(`.file-name`)?.textContent?.trim() ?? ``;
+		const question = document.createElement(`div`);
+		const line = document.createElement(`p`);
+		const buttons = document.createElement(`p`);
+
+		line.textContent = name ? `${text} ${name}` : text;
+		buttons.append(confirmButton(`confirm`, yes, `button1`), ` `, confirmButton(`cancel`, no, `button2`));
+		question.append(line, buttons);
+
+		window.phpbb.confirm(question.innerHTML, (/** @type {boolean} */ yesPressed) => {
+			if (yesPressed) {
+				confirmedDelete = button;
+				/** @type {HTMLElement} */ (button).click();
+			}
+		});
+	},
+	true,
+);
+
+/**
+ * One of the two buttons of the question. The names `confirm` and `cancel` are the ones phpBB's confirm box looks for.
+ * @param {string} name
+ * @param {string} label
+ * @param {string} className
+ */
+function confirmButton(name, label, className) {
+	const button = document.createElement(`input`);
+	button.type = `button`;
+	button.name = name;
+	button.value = label;
+	button.className = className;
+
+	return button;
+}
 
 function turnOn() {
 	if (editor || !textarea) {
@@ -288,7 +395,7 @@ function turnOn() {
 
 		// The description is the comment of the attachment. phpBB sends it in two places.
 		attachment.attach_comment = description;
-		const field = row?.querySelector(`textarea`);
+		const field = row?.querySelector(`.attach-comment-field`);
 		const hidden = row?.querySelector(`input[name$="[attach_comment]"]`);
 
 		if (field) {

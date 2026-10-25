@@ -55,6 +55,7 @@ The install steps for production are in `docs/production-install.md`.
 | Firefox keeps an `@import`ed stylesheet (`stylesheet.css` imports our CSS) in its own cache, so a CSS edit may not show, even after a reload | Measure in `scripts/browser-tests` (Chrome starts with a clean profile each run), or clear the cache in the browser. `headers.mjs` shows how. |
 | Firefox holds port 9222, so `run.sh` cannot start Chrome | `PORT=9223 scripts/browser-tests/run.sh <script.mjs>` |
 | Pictures look empty (1 px) or an upload says "expected extension png but extension jpg given" in Firefox after the test board was installed again | `download/file.php` sends `Expires` one year ahead and a fresh install numbers attachments from 1 again, so Firefox shows the old picture of the same id (`pixel.png`, 70 bytes). The pictures are saved. Clear the cache of localhost:8080, or look at `curl` / a private window. A picture dragged out of such a page uploads the 70-byte PNG. |
+| The description field of a file in the list under the editor is a text input (`.attach-comment-field`), not phpBB's textarea | phpBB's `updateRow` names the field with `row.find('textarea')`, so `bf-phpbb.js` wraps `phpbb.plupload.updateRow` and sets `comment_list[N]` itself. "Delete file" asks in a dialog: a capture listener on `#file-list` holds the click back, `phpbb.confirm` shows the dialog, and a yes clicks the button again. Wrapping `phpbb.alert` in a plain function drops `.open` and `.close` (`phpbb.confirm` then fails), so copy them with `Object.assign`. |
 | Facebook and Google login buttons | Stay. 14 production users are linked. Styles are in `login_body_oauth.html`. |
 
 ## Design rules
@@ -66,7 +67,7 @@ The install steps for production are in `docs/production-install.md`.
 ## Template overrides in this style
 
 `baneforum/template/` holds: `attachment.html`, `index_body.html`, `login_body.html`, `login_body_oauth.html`, `navbar_header.html`,
-`navbar_footer.html`, `overall_header.html`, `overall_footer.html`, `posting_editor.html`, `posting_poll_body.html`.
+`navbar_footer.html`, `overall_header.html`, `overall_footer.html`, `posting_editor.html`, `posting_attach_body.html`, `posting_poll_body.html`.
 A file here replaces the one in prosilver. Check the prosilver original of the same phpBB version when you change one.
 
 ## Tests
