@@ -64,22 +64,42 @@
 	width: 0;
 }
 
-.file-status.file-working {
-	background: url("./images/plupload/throbber.gif");
-}
-
-.file-status.file-uploaded {
-	background: url("./images/plupload/done.gif");
-}
-
-.file-status.file-error {
-	background: url("./images/plupload/error.gif");
-}
-
+/* The state of a file in the list: Font Awesome icons (the font is loaded by the board), in the colours of the theme. */
 .file-status {
 	display: inline-block;
 	height: 1rem;
 	width: 1rem;
+	font-size: 1rem;
+	line-height: 1;
+}
+
+.file-status::before {
+	font-family: FontAwesome, sans-serif;
+	font-style: normal;
+	font-weight: normal;
+}
+
+.file-status.file-working::before {
+	content: "\f110";
+	display: inline-block;
+	color: var(--color-muted);
+	animation: fa-spin 1s infinite steps(8);
+}
+
+.file-status.file-uploaded::before {
+	content: "\f058";
+	color: var(--color-success);
+}
+
+.file-status.file-error::before {
+	content: "\f057";
+	color: var(--color-danger);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.file-status.file-working::before {
+		animation: none;
+	}
 }
 
 .file-name {
