@@ -274,7 +274,7 @@ dd.option {
 	float: left;
 	font-size: 1.5em;
 	padding: 0.125rem 0 0 0;
-	margin-top: 0 !important;
+	margin-top: 0;
 	margin-bottom: 0.3em !important;
 	text-transform: none;
 	border: none;
@@ -288,7 +288,7 @@ dd.option {
 
 .has-profile .postbody h3 {
 	/* If there is a post-profile, we position the post-buttons differently */
-	float: none !important;
+	float: none;
 	margin-right: 11.25rem;
 }
 
@@ -820,7 +820,7 @@ dd.profile-contact {
 
 /* pm list in compose message if mass pm is enabled */
 dl.pmlist dt {
-	width: 60% !important;
+	width: 60%;
 }
 
 dl.pmlist dt textarea {
@@ -828,7 +828,7 @@ dl.pmlist dt textarea {
 }
 
 dl.pmlist dd {
-	margin-left: 61% !important;
+	margin-left: 61%;
 	margin-bottom: 0.125rem;
 }
 

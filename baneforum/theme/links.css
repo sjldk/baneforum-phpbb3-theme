@@ -16,8 +16,8 @@ a {
 
 /* Coloured usernames */
 .username-coloured {
-	display: inline !important;
-	padding: 0 !important;
+	display: inline;
+	padding: 0;
 }
 
 /* Links on gradient backgrounds */

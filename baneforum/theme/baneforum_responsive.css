@@ -123,7 +123,7 @@
 
 @media (max-width: 43.75em) {
 	.responsive-hide {
-		display: none !important;
+		display: none;
 	}
 	.responsive-show {
 		display: block !important;
@@ -223,12 +223,12 @@
 
 	ul.topiclist li.header dt,
 	ul.topiclist li.header dt .list-inner {
-		margin-right: 0 !important;
+		margin-right: 0;
 		padding-right: 0;
 	}
 
 	ul.topiclist li.header dd {
-		display: none !important;
+		display: none;
 	}
 
 	ul.topiclist dt,
@@ -328,8 +328,8 @@
 	table.responsive.show-header thead,
 	table.responsive.show-header th:first-child {
 		display: block;
-		width: auto !important;
-		text-align: left !important;
+		width: auto;
+		text-align: left;
 	}
 
 	table.responsive.show-header th:first-child span.rank-img {
@@ -347,7 +347,7 @@
 	}
 
 	table.responsive td.empty {
-		display: none !important;
+		display: none;
 	}
 
 	table.responsive td > dfn {
@@ -392,13 +392,13 @@
 	}
 
 	dl.pmlist dt {
-		width: auto !important;
+		width: auto;
 		margin-bottom: 0.3125rem;
 	}
 
 	dl.pmlist dd {
 		display: inline-block;
-		margin-left: 0 !important;
+		margin-left: 0;
 	}
 
 	dl.pmlist dd:first-of-type {
@@ -539,8 +539,8 @@
 	}
 
 	.has-profile .postbody h3 {
-		margin-left: 0 !important;
-		margin-right: 0 !important;
+		margin-left: 0;
+		margin-right: 0;
 	}
 
 	.has-profile .post-buttons {

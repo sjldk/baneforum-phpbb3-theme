@@ -326,7 +326,7 @@ input.button1,
 input.button3,
 a.button2,
 input.button2 {
-	width: auto !important;
+	width: auto;
 	font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
 	background: transparent none repeat-x top left;
 	line-height: 1.5;

@@ -666,7 +666,7 @@ body :is(input, select, textarea, option) {
 }
 
 body :is(h1, .site-description h1) {
-	font-size: var(--font-size-h1) !important;
+	font-size: var(--font-size-h1);
 }
 body h2,
 body .forum-title,
@@ -1455,7 +1455,7 @@ dl.row-item:is([class*="forum_"], [class*="topic_"], [class*="sticky_"], [class*
 	position: absolute;
 	inset-block-start: 50%;
 	color: var(--bf-color);
-	font-family: FontAwesome !important;
+	font-family: FontAwesome;
 	font-style: normal;
 	font-weight: normal;
 	line-height: 1;
@@ -1656,7 +1656,7 @@ input#subject {
    colour. The line under it ("by ... on ... in ..."), the counts and the last post are small and soft. The !important
    is needed because the rule near the top gives every div, dt, dd and link 1em with !important. */
 body ul.topiclist li.row :is(a.topictitle, a.forumtitle) {
-	font-size: var(--text-heading) !important;
+	font-size: var(--text-heading);
 	line-height: 1.4;
 }
 
@@ -1842,31 +1842,31 @@ dialog.phpbb_alert .alert_text fieldset.submit-buttons {
 }
 
 body .bf-index__title {
-	font-family: var(--font-headline) !important;
-	font-size: var(--text-title) !important;
-	font-weight: 600 !important;
+	font-family: var(--font-headline);
+	font-size: var(--text-title);
+	font-weight: 600;
 }
 
 /* The name of a section (category): a headline, one size under the title. */
 body .bf-index ul.topiclist li.header dt .list-inner,
 body .bf-index ul.topiclist li.header dt a {
-	font-family: var(--font-headline) !important;
-	font-size: var(--text-heading) !important;
-	font-weight: 600 !important;
+	font-family: var(--font-headline);
+	font-size: var(--text-heading);
+	font-weight: 600;
 }
 
 /* The name of a forum: a headline. */
 body .bf-index ul.topiclist li.row a.forumtitle {
-	font-family: var(--font-headline) !important;
-	font-size: var(--text-heading) !important;
-	font-weight: 600 !important;
+	font-family: var(--font-headline);
+	font-size: var(--text-heading);
+	font-weight: 600;
 	line-height: 1.25;
-	color: var(--color-text) !important;
+	color: var(--color-text);
 }
 
 /* Its description: the reading text, in the serif. */
 body .bf-index ul.topiclist li.row dt .list-inner {
-	font-family: var(--font-serif) !important;
+	font-family: var(--font-serif);
 	font-size: var(--text-body) !important;
 	line-height: 1.5;
 	color: var(--color-text);
@@ -1874,21 +1874,21 @@ body .bf-index ul.topiclist li.row dt .list-inner {
 
 body .bf-index ul.topiclist li.row dt .list-inner a:not(.forumtitle),
 body .bf-index ul.topiclist li.row dt .list-inner strong {
-	font-family: var(--font-serif) !important;
-	font-size: inherit !important;
+	font-family: var(--font-serif);
+	font-size: inherit;
 }
 
 /* The counts and the last post are small facts: mono, small. */
 body .bf-index ul.topiclist li.row dd,
 body .bf-index ul.topiclist li.row dd * {
-	font-family: var(--font-facts) !important;
+	font-family: var(--font-facts);
 	font-size: var(--text-meta) !important;
 }
 
 /* The last post: its title is read, so it keeps the serif. */
 body .bf-index ul.topiclist li.row dd.lastpost a.lastsubject {
 	display: block;
-	font-family: var(--font-serif) !important;
+	font-family: var(--font-serif);
 	font-size: var(--text-body) !important;
 	line-height: 1.3;
 	overflow-wrap: anywhere;
