@@ -12,3 +12,5 @@ The same applies to docs you write: README files, plans, handoffs, skills and PR
 short sentences. One idea per sentence. Explain a hard word the first time it is used.
 
 Code and code comments keep the style they already have.
+
+When you change code, follow `docs/coding-guidelines.md`.
