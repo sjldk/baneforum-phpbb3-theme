@@ -3,11 +3,7 @@
    same place in overall_header.html, so the order against prosilver's other files is unchanged. */
 
 .button {
-	display: inline-block;
-	padding: 0.125rem 0.5rem;
 	font-size: var(--text-meta);
-	font-weight: 600;
-	font-family: "Open Sans", "Droid Sans", Verdana, Arial, Helvetica;
 	line-height: 1.4;
 	text-align: center;
 	white-space: nowrap;
@@ -15,8 +11,6 @@
 	touch-action: manipulation;
 	cursor: pointer;
 	user-select: none;
-	border: 1px solid transparent;
-	border-radius: var(--radius);
 }
 
 .button:focus,
@@ -82,9 +76,6 @@
 .contact-icons a {
 	border-bottom: 1px dotted;
 	border-right: 1px dotted;
-	display: block;
-	float: left;
-	padding: 0.5rem;
 }
 
 .contact-icons .last-cell {

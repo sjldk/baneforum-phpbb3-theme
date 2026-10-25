@@ -1,0 +1,176 @@
+/* Links. Replaces prosilver's links.css, which is no longer loaded. Same rules, in rem (em in media queries) and without the
+   vendor prefixes and the Internet Explorer leftovers. It loads in the same place in baneforum_css.html, so the order is unchanged. */
+
+/* Link Styles
+---------------------------------------- */
+
+/* Coloured usernames */
+.username-coloured {
+	display: inline;
+	padding: 0;
+}
+
+/* Links on gradient backgrounds */
+.forumbg .header a,
+.forabg .header a,
+th a {
+	text-decoration: none;
+	/* Links on gradient backgrounds */
+	color: #ffffff;
+}
+
+/* Notification mark read link */
+.dropdown-extended a.mark_read {
+	background-position: center center;
+	background-repeat: no-repeat;
+	border-radius: 0.1875rem 0 0 0.1875rem;
+	display: none;
+	margin-top: -1.25rem;
+	position: absolute;
+	z-index: 2;
+	right: 0;
+	top: 50%;
+	box-sizing: border-box;
+}
+
+.dropdown-extended li:hover a.mark_read {
+	display: block;
+}
+
+.dropdown-extended a.mark_read:hover {
+	width: 3.125rem;
+}
+
+.jumpbox-cat-link,
+.jumpbox-forum-link {
+	font-weight: bold;
+}
+
+/* Links for forum/topic lists */
+a.forumtitle {
+	font-size: 1.2em;
+	text-decoration: none;
+}
+
+a.forumtitle:hover {
+	text-decoration: underline;
+}
+
+a.topictitle {
+	font-size: 1.2em;
+	text-decoration: none;
+	display: inline;
+}
+
+a.topictitle:hover {
+	text-decoration: underline;
+}
+
+a.lastsubject {
+	text-decoration: none;
+}
+
+a.lastsubject:hover {
+	text-decoration: underline;
+}
+
+.row-item a:hover {
+	text-decoration: none;
+}
+
+.row-item .forumtitle:hover,
+.row-item .topictitle:hover,
+.row-item .lastsubject:hover,
+.row-item .subforum:hover,
+.row-item a.username:hover,
+.row-item a.username-coloured:hover {
+	text-decoration: underline;
+}
+
+/* Post body links */
+.postlink {
+	text-decoration: none;
+	padding-bottom: 0;
+	/* Post body links */
+	color: #368ad2;
+}
+
+.postlink:hover {
+	text-decoration: none;
+}
+
+.signature a,
+.signature a:hover {
+	border: none;
+	text-decoration: underline;
+}
+
+/* Profile links */
+.postprofile a,
+.postprofile dt.author a {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.postprofile a:hover,
+.postprofile dt.author a:hover {
+	text-decoration: underline;
+}
+
+/* Profile searchresults */
+.search .postprofile a {
+	text-decoration: none;
+	font-weight: normal;
+}
+
+.search .postprofile a:hover {
+	text-decoration: underline;
+}
+
+.top {
+	font-size: 0.75rem;
+	text-decoration: none;
+	margin-top: 0.625rem;
+}
+
+/* Back to top of page */
+.back2top {
+	clear: both;
+}
+
+/* Arrow links  */
+
+.arrow-up {
+	padding-left: 0.625rem;
+	text-decoration: none;
+	border-bottom-width: 0;
+}
+
+.arrow-down {
+	padding-right: 0.625rem;
+}
+
+.arrow-left:hover {
+	text-decoration: none;
+}
+
+.arrow-right:hover {
+	text-decoration: none;
+}
+
+/* invisible skip link, used for accessibility  */
+.skiplink {
+	position: absolute;
+	left: -62.4375rem;
+	width: 61.875rem;
+}
+
+/* Feed icon in forumlist_body.html */
+a.feed-icon-forum {
+	float: right;
+	margin: 0.1875rem;
+}
+
+a.anchor {
+	display: block;
+}

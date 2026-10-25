@@ -1,0 +1,85 @@
+/* Icons. Replaces prosilver's icons.css, which is no longer loaded. Same rules, in rem (em in media queries) and without the
+   vendor prefixes and the Internet Explorer leftovers. It loads in the same place in baneforum_css.html, so the order is unchanged. */
+
+/* --------------------------------------------------------------
+	$Icons
+-------------------------------------------------------------- */
+
+/* Global module setup
+--------------------------------*/
+
+/* Renamed version of .fa class for agnostic usage of icon fonts.
+ * Just change the name of the font after the 14/1 to the name of
+ * the font you wish to use.
+ */
+.icon,
+.button .icon,
+blockquote cite:before,
+.uncited:before {
+	display: inline-block;
+	/* biome-ignore lint/a11y/useGenericFontNames: an icon font has no generic family */
+	font-family: FontAwesome;
+	font-weight: normal;
+	font-style: normal;
+	font-variant: normal;
+	font-size: 0.875rem;
+	line-height: 1;
+	text-rendering: auto; /* optimizelegibility throws things off #1094 */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon:before {
+	padding-right: 0.125rem;
+}
+
+.button .icon:before {
+	padding-right: 0;
+}
+
+/* Icon size classes - Default size is 0.875rem, use these for small variations */
+
+/* icon modifiers */
+.icon-tiny {
+	width: 0.75rem;
+	transform: scale(0.65, 0.75);
+	vertical-align: text-bottom;
+	font-size: 1rem;
+}
+
+.arrow-left .icon {
+	float: left;
+}
+
+.arrow-left:hover .icon {
+	margin-left: -0.3125rem;
+	margin-right: 0.3125rem;
+}
+
+.arrow-right .icon {
+	float: right;
+}
+
+.arrow-right:hover .icon {
+	margin-left: 0.3125rem;
+	margin-right: -0.3125rem;
+}
+
+.post-buttons .dropdown-contents .icon {
+	float: right;
+	margin-left: 0.3125rem;
+}
+
+.alert_close .icon:before {
+	padding: 0;
+	border-radius: 50%;
+	width: 0.6875rem;
+	display: block;
+	line-height: 0.9;
+	height: 0.75rem;
+}
+
+.rtl blockquote cite:before,
+.rtl .uncited:before {
+	content: "\f10e"; /* Font Awesome quote-right */
+}
