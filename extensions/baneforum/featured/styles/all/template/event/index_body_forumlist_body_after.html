@@ -1,5 +1,5 @@
 {% if loops.bf_featured|length %}
-<section class="bf-featured" aria-labelledby="bf-featured-title">
+<section class="bf-featured"{% if loops.bf_featured|length > 1 %} aria-labelledby="bf-featured-title"{% endif %}>
 	{% for post in loops.bf_featured %}
 	{% if loop.first %}
 	<div class="bf-featured__lead">
@@ -14,9 +14,11 @@
 			</div>
 		</article>
 	</div>
+	{% if loops.bf_featured|length > 1 %}
 	<div class="bf-featured__rest">
 		<h2 id="bf-featured-title" class="bf-index__title">{{ lang('BF_FEATURED_TITLE') }}</h2>
 		<ol class="bf-featured__list">
+	{% endif %}
 	{% else %}
 			<li class="bf-featured__item">
 				<a class="bf-featured__picture" href="{{ post.U_POST }}" tabindex="-1" aria-hidden="true">
@@ -30,7 +32,9 @@
 			</li>
 	{% endif %}
 	{% endfor %}
+	{% if loops.bf_featured|length > 1 %}
 		</ol>
 	</div>
+	{% endif %}
 </section>
 {% endif %}
