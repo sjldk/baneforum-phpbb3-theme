@@ -42,7 +42,7 @@ The install steps for production are in `docs/production-install.md`.
 | On the copy board the founder is user 2, `Baneforum.dk` | There is no user named `admin`. |
 | StatCounter loads from `overall_footer.html` | A tracker. Not changed. Ask the owner. |
 | Fixed `px` sizes in the theme CSS | Use `rem`, and `em` in media queries. Keep 1px borders, the 16px minimum of form fields (iOS zoom) and `px` inside SVG (`.attachment-icon .type`), because SVG text scales with its viewBox. |
-| Prosilver caps menus at 300px and scrolls inside them, and fixes icons at 14px | `baneforum_common.css` removes the cap and sets icons to `1.25em`. Prosilver itself still has about 690 `px` values. |
+| Prosilver caps menus at 300px and scrolls inside them, and fixes icons at 14px | `baneforum_common.css` removes the cap and sets icons to `1.25em`. The prosilver files are ours now (`theme/common.css` and others), with the same rules in rem. |
 | Extension routes are in `config/routing.yml`, not `routes.yml` | A wrong name gives `RouteNotFoundException` and a fatal error on every page that makes the URL. Purge the cache after the fix. |
 | `extensions/baneforum` is owned by `www-data` (Docker made it) | Create a new extension folder with `docker exec -u root docker-web-1 mkdir`, then `chown 1000:1000` it. Then you can write in it. |
 | phpBB's word censor changes words inside URLs (`maerklin.de` becomes `Märklin.de`) and breaks links | It censors the whole HTML including `href` (`renderer.php`, `censorHtml($html, true)`). `extensions/baneforum/censor` takes the core censor out and censors text only, keeping URLs. The ACP word list is still used. Test: `docker compose exec web php ext/baneforum/censor/tests/censor_test.php` |

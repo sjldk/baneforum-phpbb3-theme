@@ -31,7 +31,7 @@ Push: if it fails with "publickey", unlock the SSH key (`ssh-add ~/.ssh/id_githu
 | Editor (phases 0 to 8) | Done for posts, replies, edits and PMs. **Saves BBCode now (2026-10-23).** Signatures open. Phase 9 (keyboard walkthrough, screen reader, zoom, phones, size budget, Firefox board tests) is next. Phase 10 (packaging for reuse) open. |
 | Theme | Under active polish. See "Today". |
 | Extensions | `likes` and `censor` are new and enabled on the test board. Not installed on production. |
-| Replacing prosilver CSS | `buttons.css` and `forms.css` are ours now. Nine prosilver files still load. See "Next". |
+| Replacing prosilver CSS | All eleven prosilver CSS files are ours now (`baneforum/theme/`). No prosilver CSS loads. See "CSS ancestry" and "Next". |
 | Prosilver 3.3.19 | All our overrides are checked against it. Nothing open. |
 
 ## Today (2026-10-23)
@@ -74,22 +74,22 @@ Push: if it fails with "publickey", unlock the SSH key (`ssh-add ~/.ssh/id_githu
 - `censor`: replaces phpBB's word censor, same ACP list, leaves URLs alone. Test: `docker compose exec web php ext/baneforum/censor/tests/censor_test.php`.
 
 **CSS ancestry**
-- `baneforum/theme/buttons.css` and `forms.css` replace prosilver's files (same rules, in rem, no vendor prefixes). `overall_header.html` loads them in the same place as the old links. Checked with `snap.mjs`: no differences.
+- All eleven prosilver files are replaced by our own copies in `baneforum/theme/` (`normalize`, `base`, `utilities`, `links`, `content`, `buttons`, `cp`, `forms`, `icons`, `common`, `colours`). Same rules, in rem (em in media queries), no vendor prefixes, no Internet Explorer filters. `baneforum_css.html` loads them in the old order. Checked with `snap.mjs '*'` (every element, 25 pages, widths 400, 800, 1100 and 1250, and the dark theme): no differences, except date texts and colours caught in a transition.
+- `scripts/dark-colours.py` still reads prosilver's original `colours.css` (see the command in the script), not our copy.
 
 ## Next
 
 | Item | Note |
 |---|---|
 | Check today's changes | `snap.mjs` ran on the header include and the background (only the expected colour changes). Left: member list header and likes tooltip on a phone, Chrome check of the likes tooltip, the BBCode editor in Firefox. |
-| Replace the other prosilver CSS files | `content.css` next, then `colours.css`, `common.css`, `cp.css`, `links.css`, `base.css`, `utilities.css`, `icons.css`, `normalize.css`. Check each with `snap.mjs` before and after, and keep the same position in `overall_header.html`. |
-| Optimise the CSS | After all files are ours: merge our overrides into the replaced files, drop dead rules and `!important`, deduplicate. The user asked for this. |
+| Optimise the CSS | All files are ours now: merge our overrides into the replaced files, drop dead rules and `!important`, deduplicate. The user asked for this. |
 | `dl`/`dt` layouts | Form rows are a grid now. Topic rows and other lists still use prosilver's floats and flex. |
 | Pagination "…" dropdown | Prosilver fills it dark when open. Not restyled. |
 | Not looked at | The like bounce while moving, topic lists at narrow widths, dark mode of today's changes, other forms with the new grid (login, user control panel), the dialogs on a phone. |
 | Editor phase 9 | See the table above. |
 | Likes | Production board and notifications. A who-voted list is deliberately not wanted. |
 | Hidden "Unread" text for screen readers | Needs copies of `viewforum_body.html` and `forumlist_body.html`. |
-| Prosilver `px` values | About 690 left. Replacing the files removes them. |
+| Hover, focus and pressed states | `snap.mjs` does not see them. Run `states.mjs`, `buttons.mjs` and `inputs.mjs` before you merge. |
 
 ## Things to know
 

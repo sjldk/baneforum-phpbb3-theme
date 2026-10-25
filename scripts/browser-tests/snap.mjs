@@ -1,5 +1,6 @@
-// Computed style snapshot of the elements a prosilver CSS file styles, on many pages. Compare two runs to see what a CSS change did.
-//   run.sh snap.mjs <out.json> <selector> [<selector> ...]
+// Computed style snapshot of the elements a CSS change can touch, on many pages. Compare two runs to see what the change did.
+//   run.sh snap.mjs <out.json> <selector> [<selector> ...]     (`*` takes every element; each row is keyed by its path in the page)
+//   W=400 sets the window width, DARK=1 turns the dark theme on.
 import { writeFileSync } from 'node:fs';
 import { connect } from './connect.mjs';
 import { login } from './login.mjs';
@@ -17,22 +18,28 @@ const pages = [
 ];
 const props = [`display`, `padding`, `margin`, `fontSize`, `fontWeight`, `fontFamily`, `lineHeight`, `textAlign`, `whiteSpace`, `verticalAlign`, `cursor`, `border`, `borderRadius`, `float`, `position`, `width`, `height`, `backgroundColor`, `color`, `outline`, `textDecoration`, `top`, `right`];
 const result = {};
+const pathFn = `(el) => { const parts = []; for (let n = el; n && n.nodeType === 1; n = n.parentElement) { const sib = n.parentElement ? [...n.parentElement.children].filter((c) => c.tagName === n.tagName) : [n]; parts.unshift(n.tagName.toLowerCase() + (n.id ? '#' + n.id : '') + (sib.length > 1 ? ':' + (sib.indexOf(n) + 1) : '')); } return parts.join('>'); }`;
 
 for (const url of pages) {
-	await page.setViewport({ width: 1100, height: 900 });
+	await page.setViewport({ width: Number(process.env.W ?? 1100), height: 900 });
 	await page.goto(`http://localhost:8080/${url}`, { waitUntil: `networkidle0` });
-	result[url] = await page.evaluate((sels, ps) => {
+	if (process.env.DARK) {
+		await page.evaluate(() => document.documentElement.setAttribute(`data-theme`, `dark`));
+	}
+
+	result[url] = await page.evaluate((sels, ps, pf) => {
+		const pathOf = eval(pf);
 		const rows = [];
 
 		for (const sel of sels) {
 			document.querySelectorAll(sel).forEach((el, i) => {
 				const c = getComputedStyle(el);
-				rows.push([`${sel}#${i}`, ps.map((p) => `${p}=${c[p]}`).join(`;`)]);
+				rows.push([`${sel}#${i}:${pathOf(el)}`, ps.map((p) => `${p}=${c[p]}`).join(`;`)]);
 			});
 		}
 
 		return rows;
-	}, selectors, props);
+	}, selectors, props, pathFn);
 }
 
 writeFileSync(`/w/${out}`, JSON.stringify(result, null, 1));
