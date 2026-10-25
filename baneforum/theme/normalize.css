@@ -17,10 +17,6 @@ html {
  * Remove default margin.
  */
 
-body {
-	margin: 0;
-}
-
 /* HTML5 display definitions
 	 ========================================================================== */
 
@@ -116,11 +112,6 @@ abbr[title] {
  * Address style set to `bolder` in Firefox 4+, Safari, and Chrome.
  */
 
-b,
-strong {
-	font-weight: bold;
-}
-
 /**
  * Address styling not present in Safari and Chrome.
  */
@@ -133,11 +124,6 @@ dfn {
  * Address variable `h1` font-size and margin within `section` and `article`
  * contexts in Firefox 4+, Safari, and Chrome.
  */
-
-h1 {
-	font-size: 2em;
-	margin: 0.67em 0;
-}
 
 /**
  * Address styling not present in IE 8/9.
@@ -202,17 +188,12 @@ svg:not(:root) {
  * Address margin not present in IE 8/9 and Safari.
  */
 
-figure {
-	margin: 1em 2.5rem;
-}
-
 /**
  * Address differences between Firefox and other browsers.
  */
 
 hr {
 	box-sizing: content-box;
-	height: 0;
 }
 
 /**
@@ -226,14 +207,6 @@ pre {
 /**
  * Address odd `em`-unit font size rendering in all browsers.
  */
-
-code,
-kbd,
-pre,
-samp {
-	font-family: monospace, monospace;
-	font-size: 1em;
-}
 
 /* Forms
 	 ========================================================================== */
@@ -334,8 +307,8 @@ input {
 
 input[type="checkbox"],
 input[type="radio"] {
-	box-sizing: border-box; /* 1 */
-	padding: 0; /* 2 */
+	/* 1 */
+	/* 2 */
 }
 
 /**
@@ -355,8 +328,8 @@ input[type="number"]::-webkit-outer-spin-button {
  */
 
 input[type="search"] {
-	appearance: textfield; /* 1 */
-	box-sizing: content-box; /* 2 */
+	/* 1 */
+	/* 2 */
 }
 
 /**
@@ -373,12 +346,6 @@ input[type="search"]::-webkit-search-decoration {
 /**
  * Define consistent border, margin, and padding.
  */
-
-fieldset {
-	border: 1px solid #c0c0c0;
-	margin: 0 0.125rem;
-	padding: 0.35em 0.625em 0.75em;
-}
 
 /**
  * 1. Correct `color` not being inherited in IE 8/9/10/11.

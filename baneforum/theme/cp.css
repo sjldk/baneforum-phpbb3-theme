@@ -142,7 +142,6 @@ ul.cplist {
 
 .tabs .tab > a {
 	border: 1px solid transparent;
-	border-radius: 0.25rem 0.25rem 0 0;
 	margin: 1px 1px 0 0;
 }
 
@@ -367,10 +366,6 @@ ol.def-rules li {
 		padding: 0;
 		margin: 0 auto;
 		max-width: 20rem;
-	}
-
-	.navigation a {
-		background-image: none;
 	}
 
 	.navigation li:first-child a {

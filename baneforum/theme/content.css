@@ -20,10 +20,6 @@ ul.topiclist dl {
 	position: relative;
 }
 
-ul.topiclist li.row dl {
-	margin: 0.125rem 0;
-}
-
 ul.topiclist dt,
 ul.topiclist dd {
 	display: block;
@@ -117,11 +113,9 @@ li.header dd {
 	padding-bottom: 0.125rem;
 	font-size: 1em;
 	font-family: Arial, Helvetica, sans-serif;
-	text-transform: uppercase;
 }
 
 li.header dt {
-	font-weight: bold;
 	width: 100%;
 	margin-right: -27.5rem;
 }
@@ -357,7 +351,6 @@ dd.option {
 	clear: both;
 	min-height: 3em;
 	overflow: hidden;
-	line-height: 1.4em;
 	font-family: "Lucida Grande", "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif;
 	font-size: 1em;
 	padding-bottom: 1px;
@@ -379,7 +372,6 @@ dd.option {
 
 .panel p {
 	font-size: 1.2em;
-	margin-bottom: 1em;
 	line-height: 1.4em;
 }
 
@@ -513,7 +505,6 @@ blockquote blockquote {
 blockquote cite {
 	/* Username/source of quoter */
 	font-style: normal;
-	font-weight: bold;
 	display: block;
 	font-size: 0.9em;
 }
@@ -581,23 +572,18 @@ blockquote .codebox {
 	float: left;
 	width: auto;
 	max-width: 100%;
-	margin: 0.3125rem 0.3125rem 0.3125rem 0;
-	padding: 0.375rem;
-	border: 1px dashed transparent;
 	clear: left;
 	box-sizing: border-box;
 }
 
 .attachbox dt {
 	font-family: Arial, Helvetica, sans-serif;
-	text-transform: uppercase;
 }
 
 .attachbox dd {
 	margin-top: 0.25rem;
 	padding-top: 0.25rem;
 	clear: left;
-	border-top: 1px solid transparent;
 	overflow-x: auto;
 	overflow-y: hidden;
 }
@@ -658,22 +644,15 @@ dl.file dd {
 }
 
 dl.thumbnail img {
-	padding: 0.1875rem;
-	border: 1px solid transparent;
 	box-sizing: border-box;
 }
 
 dl.thumbnail dd {
-	font-style: italic;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
 .attachbox dl.thumbnail dd {
 	font-size: 100%;
-}
-
-dl.thumbnail dt a:hover img {
-	border: 1px solid transparent;
 }
 
 /* Post poll styles
@@ -825,7 +804,6 @@ dd.profile-contact {
 }
 
 .online {
-	background-image: none;
 	background-position: 100% 0;
 	background-repeat: no-repeat;
 }

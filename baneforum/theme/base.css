@@ -15,15 +15,9 @@
 
 /* Define your base font-size here; most elements will inherit this. _NO__DOTCOMMA__AFTER__*/
 html {
-	font-size: 1em; /* Assuming 1rem... */
+	/* Assuming 1rem... */
 	line-height: 1.5; /* 1.5rem (This is now our magic number; all subsequent margin-bottoms and line-heights want to be a multiple of this number in order to maintain vertical rhythm.) _NO__DOTCOMMA__AFTER__*/
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-
-body {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	color: #333333;
-	background-color: #ffffff;
 }
 
 input,
@@ -34,30 +28,13 @@ textarea {
 	font-size: inherit;
 	line-height: inherit;
 }
-
-figure {
-	margin: 0;
-}
 img {
 	vertical-align: middle;
-}
-
-hr {
-	margin-top: 1.25rem;
-	margin-bottom: 1.25rem;
-	border: 0;
-	border-top: 1px solid #e5e5e5;
-}
-
-a {
-	color: #428bca;
-	text-decoration: none;
 }
 
 a:hover,
 a:focus,
 a:active {
-	color: #2a6496;
 	text-decoration: underline;
 }
 

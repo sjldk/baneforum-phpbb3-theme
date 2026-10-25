@@ -147,7 +147,6 @@
 
 	.wrap {
 		border: none;
-		border-radius: 0;
 		margin: 0;
 		min-width: 18.125rem;
 		padding: 0 0.3125rem;
@@ -161,7 +160,6 @@
 	.forumbg,
 	.post,
 	.panel {
-		border-radius: 0;
 		margin-left: -0.3125rem;
 		margin-right: -0.3125rem;
 	}
@@ -219,7 +217,6 @@
 	----------------------------------------*/
 	li.header dt {
 		text-align: center;
-		text-transform: none;
 		line-height: 1em;
 		padding-bottom: 0.25rem;
 	}
@@ -259,9 +256,6 @@
 
 	ul.topiclist dd {
 		display: none;
-	}
-	ul.topiclist dd.mark {
-		display: block;
 	}
 
 	/* Forums and topics lists
@@ -419,10 +413,6 @@
 
 	.smiley-box {
 		margin-top: 0.3125rem;
-	}
-
-	.bbcode-status {
-		display: none;
 	}
 
 	.colour-palette,

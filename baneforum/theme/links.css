@@ -16,7 +16,6 @@ a {
 
 /* Coloured usernames */
 .username-coloured {
-	font-weight: bold;
 	display: inline !important;
 	padding: 0 !important;
 }
@@ -26,12 +25,6 @@ a {
 .forabg .header a,
 th a {
 	text-decoration: none;
-}
-
-.forumbg .header a:hover,
-.forabg .header a:hover,
-th a:hover {
-	text-decoration: underline;
 }
 
 /* Notification mark read link */
@@ -65,7 +58,6 @@ th a:hover {
 a.forumtitle {
 	font-family: "Trebuchet MS", Helvetica, Arial, sans-serif;
 	font-size: 1.2em;
-	font-weight: bold;
 	text-decoration: none;
 }
 
@@ -76,7 +68,6 @@ a.forumtitle:hover {
 a.topictitle {
 	font-family: "Trebuchet MS", Helvetica, Arial, sans-serif;
 	font-size: 1.2em;
-	font-weight: bold;
 	text-decoration: none;
 	display: inline;
 }
@@ -86,7 +77,6 @@ a.topictitle:hover {
 }
 
 a.lastsubject {
-	font-weight: bold;
 	text-decoration: none;
 }
 
@@ -110,7 +100,6 @@ a.lastsubject:hover {
 /* Post body links */
 .postlink {
 	text-decoration: none;
-	border-bottom: 1px solid transparent;
 	padding-bottom: 0;
 }
 
@@ -155,12 +144,6 @@ a.lastsubject:hover {
 /* Back to top of page */
 .back2top {
 	clear: both;
-}
-
-.back2top .top {
-	float: right;
-	margin-right: -0.625rem;
-	margin-top: 0;
 }
 
 /* Arrow links  */

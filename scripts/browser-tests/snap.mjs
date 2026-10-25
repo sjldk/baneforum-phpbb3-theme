@@ -44,4 +44,4 @@ for (const url of pages) {
 
 writeFileSync(`/w/${out}`, JSON.stringify(result, null, 1));
 console.log(`pages`, Object.keys(result).length, `elements`, Object.values(result).reduce((n, r) => n + r.length, 0));
-await browser.close();
+await browser.disconnect();

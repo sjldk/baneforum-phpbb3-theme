@@ -39,22 +39,6 @@ blockquote cite:before,
 
 /* Icon size classes - Default size is 0.875rem, use these for small variations */
 
-.icon.icon-xl {
-	font-size: 1.25rem;
-}
-
-.icon.icon-lg {
-	font-size: 1rem;
-}
-
-.icon.icon-md {
-	font-size: 0.625rem;
-}
-
-.icon.icon-sm {
-	font-size: 0.5rem;
-}
-
 /* icon modifiers */
 .icon-tiny {
 	width: 0.75rem;

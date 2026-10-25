@@ -10,8 +10,6 @@ html {
 }
 
 body {
-	font-family: Verdana, Helvetica, Arial, sans-serif;
-	font-size: 0.625rem;
 	line-height: normal;
 	margin: 0;
 	padding: 0.75rem 0;
@@ -44,7 +42,6 @@ h3 {
 	/* Sub-headers (also used as post headers, but defined later) */
 	font-family: Arial, Helvetica, sans-serif;
 	font-weight: bold;
-	text-transform: uppercase;
 	border-bottom: 1px solid transparent;
 	margin-bottom: 0.1875rem;
 	padding-bottom: 0.125rem;
@@ -150,9 +147,7 @@ a:hover {
 ---------------------------------------- */
 .wrap {
 	border: 1px solid transparent;
-	border-radius: 0.5rem;
 	margin: 0 auto;
-	max-width: 72rem;
 	min-width: 39.0625rem;
 	padding: 0.9375rem;
 }
@@ -164,7 +159,6 @@ a:hover {
 }
 
 .page-body {
-	margin: 0.25rem 0;
 	clear: both;
 }
 
@@ -187,10 +181,7 @@ a:hover {
 }
 
 .site_logo {
-	background-repeat: no-repeat;
 	display: inline-block;
-	width: 9.3125rem;
-	height: 3.25rem;
 }
 
 /* Site description and logo */
@@ -208,40 +199,28 @@ a:hover {
 .headerbar {
 	margin-bottom: 0.25rem;
 	padding: 0.3125rem;
-	border-radius: 0.4375rem;
 }
 
 .navbar {
 	padding: 0.1875rem 0.625rem;
-	border-radius: 0.4375rem;
 }
 
 .forabg {
-	margin-bottom: 0.25rem;
-	padding: 0.3125rem;
 	clear: both;
-	border-radius: 0.4375rem;
 }
 
 .forumbg {
-	margin-bottom: 0.25rem;
-	padding: 0.3125rem;
 	clear: both;
-	border-radius: 0.4375rem;
 }
 
 .panel {
 	margin-bottom: 0.25rem;
 	padding: 0.3125rem 0.625rem;
-	border-radius: 0.4375rem;
 }
 
 .post {
-	padding: 0.3125rem 0.625rem;
-	margin-bottom: 0.25rem;
 	background-repeat: no-repeat;
 	background-position: 100% 0;
-	border-radius: 0.4375rem;
 	position: relative;
 }
 
@@ -494,18 +473,10 @@ a.header-avatar span:after {
 
 .dropdown .dropdown-contents {
 	z-index: 2;
-	overflow: hidden;
-	overflow-y: auto;
 	border: 1px solid transparent;
 	border-radius: 0.3125rem;
 	padding: 0.3125rem;
 	position: relative;
-	max-height: 18.75rem;
-}
-
-.dropdown-contents a {
-	display: block;
-	padding: 0.3125rem;
 }
 
 .jumpbox {
@@ -514,10 +485,6 @@ a.header-avatar span:after {
 
 .jumpbox .dropdown li {
 	border-top: 1px solid transparent;
-}
-
-.jumpbox .dropdown-select {
-	margin: 0;
 }
 
 .jumpbox .dropdown-contents {
@@ -532,7 +499,6 @@ a.header-avatar span:after {
 .jumpbox .dropdown-contents a {
 	margin-right: 1.25rem;
 	padding: 0.3125rem 0.625rem;
-	text-decoration: none;
 	width: 100%;
 }
 
@@ -568,10 +534,6 @@ a.header-avatar span:after {
 	margin: 0;
 	white-space: nowrap;
 	text-align: left;
-}
-
-.dropdown-contents > li {
-	padding-right: 0.9375rem;
 }
 
 .dropdown-nonscroll > li {
@@ -617,7 +579,6 @@ a.header-avatar span:after {
 ----------------------------------------*/
 .breadcrumbs .crumb {
 	float: left;
-	font-weight: bold;
 	word-wrap: normal;
 }
 
@@ -666,9 +627,6 @@ a.header-avatar span:after {
 
 /* Table styles
 ----------------------------------------*/
-table.table1 {
-	width: 100%;
-}
 
 .ucp-main table.table1 {
 	padding: 0.125rem;
@@ -677,9 +635,7 @@ table.table1 {
 table.table1 thead th {
 	font-weight: normal;
 	text-transform: uppercase;
-	line-height: 1.3em;
 	font-size: 1em;
-	padding: 0 0 0.25rem 0.1875rem;
 }
 
 table.table1 thead th span {
@@ -692,11 +648,6 @@ table.table1 tbody tr {
 
 table.table1 td {
 	font-size: 1.1em;
-}
-
-table.table1 tbody td {
-	padding: 0.3125rem;
-	border-top: 1px solid transparent;
 }
 
 table.table1 tbody th {
@@ -868,7 +819,6 @@ fieldset.fields1 dl.pmlist dd.recipients {
 ---------------------------------------- */
 .action-bar {
 	font-size: 0.6875rem;
-	margin: 0.25rem 0;
 }
 
 .forabg + .action-bar {
@@ -878,10 +828,6 @@ fieldset.fields1 dl.pmlist dd.recipients {
 .action-bar .button {
 	margin-right: 0.3125rem;
 	float: left;
-}
-
-.action-bar .button-search {
-	margin-right: 0;
 }
 
 /* Pagination
@@ -922,12 +868,9 @@ fieldset.fields1 dl.pmlist dd.recipients {
 }
 
 .pagination li.active span {
-	display: inline-block;
 	font-size: 0.8125rem;
-	font-weight: normal;
 	/* biome-ignore lint/a11y/useGenericFontNames: kept as prosilver has it */
 	font-family: "Open Sans", "Droid Sans", Verdana, Arial, Helvetica;
-	line-height: 1.4;
 	text-align: center;
 	white-space: nowrap;
 	vertical-align: middle;
@@ -1077,14 +1020,12 @@ fieldset.fields1 dl.pmlist dd.recipients {
 }
 
 .error {
-	font-weight: bold;
 	font-size: 1em;
 }
 
 div.rules {
 	margin: 0.625rem 0;
 	font-size: 1.1em;
-	padding: 0.3125rem 0.625rem;
 	border-radius: 0.4375rem;
 }
 
@@ -1095,13 +1036,8 @@ div.rules ol {
 
 p.post-notice {
 	position: relative;
-	padding: 0.3125rem;
 	min-height: 0.875rem;
 	margin-bottom: 1em;
-}
-
-form > p.post-notice strong {
-	line-height: 1.25rem;
 }
 
 .stat-block {
@@ -1167,9 +1103,6 @@ ul.linklist:after,
 }
 
 .dropdown-extended ul {
-	max-height: 21.875rem;
-	overflow-y: auto;
-	overflow-x: hidden;
 	clear: both;
 }
 
@@ -1194,7 +1127,6 @@ ul.linklist:after,
 
 .dropdown-extended .dropdown-contents {
 	max-height: none;
-	padding: 0;
 	position: absolute;
 	width: 21.25rem;
 }
