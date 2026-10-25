@@ -199,10 +199,14 @@ a:hover {
 .headerbar {
 	margin-bottom: 0.25rem;
 	padding: 0.3125rem;
+	color: #ffffff;
 }
 
 .navbar {
 	padding: 0.1875rem 0.625rem;
+	/* The links on the right give room to the trail as the navbar gets narrower: first "Quick links" is only an icon, then all of them.
+	   The words stay in the page for screen readers. The width is the width of the navbar, not of the screen. */
+	container-type: inline-size;
 }
 
 .forabg {
@@ -500,6 +504,7 @@ a.header-avatar span:after {
 	margin-right: 1.25rem;
 	padding: 0.3125rem 0.625rem;
 	width: 100%;
+	text-decoration: none;
 }
 
 .jumpbox .spacer {
@@ -518,10 +523,6 @@ a.header-avatar span:after {
 
 .jumpbox .dropdown-select {
 	margin: 0;
-}
-
-.jumpbox .dropdown-contents a {
-	text-decoration: none;
 }
 
 .dropdown li {
@@ -636,6 +637,7 @@ table.table1 thead th {
 	font-weight: normal;
 	text-transform: uppercase;
 	font-size: 1em;
+	color: #ffffff;
 }
 
 table.table1 thead th span {
@@ -644,6 +646,7 @@ table.table1 thead th span {
 
 table.table1 tbody tr {
 	border: 1px solid transparent;
+	border-color: #bfc1cf;
 }
 
 table.table1 td {
@@ -654,6 +657,9 @@ table.table1 tbody th {
 	padding: 0.3125rem;
 	border-bottom: 1px solid transparent;
 	text-align: left;
+	border-bottom-color: #000000;
+	color: #333333;
+	background-color: #ffffff;
 }
 
 /* Specific column styles */
@@ -713,6 +719,7 @@ table.info tbody th {
 	text-align: right;
 	vertical-align: top;
 	font-weight: normal;
+	color: #000000;
 }
 
 .forumbg table.table1 {
@@ -1167,6 +1174,8 @@ ul.linklist:after,
 .dropdown-extended .footer {
 	text-align: center;
 	font-size: 1.1em;
+	border-top-style: solid;
+	border-top-width: 1px;
 }
 
 .dropdown-extended ul li a,

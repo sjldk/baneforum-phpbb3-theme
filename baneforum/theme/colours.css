@@ -29,13 +29,6 @@ hr {
 Colours and backgrounds for links.css
 -------------------------------------------------------------- */
 
-/* Links on gradient backgrounds */
-.forumbg .header a,
-.forabg .header a,
-th a {
-	color: #ffffff;
-}
-
 .forumbg .header a:hover,
 .forabg .header a:hover,
 th a:hover {
@@ -45,11 +38,6 @@ th a:hover {
 /* Notification mark read link */
 .dropdown-extended a.mark_read {
 	background-color: #ffffff;
-}
-
-/* Post body links */
-.postlink {
-	color: #368ad2;
 }
 
 .postlink:visited {
@@ -80,10 +68,6 @@ th a:hover {
 
 /* Round cornered boxes and backgrounds
 ---------------------------------------- */
-
-.headerbar {
-	color: #ffffff;
-}
 
 .headerbar,
 .forumbg {
@@ -125,13 +109,6 @@ ul.navlinks {
 
 /* Table styles
 ----------------------------------------*/
-table.table1 thead th {
-	color: #ffffff;
-}
-
-table.table1 tbody tr {
-	border-color: #bfc1cf;
-}
 
 table.table1 tbody tr:hover,
 table.table1 tbody tr.hover {
@@ -141,16 +118,6 @@ table.table1 tbody tr.hover {
 
 table.table1 td {
 	color: #536482;
-}
-
-table.table1 tbody th {
-	border-bottom-color: #000000;
-	color: #333333;
-	background-color: #ffffff;
-}
-
-table.info tbody th {
-	color: #000000;
 }
 
 /* Misc layout styles
@@ -295,6 +262,8 @@ li.row:hover dd {
 li.header dt,
 li.header dd {
 	color: #ffffff;
+	text-transform: none;
+	font-weight: normal;
 }
 
 /* Post body styles
@@ -343,11 +312,6 @@ blockquote {
 	border-color: #dbdbce;
 }
 
-blockquote blockquote {
-	/* Nested quotes */
-	background-color: #efeed9;
-}
-
 blockquote blockquote blockquote {
 	/* Nested quotes */
 	background-color: #ebeadd;
@@ -367,10 +331,6 @@ blockquote blockquote blockquote {
 }
 
 .attachbox p {
-	color: #666666;
-}
-
-.attachbox p.stats {
 	color: #666666;
 }
 
@@ -543,10 +503,6 @@ Colours and backgrounds for buttons.css
 
 /* Search box
 --------------------------------------------- */
-
-.search-header {
-	box-shadow: 0 0 0.625rem #0075b0;
-}
 
 .search-results li:hover,
 .search-results li.active {
@@ -780,6 +736,7 @@ ul.cplist {
 ----------------------------------------*/
 .tabs .tab > a {
 	background: #baccd9;
+	border-radius: var(--radius) var(--radius) 0 0;
 }
 
 .tabs .activetab > a,
@@ -901,9 +858,6 @@ option.disabled-option {
 
 /* Definition list layout for forms
 ---------------------------------------- */
-dd label {
-	color: #333;
-}
 
 fieldset.fields1 {
 	background-color: transparent;
@@ -1024,11 +978,6 @@ input.disabled {
 .dropdown-extended .footer {
 	border-color: #b9b9b9;
 	color: #000000;
-}
-
-.dropdown-extended .footer {
-	border-top-style: solid;
-	border-top-width: 1px;
 }
 
 .dropdown-extended .header {

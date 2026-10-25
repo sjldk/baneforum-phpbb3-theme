@@ -98,6 +98,9 @@ ul.topiclist dfn {
 li.row {
 	border-top: 1px solid transparent;
 	border-bottom: 1px solid transparent;
+	/* Unread rows: a bar at the start of the row and a bold title. Read titles are normal weight. Bold is the cue that
+	   does not rest on colour (WCAG 1.4.1), the bar has 7.7:1 against the page (1.4.11). */
+	border-inline-start: 0.25rem solid transparent;
 }
 
 li.row strong {
@@ -138,6 +141,7 @@ li.header dl.row-item dt .list-inner {
 	/* Tweak for headers alignment when folder icon used */
 	padding-left: 0;
 	padding-right: 3.125rem;
+	padding-inline-start: 0.5625rem;
 }
 
 /* Forum list column styles */
@@ -500,6 +504,8 @@ blockquote blockquote {
 	/* Nested quotes */
 	font-size: 1em;
 	margin: 1em 1px 1em 0.9375rem;
+	/* Nested quotes */
+	background-color: #efeed9;
 }
 
 blockquote cite {
@@ -516,6 +522,8 @@ blockquote cite cite {
 blockquote cite:before,
 .uncited:before {
 	padding-right: 0.3125rem;
+	content: "\f10d";
+	/* Font Awesome quote-left */
 }
 
 blockquote cite > span {
@@ -602,6 +610,7 @@ blockquote .codebox {
 	line-height: 110%;
 	font-weight: normal;
 	clear: left;
+	color: #666666;
 }
 
 .attach-image {

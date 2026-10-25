@@ -85,6 +85,13 @@ template {
 
 a {
 	background-color: transparent;
+	/* Links adjustment to correctly display an order of rtl/ltr mixed content */
+	direction: ltr;
+	unicode-bidi: embed;
+	text-decoration: none;
+	/* we use links inline more often then not so to address several bugs with
+	   IE and some other browsers we render all links as inlineblock by default */
+	display: inline-block;
 }
 
 /**
@@ -171,6 +178,7 @@ sub {
 
 img {
 	border: 0;
+	vertical-align: middle;
 }
 
 /**

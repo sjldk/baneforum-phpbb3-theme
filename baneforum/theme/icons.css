@@ -79,11 +79,6 @@ blockquote cite:before,
 	height: 0.75rem;
 }
 
-blockquote cite:before,
-.uncited:before {
-	content: "\f10d"; /* Font Awesome quote-left */
-}
-
 .rtl blockquote cite:before,
 .rtl .uncited:before {
 	content: "\f10e"; /* Font Awesome quote-right */

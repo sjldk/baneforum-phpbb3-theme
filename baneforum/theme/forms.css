@@ -70,6 +70,7 @@ fieldset dt {
 	width: 40%;
 	text-align: left;
 	display: block;
+	padding-top: 0.6rem;
 }
 
 fieldset dd {
@@ -117,6 +118,7 @@ dt label {
 
 dd label {
 	white-space: nowrap;
+	color: #333;
 }
 
 dd input,
@@ -408,6 +410,7 @@ input.button3:focus {
 	float: right;
 	margin-right: 0.3125rem;
 	margin-top: 1.875rem;
+	box-shadow: 0 0 0.625rem #0075b0;
 }
 
 .search-header .inputbox {

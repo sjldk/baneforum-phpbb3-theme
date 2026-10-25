@@ -103,6 +103,7 @@ li.row:hover,
 
 .content blockquote {
 	background-color: var(--color-tint);
+	border-color: var(--color-line);
 }
 
 .pagination li.active span {
@@ -119,10 +120,6 @@ li.row:hover,
 
 .signature {
 	border-top-color: transparent;
-}
-
-.content blockquote {
-	border-color: var(--color-line);
 }
 
 .error {
@@ -153,12 +150,6 @@ select:focus,
 fieldset.quick-login input.inputbox {
 	background-color: var(--color-paper);
 	color: var(--color-text);
-}
-
-/* Prosilver fades everything for 0.5s. A short fade on the border colour only. */
-.inputbox,
-select {
-	transition: border-color 0.1s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -286,12 +277,6 @@ li.notification-disapproved strong {
 
 .badge {
 	background-color: var(--color-danger);
-}
-
-/* Group colours (red administrators, green moderators) are not used. phpBB writes them as an inline style, so
-   !important is needed. Names look like any other user name. */
-.username-coloured {
-	color: inherit !important;
 }
 
 /* Checkboxes in the palette. The box border is the width of the text fields, --color-control, the same as the text fields (3.2:1, WCAG 1.4.11 needs 3:1), a checked box is filled

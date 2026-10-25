@@ -64,6 +64,29 @@
 	/* Signal colours: a small share of the accent keeps them in the same family */
 	--color-danger: color-mix(in srgb, var(--accent-base) 10%, darkred);
 	--color-success: color-mix(in srgb, var(--accent-base) 10%, green);
+	--base-font: "Inter", system-ui, sans-serif;
+	--font-headline: var(--base-font);
+	--font-title: var(--base-font);
+	/* The three voices of the front page and, later, of the posts: headlines (--font-headline), reading text (--font-serif) and small facts
+	   (--font-facts). All three are Inter now. Barlow Semi Condensed, Source Serif 4 and a monospace face were tried (see fonts.css). */
+	--font-serif: var(--base-font);
+	--font-facts: var(--base-font);
+	--font-comic: "Comic Sans", sans-serif;
+	/* One monospace stack for code blocks, inline code and keys only. phpBB and the Markdown extension each set their own. */
+	--font-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+	/* The type scale: five sizes, in rem so they never add up through nested elements. Two weights, 400 and 600
+	   (700 only in the banner title). */
+	--text-meta: 0.8125rem;
+	--text-body: 0.95rem;
+	--text-heading: 1.125rem;
+	--text-title: 1.5rem;
+	--text-banner: 2.5rem;
+	--base-font-size: var(--text-body);
+	--font-size-small: var(--text-meta);
+	--font-size-h3: var(--text-heading);
+	--font-size-h2: var(--text-title);
+	--font-size-h1: var(--text-banner);
+	--radius: 0.5rem;
 }
 
 /* Dark mode: dark grey backgrounds, light grey text, and a light version of the accent for links.
