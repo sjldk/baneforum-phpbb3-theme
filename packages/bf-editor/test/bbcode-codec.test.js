@@ -6,10 +6,7 @@ import { assertImplements } from '../src/contracts.js';
 import { schema } from '../src/schema.js';
 
 const codec = createBBCodeCodec(schema);
-// A post that was written in Markdown is read as Markdown and saved as BBCode.
-const markdown = createBBCodeCodec(schema, { markdown: true });
 const roundTrip = (text) => codec.serialize(codec.parse(text));
-const convert = (text) => markdown.serialize(markdown.parse(text));
 const types = (text) => codec.parse(text).children.map((node) => node.type.name);
 
 test(`the codec satisfies the Codec contract`, () => {
@@ -125,86 +122,7 @@ test(`a line that looks like Markdown is plain text, so a list in BBCode is only
 	assert.equal(roundTrip(`Ulemper:\n        - bruger`), `Ulemper:\n        - bruger`);
 });
 
-test(`Markdown is converted to BBCode when the post is Markdown`, () => {
-	assert.equal(
-		convert(`**bold** *italic* [link](https://example.com) and ~~gone~~`),
-		`[b]bold[/b] [i]italic[/i] [url=https://example.com]link[/url] and [s]gone[/s]`,
-	);
-	assert.equal(convert(`a [b]bold[/b] and **more**`), `a [b]bold[/b] and [b]more[/b]`);
-});
-
-test(`a Markdown heading becomes a size and bold`, () => {
-	assert.equal(
-		convert(`# Big\n\ntext\n\n## Less\n\n#### Small`),
-		`[size=150][b]Big[/b][/size]\n\ntext\n\n[size=130][b]Less[/b][/size]\n\n[b]Small[/b]`,
-	);
-	assert.equal(convert(`Title\n=====`), `[size=150][b]Title[/b][/size]`);
-});
-
-test(`a Markdown list becomes [list], nested and numbered`, () => {
-	assert.equal(convert(`Hej\n\n- one\n- two **b**`), `Hej\n\n[list]\n[*]one\n[*]two [b]b[/b]\n[/list]`);
-	assert.equal(convert(`1. a\n2. b`), `[list=1]\n[*]a\n[*]b\n[/list]`);
-	assert.equal(convert(`- a\n\n1. b`), `[list]\n[*]a\n[/list]\n[list=1]\n[*]b\n[/list]`);
-	assert.equal(convert(`- a\n  - b\n- c`), `[list]\n[*]a\n[list]\n[*]b\n[/list]\n[*]c\n[/list]`);
-});
-
-test(`Markdown code becomes [code]`, () => {
-	assert.equal(convert(`\`\`\`\nlet a = 1;\n\`\`\``), `[code]\nlet a = 1;\n[/code]`);
-	assert.equal(convert(`    indented\n    code`), `[code]\nindented\ncode\n[/code]`);
-});
-
-test(`a Markdown table becomes [table] with a header row`, () => {
-	assert.equal(
-		convert(`| a | b |\n|---|---|\n| 1 | 2 |`),
-		`[table]\n[tr][th]a[/th][th]b[/th][/tr]\n[tr][td]1[/td][td]2[/td][/tr]\n[/table]`,
-	);
-});
-
-test(`a colon in the delimiter row of a table sets the alignment`, () => {
-	assert.equal(
-		convert(`| L | C | R | N |\n|:--|:-:|--:|---|\n| 1 | 2 | 3 | 4 |`),
-		`[table]\n[tr][th align=left]L[/th][th align=center]C[/th][th align=right]R[/th][th]N[/th][/tr]\n[tr][td align=left]1[/td][td align=center]2[/td][td align=right]3[/td][td]4[/td][/tr]\n[/table]`,
-	);
-});
-
-test(`a table cell holds formatting, an escaped bar and a short row is filled`, () => {
-	assert.equal(
-		convert(`| a | b |\n|---|---|\n| **x** \\| y |\n`),
-		`[table]\n[tr][th]a[/th][th]b[/th][/tr]\n[tr][td][b]x[/b] | y[/td][td][/td][/tr]\n[/table]`,
-	);
-});
-
-test(`bars without a delimiter row are not a table: they stay as [code]`, () => {
-	assert.equal(convert(`| a | b |\n| 1 | 2 |`), `[code]\n| a | b |\n| 1 | 2 |\n[/code]`);
-});
-
 test(`a [table] that was written as BBCode reads and writes unchanged`, () => {
 	const text = `[table]\n[tr][th]a[/th][th align=center]b[/th][/tr]\n[tr][td]1[/td][td]2[/td][/tr]\n[/table]`;
 	assert.equal(roundTrip(text), text);
-});
-
-test(`a Markdown link that names its address elsewhere is written as [url]`, () => {
-	assert.equal(
-		convert(`See [the shop][s1] and [Other][].\n\n[s1]: https://a.test/shop\n[other]: https://b.test/ "Title"`),
-		`See [url=https://a.test/shop]the shop[/url] and [url=https://b.test/]Other[/url].`,
-	);
-	assert.equal(convert(`No [such][x] link`), `No [such][x] link`);
-});
-
-test(`a Markdown quote becomes [quote]`, () => {
-	assert.equal(convert(`> one\n> **two**`), `[quote]\none\n[b]two[/b]\n[/quote]`);
-});
-
-test(`an attachment inside Markdown is kept`, () => {
-	assert.equal(
-		convert(`- see [attachment=0]a.jpg[/attachment]`),
-		`[list]\n[*]see [attachment=0]a.jpg[/attachment]\n[/list]`,
-	);
-});
-
-test(`converted text is stable: reading it as BBCode gives the same text`, () => {
-	for (const text of [`# T\n\n- a\n- b\n\n**x** and [y](https://z.test)`, `> q`]) {
-		const once = convert(text);
-		assert.equal(roundTrip(once), once, text);
-	}
 });

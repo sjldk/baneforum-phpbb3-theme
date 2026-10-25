@@ -34,10 +34,10 @@
 	const Selection = view.state.selection.constructor;
 	view.dispatch(view.state.tr.setSelection(Selection.create(view.state.doc, 1, 6)));
 	toolbar.querySelector('[command="--bold"]').click();
-	check('bold button writes markdown', editor.value === '**hello** world', editor.value);
+	check('bold button writes BBCode', editor.value === '[b]hello[/b] world', editor.value);
 	check('bold shows pressed', toolbar.querySelector('[command="--bold"]').getAttribute('aria-pressed') === 'true');
 	view.dom.dispatchEvent(new KeyboardEvent('keydown', { key: 'i', ctrlKey: true, bubbles: true, cancelable: true }));
-	check('ctrl+i writes italic', editor.value.includes('***hello***') || editor.value.includes('*'), editor.value);
+	check('ctrl+i writes italic', editor.value.includes('[i]'), editor.value);
 
 	editor.value = '[quote="a" post_id=1]q[/quote]\nreply';
 	check('quote loads', editor.shadowRoot.querySelector('blockquote') !== null);
@@ -65,7 +65,7 @@
 	dialog.querySelector('input').value = 'example.com';
 	dialog.querySelector('button[value="ok"]').click();
 	await new Promise((resolve) => setTimeout(resolve, 100));
-	check('save writes a Markdown link', editor.value === '[hello](https://example.com) world', editor.value);
+	check('save writes a BBCode link', editor.value === '[url=https://example.com]hello[/url] world', editor.value);
 	check('link opens in a new window', editor.shadowRoot.querySelector('bf-editable a').target === '_blank');
 	check('dialog is closed', !dialog.open);
 	check('link button shows pressed in a link', (view.dispatch(view.state.tr.setSelection(Selection.create(view.state.doc, 3))), toolbar.querySelector('[command="--link"]').getAttribute('aria-pressed') === 'true'));

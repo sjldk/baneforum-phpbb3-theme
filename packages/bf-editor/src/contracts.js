@@ -4,7 +4,7 @@
 
 /**
  * @typedef {object} Codec  Turns stored text into an editor document and back.
- * @property {string} id  Short name, for example "markdown" or "bbcode-legacy".
+ * @property {string} id  Short name, for example "bbcode".
  * @property {(text: string) => import('prosemirror-model').Node} parse
  * @property {(doc: import('prosemirror-model').Node) => string} serialize
  */

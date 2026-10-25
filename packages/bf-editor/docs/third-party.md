@@ -26,4 +26,4 @@ Build and check tools only: esbuild, Biome, TypeScript, jsdom. They run in the N
 
 ## Removed
 
-micromark, mdast-util-from-markdown, mdast-util-gfm-strikethrough and micromark-extension-gfm-strikethrough (42 packages with their helpers) were replaced by our own Markdown reader (`src/markdown/blocks.js`, `inline.js`). On 30,374 real posts it gives the same result as before (30,267 identical visible texts).
+micromark, mdast-util-from-markdown, mdast-util-gfm-strikethrough and micromark-extension-gfm-strikethrough (42 packages with their helpers) were used to read Markdown. They were replaced by our own Markdown reader, and that reader is removed now. The editor reads BBCode only.

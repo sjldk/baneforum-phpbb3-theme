@@ -5,7 +5,7 @@ Last updated 2026-10-23. Read this first. The long log is `docs/editor-progress.
 ## What this repo is
 
 The Baneforum phpBB 3.3 theme (`baneforum/`, style `baneforumblue`, child of prosilver), a post editor for it
-(`packages/bf-editor/`, ProseMirror as `bf-` web components, writes Markdown, reads old BBCode) and three phpBB
+(`packages/bf-editor/`, ProseMirror as `bf-` web components, writes and reads BBCode) and three phpBB
 extensions in `extensions/baneforum/` (`imagecompress`, `likes`, `censor`). The Docker test board (`docker/`) mirrors
 production: phpBB 3.3.19, PHP 8.5, the Markdown and MediaEmbed extensions.
 
@@ -40,16 +40,16 @@ Push: if it fails with "publickey", unlock the SSH key (`ssh-add ~/.ssh/id_githu
 - **Prosilver 3.3.19 check:** our overrides came from prosilver 3.3.0 to 3.3.11. Real gaps, now fixed: `{% apply spaceless %}` in `navbar_footer.html`, and the two delete checkboxes in separate `if` blocks in `posting_editor.html`. Everything else was already ours or in a section we removed.
 - **Background image:** `cover`, and it sits on `html` now. Prosilver gives `html` a background colour, so a body background stopped where the page stopped when zoomed out. `body` has `background: none`, and `body` is out of the surface-colour list in `baneforum_colours.css`.
 - **Quick login:** the text fields have `min-width: 10rem` (your edit, committed).
-- **Saved format is BBCode (decided today).** The editor writes BBCode and reads BBCode and Markdown. A post that was written in Markdown is converted when it is opened. New extension `extensions/baneforum/editor`: the `[s]` BBCode, and `BF_MARKDOWN` for the posting page (read from the stored XML, because production's Markdown extension 1.2.0 has no per-post flag). The editor adds `disable_markdown=1` to the form. **The extension must be enabled on any board that uses the new editor** (`docs/production-install.md`). Details and the corpus result (45 of 30,374 messages look different, none crash): `docs/editor-progress.md` and `docs/markdown-to-bbcode-plan.md`. Plan for converting the stored posts in the database (about 275 messages): the plan file, nothing done yet. Tests: `markdown.mjs` (new), `posting.mjs`, 123 unit tests.
+- **Saved format is BBCode (decided 2026-10-23).** The editor writes and reads BBCode only. The Markdown reader, the converter (`markdown-converter/`) and the Markdown detector were removed on 2026-10-25. Extension `extensions/baneforum/editor` adds the `[s]` and table BBCodes. The editor adds `disable_markdown=1` to the form, so the Markdown extension on the board does not read the text as Markdown. **The extension must be enabled on any board that uses the new editor** (`docs/production-install.md`). History: `docs/editor-progress.md`. Tests: `posting.mjs`, the unit tests.
 - **Likes tooltip:** the buttons that cannot be used show the browser's own `title` tooltip. The custom CSS tooltip is gone.
 - **Member list header** (`table.table1 thead th`) has the size and spacing of the topic list header. `scripts/browser-tests/headers.mjs` compares the two.
-- **Tools:** `PORT=9223 run.sh ...` when Firefox holds port 9222. `markdown-converter/cli/bf-markdown-export-cli.php` and `scripts/render_compare.php` know about Markdown mode now.
+- **Tools:** `PORT=9223 run.sh ...` when Firefox holds port 9222.
 - **Not checked:** the background in a browser at different zoom levels and on a phone (iOS ignores `fixed`). `snap.mjs` after the header include and the background move. Popup and print pages in a browser.
 
 ## 2026-10-22, checked in Chrome on the test board unless noted
 
 **Posting page**
-- The option checkboxes (BBCode, smilies, URLs, signature, "Disable Markdown") are gone from `posting_editor.html`. The panel stays for notify, lock, sticky type, delete and edit reason. The editor is always on (`bf-phpbb.js` no longer waits for the Markdown box).
+- The option checkboxes (BBCode, smilies, URLs, signature, "Disable Markdown") are gone from `posting_editor.html`. The panel stays for notify, lock, sticky type, delete and edit reason. The editor is always on (`bf-phpbb.js` does not wait for the Markdown box).
 - Quote: the cursor sits on a new line after the quote (`bf-editor` `focusEnd()`, called when the URL has `mode=quote`).
 - The Quote buttons of the topic review work again. The template override had dropped phpBB's `editor.js`. It is back, and `bf-phpbb.js` sends `insert_text()` to the editor (`insertText()`).
 - Topic review is a `<details>` bar with a chevron (`posting_topic_review.html`). Closed by default.
@@ -87,7 +87,6 @@ Push: if it fails with "publickey", unlock the SSH key (`ssh-add ~/.ssh/id_githu
 | Pagination "…" dropdown | Prosilver fills it dark when open. Not restyled. |
 | Not looked at | The like bounce while moving, topic lists at narrow widths, dark mode of today's changes, other forms with the new grid (login, user control panel), the dialogs on a phone. |
 | Editor phase 9 | See the table above. |
-| Convert the stored Markdown posts | `docs/markdown-to-bbcode-plan.md`. Needs the owner's go for production. Open: `[hr]` and table BBCodes, horizontal rules and inline code are kept as text. |
 | Likes | Production board and notifications. A who-voted list is deliberately not wanted. |
 | Hidden "Unread" text for screen readers | Needs copies of `viewforum_body.html` and `forumlist_body.html`. |
 | Prosilver `px` values | About 690 left. Replacing the files removes them. |
