@@ -3,7 +3,29 @@
 For whoever (or whichever session) picks up PR #3 (`claude/ui-test-plan-451cpx`). Start by reading
 `plans/user-journey-tests.md` (the plan) and `scripts/browser-tests/user-journey.mjs` (the test).
 
-## State
+## State (updated)
+
+**The test has now been run: 48 of 48 checks pass** on the test board in Chrome 153 (Playwright's Chromium), in a cloud
+session with `deb.debian.org` and `download.phpbb.com` allowed. What it took:
+
+- The image was built from a scratch copy of `docker/Dockerfile` (not committed): `--network host`, the proxy CA copied
+  in, `http_proxy`/`https_proxy` set (the proxy port changes between sessions), apt switched to `https://`, and the
+  two extension tarballs from `github.com/.../archive/...` (403 through the proxy) replaced by `git clone --depth 1
+  --branch 1.5.0` / `2.1.0` copied in. Then `docker compose up -d --no-build`, `docker/purge-cache.sh`,
+  `docker/dummy-data.sh`, and `docker/purge-cache.sh` again (the index was cached from before the dummy data).
+- `run.sh` was not used (no `google-chrome`, and its Node container has no network). Instead: Chromium started with
+  `--remote-debugging-port=9223`, then `cd scripts/browser-tests && npm install && PORT=9223 BF_USER=alice node user-journey.mjs`.
+- Fixes made to the script while running it: the main page uses a fresh browser context (a leftover login broke the
+  login step); network errors (`net::ERR_*`, the sandbox cannot reach third-party hosts) are not counted as script errors;
+  searching a word that is in every post fails ("too common"), so it searches `Typography`; phpBB's flood interval
+  (15 s) is waited out between posts; the first post of a topic is only deletable after the reply is gone; an edit of
+  the last post by its author is not marked "edited" by phpBB, so that check was removed; results print as they happen.
+- One failed login per run is counted by phpBB. After 3 it asks for a captcha. Reset with
+  `delete from phpbb_login_attempts; update phpbb_users set user_login_attempts=0`.
+
+The rest of this file is the original handoff, kept for the steps and the Docker background.
+
+## State (original)
 
 - Done: the plan, the test script and a README row are written, committed and pushed. Draft PR:
   https://github.com/sjldk/baneforum-phpbb3-theme/pull/3. The repo has no CI.
