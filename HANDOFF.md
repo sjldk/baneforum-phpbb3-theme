@@ -5,7 +5,7 @@ Last updated 2026-10-23. Read this first. The long log is `docs/editor-progress.
 ## What this repo is
 
 The Baneforum phpBB 3.3 theme (`baneforum/`, style `baneforumblue`, child of prosilver), a post editor for it
-(`packages/bf-editor/`, ProseMirror as `bf-` web components, writes Markdown, reads old BBCode) and three phpBB
+(`packages/bf-editor/`, ProseMirror as `bf-` web components, writes BBCode, reads BBCode and old Markdown posts) and three phpBB
 extensions in `extensions/baneforum/` (`imagecompress`, `likes`, `censor`). The Docker test board (`docker/`) mirrors
 production: phpBB 3.3.19, PHP 8.5, the Markdown and MediaEmbed extensions.
 
