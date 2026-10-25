@@ -1,5 +1,6 @@
 // A standard member's normal visit, start to end, on the test board filled by docker/dummy-data.sh.
 // Run: BF_USER=alice scripts/browser-tests/run.sh user-journey.mjs   (alice has the password adminadmin)
+// In a Claude cloud session: .claude/skills/cloud-test-board/run-user-journey.sh
 // Makes one topic with a reply and a private message. The topic's posts are deleted again at the end (phpBB keeps
 // them soft-deleted in the database); the private message stays in the outbox.
 // The wrong-password check adds one failed login per run. phpBB asks for a captcha after 3, so on a board that is
@@ -293,5 +294,6 @@ noErrors(`phone`);
 
 console.log(out.join(`\n`));
 console.log(`\n${failed === 0 ? `ALL PASSED` : `${failed} FAILED`} (${out.length} checks)`);
-await page.close();
-process.exitCode = failed === 0 ? 0 : 1;
+await memberContext.close();
+await browser.disconnect();
+process.exit(failed === 0 ? 0 : 1);
