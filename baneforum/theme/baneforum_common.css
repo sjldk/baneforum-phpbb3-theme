@@ -40,7 +40,6 @@ dl.faq,
 input,
 input.button1,
 input.button2,
-input.button3,
 select,
 textarea,
 dl.file,
@@ -75,7 +74,6 @@ p.author,
 .signature,
 input.button1,
 input.button2,
-input.button3,
 .content blockquote,
 blockquote cite,
 li.header dl.row-item dt,
@@ -380,12 +378,6 @@ input.inputbox {
 
 .search-box .inputbox {
 	height: 2.3rem;
-}
-
-li.pagejump {
-	border-radius: 2rem;
-	height: 0.9rem;
-	min-width: 0.9rem;
 }
 
 .action-bar .button-search {
@@ -1234,7 +1226,6 @@ figure.file a:focus-visible {
 a.button,
 input.button1,
 input.button2,
-input.button3,
 button,
 input[type="button"],
 input[type="submit"],
@@ -1264,8 +1255,7 @@ a.mark {
 }
 
 input.button1,
-input.button2,
-input.button3 {
+input.button2 {
 	padding-block: 0;
 	padding-inline: 1.1em;
 }
@@ -1451,7 +1441,6 @@ a:has(> .icon.fa-external-link-square) {
 .icon.icon-xl { font-size: 1.75em; }
 .icon.icon-lg { font-size: 1.375em; }
 .icon.icon-md { font-size: 1em; }
-.icon.icon-sm { font-size: 0.8em; }
 
 /* Posts are speech bubbles everywhere. prosilver uses a document (fa-file, fa-file-o) in menus and for the
    unread post link, so the same glyphs as the status icons replace it. */

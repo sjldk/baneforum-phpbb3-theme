@@ -62,19 +62,7 @@ ul.cplist {
 	border-bottom: none;
 }
 
-.cp-main .pm-message {
-	border: 1px solid transparent;
-	margin: 0.625rem 0;
-	width: auto;
-	float: none;
-}
-
-.pm-message h2 {
-	padding-bottom: 0.3125rem;
-}
-
-.cp-main .postbody h3,
-.cp-main .box2 h3 {
+.cp-main .postbody h3 {
 	margin-top: 0;
 }
 

@@ -92,14 +92,6 @@ ul.zebra-list li:nth-child(even) {
 	background-color: #e1ebf2;
 }
 
-.ucprowbg {
-	background-color: #dcdee2;
-}
-
-.fieldsbg {
-	background-color: #e7e8ea;
-}
-
 /* Horizontal lists
 ----------------------------------------*/
 
@@ -154,11 +146,6 @@ a:hover .icon.icon-red {
 .icon.icon-orange,
 a:hover .icon.icon-orange {
 	color: #ff6600;
-}
-
-.icon.icon-bluegray,
-a:hover .icon.icon-bluegray {
-	color: #536482;
 }
 
 .icon.icon-lightgray,
@@ -235,15 +222,6 @@ li.reported:hover {
 --------------------------------------------------------------
 Colours and backgrounds for content.css
 -------------------------------------------------------------- */
-
-ul.forums {
-	/* Old browsers */
-	/* FF3.6+ */
-}
-
-ul.topiclist li {
-	color: #4c5d77;
-}
 
 .rtl ul.topiclist dd {
 	border-right-color: #ffffff;
@@ -325,10 +303,6 @@ blockquote blockquote blockquote {
 
 /* Attachments
 ----------------------------------------*/
-
-.pm-message .attachbox {
-	background-color: #f2f3f3;
-}
 
 .attachbox p {
 	color: #666666;
@@ -441,14 +415,14 @@ dd.profile-warnings {
 Colours and backgrounds for buttons.css
 -------------------------------------------------------------- */
 .button {
-	background-color: #e9e9e9; /* Old browsers */ /* FF3.6+ */
+	background-color: #e9e9e9;
 	background-image: linear-gradient(to bottom, #ffffff 0%, #e9e9e9 100%);
 	color: #d31141;
 }
 
 .button:hover,
 .button:focus {
-	background-color: #ffffff; /* Old browsers */ /* FF3.6+ */
+	background-color: #ffffff;
 	background-image: linear-gradient(to bottom, #e9e9e9 0%, #ffffff 100%);
 }
 
@@ -517,15 +491,6 @@ Colours and backgrounds for buttons.css
 }
 
 /* Profile & navigation icons */
-.pm-icon {
-	background-position: 0 0;
-}
-.email-icon {
-	background-position: -1.3125rem 0;
-}
-.jabber-icon {
-	background-position: -5rem 0;
-}
 .phpbb_icq-icon {
 	background-position: -3.8125rem 0;
 }
@@ -694,11 +659,6 @@ Colours and backgrounds for buttons.css
 	background-image: url("./images/topic_unread_locked_mine.gif");
 }
 
-/*
---------------------------------------------------------------
-Colours and backgrounds for cp.css
--------------------------------------------------------------- */
-
 /* Main CP box
 ----------------------------------------*/
 
@@ -727,11 +687,6 @@ ul.cplist {
 	border-bottom-color: #333333;
 }
 
-.cp-main .pm-message {
-	border-color: #dbdee2;
-	background-color: #ffffff;
-}
-
 /* CP tabbed menu
 ----------------------------------------*/
 .tabs .tab > a {
@@ -741,7 +696,6 @@ ul.cplist {
 
 .tabs .activetab > a,
 .tabs .activetab > a:hover {
-	/* Old browsers */ /* FF3.6+ */
 	box-shadow: 0 1px 1px #f2f9ff inset;
 }
 
@@ -844,11 +798,6 @@ dl.mini dt {
 	background-color: #eee;
 }
 
-/*
---------------------------------------------------------------
-Colours and backgrounds for forms.css
--------------------------------------------------------------- */
-
 /* General form styles
 ----------------------------------------*/
 
@@ -901,24 +850,14 @@ fieldset.fields2 dl:hover dt label {
 
 a.button1,
 input.button1,
-input.button3,
 a.button2,
 input.button2 {
 	color: #000;
-	background-color: #efefef; /* Old browsers */ /* FF3.6+ */
+	background-color: #efefef;
 	background-image: linear-gradient(to bottom, #d2d2d2 0%, #efefef 100%);
 }
 
-input.button3 {
-	background-image: none;
-}
-
 /* Alternative button */
-a.button2,
-input.button2,
-input.button3 {
-	border-color: #666666;
-}
 
 /* <a> button in the style of the form buttons */
 a.button1,
@@ -930,18 +869,16 @@ a.button2 {
 a.button1:hover,
 input.button1:hover,
 a.button2:hover,
-input.button2:hover,
-input.button3:hover {
+input.button2:hover {
 	border-color: #d31141;
 	color: #d31141;
-	background-color: #d2d2d2; /* Old browsers */ /* FF3.6+ */
+	background-color: #d2d2d2;
 	background-image: linear-gradient(to bottom, #efefef 0%, #d2d2d2 100%);
 }
 
 /* Focus states */
 input.button1:focus,
-input.button2:focus,
-input.button3:focus {
+input.button2:focus {
 	border-color: #11a3ea;
 	color: #0f4987;
 }
@@ -978,11 +915,6 @@ input.disabled {
 .dropdown-extended .footer {
 	border-color: #b9b9b9;
 	color: #000000;
-}
-
-.dropdown-extended .header {
-	/* Old browsers */
-	/* FF3.6+ */
 }
 
 .dropdown .pointer {

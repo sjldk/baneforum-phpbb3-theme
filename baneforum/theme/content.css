@@ -282,7 +282,6 @@ dd.option {
 	margin-bottom: 0.3em !important;
 	text-transform: none;
 	border: none;
-	font-family: "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif;
 	line-height: 125%;
 }
 
@@ -297,7 +296,6 @@ dd.option {
 }
 
 .postbody .content {
-	font-size: 1.3em;
 	overflow-x: auto;
 }
 
@@ -356,7 +354,6 @@ dd.option {
 	min-height: 3em;
 	overflow: hidden;
 	font-family: "Lucida Grande", "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif;
-	font-size: 1em;
 	padding-bottom: 1px;
 }
 
@@ -380,7 +377,6 @@ dd.option {
 }
 
 .content p {
-	font-family: "Lucida Grande", "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif;
 	font-size: 1.2em;
 	margin-bottom: 1em;
 	line-height: 1.4em;
@@ -398,7 +394,6 @@ dd.option {
 }
 
 dl.faq {
-	font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
 	font-size: 1.1em;
 	margin-top: 1em;
 	margin-bottom: 2em;
@@ -431,8 +426,6 @@ dl.faq dt {
 p.author {
 	margin-bottom: 0.6em;
 	padding: 0 0 0.3125rem 0;
-	font-family: Verdana, Helvetica, Arial, sans-serif;
-	font-size: 1em;
 	line-height: 1.2em;
 	clear: both;
 }
@@ -441,7 +434,6 @@ p.author {
 .signature {
 	margin-top: 1.5em;
 	padding-top: 0.2em;
-	font-size: 1.1em;
 	border-top: 1px solid transparent;
 	clear: left;
 	line-height: 140%;
@@ -512,7 +504,6 @@ blockquote cite {
 	/* Username/source of quoter */
 	font-style: normal;
 	display: block;
-	font-size: 0.9em;
 }
 
 blockquote cite cite {
@@ -576,16 +567,11 @@ blockquote .codebox {
 /* Attachments
 ----------------------------------------*/
 .attachbox {
-	font-size: 0.8125rem;
 	float: left;
 	width: auto;
 	max-width: 100%;
 	clear: left;
 	box-sizing: border-box;
-}
-
-.attachbox dt {
-	font-family: Arial, Helvetica, sans-serif;
 }
 
 .attachbox dd {
@@ -635,7 +621,6 @@ div.inline-attachment p {
 }
 
 dl.file {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
 	display: block;
 }
 
@@ -644,7 +629,6 @@ dl.file dt {
 	margin: 0;
 	padding: 0;
 	font-weight: bold;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
 dl.file dd {
@@ -804,10 +788,6 @@ dd.profile-contact {
 	display: inline-block;
 }
 
-.profile-contact .icon_contact {
-	vertical-align: middle;
-}
-
 .profile-contact .dropdown {
 	margin-right: -0.875rem;
 }
@@ -839,29 +819,6 @@ dl.pmlist dt textarea {
 dl.pmlist dd {
 	margin-left: 61%;
 	margin-bottom: 0.125rem;
-}
-
-.action-bar div.dl_links {
-	padding: 0.625rem 0 0 0.625rem;
-}
-
-div.dl_links {
-	display: inline-block;
-	text-transform: none;
-}
-
-.dl_links strong {
-	font-weight: bold;
-}
-
-.dl_links ul {
-	list-style-type: none;
-	margin: 0;
-	display: inline-block;
-}
-
-.dl_links li {
-	display: inline-block;
 }
 
 .attachment-filename {

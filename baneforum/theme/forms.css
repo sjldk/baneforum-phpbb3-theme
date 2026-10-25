@@ -5,8 +5,6 @@
 ----------------------------------------*/
 fieldset {
 	border-width: 0;
-	font-family: Verdana, Helvetica, Arial, sans-serif;
-	font-size: 1.1em;
 }
 
 input {
@@ -14,11 +12,9 @@ input {
 	vertical-align: middle;
 	padding: 0 0.1875rem;
 	font-size: 1em;
-	font-family: Verdana, Helvetica, Arial, sans-serif;
 }
 
 select {
-	font-family: Verdana, Helvetica, Arial, sans-serif;
 	font-weight: normal;
 	cursor: pointer;
 	vertical-align: middle;
@@ -39,7 +35,6 @@ select optgroup option {
 }
 
 textarea {
-	font-family: "Lucida Grande", Verdana, Helvetica, Arial, sans-serif;
 	width: 60%;
 	padding: 0.125rem;
 	font-size: 1em;
@@ -210,10 +205,6 @@ fieldset.display-actions label {
 	padding-right: 0.125rem;
 }
 
-fieldset.sort-options {
-	line-height: 2em;
-}
-
 /* MCP forum selection*/
 fieldset.forum-selection {
 	margin: 0.3125rem 0 0.1875rem 0;
@@ -252,7 +243,6 @@ fieldset.submit-buttons input {
 /* Main message box */
 
 .message-box textarea {
-	font-family: "Trebuchet MS", Verdana, Helvetica, Arial, sans-serif;
 	box-sizing: border-box;
 	height: 16.875rem;
 	min-width: 100%;
@@ -318,14 +308,9 @@ input[type="search"]::-webkit-search-cancel-button {
 
 /* Form button styles
 ---------------------------------------- */
-input.button1,
-input.button2 {
-	font-size: 1em;
-}
 
 a.button1,
 input.button1,
-input.button3,
 a.button2,
 input.button2 {
 	width: auto;
@@ -339,14 +324,6 @@ input.button1 {
 	font-weight: 600;
 }
 
-input.button3 {
-	padding: 0;
-	margin: 0;
-	line-height: 0.3125rem;
-	height: 0.75rem;
-	font-variant: small-caps;
-}
-
 input[type="button"],
 input[type="submit"],
 input[type="reset"],
@@ -357,11 +334,6 @@ input[type="radio"],
 }
 
 /* Alternative button */
-a.button2,
-input.button2,
-input.button3 {
-	border: 1px solid transparent;
-}
 
 /* <a> button in the style of the form buttons */
 a.button1,
@@ -373,8 +345,7 @@ a.button2 {
 a.button1:hover,
 input.button1:hover,
 a.button2:hover,
-input.button2:hover,
-input.button3:hover {
+input.button2:hover {
 	border: 1px solid transparent;
 }
 
@@ -384,8 +355,7 @@ input.disabled {
 
 /* Focus states */
 input.button1:focus,
-input.button2:focus,
-input.button3:focus {
+input.button2:focus {
 	outline-style: none;
 }
 
