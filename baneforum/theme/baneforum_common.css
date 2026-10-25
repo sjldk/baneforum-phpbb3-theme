@@ -972,12 +972,12 @@ form:has(bf-editor) #attach-panel :is(.inner > p, #attach-panel-basic, #attach-p
 	block-size: 0.6rem;
 	border-inline-end: 0.15rem solid currentcolor;
 	border-block-end: 0.15rem solid currentcolor;
-	transform: translateY(-0.15rem) rotate(-45deg);
+	transform: translateY(-0.03rem) rotate(-45deg);
 	transition: transform 0.15s;
 }
 
 :is(.bf-options, #poll-panel, #attach-panel)[open] > summary::before {
-	transform: translateY(0.1rem) rotate(45deg);
+	transform: translateY(-0.275rem) rotate(45deg);
 }
 
 :is(.bf-options, #poll-panel, #attach-panel)[open] > summary {
