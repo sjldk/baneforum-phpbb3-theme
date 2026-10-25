@@ -1,54 +1,57 @@
-# Plan: user interface tests for a standard user
+# Plan: UI tests for a normal user
 
-Goal: prove that normal use of the board works in a real browser, as a registered member with no special rights
-(`alice`, from `docker/dummy-data.sh`), and as a guest. The existing browser tests check one part of the theme each
-(editor, dialogs, contrast). None of them walks through a visit from start to end.
+## Goal
 
-## Frameworks and tools (nothing new is added)
+Check that normal use of the board works in a real browser.
+The test acts as a guest and as a member with no special rights (`alice`).
+The older browser tests each check one part of the theme. No test walks through a whole visit.
 
-| Tool | Used for | Why |
-|---|---|---|
-| `puppeteer-core` 24 | Drives Chrome (Firefox with `BROWSER=firefox`) | Already in `scripts/browser-tests/package.json`. Real keyboard and pointer. |
-| Node 22, plain ES modules | The test scripts, `.mjs` | The existing style: `check(name, ok)` prints `PASS` / `FAIL`. No test runner to learn. |
-| `run.sh` | Starts headless Chrome, runs the script in a `node:22-slim` container | Already there. The host needs only Docker and Chrome. |
-| `docker/test-env.sh` | Starts the board and fills it with `alice`, `bob`, `carol`, forums and topics | Already there. Gives a standard user with no admin rights. |
+## Tools
 
-A new framework (Playwright Test, Cypress) was left out on purpose: it would be a second harness next to 30 working
-scripts, and the owner prefers scripts.
+No new tools. The test uses what the repo already has.
 
-## Scenarios (file: `scripts/browser-tests/user-journey.mjs`)
+| Tool | Use |
+|---|---|
+| `puppeteer-core` | Controls Chrome with a real keyboard and mouse. |
+| Node 22, plain `.mjs` files | The test script. It prints `PASS` or `FAIL` for each check. |
+| `scripts/browser-tests/run.sh` | Starts Chrome and runs the script. |
+| `docker/test-env.sh` | Starts the test board with the users `alice`, `bob` and `carol` and some topics. |
 
-1. **Guest** (own browser context): index lists the forums; a topic can be read; like buttons are read-only;
-   "Post a reply" sends the guest to the login page.
-2. **Log in and out**: a wrong password shows an error and stays on the login page; the right one shows the user name
-   in the navigation bar; Log out returns to the guest view.
-3. **Browse**: index → forum → topic by clicking; the breadcrumbs lead back; a hot topic has pagination that works.
-4. **Search**: search for a word from a known topic; the topic is in the results and opens.
-5. **New topic**: write a title and text in the editor with the keyboard (bold with `**`), preview, submit;
-   the topic page shows the formatted text.
-6. **Reply and quote**: reply to the new topic; quote a post; the quote shows in the editor and in the posted reply.
-7. **Edit own post**: open, change a word, save; the change shows, and "last edited" appears.
-8. **Like**: like another member's post; the count goes up and the button is pressed; click again removes it.
-9. **Delete own post**: the delete dialog opens, Cancel keeps the post, confirm removes it (cleans up the test topic).
-10. **Control panel and messages**: the user control panel opens, a private message to `bob` can be sent.
-11. **Dark theme**: the switch turns the theme and the choice survives a reload.
-12. **Phone width** (390 px): the index, a topic and the reply page have no sideways scroll.
+We did not add Playwright Test or Cypress. They would be a second system next to the 30 scripts we have.
+The owner prefers scripts.
 
-Each scenario is independent enough to name its own failure, and the script cleans up the topic it makes.
-After every page change the script collects `pageerror` and console errors, and fails if there are any.
+## What the test does
 
-## Running
+The file is `scripts/browser-tests/user-journey.mjs`.
+
+1. **Guest:** sees the forums, reads a topic, sees read-only like buttons. "Post a reply" shows the login form.
+2. **Login and logout:** a wrong password gives an error. The right password shows the user name. Logout works.
+3. **Browse:** index, forum, topic by clicking. A long topic has pages. The breadcrumb goes back.
+4. **Search:** a search finds a topic and the result opens.
+5. **New topic:** write a title and text with the editor, check the preview, post it.
+6. **Reply and quote:** quote a post and post the reply.
+7. **Edit:** change the reply and save it.
+8. **Like:** like another member's post, then undo it.
+9. **Delete:** the dialog opens. Cancel keeps the post. Confirm deletes it. The test topic is removed.
+10. **Control panel and message:** the control panel opens. A private message to `bob` is sent.
+11. **Dark theme:** the switch works and the choice stays after a reload.
+12. **Phone width (390 px):** the index, a topic and the reply page do not scroll sideways.
+
+The test also fails if a page has a script error.
+
+## How to run
+
+On a normal computer:
 
 ```bash
-docker/test-env.sh                                   # board with dummy data (once)
+docker/test-env.sh
 BF_USER=alice scripts/browser-tests/run.sh user-journey.mjs
 ```
 
-Exit state is printed as `PASS` / `FAIL` lines. A last line says how many failed.
+In a Claude cloud session, use the skill `phpbbtest` (`.claude/skills/phpbbtest/SKILL.md`).
 
 ## Limits
 
-- Only Chrome is tested by default. The Firefox run is the same script with `BROWSER=firefox`.
-- The scripts name the dummy topics from `docker/dummy-data.php`, so they cover the test board only. The production
-  copy needs other topic names.
-- Contrast and other accessibility checks stay in the `axe*.mjs` scripts. This one checks that things work.
+- Only Chrome was tested. Firefox should work with `BROWSER=firefox`.
+- The test uses topic names from `docker/dummy-data.php`. It works on the test board only.
+- It checks that things work. Contrast and other accessibility checks are in the `axe*.mjs` scripts.
