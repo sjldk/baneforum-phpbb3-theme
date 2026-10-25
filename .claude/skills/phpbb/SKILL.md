@@ -54,6 +54,7 @@ The install steps for production are in `docs/production-install.md`.
 | Markdown extension: production has 1.2.0 (no per-post flag), the test board 1.5.0 (`phpbb_posts.enable_markdown`) | Never rely on the flag. Decide from the stored XML. The editor sends `disable_markdown=1`, which both versions read. |
 | Firefox keeps an `@import`ed stylesheet (`stylesheet.css` imports our CSS) in its own cache, so a CSS edit may not show, even after a reload | Measure in `scripts/browser-tests` (Chrome starts with a clean profile each run), or clear the cache in the browser. `headers.mjs` shows how. |
 | Firefox holds port 9222, so `run.sh` cannot start Chrome | `PORT=9223 scripts/browser-tests/run.sh <script.mjs>` |
+| Pictures look empty (1 px) or an upload says "expected extension png but extension jpg given" in Firefox after the test board was installed again | `download/file.php` sends `Expires` one year ahead and a fresh install numbers attachments from 1 again, so Firefox shows the old picture of the same id (`pixel.png`, 70 bytes). The pictures are saved. Clear the cache of localhost:8080, or look at `curl` / a private window. A picture dragged out of such a page uploads the 70-byte PNG. |
 | Facebook and Google login buttons | Stay. 14 production users are linked. Styles are in `login_body_oauth.html`. |
 
 ## Design rules
