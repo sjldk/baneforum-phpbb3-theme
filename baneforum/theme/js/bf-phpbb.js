@@ -48,9 +48,6 @@ function acceptedTypes() {
 		.join(`,`);
 }
 
-/** Set when the section has opened by itself once. */
-let panelOpened = false;
-
 /**
  * The attachment panel of phpBB lists the files of the post. A file that is in the text is shown in
  * the editor, so its row is hidden, and the panel only shows when a file is left that is not in the text
@@ -94,16 +91,11 @@ function syncAttachmentRows() {
 
 		// With no file left to show, the panel says why: there are none, or all of them are in the text.
 		const empty = left > 0 ? `` : (data.length === 0 ? panel.dataset.bfEmptyNone : panel.dataset.bfEmptyAll) ?? ``;
-		const note = panel.querySelector(`.attach-note`);
+		const notice = /** @type {HTMLElement | null} */ (panel.querySelector(`.attach-empty`));
 
-		if (note) {
-			note.textContent = empty;
-		}
-
-		// The section opens by itself the first time a file is left that is not in the text. After that the writer decides.
-		if (left > 0 && !panelOpened && panel instanceof HTMLDetailsElement) {
-			panel.open = true;
-			panelOpened = true;
+		if (notice) {
+			notice.textContent = empty;
+			notice.hidden = empty === ``;
 		}
 	}
 }

@@ -1183,15 +1183,10 @@ figure.file a:focus-visible {
 	display: contents;
 }
 
-/* What the panel says in its title line when it has nothing to list (bf-phpbb.js). */
-#attach-panel .attach-note {
-	margin-inline-start: 0.75rem;
+/* What the panel says inside, in place of the list, when it has nothing to list (bf-phpbb.js). */
+#attach-panel .attach-empty {
+	margin: 0 0 0.75rem;
 	color: var(--color-muted);
-	font-weight: normal;
-}
-
-#attach-panel .attach-note:empty {
-	display: none;
 }
 
 /* The names of the cells (Filename, Size, Status) that prosilver shows on a narrow screen are not needed: each card says it itself. */

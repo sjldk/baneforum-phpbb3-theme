@@ -1,6 +1,7 @@
-<details class="panel bg3 panel-container" id="attach-panel" data-bf-empty-none="{% if S_USER_LANG starts with 'da' %}Ingen filer er vedhæftet.{% else %}No files attached.{% endif %}" data-bf-empty-all="{% if S_USER_LANG starts with 'da' %}Alle filer er indsat i teksten.{% else %}All files are in the text.{% endif %}">
-	<summary>{{ lang('ATTACHMENTS') }}<span class="attach-note"></span></summary>
+<details class="panel bg3 panel-container" id="attach-panel" open data-bf-empty-none="{% if S_USER_LANG starts with 'da' %}Ingen filer er vedhæftet.{% else %}No files attached.{% endif %}" data-bf-empty-all="{% if S_USER_LANG starts with 'da' %}Alle filer er indsat i teksten.{% else %}All files are in the text.{% endif %}">
+	<summary>{{ lang('ATTACHMENTS') }}</summary>
 	<div class="inner">
+	<div class="attach-empty" hidden></div>
 
 	<p>{L_ADD_ATTACHMENT_EXPLAIN} <span class="hidden" id="drag-n-drop-message">{L_PLUPLOAD_DRAG_TEXTAREA}</span></p>
 	{% if MAX_ATTACHMENT_FILESIZE is not empty %}<p>{{ MAX_ATTACHMENT_FILESIZE }}</p>{% endif %}
