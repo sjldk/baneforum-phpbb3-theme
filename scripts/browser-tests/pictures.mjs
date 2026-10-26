@@ -64,14 +64,14 @@ await page.evaluate(() => window.scrollBy(0, 120));
 await wait(200);
 check(`the menu follows the picture when the page scrolls`, (await gap()) === before, `${before} -> ${await gap()}`);
 await page.evaluate(() => window.scrollBy(0, -120));
-check(`the menu looks like the toolbar`, await page.evaluate(() => {
+check(`the menu has the toolbar shape and a darker tone than the toolbar`, await page.evaluate(() => {
 	const root = document.querySelector(`bf-editor`).shadowRoot;
 	const a = getComputedStyle(root.querySelector(`.bars menu`));
 	const b = getComputedStyle(root.querySelector(`form.attachment-menu menu`));
 	const x = getComputedStyle(root.querySelector(`.bars menu button`));
 	const y = getComputedStyle(root.querySelector(`form.attachment-menu menu button`));
 
-	return a.backgroundColor === b.backgroundColor && a.borderRadius === b.borderRadius && a.padding === b.padding && x.width === y.width && x.height === y.height;
+	return a.backgroundColor !== b.backgroundColor && a.borderRadius === b.borderRadius && a.padding === b.padding && x.width === y.width && x.height === y.height;
 }));
 await page.screenshot({ path: `/w/pictures-2.png`, clip: { x: 0, y: 150, width: 1000, height: 700 } });
 await page.keyboard.type(`A red square in the corner`);

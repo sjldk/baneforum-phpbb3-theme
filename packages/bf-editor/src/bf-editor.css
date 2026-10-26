@@ -81,6 +81,13 @@ menu.table-bar {
 	margin: 0;
 }
 
+/* The bars that float over the text (the table bar and the picture menu) have a darker tone than the toolbar,
+   so they are easy to tell from the text. They share this one rule. */
+menu.table-bar,
+form.attachment-menu menu {
+	background: color-mix(in srgb, var(--bf-accent) 22%, var(--bf-tint));
+}
+
 menu button {
 	display: inline-grid;
 	place-items: center;
@@ -543,6 +550,7 @@ dialog button[value="ok"] {
 
 /* A picture or player that is selected as one piece. */
 .ProseMirror-selectednode {
+	border-radius: var(--bf-radius);
 	outline: 0.15rem solid var(--bf-focus);
 	outline-offset: 0.1rem;
 }
