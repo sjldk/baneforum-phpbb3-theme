@@ -142,7 +142,8 @@ export function createAttachmentMenu({ root, emit, info }) {
 				const height = menu.offsetHeight;
 				const below = box.bottom - surface.top + 4;
 				const above = box.top - surface.top - height - 4;
-				const top = below + height <= surface.height ? below : above >= 0 ? above : Math.max(0, surface.height - height - 4);
+				const top =
+					below + height <= surface.height ? below : above >= 0 ? above : Math.max(0, surface.height - height - 4);
 				menu.style.insetBlockStart = `${top}px`;
 				menu.style.insetInlineStart = `${Math.max(0, Math.min(box.left - surface.left, surface.width - menu.offsetWidth))}px`;
 			}
