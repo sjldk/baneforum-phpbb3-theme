@@ -12,6 +12,7 @@ bf-editor {
 	--bf-text: var(--color-text);
 	--bf-muted: var(--color-muted);
 	--bf-on-accent: var(--color-on-accent);
+	--bf-danger: var(--color-danger);
 }
 
 bf-youtube {

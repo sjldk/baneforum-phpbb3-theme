@@ -19,6 +19,7 @@
 	--bf-text: #132e4e;
 	--bf-muted: #1d4779;
 	--bf-on-accent: #f6f8fa;
+	--bf-danger: #9b1c1c;
 	--bf-target: 2.75rem;
 }
 
@@ -33,6 +34,7 @@
 		--bf-text: #e4eaf1;
 		--bf-muted: #b2c3d7;
 		--bf-on-accent: #000;
+		--bf-danger: #ff9a9a;
 	}
 }
 
@@ -101,6 +103,12 @@ menu button svg {
 	stroke-width: 2;
 	stroke-linecap: round;
 	stroke-linejoin: round;
+}
+
+/* The buttons that delete a row, a column, the table or a picture have a red icon. */
+menu button[command^="--delete-"],
+menu button[value="remove"] {
+	color: var(--bf-danger);
 }
 
 menu button:hover {
