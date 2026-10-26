@@ -290,25 +290,37 @@ fileList?.addEventListener(
 		event.preventDefault();
 		event.stopImmediatePropagation();
 
-		const { bfDeleteText: text = ``, bfYes: yes = `Yes`, bfNo: no = `No` } = fileList.dataset;
 		const name = button.closest(`.attach-row`)?.querySelector(`.file-name`)?.textContent?.trim() ?? ``;
-		const question = document.createElement(`div`);
-		const line = document.createElement(`p`);
-		const buttons = document.createElement(`p`);
 
-		line.textContent = name ? `${text} ${name}` : text;
-		buttons.append(confirmButton(`confirm`, yes, `button1`), ` `, confirmButton(`cancel`, no, `button2`));
-		question.append(line, buttons);
-
-		window.phpbb.confirm(question.innerHTML, (/** @type {boolean} */ yesPressed) => {
-			if (yesPressed) {
-				confirmedDelete = button;
-				/** @type {HTMLElement} */ (button).click();
-			}
+		askToDelete(name, () => {
+			confirmedDelete = button;
+			/** @type {HTMLElement} */ (button).click();
 		});
 	},
 	true,
 );
+
+/**
+ * Asks in the board's dialog if the file should be deleted. Used by the list and by the picture menu in the editor.
+ * @param {string} name  the file name, or an empty string
+ * @param {() => void} onYes
+ */
+function askToDelete(name, onYes) {
+	const { bfDeleteText: text = ``, bfYes: yes = `Yes`, bfNo: no = `No` } = document.getElementById(`file-list`)?.dataset ?? {};
+	const question = document.createElement(`div`);
+	const line = document.createElement(`p`);
+	const buttons = document.createElement(`p`);
+
+	line.textContent = name ? `${text} ${name}` : text;
+	buttons.append(confirmButton(`confirm`, yes, `button1`), ` `, confirmButton(`cancel`, no, `button2`));
+	question.append(line, buttons);
+
+	window.phpbb.confirm(question.innerHTML, (/** @type {boolean} */ yesPressed) => {
+		if (yesPressed) {
+			onYes();
+		}
+	});
+}
 
 /**
  * One of the two buttons of the question. The names `confirm` and `cancel` are the ones phpBB's confirm box looks for.
@@ -400,6 +412,15 @@ function turnOn() {
 		if (hidden instanceof HTMLInputElement) {
 			hidden.value = description;
 		}
+	});
+	// The picture menu's Delete asks first, as the list does. The editor waits until `proceed` is called.
+	editor.addEventListener(`bf-attachment-remove-request`, (/** @type {CustomEvent} */ event) => {
+		event.preventDefault();
+		askToDelete(event.detail.name, () => {
+			// The tag leaves the text first. The row must not show up as a file that is not in the text while phpBB deletes it.
+			attachmentRow(event.detail.index)?.setAttribute(`data-bf-removing`, ``);
+			event.detail.proceed();
+		});
 	});
 	editor.addEventListener(`bf-attachment-remove`, (/** @type {CustomEvent} */ event) => {
 		const row = attachmentRow(event.detail.index);

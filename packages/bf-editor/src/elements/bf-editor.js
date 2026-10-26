@@ -124,7 +124,8 @@ export class BfEditor extends HTMLElement {
 		});
 		this.#menu = createAttachmentMenu({
 			root,
-			emit: (name, detail) => this.dispatchEvent(new CustomEvent(name, { bubbles: true, detail })),
+			emit: (name, detail, cancelable = false) =>
+				this.dispatchEvent(new CustomEvent(name, { bubbles: true, cancelable, detail })),
 			info: () => this.#attachmentInfo,
 		});
 		this.#nodeViews = createNodeViews(

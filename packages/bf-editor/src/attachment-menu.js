@@ -1,6 +1,7 @@
-// The small menu of a picture in the text: change its description or delete it. It is a native
-// popover (the Popover API) on a <form>, so the browser handles the layer, Escape and a click
-// outside. The markup is in bf-editor.html. This file puts it by the picture and reads the answer.
+// The small menu of a picture in the text: change its description or delete it. It is a bar like the
+// table bar. It floats under the picture inside the editor, so it scrolls with the text. The markup is
+// in bf-editor.html. This file puts it by the picture, closes it on Escape and on a click outside, and
+// reads the answer.
 //
 // The editor does not know what a description is for. It tells the host with events on <bf-editor>:
 //   bf-attachment-describe  {index, name, description}
@@ -12,11 +13,11 @@ import { Plugin } from 'prosemirror-state';
  * acts on that picture, also if the text has moved on.
  * @param {object} options
  * @param {ShadowRoot} options.root  the editor's shadow root
- * @param {(name: string, detail: Record<string, unknown>) => void} options.emit  tells the host
+ * @param {(name: string, detail: Record<string, unknown>, cancelable?: boolean) => boolean} options.emit  tells the host, false if the host cancelled it
  * @param {() => ((index: number) => {src?: string, description?: string, image?: boolean} | null) | null} options.info  what the host knows about a file
  */
 export function createAttachmentMenu({ root, emit, info }) {
-	const menu = /** @type {HTMLFormElement} */ (root.querySelector(`form[popover]`));
+	const menu = /** @type {HTMLFormElement} */ (root.querySelector(`form.attachment-menu`));
 	const field = /** @type {HTMLInputElement} */ (menu.querySelector(`input[name="description"]`));
 	/** @type {{view: import('prosemirror-view').EditorView, node: import('prosemirror-model').Node, image: HTMLElement | null} | null} */
 	let target = null;
@@ -36,13 +37,33 @@ export function createAttachmentMenu({ root, emit, info }) {
 		return found;
 	}
 
-	/** Takes the picture out of the text and tells the host. */
+	/**
+	 * Asks the host first. A host that wants to ask the writer cancels the request and calls `proceed` when the answer is yes.
+	 * Without a host that cancels it, the picture goes at once.
+	 */
 	function remove() {
 		if (!target) {
 			return;
 		}
 
-		const { view, node } = target;
+		const picked = target;
+		const { node } = picked;
+		const proceed = () => take(picked);
+
+		if (emit(`bf-attachment-remove-request`, { index: node.attrs.index, name: node.attrs.name, proceed }, true)) {
+			proceed();
+		} else {
+			hide();
+		}
+	}
+
+	/**
+	 * Takes the picture out of the text and tells the host.
+	 * @param {NonNullable<typeof target>} picked
+	 */
+	function take(picked) {
+		target = picked;
+		const { view, node } = picked;
 		const position = where();
 
 		if (position !== -1) {
@@ -70,8 +91,12 @@ export function createAttachmentMenu({ root, emit, info }) {
 		emit(`bf-attachment-describe`, { index: node.attrs.index, name: node.attrs.name, description });
 	}
 
+	function hide() {
+		menu.hidden = true;
+	}
+
 	function close() {
-		menu.hidePopover();
+		hide();
 		target?.view.focus();
 		target = null;
 	}
@@ -82,6 +107,19 @@ export function createAttachmentMenu({ root, emit, info }) {
 		save();
 	});
 	menu.querySelector(`button[value="remove"]`)?.addEventListener(`click`, remove);
+	menu.addEventListener(`keydown`, (event) => {
+		if (event.key === `Escape` && target) {
+			event.stopPropagation();
+			close();
+		}
+	});
+	// A click anywhere else closes the menu without saving. A click on a picture opens it again.
+	document.addEventListener(`pointerdown`, (event) => {
+		if (!menu.hidden && !event.composedPath().includes(menu)) {
+			hide();
+			target = null;
+		}
+	});
 
 	return {
 		/**
@@ -93,10 +131,22 @@ export function createAttachmentMenu({ root, emit, info }) {
 		open(view, node, anchor) {
 			target = { view, node, image: anchor.querySelector(`img`) };
 			field.value = info()?.(node.attrs.index)?.description ?? ``;
+			field.placeholder = field.getAttribute(`aria-label`) ?? ``;
+			menu.hidden = false;
+			const surface = (menu.offsetParent ?? menu.parentElement)?.getBoundingClientRect();
 			const box = anchor.getBoundingClientRect();
-			menu.style.insetInlineStart = `${Math.max(8, box.left)}px`;
-			menu.style.insetBlockStart = `${box.bottom + 6}px`;
-			menu.showPopover();
+
+			if (surface) {
+				// Under the picture. At the bottom of the text there is no room under it (the page may cut it off), so it
+				// goes above it, or, if the picture fills the editor, over the lower edge of the picture.
+				const height = menu.offsetHeight;
+				const below = box.bottom - surface.top + 4;
+				const above = box.top - surface.top - height - 4;
+				const top = below + height <= surface.height ? below : above >= 0 ? above : Math.max(0, surface.height - height - 4);
+				menu.style.insetBlockStart = `${top}px`;
+				menu.style.insetInlineStart = `${Math.max(0, Math.min(box.left - surface.left, surface.width - menu.offsetWidth))}px`;
+			}
+
 			field.focus();
 		},
 	};

@@ -547,23 +547,32 @@ dialog button[value="ok"] {
 	outline-offset: 0.1rem;
 }
 
-/* The small menu by a picture. A popover is in the top layer, placed by the script. */
-.attachment-menu {
-	inline-size: min(22rem, calc(100vw - 1rem));
+/* The menu of a picture is a bar like the table bar: it floats under the picture inside the editor, so it
+   scrolls with the text. It looks exactly like the toolbar (the "menu" rules above). Only the field is new. */
+form.attachment-menu {
+	position: absolute;
+	z-index: 2;
+	inline-size: min(22rem, 100%);
 	margin: 0;
-	padding: 0.75rem;
-	border: 0.15rem solid var(--bf-border);
-	border-radius: var(--bf-radius);
-	background: var(--bf-surface);
-	color: var(--bf-text);
 }
 
-.attachment-menu label {
-	display: grid;
-	gap: 0.25rem;
+form.attachment-menu[hidden] {
+	display: none;
 }
 
-.attachment-menu input {
+form.attachment-menu menu {
+	margin: 0;
+	flex-wrap: nowrap;
+}
+
+form.attachment-menu li:first-child {
+	flex: 1 1 auto;
+	min-inline-size: 0;
+}
+
+form.attachment-menu input {
+	inline-size: 100%;
+	box-sizing: border-box;
 	min-block-size: var(--bf-target);
 	padding: 0 0.5rem;
 	border: 0.15rem solid var(--bf-border);
@@ -574,37 +583,7 @@ dialog button[value="ok"] {
 	font-size: max(1rem, 16px);
 }
 
-.attachment-menu p {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.5rem;
-	justify-content: space-between;
-	margin: 0.75rem 0 0;
-}
-
-.attachment-menu button {
-	min-block-size: var(--bf-target);
-	padding: 0 1rem;
-	border: 0.15rem solid var(--bf-border);
-	border-radius: var(--bf-radius);
-	background: var(--bf-field);
-	color: inherit;
-	cursor: pointer;
-	font: inherit;
-}
-
-.attachment-menu button[value="ok"] {
-	border-color: var(--bf-accent);
-	background: var(--bf-accent);
-	color: var(--bf-on-accent);
-}
-
-.attachment-menu button:focus-visible {
-	outline: 0.15rem solid var(--bf-focus);
-	outline-offset: 0.1rem;
-}
-
-.attachment-menu input:focus-visible {
+form.attachment-menu input:focus-visible {
 	outline: none;
 	border-color: var(--bf-focus);
 }

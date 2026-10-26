@@ -29,7 +29,7 @@ await page.waitForSelector(`bf-editor`);
 await wait(1500);
 check(`no tab bar`, await page.evaluate(() => !document.querySelector(`#tabs`)));
 check(`options show without a tab`, await page.evaluate(() => document.querySelector(`#options-panel`)?.offsetHeight > 0));
-check(`attachment panel is out of sight`, await page.evaluate(() => document.querySelector(`#attach-panel`)?.offsetHeight === 0));
+check(`attachment panel is open under the buttons`, await page.evaluate(() => document.querySelector(`#attach-panel`)?.open === true));
 
 const input = await page.evaluateHandle(() => document.querySelector(`bf-editor`).shadowRoot.querySelector(`input[type="file"]`));
 await input.uploadFile(PHOTO);
@@ -42,11 +42,37 @@ await page.screenshot({ path: `/w/pictures-1.png`, clip: { x: 0, y: 150, width: 
 await page.evaluate(() => document.querySelector(`bf-editor`).shadowRoot.querySelector(`bf-editable .attachment`).click());
 await wait(300);
 const menu = await page.evaluate(() => {
-	const form = document.querySelector(`bf-editor`).shadowRoot.querySelector(`form[popover]`);
+	const form = document.querySelector(`bf-editor`).shadowRoot.querySelector(`form.attachment-menu`);
 
-	return { open: form.matches(`:popover-open`), focused: document.querySelector(`bf-editor`).shadowRoot.activeElement?.name, rect: form.getBoundingClientRect().toJSON() };
+	return { open: !form.hidden, focused: document.querySelector(`bf-editor`).shadowRoot.activeElement?.name, rect: form.getBoundingClientRect().toJSON() };
 });
 check(`clicking the picture opens the menu with focus in the description`, menu.open && menu.focused === `description`, JSON.stringify(menu));
+check(`the menu is not cut off by the panel around the editor`, await page.evaluate(() => {
+	const host = document.querySelector(`bf-editor`);
+	const menu = host.shadowRoot.querySelector(`form.attachment-menu`).getBoundingClientRect();
+	const panel = host.closest(`.panel`).getBoundingClientRect();
+
+	return menu.bottom <= panel.bottom && menu.top >= panel.top;
+}));
+const gap = () => page.evaluate(() => {
+	const root = document.querySelector(`bf-editor`).shadowRoot;
+
+	return Math.round(root.querySelector(`form.attachment-menu`).getBoundingClientRect().top - root.querySelector(`bf-editable .attachment`).getBoundingClientRect().bottom);
+});
+const before = await gap();
+await page.evaluate(() => window.scrollBy(0, 120));
+await wait(200);
+check(`the menu follows the picture when the page scrolls`, (await gap()) === before, `${before} -> ${await gap()}`);
+await page.evaluate(() => window.scrollBy(0, -120));
+check(`the menu looks like the toolbar`, await page.evaluate(() => {
+	const root = document.querySelector(`bf-editor`).shadowRoot;
+	const a = getComputedStyle(root.querySelector(`.bars menu`));
+	const b = getComputedStyle(root.querySelector(`form.attachment-menu menu`));
+	const x = getComputedStyle(root.querySelector(`.bars menu button`));
+	const y = getComputedStyle(root.querySelector(`form.attachment-menu menu button`));
+
+	return a.backgroundColor === b.backgroundColor && a.borderRadius === b.borderRadius && a.padding === b.padding && x.width === y.width && x.height === y.height;
+}));
 await page.screenshot({ path: `/w/pictures-2.png`, clip: { x: 0, y: 150, width: 1000, height: 700 } });
 await page.keyboard.type(`A red square in the corner`);
 await page.keyboard.press(`Enter`);
@@ -55,7 +81,7 @@ state = await editorState();
 check(`description is stored as the attachment comment`, state.data[0]?.[1] === `A red square in the corner`, JSON.stringify(state.data));
 check(`and is the alt text`, state.alt === `A red square in the corner`);
 check(`and is in the field phpBB sends`, await page.evaluate(() => [document.querySelector(`[data-attach-id] .attach-comment-field`)?.value, document.querySelector(`input[name="attachment_data[0][attach_comment]"]`)?.value].join(`|`)) === `A red square in the corner|A red square in the corner`);
-check(`menu closed after saving`, await page.evaluate(() => !document.querySelector(`bf-editor`).shadowRoot.querySelector(`form[popover]`).matches(`:popover-open`)));
+check(`menu closed after saving`, await page.evaluate(() => document.querySelector(`bf-editor`).shadowRoot.querySelector(`form.attachment-menu`).hidden));
 
 // Preview reloads the page. The picture must still be there.
 await page.evaluate(() => document.querySelector(`bf-editor`).focus());
@@ -72,7 +98,24 @@ await page.screenshot({ path: `/w/pictures-3.png`, clip: { x: 0, y: 150, width: 
 await page.keyboard.press(`Escape`);
 await page.evaluate(() => document.querySelector(`bf-editor`).shadowRoot.querySelector(`bf-editable .attachment`).click());
 await wait(300);
-await page.evaluate(() => document.querySelector(`bf-editor`).shadowRoot.querySelector(`form[popover] button[value="remove"]`).click());
+const clickDelete = () => page.evaluate(() => document.querySelector(`bf-editor`).shadowRoot.querySelector(`form.attachment-menu button[value="remove"]`).click());
+const dialogOpen = () => page.evaluate(() => document.querySelector(`#phpbb_confirm`)?.open === true);
+const answer = (name) => page.evaluate((n) => document.querySelector(`#phpbb_confirm input[name="${n}"]`).click(), name);
+
+// Delete asks first, as the list does. No keeps the picture.
+await clickDelete();
+await wait(500);
+check(`Delete in the menu asks in the board dialog`, await dialogOpen());
+check(`and the picture is still there while it asks`, (await editorState()).attachments === 1);
+await answer(`cancel`);
+await wait(500);
+state = await editorState();
+check(`No keeps the picture and the file`, state.attachments === 1 && state.data.length === 1 && state.textarea.includes(`[attachment`), JSON.stringify(state));
+await page.evaluate(() => document.querySelector(`bf-editor`).shadowRoot.querySelector(`bf-editable .attachment`).click());
+await wait(300);
+await clickDelete();
+await wait(500);
+await answer(`confirm`);
 await wait(2500);
 state = await editorState();
 check(`deleting removes the picture from the editor`, state.attachments === 0, JSON.stringify(state));
