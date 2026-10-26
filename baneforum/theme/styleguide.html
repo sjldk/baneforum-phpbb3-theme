@@ -20,6 +20,8 @@
 <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
 <link rel="stylesheet" href="/styles/baneforum/theme/stylesheet.css">
 <link rel="stylesheet" href="/ext/baneforum/likes/styles/all/theme/votes.css">
+<link rel="stylesheet" href="/styles/baneforum/theme/plupload.css">
+<link rel="stylesheet" href="/styles/baneforum/theme/bf-editor-theme.css">
 <script>
 	try { if (localStorage.getItem('bf-theme') === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); } } catch (e) {}
 </script>
@@ -119,6 +121,55 @@
 	<div class="rules"><div class="inner">A notice.</div></div>
 	<details class="bf-options" open><summary>A collapsible section (Options, Add poll)</summary><p>The content of the section.</p></details>
 </div></div>
+
+<h2>Attachments</h2>
+<!-- The attachment panel of the posting page (posting_attach_body.html): a collapsible section, one row per file that is not in the text.
+     Rules: "#attach-panel" in baneforum_common.css and the file status icons in plupload.css. -->
+<details class="panel bg3 panel-container" id="attach-panel" open>
+	<summary>Attachments</summary>
+	<div class="inner">
+		<div class="panel file-list-container"><div class="inner">
+			<table class="table1 zebra-list fixed-width-table">
+				<thead><tr><th class="attach-name">File name</th><th class="attach-comment">File comment</th><th class="attach-filesize">Size</th><th class="attach-status">Status</th></tr></thead>
+				<tbody class="responsive-skip-empty file-list" id="file-list">
+					<tr class="attach-row" data-attach-id="1">
+						<td class="attach-name"><img class="attach-thumb" alt="" src="/styles/baneforum/theme/images/no_avatar.gif"><span class="file-name ellipsis-text"><a href="#">kupplungs-schacht.jpg</a></span><span class="attach-controls"><input type="button" value="Place inline" class="button2 file-inline-bbcode"> <input type="button" value="Delete file" class="button2 file-delete"></span></td>
+						<td class="attach-comment"><input type="text" class="inputbox attach-comment-field" value="A description" aria-label="File comment"></td>
+						<td class="attach-filesize"><span class="file-size">239.7 KB</span></td>
+						<td class="attach-status"><span class="file-status file-uploaded"></span></td>
+					</tr>
+					<tr class="attach-row" data-attach-id="2">
+						<td class="attach-name"><span class="file-name ellipsis-text"><a href="#">manual.pdf</a></span><span class="attach-controls"><input type="button" value="Delete file" class="button2 file-delete"></span></td>
+						<td class="attach-comment"><input type="text" class="inputbox attach-comment-field" aria-label="File comment" placeholder="File comment"></td>
+						<td class="attach-filesize"><span class="file-size">1.2 MB</span></td>
+						<td class="attach-status"><span class="file-status file-working"></span></td>
+					</tr>
+					<tr class="attach-row" data-attach-id="3">
+						<td class="attach-name"><span class="file-name ellipsis-text">pack.zip</span><span class="attach-controls"><input type="button" value="Delete file" class="button2 file-delete"></span></td>
+						<td class="attach-comment"><input type="text" class="inputbox attach-comment-field" aria-label="File comment" placeholder="File comment"></td>
+						<td class="attach-filesize"><span class="file-size">4 B</span></td>
+						<td class="attach-status"><span class="file-status file-error"></span></td>
+					</tr>
+				</tbody>
+			</table>
+		</div></div>
+	</div>
+</details>
+
+<h2>Editor bars</h2>
+<p>The editor with its toolbar. The cursor is in the table, so the table bar shows under it. The bar of a picture (description, delete, save) looks the same and shows when a picture is clicked. The delete buttons are red.</p>
+<bf-editor id="sg-editor" label="Message"></bf-editor>
+<script type="module">
+	import { defineBfEditor } from '/styles/baneforum/theme/js/bf-editor.js';
+	defineBfEditor();
+	const editor = document.getElementById('sg-editor');
+	await new Promise((resolve) => setTimeout(resolve, 100));
+	editor.value = 'Text before.\n[table][tr][td]A[/td][td]B[/td][/tr][tr][td]C[/td][td]D[/td][/tr][/table]\nText after.';
+	const { state, dispatch } = editor.view;
+	let at = 0;
+	state.doc.descendants((node, pos) => { if (!at && node.isText && node.text === 'A') { at = pos + 1; } });
+	dispatch(state.tr.setSelection(state.selection.constructor.near(state.doc.resolve(at))));
+</script>
 
 </div>
 </div>
