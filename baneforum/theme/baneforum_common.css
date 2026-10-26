@@ -1099,6 +1099,12 @@ figure.file a:focus-visible {
 	background: var(--color-tint);
 }
 
+/* A picture that the editor uploads or deletes is in the text, so its row is not shown while that happens. */
+#attach-panel tr.attach-row[data-bf-pending],
+#attach-panel tr.attach-row[data-bf-removing] {
+	display: none;
+}
+
 #attach-panel tr.attach-row > td {
 	display: block;
 	width: auto;

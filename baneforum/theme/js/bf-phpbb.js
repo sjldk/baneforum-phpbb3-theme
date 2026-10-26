@@ -63,6 +63,11 @@ function syncAttachmentRows() {
 		const index = data.findIndex((/** @type {{attach_id: string}} */ attachment) => String(attachment.attach_id) === row.dataset.attachId);
 		const placed = index !== -1 && new RegExp(`\\[attachment=${index}\\]`).test(text);
 		row.style.display = placed ? `none` : ``;
+
+		if (row.dataset.attachId) {
+			delete row.dataset.bfPending;
+		}
+
 		left += placed ? 0 : 1;
 
 		// A picture that is not in the text gets a small thumbnail, so it is easy to tell from the others.
@@ -122,6 +127,11 @@ function upload(file, { onProgress, signal } = {}) {
 		const onAdded = (/** @type {any} */ _up, /** @type {any[]} */ files) => {
 			queued ??= files.find((candidate) => candidate.name === name) ?? null;
 			bridging = false;
+
+			// The picture goes into the text, so its row stays out of sight while it uploads. An error shows it again.
+			if (queued) {
+				document.getElementById(queued.id)?.setAttribute(`data-bf-pending`, ``);
+			}
 		};
 		const onProgressEvent = (/** @type {any} */ _up, /** @type {any} */ candidate) => {
 			if (candidate === queued) {
@@ -136,6 +146,7 @@ function upload(file, { onProgress, signal } = {}) {
 			finish();
 
 			if (candidate.error || !candidate.attachment_data) {
+				document.getElementById(candidate.id)?.removeAttribute(`data-bf-pending`);
 				reject(new Error(candidate.error ?? `Upload failed.`));
 
 				return;
@@ -162,6 +173,7 @@ function upload(file, { onProgress, signal } = {}) {
 		const onError = (/** @type {any} */ _up, /** @type {{message: string, file?: any}} */ problem) => {
 			if (mine(problem.file) || (!problem.file && queued === null)) {
 				finish();
+				document.getElementById(queued?.id)?.removeAttribute(`data-bf-pending`);
 				reject(new Error(problem.message));
 			}
 		};
