@@ -126,12 +126,16 @@ fi
 
 # Attachment settings for the test board: no size limit and no pixel limit of phpBB's own (its default
 # is 256 KB, which stops every photo, and it refuses big pictures before an extension can act),
-# up to 40 files. The extension above makes the pictures smaller.
+# up to 40 files. The extension above makes the pictures smaller. Thumbnails are made as on production
+# (400 px wide, for every picture).
 "${DB[@]}" -e "
 	UPDATE phpbb_config SET config_value='0' WHERE config_name IN ('max_filesize', 'max_filesize_pm');
 	UPDATE phpbb_config SET config_value='0' WHERE config_name='img_max_width';
 	UPDATE phpbb_config SET config_value='0' WHERE config_name='img_max_height';
 	UPDATE phpbb_config SET config_value='40' WHERE config_name='max_attachments';
+	UPDATE phpbb_config SET config_value='1' WHERE config_name='img_create_thumbnail';
+	UPDATE phpbb_config SET config_value='400' WHERE config_name='img_max_thumb_width';
+	UPDATE phpbb_config SET config_value='1' WHERE config_name='img_min_thumb_filesize';
 	UPDATE phpbb_extension_groups SET allow_group=1 WHERE group_name IN ('IMAGES', 'ARCHIVES', 'DOCUMENTS', 'DOWNLOADABLE_FILES');"
 
 # Template and style changes need a cleared cache.

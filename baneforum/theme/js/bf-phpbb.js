@@ -78,7 +78,10 @@ function syncAttachmentRows() {
 			thumb.className = `attach-thumb`;
 			thumb.alt = ``;
 			thumb.loading = `lazy`;
-			thumb.src = attachmentInfo(index)?.src ?? ``;
+			// phpBB makes a small copy of a picture when it is uploaded. A picture without one is shown whole.
+			const whole = attachmentInfo(index)?.src ?? ``;
+			thumb.addEventListener(`error`, () => (thumb.src = whole), { once: true });
+			thumb.src = `${whole}${whole.includes(`?`) ? `&` : `?`}t=1`;
 			name.prepend(thumb);
 		}
 	}
