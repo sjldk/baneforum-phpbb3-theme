@@ -344,16 +344,6 @@ a.header-avatar img {
 	width: auto;
 }
 
-a.header-avatar span:after {
-	content: "\f0dd";
-	display: inline-block;
-	/* biome-ignore lint/a11y/useGenericFontNames: an icon font has no generic family */
-	font: normal normal normal 0.875rem / 1 FontAwesome;
-	padding-left: 0.375rem;
-	padding-top: 0.125rem;
-	vertical-align: top;
-}
-
 /* Dropdown menu
 ----------------------------------------*/
 .dropdown-container {
