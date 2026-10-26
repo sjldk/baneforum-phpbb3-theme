@@ -149,7 +149,7 @@ function upload(file, { onProgress, signal } = {}) {
 			finish();
 
 			if (candidate.error || !candidate.attachment_data) {
-				document.getElementById(candidate.id)?.removeAttribute(`data-bf-pending`);
+				discard(candidate);
 				reject(new Error(candidate.error ?? `Upload failed.`));
 
 				return;
@@ -176,17 +176,20 @@ function upload(file, { onProgress, signal } = {}) {
 		const onError = (/** @type {any} */ _up, /** @type {{message: string, file?: any}} */ problem) => {
 			if (mine(problem.file) || (!problem.file && queued === null)) {
 				finish();
-				document.getElementById(queued?.id)?.removeAttribute(`data-bf-pending`);
+				discard(queued);
 				reject(new Error(problem.message));
+			}
+		};
+		// The picture shows its own error in the editor, so a file that failed leaves the list and the queue.
+		const discard = (/** @type {any} */ file) => {
+			if (file) {
+				uploader.removeFile(file);
+				document.getElementById(file.id)?.remove();
 			}
 		};
 		const onAbort = () => {
 			finish();
-
-			if (queued) {
-				uploader.removeFile(queued);
-				document.getElementById(queued.id)?.remove();
-			}
+			discard(queued);
 
 			reject(new DOMException(`Aborted`, `AbortError`));
 		};
