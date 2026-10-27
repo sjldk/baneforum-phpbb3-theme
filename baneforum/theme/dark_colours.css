@@ -233,7 +233,8 @@
 }
 
 :where(:root[data-theme="dark"]) .error {
-	color: var(--color-danger);
+	background-color: var(--color-danger);
+	color: var(--color-on-accent);
 }
 
 :where(:root[data-theme="dark"]) .reported {

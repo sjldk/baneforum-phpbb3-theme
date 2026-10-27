@@ -138,6 +138,11 @@ fi
 	UPDATE phpbb_config SET config_value='1' WHERE config_name='img_min_thumb_filesize';
 	UPDATE phpbb_extension_groups SET allow_group=1 WHERE group_name IN ('IMAGES', 'ARCHIVES', 'DOCUMENTS', 'DOWNLOADABLE_FILES');"
 
+# Our own login error text that does not tell which of username and password was wrong.
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/loginerror' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable baneforum/loginerror
+fi
+
 # Template and style changes need a cleared cache.
 php bin/phpbbcli.php cache:purge >/dev/null 2>&1 || true
 chown -R www-data:www-data cache store files images

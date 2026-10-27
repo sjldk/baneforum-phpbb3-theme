@@ -126,6 +126,12 @@ li.row:hover,
 	background-color: var(--color-danger);
 }
 
+/* The link in an error text must be readable on the red box, and not only by its colour. */
+.error a {
+	color: inherit;
+	text-decoration: underline;
+}
+
 /* Same border width in every state, so the page does not jump on focus. Prosilver sets 1px on :hover and :focus.
    Only :focus changes the colour, hover does not highlight. */
 .inputbox,

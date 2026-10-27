@@ -1,0 +1,5 @@
+services:
+    baneforum.loginerror.listener:
+        class: baneforum\loginerror\event\listener
+        tags:
+            - { name: event.listener }
