@@ -430,29 +430,6 @@
 		display: none;
 	}
 
-	fieldset.quick-login label {
-		display: block;
-		margin-bottom: 0.3125rem;
-		white-space: normal;
-	}
-
-	fieldset.quick-login label > span {
-		display: inline-block;
-		min-width: 6.25rem;
-	}
-
-	fieldset.quick-login input.inputbox {
-		width: 85%;
-		max-width: 18.75rem;
-		margin-left: 1.25rem;
-	}
-
-	fieldset.quick-login label[for="autologin"] {
-		display: inline-block;
-		text-align: right;
-		min-width: 50%;
-	}
-
 	/* User profile
 	----------------------------------------*/
 	.column1,

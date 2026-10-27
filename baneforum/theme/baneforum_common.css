@@ -764,28 +764,89 @@ table.table1 tbody tr:hover td {
 	overflow: hidden;
 }
 
-/* External login buttons on the login page (login_body_oauth.html). */
+/* The login page: one narrow box, labels above full-width fields, no spacer columns. The register invitation is one
+   quiet line under the box. */
+form.login-form {
+	max-inline-size: 26rem;
+	margin-inline: auto;
+}
+
+form.login-form .panel {
+	padding: 1.25rem;
+	border-radius: var(--radius);
+}
+
+form.login-form .login-title {
+	margin-block-start: 0;
+}
+
+form.login-form fieldset {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+form.login-form fieldset dl {
+	display: block;
+	margin: 0 0 0.75rem;
+}
+
+form.login-form fieldset :is(dt, dd) {
+	float: none;
+	width: auto;
+	margin: 0 0 0.3rem;
+	padding: 0;
+}
+
+form.login-form fieldset .inputbox {
+	box-sizing: border-box;
+	width: 100%;
+}
+
+form.login-form fieldset .login-submit {
+	margin-block-start: 1rem;
+}
+
+form.login-form fieldset .login-submit input {
+	width: 100%;
+}
+
+.login-register {
+	margin-block: 1rem 0;
+	text-align: center;
+	color: var(--color-muted);
+}
+
+/* External login buttons on the login page (login_body_oauth.html). A line above separates them from the form. */
 .oauth-buttons {
 	display: flex;
-	flex-wrap: wrap;
+	flex-direction: column;
 	gap: 0.5rem;
 	margin: 1rem 0 0;
-	padding: 0;
+	padding: 1rem 0 0;
+	border-top: 1px solid var(--color-line);
 	list-style: none;
 }
 
 .oauth-buttons a {
-	display: inline-flex;
+	display: flex;
 	align-items: center;
 	justify-content: center;
+	gap: 0.75rem;
 	min-block-size: 2.75rem;
 	padding: 0 1.25rem;
-	border: 0.15rem solid var(--color-line);
+	border: var(--border-control) solid var(--color-line);
 	border-radius: var(--radius);
 	background: var(--color-paper);
 	color: var(--color-text);
 	font-weight: 600;
 	text-decoration: none;
+}
+
+.oauth-logo {
+	flex: none;
+	inline-size: 1.25rem;
+	block-size: 1.25rem;
 }
 
 .oauth-buttons a:hover {
@@ -1299,8 +1360,8 @@ input.button2 {
    text around it by its surface, and hover and focus show a soft background in the style's radius instead. The focus line of the
    keyboard stays (see below). Links in running text keep their underline. A new kind of button-like link is added to this list.
    The same rule is written in .claude/skills/phpbb/SKILL.md. */
-body :is(a.button, .button a, .dropdown-trigger, .pagination a, .post-buttons a, .navbar a, .dropdown-contents a, .tabs a, .bf-contact__button, .bf-top, bf-youtube > a),
-body :is(a.button, .button a, .dropdown-trigger, .pagination a, .post-buttons a, .navbar a, .dropdown-contents a, .tabs a, .bf-contact__button, .bf-top, bf-youtube > a):is(:link, :visited, :hover, :focus, :active) {
+body :is(a.button, .button a, .dropdown-trigger, .pagination a, .post-buttons a, .navbar a, .dropdown-contents a, .tabs a, .bf-contact__button, .bf-top, bf-youtube > a, .oauth-buttons a),
+body :is(a.button, .button a, .dropdown-trigger, .pagination a, .post-buttons a, .navbar a, .dropdown-contents a, .tabs a, .bf-contact__button, .bf-top, bf-youtube > a, .oauth-buttons a):is(:link, :visited, :hover, :focus, :active) {
 	text-decoration: none;
 }
 

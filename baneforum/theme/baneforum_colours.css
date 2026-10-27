@@ -145,9 +145,8 @@ select:focus,
 	border-color: var(--color-focus);
 }
 
-/* One field colour, the page colour. prosilver gives the quick login fields a grey of their own. */
-.inputbox,
-fieldset.quick-login input.inputbox {
+/* One field colour, the page colour. */
+.inputbox {
 	background-color: var(--color-paper);
 	color: var(--color-text);
 }
