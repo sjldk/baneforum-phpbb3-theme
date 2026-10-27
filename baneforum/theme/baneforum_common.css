@@ -803,6 +803,11 @@ form.login-form fieldset .inputbox {
 	width: 100%;
 }
 
+/* Each checkbox row is a 44 pixel target, so the rows are not tight. */
+form.login-form fieldset .login-options label {
+	min-block-size: 2.75rem;
+}
+
 form.login-form fieldset .login-submit {
 	margin-block-start: 1rem;
 }
