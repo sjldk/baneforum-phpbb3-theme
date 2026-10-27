@@ -90,6 +90,12 @@ The phpBB traps we found are in `.claude/skills/phpbb/SKILL.md`. Add new ones th
 
 In a Claude cloud session use the skill `phpbbtest`. It builds the test board and runs `user-journey.mjs`.
 
+**Look at the real page before you call a visual change done.**
+- Do not say "Docker is not available" before you read the `phpbbtest` skill and run its `build-image.sh`. A plain `docker ps` fails in a cloud session until the script starts the daemon.
+- Take a screenshot of the real page on the test board and look at it. Do this for every CSS or template change, and fix what you see.
+- A screenshot of a mock page is not a check. If you share one, say in the caption that it is a mock.
+- Say clearly what you did not check (for example a provider the test board does not have, dark mode, a phone).
+
 ## 8. Git
 
 - **Commit messages:** start with the area and a colon (`Tema:`, `Docker:`, `Skill:`), then what changed and why. The owner writes them in Danish. English is fine.

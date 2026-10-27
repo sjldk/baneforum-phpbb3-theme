@@ -138,27 +138,6 @@ dd textarea {
 	width: 95%;
 }
 
-/* Quick-login on index page */
-fieldset.quick-login {
-	margin-top: 0.3125rem;
-}
-
-fieldset.quick-login input[type="text"],
-fieldset.quick-login input[type="password"] {
-	min-width: 10rem;
-}
-
-fieldset.quick-login input.inputbox {
-	width: 15%;
-	vertical-align: middle;
-	margin-right: 0.3125rem;
-}
-
-fieldset.quick-login label {
-	white-space: nowrap;
-	padding-right: 0.125rem;
-}
-
 /* Display options on viewtopic/viewforum pages  */
 fieldset.display-options {
 	text-align: center;
