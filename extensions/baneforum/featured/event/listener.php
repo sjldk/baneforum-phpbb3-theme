@@ -93,6 +93,7 @@ class listener implements EventSubscriberInterface
 				'TITLE'     => $post['topic_title'],
 				'SNIPPET'   => $post['snippet'],
 				'AUTHOR'    => get_username_string('username', (int) $post['poster_id'], $post['username'], $post['user_colour'], $post['post_username']),
+				'S_NEW'     => (int) $post['post_time'] >= time() - finder::NEW_DAYS * 86400,
 				'TIME'      => $this->user->format_date((int) $post['post_time']),
 				'U_PICTURE' => append_sid($this->root_path . 'download/file.' . $this->php_ext, $picture),
 				'U_PICTURE_FULL' => append_sid($this->root_path . 'download/file.' . $this->php_ext, ['id' => (int) $post['attach_id']]),

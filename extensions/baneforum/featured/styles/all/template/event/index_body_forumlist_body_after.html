@@ -1,11 +1,19 @@
 {% if loops.bf_featured|length %}
-<section class="bf-featured"{% if loops.bf_featured|length > 1 %} aria-labelledby="bf-featured-title"{% endif %}>
+<section class="bf-featured" aria-labelledby="bf-featured-title">
 	{% for post in loops.bf_featured %}
 	{% if loop.first %}
 	<div class="bf-featured__lead">
+		<div class="bf-featured__head">
+			<h2 id="bf-featured-title" class="bf-index__title">{{ lang('BF_FEATURED_TITLE') }}</h2>
+			<details class="bf-featured__help">
+				<summary aria-label="{{ lang('BF_FEATURED_HELP') }}" title="{{ lang('BF_FEATURED_HELP') }}"><i class="icon fa-question-circle fa-fw" aria-hidden="true"></i></summary>
+				<p class="bf-featured__about">{{ lang('BF_FEATURED_ABOUT') }}</p>
+			</details>
+		</div>
 		<article class="bf-featured__item bf-featured__item--lead">
 			<a class="bf-featured__picture" href="{{ post.U_POST }}" tabindex="-1" aria-hidden="true">
 				<img src="{{ post.U_PICTURE_FULL }}" alt="" fetchpriority="high">
+				{% if post.S_NEW %}<span class="bf-featured__new">{{ lang('BF_FEATURED_NEW') }}</span>{% endif %}
 			</a>
 			<div class="bf-featured__body">
 				<a class="bf-featured__topic" href="{{ post.U_POST }}">{{ post.TITLE }}</a>
@@ -16,13 +24,13 @@
 	</div>
 	{% if loops.bf_featured|length > 1 %}
 	<div class="bf-featured__rest">
-		<h2 id="bf-featured-title" class="bf-index__title">{{ lang('BF_FEATURED_TITLE') }}</h2>
 		<ol class="bf-featured__list">
 	{% endif %}
 	{% else %}
 			<li class="bf-featured__item">
 				<a class="bf-featured__picture" href="{{ post.U_POST }}" tabindex="-1" aria-hidden="true">
 					<img src="{{ post.U_PICTURE }}" alt="" loading="lazy">
+					{% if post.S_NEW %}<span class="bf-featured__new">{{ lang('BF_FEATURED_NEW') }}</span>{% endif %}
 				</a>
 				<div class="bf-featured__body">
 					<a class="bf-featured__topic" href="{{ post.U_POST }}">{{ post.TITLE }}</a>

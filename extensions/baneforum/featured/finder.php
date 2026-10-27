@@ -26,6 +26,9 @@ class finder
 	/** Posts newer than this many days go before older ones. */
 	public const WINDOW_DAYS = 30;
 
+	/** A post newer than this many days gets the "New" label. */
+	public const NEW_DAYS = 7;
+
 	/** How many picture rows to read. One post can have many pictures, and only the first one is used. */
 	protected const ROWS = 60;
 
@@ -113,6 +116,9 @@ class finder
 	 */
 	public function snippet(string $stored): string
 	{
+		// phpBB 3.3 stores the post as XML. An attachment is <ATTACHMENT ...><s>[attachment=0]</s>file name<e>[/attachment]</e></ATTACHMENT>:
+		// drop the whole element, so its file name does not end up in the text.
+		$stored = preg_replace('~<ATTACHMENT\b.*?</ATTACHMENT>~su', '', $stored) ?? $stored;
 		$text = $this->utils->clean_formatting($stored);
 		$text = preg_replace('~https?://\S+~u', '', $text) ?? $text;
 		$text = trim(preg_replace('~\s+~u', ' ', $text) ?? $text);
