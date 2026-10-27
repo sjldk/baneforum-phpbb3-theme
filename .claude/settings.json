@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; case \"$f\" in */baneforum/*.css|*/baneforum/*.html|*/extensions/*.css|*/extensions/*.html) printf '%s\\n' '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"VISUAL CHANGE: this file changes how a page looks. Before you say it is done: run docker/purge-cache.sh, take a screenshot of the real page on http://localhost:8080 (wide, dark theme, phone) and look at it. See the hard rule in CLAUDE.md.\"}}';; esac; }"
+          }
+        ]
+      }
+    ]
+  }
+}
