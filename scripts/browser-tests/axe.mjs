@@ -29,7 +29,7 @@ const guest = await context.newPage();
 await guest.setCacheEnabled(false);
 const guestPage = page;
 for (const url of [`ucp.php?mode=login`]) {
-	await guest.goto(`http://localhost:8080/${url}`, { waitUntil: `networkidle0` });
+	await guest.goto(`${process.env.BASE ?? `http://localhost:8080`}/${url}`, { waitUntil: `networkidle0` });
 	await guest.evaluate(axeSource);
 	const r = await guest.evaluate(async () => (await window.axe.run(document, { runOnly: { type: `tag`, values: [`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa`, `wcag2aaa`, `best-practice`] } })).violations.map((v) => `${v.impact} ${v.id} x${v.nodes.length} ${v.nodes[0].target.join(` `).slice(0, 70)}`));
 	console.log(`\n== guest ${url}: ${r.length}\n  ${r.join(`\n  `)}`);
@@ -39,12 +39,12 @@ await context.close();
 await login(page);
 
 for (const [name, url] of [[`index`, `index.php`], [`topic with posts, picture, player`, `viewtopic.php?t=1`]]) {
-	await page.goto(`http://localhost:8080/${url}`, { waitUntil: `networkidle0` });
+	await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/${url}`, { waitUntil: `networkidle0` });
 	await wait(500);
 	await run(name);
 }
 
-await page.goto(`http://localhost:8080/posting.php?mode=post&f=2`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/posting.php?mode=post&f=2`, { waitUntil: `networkidle0` });
 await page.waitForSelector(`bf-editor`);
 await wait(1500);
 await run(`new topic with editor`);

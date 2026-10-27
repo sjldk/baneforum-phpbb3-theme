@@ -10,7 +10,7 @@ const check = (name, ok, extra = ``) => out.push(`${ok ? `PASS` : `FAIL`} ${name
 
 await login(page);
 await page.setViewport({ width: 1100, height: 900 });
-await page.goto(`http://localhost:8080/viewtopic.php?t=21`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/viewtopic.php?t=21`, { waitUntil: `networkidle0` });
 const replyUrl = await page.$eval(`a[href*="mode=reply"]`, (a) => a.href);
 await page.goto(replyUrl, { waitUntil: `networkidle0` });
 await page.evaluate(() => (document.querySelector(`#message`).value = `throwaway for the dialog test`));

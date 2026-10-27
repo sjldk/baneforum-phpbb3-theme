@@ -83,6 +83,6 @@ A file here replaces the one in prosilver. Check the prosilver original of the s
 | A browser test on the board | `scripts/browser-tests/run.sh <script.mjs>` (Chrome) or `BROWSER=firefox scripts/browser-tests/run.sh <script.mjs>` |
 | Firefox | Puppeteer talks WebDriver BiDi. `states.mjs` uses the Chrome DevTools protocol and is Chrome only. |
 | Style sheet page | `baneforum/theme/styleguide.html` shows every button level, surface, heading, list row, post card and form field in both themes. Open `/styles/baneforum/theme/styleguide.html` on the test board after a style change, and run `styleguide.mjs`. Add a new part of the theme to it. |
-| Another board | The tests use `http://localhost:8080`. Change the host in `login.mjs` and the scripts for 8081. |
+| Another board | The tests use `BASE`, or the URL in `docker/.test-url`, or `http://localhost:8080`. Set `BASE=http://localhost:8081` for the production copy. |
 
 Details: `scripts/browser-tests/README.md`.

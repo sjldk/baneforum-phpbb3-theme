@@ -24,7 +24,7 @@ const editorState = () => page.evaluate(() => {
 });
 
 await login(page);
-await page.goto(`http://localhost:8080/posting.php?mode=reply&t=1`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/posting.php?mode=reply&t=1`, { waitUntil: `networkidle0` });
 await page.waitForSelector(`bf-editor`);
 await wait(1500);
 check(`no tab bar`, await page.evaluate(() => !document.querySelector(`#tabs`)));

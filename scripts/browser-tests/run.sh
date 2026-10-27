@@ -1,5 +1,6 @@
 #!/bin/bash
-# Runs one browser test against the Docker board (http://localhost:8080).
+# Runs one browser test against the Docker board. The URL is in docker/.test-url (written by docker/test-env.sh),
+# or set BASE yourself. Without both it is http://localhost:8080.
 #   run.sh <script.mjs> [arguments]          (BROWSER=firefox run.sh ... runs it in Firefox)
 #   PORT=9223 run.sh ...  uses another debugging port (default 9222, for when Firefox already holds it)
 # Starts headless Chrome with remote debugging, then runs the script with puppeteer-core in a Node
@@ -11,6 +12,12 @@ dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 [[ $# -ge 1 ]] || { echo "Usage: ${0##*/} <script.mjs> [arguments]" >&2; exit 1; }
 
 [[ -d "$dir/node_modules" ]] || docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -v "$dir:/w" -w /w node:22-slim npm install --no-audit --no-fund
+
+if [[ -z "${BASE:-}" && -s "$dir/../../docker/.test-url" ]]; then
+	BASE="$(<"$dir/../../docker/.test-url")"
+fi
+export BASE="${BASE:-http://localhost:8080}"
+echo "Board: $BASE"
 
 profile="$(mktemp -d)"
 if [[ "${BROWSER:-chrome}" == firefox ]]; then

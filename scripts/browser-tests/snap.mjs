@@ -22,7 +22,7 @@ const pathFn = `(el) => { const parts = []; for (let n = el; n && n.nodeType ===
 
 for (const url of pages) {
 	await page.setViewport({ width: Number(process.env.W ?? 1100), height: 900 });
-	await page.goto(`http://localhost:8080/${url}`, { waitUntil: `networkidle0` });
+	await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/${url}`, { waitUntil: `networkidle0` });
 	if (process.env.DARK) {
 		await page.evaluate(() => document.documentElement.setAttribute(`data-theme`, `dark`));
 	}

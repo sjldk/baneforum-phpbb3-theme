@@ -9,7 +9,7 @@ page.on(`pageerror`, (error) => out.push(`PAGEERROR ${error.message}`));
 page.on(`console`, (message) => message.type() === `error` && out.push(`CONSOLE ${message.text()}`));
 
 await login(page);
-await page.goto(`http://localhost:8080/viewtopic.php?t=1`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/viewtopic.php?t=1`, { waitUntil: `networkidle0` });
 const replyUrl = await page.$eval(`a[href*="mode=reply"]`, (a) => a.href);
 await page.goto(replyUrl, { waitUntil: `networkidle0` });
 

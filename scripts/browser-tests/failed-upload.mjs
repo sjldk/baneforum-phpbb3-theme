@@ -8,7 +8,7 @@ await page.setCacheEnabled(false);
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 page.on(`pageerror`, (error) => console.log(`PAGEERROR ${error.message}`));
 await login(page);
-await page.goto(`http://localhost:8080/posting.php?mode=reply&t=1`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/posting.php?mode=reply&t=1`, { waitUntil: `networkidle0` });
 await page.waitForSelector(`bf-editor`);
 await wait(1500);
 

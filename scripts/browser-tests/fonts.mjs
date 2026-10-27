@@ -9,7 +9,7 @@ const pages = (process.argv[3] ? [process.argv[3]] : [
 ]);
 
 async function audit(page, url) {
-	await page.goto(`http://localhost:8080/${url}`, { waitUntil: `networkidle0` }).catch(() => {});
+	await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/${url}`, { waitUntil: `networkidle0` }).catch(() => {});
 	await new Promise((r) => setTimeout(r, 400));
 	const data = await page.evaluate(() => {
 		const families = {};

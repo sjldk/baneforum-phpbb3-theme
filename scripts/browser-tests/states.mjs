@@ -123,7 +123,7 @@ const states = [[`rest`, []], [`hover`, [`hover`]], [`focus`, [`focus`, `focus-v
 const groups = new Map();
 
 async function run(page, label, url, prepare) {
-	await page.goto(`http://localhost:8080/${url}`, { waitUntil: `networkidle0` });
+	await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/${url}`, { waitUntil: `networkidle0` });
 
 	if (prepare) {
 		await prepare(page);

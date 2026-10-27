@@ -7,7 +7,7 @@ const src = fs.readFileSync(`/w/node_modules/axe-core/axe.min.js`, `utf8`);
 const browser = await connect();
 const page = await browser.newPage();
 await page.setViewport({ width: 1100, height: 900 });
-await page.goto(`http://localhost:8080/styles/baneforum/theme/styleguide.html`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/styles/baneforum/theme/styleguide.html`, { waitUntil: `networkidle0` });
 
 let failed = 0;
 const check = (name, ok, detail = ``) => {

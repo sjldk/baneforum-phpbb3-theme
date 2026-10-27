@@ -5,7 +5,7 @@ const page = await browser.newPage();
 await page.setViewport({ width: 1000, height: 1100 });
 await page.setCacheEnabled(false);
 await login(page);
-await page.goto(`http://localhost:8080/posting.php?mode=reply&t=1`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/posting.php?mode=reply&t=1`, { waitUntil: `networkidle0` });
 await page.waitForSelector(`bf-editor`);
 await new Promise((r) => setTimeout(r, 1500));
 const input = await page.evaluateHandle(() => document.querySelector(`bf-editor`).shadowRoot.querySelector(`input[type="file"]`));
@@ -30,7 +30,7 @@ const info = await page.evaluate(async () => {
 check(`a picture that is not in the text shows its small copy`, !!info && info.src.endsWith(`&t=1`) && info.width > 0 && info.width <= 400 && info.thumbBytes < info.wholeBytes, JSON.stringify(info));
 
 // An old picture has no small copy. The list shows it whole.
-await page.goto(`http://localhost:8080/posting.php?mode=edit&p=2`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/posting.php?mode=edit&p=2`, { waitUntil: `networkidle0` });
 await page.waitForSelector(`bf-editor`);
 await new Promise((r) => setTimeout(r, 1500));
 const old = await page.evaluate(() => [...document.querySelectorAll(`#file-list .attach-row:not(.attach-row-tpl) .attach-thumb`)].map((img) => img.naturalWidth));

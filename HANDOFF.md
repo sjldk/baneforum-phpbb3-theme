@@ -13,7 +13,7 @@ production: phpBB 3.3.19, PHP 8.5, the Markdown and MediaEmbed extensions.
 
 | Task | Command |
 |---|---|
-| Start the test board, set it up, fill it with dummy data | `docker/test-env.sh` (http://localhost:8080, `admin` / `adminadmin`, users alice, bob, carol with the same password) |
+| Start the test board, set it up, fill it with dummy data | `docker/test-env.sh` (random port, URL in `docker/.test-url`, `admin` / `adminadmin`, users alice, bob, carol with the same password) |
 | Purge the phpBB cache after a template change | `sh docker/purge-cache.sh` |
 | Editor build, tests, lint | `scripts/bf-editor.sh build` / `test` / `check`. Build before you commit a change in `packages/bf-editor/src`: the built copies in `baneforum/theme/js/` are committed. (`check` reports old errors, none in files touched today.) |
 | Browser tests | `scripts/browser-tests/run.sh posting.mjs` (12 checks), `dialogs.mjs` (5 checks). See `scripts/browser-tests/README.md`. Chrome runs on the host. |

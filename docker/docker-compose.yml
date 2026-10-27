@@ -1,5 +1,5 @@
 # Usage (from this folder): docker compose up --build
-# Board:  http://localhost:8080   Login: admin / adminadmin
+# Board:  the URL is printed by docker/test-env.sh and saved in docker/.test-url (default port 8080 with a plain docker compose up)
 # Nothing is persisted: `docker compose down` gives a fresh board.
 # Theme files are bind-mounted, so edits show after a cache purge (see README).
 services:

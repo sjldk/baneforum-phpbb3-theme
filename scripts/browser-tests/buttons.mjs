@@ -237,12 +237,12 @@ await page.setCacheEnabled(false);
 const guest = await (await browser.createBrowserContext()).newPage();
 await guest.setCacheEnabled(false);
 await guest.setViewport({ width: 1100, height: 1000 });
-await guest.goto(`http://localhost:8080/ucp.php?mode=login`, { waitUntil: `networkidle0` });
+await guest.goto(`${process.env.BASE ?? `http://localhost:8080`}/ucp.php?mode=login`, { waitUntil: `networkidle0` });
 const results = [await audit(guest, `login (guest)`)];
 await login(page);
 
 for (const [label, url, prepare] of targets) {
-	await page.goto(`http://localhost:8080/${url}`, { waitUntil: `networkidle0` });
+	await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/${url}`, { waitUntil: `networkidle0` });
 	results.push(await audit(page, label, prepare));
 }
 

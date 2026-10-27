@@ -1,11 +1,29 @@
 #!/usr/bin/env bash
-# Starts the test board (http://localhost:8080), waits until phpBB is installed and fills it with dummy data.
+# Starts the test board, waits until phpBB is installed and fills it with dummy data.
 # Login: admin / adminadmin. Users alice, bob and carol have the same password.
 # Safe to run again: dummy-data.sh stops if the board is already filled.
+# The port is random, so it does not clash with other things. HTTP_PORT=8080 test-env.sh picks a fixed one.
+# The URL is saved in docker/.test-url. scripts/browser-tests/run.sh reads it.
 set -euo pipefail
 cd "$(dirname "$0")"
 
-port="${HTTP_PORT:-8080}"
+# A port that is free: no listener on it.
+free_port() {
+	local p
+	while :; do
+		p=$((RANDOM % 20000 + 20000))
+		ss -ltn "sport = :$p" | grep -q LISTEN || { echo "$p"; return; }
+	done
+}
+
+# Reuse the port of a board that already runs, so a second run does not move it.
+if [ -z "${HTTP_PORT:-}" ] && [ -s .test-url ] && [ -n "$(docker compose ps -q web 2>/dev/null)" ]; then
+	HTTP_PORT="$(sed 's/.*://' .test-url)"
+fi
+export HTTP_PORT="${HTTP_PORT:-$(free_port)}"
+port="$HTTP_PORT"
+echo "http://localhost:${port}" >.test-url
+echo "Test board port: ${port}  (http://localhost:${port})"
 
 docker compose up -d --build
 

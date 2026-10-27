@@ -18,7 +18,7 @@ When you change code, follow `docs/coding-guidelines.md`.
 **Hard rule: look at the real page after every visual change.** A visual change is a change to CSS, a template or the output of an
 extension. Do this in the same turn, without being asked:
 
-1. Purge the cache with `docker/purge-cache.sh`. The board on `http://localhost:8080` mounts the repo.
+1. Purge the cache with `docker/purge-cache.sh`. The test board mounts the repo. Its URL (a random port) is in `docker/.test-url`.
 2. Take a screenshot of the real page and look at it. Wide, dark theme and phone width. For a repeatable run, use
    `PORT=9333 scripts/browser-tests/run.sh <script>.mjs` (for example `featured.mjs`).
 3. Fix what you see. Then say what you checked, and what you did not.

@@ -14,11 +14,11 @@ const report = async (name) => {
 	console.log(name, JSON.stringify(r));
 };
 
-await page.goto(`http://localhost:8080/viewtopic.php?t=1`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/viewtopic.php?t=1`, { waitUntil: `networkidle0` });
 await report(`viewtopic`);
-await page.goto(`http://localhost:8080/search.php?keywords=bold&terms=all&sr=posts&sf=all&sd=d&st=0&ch=300&t=0&submit=Search`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/search.php?keywords=bold&terms=all&sr=posts&sf=all&sd=d&st=0&ch=300&t=0&submit=Search`, { waitUntil: `networkidle0` });
 await report(`search results`);
-await page.goto(`http://localhost:8080/posting.php?mode=reply&t=1`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/posting.php?mode=reply&t=1`, { waitUntil: `networkidle0` });
 await report(`reply page with topic review`);
 await page.waitForSelector(`bf-editor`);
 await page.evaluate(() => document.querySelector(`bf-editor`).focus());
@@ -27,7 +27,7 @@ console.log(`typed -> textarea:`, JSON.stringify(await page.$eval(`#message`, (t
 await Promise.all([page.waitForNavigation({ waitUntil: `networkidle0` }), page.click(`input[name="preview"]`)]);
 await report(`preview`);
 console.log(`editor value after preview:`, JSON.stringify(await page.$eval(`bf-editor`, (e) => e.value)));
-await page.goto(`http://localhost:8080/ucp.php?i=ucp_profile&mode=signature`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/ucp.php?i=ucp_profile&mode=signature`, { waitUntil: `networkidle0` });
 await report(`signature page`);
 await page.close();
 await browser.disconnect();

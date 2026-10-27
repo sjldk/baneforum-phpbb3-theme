@@ -19,7 +19,7 @@ const check = (name, ok, detail = ``) => {
 const theme = () => page.evaluate(() => document.documentElement.getAttribute(`data-theme`));
 const stored = () => page.evaluate(() => localStorage.getItem(`bf-theme`));
 
-await page.goto(`http://localhost:8080/index.php`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/index.php`, { waitUntil: `networkidle0` });
 await page.evaluate(() => localStorage.removeItem(`bf-theme`));
 await page.reload({ waitUntil: `networkidle0` });
 
@@ -37,18 +37,18 @@ check(`page colour is dark`, await page.evaluate(() => {
 }));
 
 // The choice applies before the page is drawn: data-theme is set when the document has been parsed, before any layout.
-await page.goto(`http://localhost:8080/index.php`, { waitUntil: `domcontentloaded` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/index.php`, { waitUntil: `domcontentloaded` });
 check(`after a reload the theme is dark at DOMContentLoaded`, (await theme()) === `dark`, String(await theme()));
 
 for (const [name, url] of [[`board index`, `index.php`], [`topic list`, `viewforum.php?f=2`], [`topic`, `viewtopic.php?t=1`], [`new topic`, `posting.php?mode=post&f=2`], [`login`, `ucp.php?mode=login&redirect=index.php`], [`faq`, `app.php/help/faq`]]) {
-	await page.goto(`http://localhost:8080/${url}`, { waitUntil: `networkidle0` });
+	await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/${url}`, { waitUntil: `networkidle0` });
 	await page.evaluate(src);
 	const problems = await page.evaluate(async () => (await window.axe.run(document, { runOnly: { type: `rule`, values: [`color-contrast`, `color-contrast-enhanced`] } })).violations
 		.flatMap((v) => v.nodes.map((n) => `${v.id} ${n.target.join(` `).slice(0, 60)} :: ${(n.any[0]?.message ?? ``).slice(0, 100)}`)));
 	check(`dark theme, no contrast problems: ${name}`, problems.length === 0, `\n  ${problems.slice(0, 4).join(`\n  `)}`);
 }
 
-await page.goto(`http://localhost:8080/index.php`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/index.php`, { waitUntil: `networkidle0` });
 await page.click(`.bf-theme-switch__button`);
 check(`second click turns it off`, (await theme()) === null, String(await theme()));
 check(`second click stores "light"`, (await stored()) === `light`, String(await stored()));

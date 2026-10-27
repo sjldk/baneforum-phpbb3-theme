@@ -15,13 +15,13 @@ const read = (el) => {
 };
 
 await login(page);
-await page.goto(`http://localhost:8080/posting.php?mode=reply&t=1`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/posting.php?mode=reply&t=1`, { waitUntil: `networkidle0` });
 await page.waitForSelector(`bf-editor`);
 await wait(500);
 
 for (const [name, selector] of [[`subject`, `#subject`], [`search box`, `search.php #keywords`]]) {
 	if (selector.startsWith(`search.php`)) {
-		await page.goto(`http://localhost:8080/search.php`, { waitUntil: `networkidle0` });
+		await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/search.php`, { waitUntil: `networkidle0` });
 	}
 
 	const target = await page.$(selector.replace(`search.php `, ``));
@@ -41,7 +41,7 @@ for (const [name, selector] of [[`subject`, `#subject`], [`search box`, `search.
 	check(`${name}: no outline and no halo`, after.outline.startsWith(`none`) && after.shadow === `none`, JSON.stringify(after));
 }
 
-await page.goto(`http://localhost:8080/posting.php?mode=reply&t=1`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/posting.php?mode=reply&t=1`, { waitUntil: `networkidle0` });
 await page.waitForSelector(`bf-editor`);
 await wait(500);
 // Inside the editor: the link dialog field and the picture menu field.

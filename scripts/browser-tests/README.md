@@ -1,6 +1,6 @@
 # Browser tests
 
-Tests that run in a real Chrome against the Docker board at `http://localhost:8080`. They are dev tools only.
+Tests that run in a real Chrome against the Docker board at the URL in `docker/.test-url` (a random port, written by `docker/test-env.sh`; `run.sh` reads it, or set `BASE`). They are dev tools only.
 They log in as `admin` (the test board's password is in `docker/docker-compose.yml` and `docker/entrypoint.sh`).
 
 Needs: Docker, Google Chrome on the host. Node runs in a container (`node:22-slim`), the same way as

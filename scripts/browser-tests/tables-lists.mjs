@@ -13,7 +13,7 @@ page.on(`pageerror`, (error) => out.push(`PAGEERROR ${error.message} ${String(er
 // The login sometimes does not stick when tests follow each other closely, so it is tried again.
 for (let attempt = 0; attempt < 4; attempt += 1) {
 	await login(page);
-	await page.goto(`http://localhost:8080/viewtopic.php?t=1`, { waitUntil: `networkidle0` });
+	await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/viewtopic.php?t=1`, { waitUntil: `networkidle0` });
 	await page.goto(await page.$eval(`a[href*="mode=reply"]`, (a) => a.href), { waitUntil: `networkidle0` });
 
 	if (await page.$(`bf-editor`)) {

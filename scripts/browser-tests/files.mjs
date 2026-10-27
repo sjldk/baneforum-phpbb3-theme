@@ -22,7 +22,7 @@ const state = () => page.evaluate(() => {
 });
 
 await login(page);
-await page.goto(`http://localhost:8080/posting.php?mode=reply&t=1`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/posting.php?mode=reply&t=1`, { waitUntil: `networkidle0` });
 await page.waitForSelector(`bf-editor`);
 await wait(1500);
 const input = await page.evaluateHandle(() => document.querySelector(`bf-editor`).shadowRoot.querySelector(`input[type="file"]`));
@@ -69,7 +69,7 @@ check(`and the picture opens whole in a new tab`, post.pictureLink?.target === `
 await page.screenshot({ path: `/w/files-post.png`, fullPage: false });
 
 // An older post with a file placed in the text: it moves to the list.
-await page.goto(`http://localhost:8080/viewtopic.php?t=1`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/viewtopic.php?t=1`, { waitUntil: `networkidle0` });
 const old = await page.evaluate(() => ({
 	placed: document.querySelectorAll(`.content .inline-attachment .attachment-file`).length,
 	listed: document.querySelectorAll(`dl.attachbox .attachment-file`).length,

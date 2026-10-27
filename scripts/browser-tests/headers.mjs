@@ -28,9 +28,9 @@ const measure = (selectors) => page.evaluate(({ box, title }) => {
 	};
 }, selectors);
 
-await page.goto(`http://localhost:8080/viewforum.php?f=2`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/viewforum.php?f=2`, { waitUntil: `networkidle0` });
 const list = await measure({ box: `.forumbg li.header`, title: `dt .list-inner` });
-await page.goto(`http://localhost:8080/memberlist.php`, { waitUntil: `networkidle0` });
+await page.goto(`${process.env.BASE ?? `http://localhost:8080`}/memberlist.php`, { waitUntil: `networkidle0` });
 const table = await measure({ box: `table.table1 thead th.name`, title: `*` }).catch(() => null);
 const tableHeader = await page.evaluate(() => {
 	const th = document.querySelector(`table.table1 thead th.name`);

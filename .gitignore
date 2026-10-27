@@ -5,3 +5,6 @@
 
 # Packed extensions (scripts/package-extensions.sh)
 /dist/
+
+# URL of the running test board (docker/test-env.sh)
+/docker/.test-url
