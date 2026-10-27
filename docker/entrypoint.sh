@@ -46,8 +46,8 @@ installer:
 YML
 	php install/phpbbcli.php install /tmp/install-config.yml
 	rm -rf install
-	# Skip styles/baneforum: it is a bind mount owned by the host user.
-	find /var/www/html -path /var/www/html/styles/baneforum -prune -o -exec chown www-data:www-data {} +
+	# Skip styles/baneforum and ext/baneforum: they are bind mounts owned by the host user.
+	find /var/www/html \( -path /var/www/html/styles/baneforum -o -path /var/www/html/ext/baneforum \) -prune -o -exec chown www-data:www-data {} +
 fi
 
 # Register the theme (mounted at styles/baneforum) once, as a child of prosilver.
