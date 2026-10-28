@@ -1,0 +1,14 @@
+services:
+    baneforum.fbdeletion.controller:
+        class: baneforum\fbdeletion\controller
+        arguments:
+            - '@config'
+            - '@dbal.conn'
+            - '@controller.helper'
+            - '@language'
+            - '@log'
+            - '@request'
+            - '@user'
+            - '%core.table_prefix%'
+            - '%core.root_path%'
+            - '%core.php_ext%'

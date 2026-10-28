@@ -1,0 +1,12 @@
+baneforum_fbdeletion:
+    path: /fb-deletion
+    defaults: { _controller: baneforum.fbdeletion.controller:callback }
+    methods: [POST]
+
+baneforum_fbdeletion_status:
+    path: /fb-deletion/status/{facebook_id}/{code}
+    defaults: { _controller: baneforum.fbdeletion.controller:status }
+    methods: [GET]
+    requirements:
+        facebook_id: \d{1,30}
+        code: '[0-9a-f]{32}'

@@ -1,0 +1,21 @@
+{
+	"name": "baneforum/fbdeletion",
+	"type": "phpbb-extension",
+	"description": "The data deletion callback that Facebook asks for. It deletes the account linked to a Facebook user and keeps the posts as posts of a guest.",
+	"license": "GPL-2.0-only",
+	"version": "0.1.0",
+	"require": {
+		"php": ">=8.1"
+	},
+	"extra": {
+		"display-name": "Baneforum Facebook data deletion",
+		"soft-require": {
+			"phpbb/phpbb": ">=3.3.0"
+		}
+	},
+	"authors": [
+		{
+			"name": "Baneforum"
+		}
+	]
+}
