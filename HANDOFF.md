@@ -1,6 +1,6 @@
 # Handoff
 
-Last updated 2026-10-23. Read this first. The long log is `docs/editor-progress.md`.
+Last updated 2026-10-28. Read this first. The long log is `docs/editor-progress.md`.
 
 ## What this repo is
 
@@ -33,6 +33,16 @@ Push: if it fails with "publickey", unlock the SSH key (`ssh-add ~/.ssh/id_githu
 | Extensions | `likes` and `censor` are new and enabled on the test board. Not installed on production. |
 | Replacing prosilver CSS | All eleven prosilver CSS files are ours now (`baneforum/theme/`). No prosilver CSS loads. See "CSS ancestry" and "Next". |
 | Prosilver 3.3.19 | All our overrides are checked against it. Nothing open. |
+
+## Today (2026-10-28)
+
+- **Test board on a random port.** `docker/test-env.sh` picks a free port and saves the URL in `docker/.test-url` (git-ignored). `HTTP_PORT=8080 docker/test-env.sh` gives a fixed port. `scripts/browser-tests/run.sh` reads the URL and passes it as `BASE`. All browser tests use `BASE`. Still on 8080: `scripts/post_test.py`, a comment in `docker/dummy-data.sh` and `.claude/skills/phpbbtest/run-user-journey.sh`.
+- **Owner trap fixed.** The entrypoint changed the owner of `extensions/baneforum` to www-data on a fresh install. It now skips `ext/baneforum`. If it happens: `docker compose -f docker/docker-compose.yml exec -T web chown -R 1000:1000 /var/www/html/ext/baneforum`.
+- **New extension `baneforum/fbdeletion`** (Facebook data deletion callback). Facebook posts to `app.php/fb-deletion`. The extension checks the signature with the ACP Facebook secret, deletes the linked account (`user_delete('retain', ..., false)`, posts stay as "Guest") and answers with the status page address. Founders are never deleted. Unit tests pass, and a self-made request worked on the test board. **Not tested with Facebook itself.** Setup is in `docs/production-install.md`. Not installed on production.
+- **Login error extension** (`loginerror`): same text for a wrong username and a wrong password. Error box has `role=alert` and is readable in both themes.
+- **Browser tests run on the new board:** `login-error.mjs` and `axe-pages.mjs` pass. **Failing, cause not found:** `user-journey.mjs` (4 guest checks), `featured.mjs` (no `.bf-featured__help summary`), `posting.mjs` (`null.focus` at line 28). It is not known if they failed before the port change.
+- **Test board state:** the user `alice` was deleted by the callback test. `user-journey.mjs` needs her. `docker compose down` and `docker/test-env.sh` give a fresh board.
+- **Open idea:** a "Delete your data" text for the privacy policy (da and en drafts were written in chat, not saved), and a link to the privacy page. Our style has no privacy link.
 
 ## Today (2026-10-23)
 
