@@ -143,6 +143,11 @@ if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='banefor
 	php bin/phpbbcli.php extension:enable baneforum/loginerror
 fi
 
+# The Facebook data deletion callback (it needs the Facebook secret from the ACP, which the test board has not).
+if [ "$("${DB[@]}" -N -e "SELECT COUNT(*) FROM phpbb_ext WHERE ext_name='baneforum/fbdeletion' AND ext_active=1")" = 0 ]; then
+	php bin/phpbbcli.php extension:enable baneforum/fbdeletion
+fi
+
 # Template and style changes need a cleared cache.
 php bin/phpbbcli.php cache:purge >/dev/null 2>&1 || true
 chown -R www-data:www-data cache store files images
